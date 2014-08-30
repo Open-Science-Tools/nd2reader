@@ -1,8 +1,6 @@
 import array
 import numpy as np
-import re
 import struct
-from pprint import pprint
 
 
 class Nd2Reader(object):
@@ -14,7 +12,7 @@ class Nd2Reader(object):
         self._filename = filename
         self._file_handler = None
         self._chunk_map_start_location = None
-        self._map_keys = {}
+        self._label_map = {}
         self._read_map()
 
     @property
@@ -30,7 +28,7 @@ class Nd2Reader(object):
         grab the subsequent data (always 16 bytes long), advance to the next label and repeat.
 
         """
-        raw_text = self.raw_chunk_map_text
+        raw_text = self._get_raw_chunk_map_text()
         label_start = self._find_first_label_offset(raw_text)
         while True:
             data_start = self._get_data_start(label_start, raw_text)
@@ -38,7 +36,7 @@ class Nd2Reader(object):
             if label == "ND2 CHUNK MAP SIGNATURE 0000001!":
                 # We've reached the end of the chunk map
                 break
-            self._map_keys[label] = value
+            self._label_map[label] = value
             label_start = data_start + 16
 
     @staticmethod
@@ -84,8 +82,46 @@ class Nd2Reader(object):
             self._chunk_map_start_location = struct.unpack("Q", self.fh.read(8))[0]
         return self._chunk_map_start_location
 
-    @property
-    def raw_chunk_map_text(self):
+    def _read_chunk(self, chunk_location):
+        """
+        Gets the data for a given chunk pointer
+
+        """
+        self.fh.seek(chunk_location)
+        chunk_data = self._read_chunk_metadata()
+        header, relative_offset, data_length = self._parse_chunk_metadata(chunk_data)
+        return self._read_chunk_data(chunk_location, relative_offset, data_length)
+
+    def _read_chunk_metadata(self):
+        """
+        Gets the chunks metadata, which is always 16 bytes
+
+        """
+        return self.fh.read(16)
+
+    def _read_chunk_data(self, chunk_location, relative_offset, data_length):
+        """
+        Reads the actual data for a given chunk
+
+        """
+        # We start at the location of the chunk metadata, skip over the metadata, and then proceed to the
+        # start of the actual data field, which is at some arbitrary place after the metadata.
+        self.fh.seek(chunk_location + 16 + relative_offset)
+        return self.fh.read(data_length)
+
+    @staticmethod
+    def _parse_chunk_metadata(chunk_data):
+        """
+        Finds out everything about a given chunk. Every chunk begins with the same value, so if that's ever
+        different we can assume the file has suffered some kind of damage.
+
+        """
+        header, relative_offset, data_length = struct.unpack("IIQ", chunk_data)
+        if header != 0xabeceda:
+            raise ValueError("The ND2 file seems to be corrupted.")
+        return header, relative_offset, data_length
+
+    def _get_raw_chunk_map_text(self):
         """
         Reads the entire chunk map and returns it as a string.
 
