@@ -5,7 +5,7 @@ from collections import namedtuple
 from StringIO import StringIO
 
 chunk = namedtuple('Chunk', ['location', 'length'])
-field_of_view = namedtuple('FOV', ['x', 'y', 'z', 'pfs_offset'])
+field_of_view = namedtuple('FOV', ['number', 'x', 'y', 'z', 'pfs_offset'])
 channel = namedtuple('Channel', ['name', 'camera', 'exposure_time'])
 
 
@@ -23,8 +23,8 @@ class Nd2(object):
 
     @property
     def fields_of_view(self):
-        for fov in self.metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx'][''][0]['uLoopPars']['Points']['']:
-            yield field_of_view(x=fov['dPosX'], y=fov['dPosY'], z=fov['dPosZ'], pfs_offset=fov['dPFSOffset'])
+        for number, fov in enumerate(self.metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['uLoopPars']['Points']['']):
+            yield field_of_view(number=number + 1, x=fov['dPosX'], y=fov['dPosY'], z=fov['dPosZ'], pfs_offset=fov['dPFSOffset'])
 
     @property
     def fov_count(self):
@@ -43,14 +43,17 @@ class Nd2(object):
     def metadata(self):
         return self._parser.metadata
 
+    def get_images(self, fov_number, channel_name, z_axis):
+        pass
 
-
-
-
-
-
-
-
+    def get_image(self, nr):
+        d = self._parser._read_chunk(self._parser._label_map["ImageDataSeq|%d!" % nr].location)
+        acqtime = struct.unpack("d", d[:8])[0]
+        res = [acqtime]
+        for i in range(self.metadata['ImageAttributes']["SLxImageAttributes"]["uiComp"]):
+            a = array.array("H", d)
+            res.append(a[4+i::self.metadata['ImageAttributes']["SLxImageAttributes"]["uiComp"]])
+        return res
 
 
 class Nd2Parser(object):
@@ -244,42 +247,42 @@ class Nd2Parser(object):
             if not name in res:
                 res[name] = value
             else:
-                if type(res[name]) != type([]):
+                if not isinstance(res[name], list):
                     res[name] = [res[name]]
                 res[name].append(value)
         x = data.read()
         assert not x, "skip %d %s" % (len(x), repr(x[:30]))
         return res
 
-
-class LVLine(object):
-    def __init__(self, line):
-        self._line = line
-        self._extract()
-
-    def _extract(self):
-        if self._type == 11:
-            count, length = struct.unpack("<IQ", self._line[self._name_end: self._name_end + 12])
-            newline = LVLine(self._line[self._name_end + 12:])
-
-    @property
-    def name(self):
-        return self._line[2: self._name_end].decode("utf16").encode("utf8")
-
-    @property
-    def _type(self):
-        return ord(self._line[0])
-
-    @property
-    def _name_end(self):
-        """
-        Length is given as number of characters, but since it's unicode (which is two-bytes per character) we return
-        twice the number.
-
-        """
-        return ord(self._line[1]) * 2
-
-
-class LVData(object):
-    def __init__(self, data):
-        self._extracted_data = LVLine(data)
+#
+# class LVLine(object):
+#     def __init__(self, line):
+#         self._line = line
+#         self._extract()
+#
+#     def _extract(self):
+#         if self._type == 11:
+#             count, length = struct.unpack("<IQ", self._line[self._name_end: self._name_end + 12])
+#             newline = self._line[self._name_end + 12:]
+#
+#     @property
+#     def name(self):
+#         return self._line[2: self._name_end].decode("utf16").encode("utf8")
+#
+#     @property
+#     def _type(self):
+#         return ord(self._line[0])
+#
+#     @property
+#     def _name_end(self):
+#         """
+#         Length is given as number of characters, but since it's unicode (which is two-bytes per character) we return
+#         twice the number.
+#
+#         """
+#         return ord(self._line[1]) * 2
+#
+#
+# class LVData(object):
+#     def __init__(self, data):
+#         self._extracted_data = LVLine(data)
