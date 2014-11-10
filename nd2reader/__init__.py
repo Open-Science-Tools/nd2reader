@@ -52,7 +52,10 @@ class Nd2(object):
         res = [acqtime]
         for i in range(self.metadata['ImageAttributes']["SLxImageAttributes"]["uiComp"]):
             a = array.array("H", d)
+
             res.append(a[4+i::self.metadata['ImageAttributes']["SLxImageAttributes"]["uiComp"]])
+        arr = np.reshape(res[1], (self.height, self.width))
+        # TODO: Are you missing a zoom level? Is there extra data here? Can you get timestamps now?
         return res
 
 
