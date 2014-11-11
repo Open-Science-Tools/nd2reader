@@ -28,9 +28,19 @@ class Nd2(object):
 
     @property
     def fields_of_view(self):
-        fov_data = self.metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']
-        valid_fields = list(fov_data['pItemValid'])
-        for number, (fov, valid) in enumerate(zip(fov_data['uLoopPars']['Points'][''], valid_fields)):
+        """
+        Fields of view are the various places in the xy-plane where images were taken.
+
+        """
+        # Grab all the metadata about fields of view
+        fov_metadata = self.metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']
+        # The attributes include x, y, and z coordinates, and perfect focus (PFS) offset
+        fov_attributes = fov_metadata['uLoopPars']['Points']['']
+        # If you crop fields of view from your ND2 file, the metadata is retained and only this list is
+        # updated to indicate that the fields of view have been deleted.
+        fov_validity = fov_metadata['pItemValid']
+        # We only yield valid (i.e. uncropped) fields of view
+        for number, (fov, valid) in enumerate(zip(fov_attributes, fov_validity)):
             if valid:
                 yield field_of_view(number=number + 1,
                                     x=fov['dPosX'],
@@ -52,10 +62,13 @@ class Nd2(object):
     @property
     def channels(self):
         metadata = self.metadata['ImageMetadataSeq']['SLxPictureMetadata']['sPicturePlanes']
+        validity = self.metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['ppNextLevelEx']['']['pItemValid']
         # Channel information is contained in dictionaries with the keys a0, a1...an where the number
         # indicates the order in which the channel is stored. So by sorting the dicts alphabetically
         # we get the correct order.
-        for label, chan in sorted(metadata['sPlaneNew'].items()):
+        for (label, chan), valid in zip(sorted(metadata['sPlaneNew'].items()), validity):
+            if not valid:
+                continue
             name = chan['sDescription']
             exposure_time = metadata['sSampleSetting'][label]['dExposureTime']
             camera = metadata['sSampleSetting'][label]['pCameraSetting']['CameraUserName']
@@ -64,6 +77,11 @@ class Nd2(object):
     @property
     def channel_count(self):
         return self.metadata['ImageAttributes']["SLxImageAttributes"]["uiComp"]
+
+    @property
+    def zoom_levels(self):
+        for i in self.metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['ppNextLevelEx'][''].items():
+            yield i
 
     @property
     def z_level_count(self):

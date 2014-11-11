@@ -11,11 +11,8 @@ n = Nd2("/home/jim/Desktop/nd2hacking/YFP-dsRed-GFP-BF.nd2")
 # for fov in n.fields_of_view:
 #     print(fov.number, fov.x, fov.y, fov.z, fov.pfs_offset)
 #
-print(n.timepoint_count)
-print(n.fov_count)
-print(n.channel_count)
-for fov in n.fields_of_view:
-    print(fov.number, fov.x, fov.y, fov.z)
+for chan in n.channels:
+    print(chan.name, chan.camera)
 # pprint(len(n.metadata['ImageMetadata']['SLxExperiment']['uLoopPars']['pPeriod']['']))
 
 # res = n.get_image(6)
