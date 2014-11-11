@@ -3,15 +3,20 @@ import numpy as np
 import struct
 from collections import namedtuple
 from StringIO import StringIO
+from nd2reader.model import Channel
+from pprint import pprint
 
 chunk = namedtuple('Chunk', ['location', 'length'])
 field_of_view = namedtuple('FOV', ['number', 'x', 'y', 'z', 'pfs_offset'])
-channel = namedtuple('Channel', ['name', 'camera', 'exposure_time'])
 
 
 class Nd2(object):
     def __init__(self, filename):
         self._parser = Nd2Parser(filename)
+
+    @property
+    def timepoint_count(self):
+        return len(self._parser.metadata['ImageEvents']['RLxExperimentRecord']['pEvents'][''])
 
     @property
     def height(self):
@@ -23,21 +28,50 @@ class Nd2(object):
 
     @property
     def fields_of_view(self):
-        for number, fov in enumerate(self.metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['uLoopPars']['Points']['']):
-            yield field_of_view(number=number + 1, x=fov['dPosX'], y=fov['dPosY'], z=fov['dPosZ'], pfs_offset=fov['dPFSOffset'])
+        fov_data = self.metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']
+        valid_fields = list(fov_data['pItemValid'])
+        for number, (fov, valid) in enumerate(zip(fov_data['uLoopPars']['Points'][''], valid_fields)):
+            if valid:
+                yield field_of_view(number=number + 1,
+                                    x=fov['dPosX'],
+                                    y=fov['dPosY'],
+                                    z=fov['dPosZ'],
+                                    pfs_offset=fov['dPFSOffset'])
 
     @property
     def fov_count(self):
-        return len(list(self.fields_of_view))
+        """
+        The metadata contains information about fields of view, but it contains it even if some fields
+        of view were cropped. We can't find anything that states which fields of view are actually
+        in the image data, so we have to calculate it. There probably is something somewhere, since
+        NIS Elements can figure it out, but we haven't found it yet.
+
+        """
+        return sum(self.metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['pItemValid'])
 
     @property
     def channels(self):
         metadata = self.metadata['ImageMetadataSeq']['SLxPictureMetadata']['sPicturePlanes']
-        for label, chan in metadata['sPlaneNew'].items():
+        # Channel information is contained in dictionaries with the keys a0, a1...an where the number
+        # indicates the order in which the channel is stored. So by sorting the dicts alphabetically
+        # we get the correct order.
+        for label, chan in sorted(metadata['sPlaneNew'].items()):
             name = chan['sDescription']
             exposure_time = metadata['sSampleSetting'][label]['dExposureTime']
             camera = metadata['sSampleSetting'][label]['pCameraSetting']['CameraUserName']
-            yield channel(name=name, exposure_time=exposure_time, camera=camera)
+            yield Channel(name, camera, exposure_time)
+
+    @property
+    def channel_count(self):
+        return self.metadata['ImageAttributes']["SLxImageAttributes"]["uiComp"]
+
+    @property
+    def z_level_count(self):
+        """
+        The number of different z-axis levels.
+
+        """
+        return 1
 
     @property
     def metadata(self):
@@ -48,13 +82,12 @@ class Nd2(object):
 
     def get_image(self, nr):
         d = self._parser._read_chunk(self._parser._label_map["ImageDataSeq|%d!" % nr].location)
-        acqtime = struct.unpack("d", d[:8])[0]
-        res = [acqtime]
-        for i in range(self.metadata['ImageAttributes']["SLxImageAttributes"]["uiComp"]):
+        timestamp = struct.unpack("d", d[:8])[0]
+        res = [timestamp]
+        # The images for the various channels are interleaved within each other.
+        for i in range(self.channel_count):
             a = array.array("H", d)
-
-            res.append(a[4+i::self.metadata['ImageAttributes']["SLxImageAttributes"]["uiComp"]])
-        arr = np.reshape(res[1], (self.height, self.width))
+            res.append(a[4+i::self.channel_count])
         # TODO: Are you missing a zoom level? Is there extra data here? Can you get timestamps now?
         return res
 
