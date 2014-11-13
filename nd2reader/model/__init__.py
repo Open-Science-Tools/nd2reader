@@ -10,9 +10,7 @@ class Channel(object):
 
     @property
     def name(self):
-        if self._name is not None and self._name != "":
-            return self._name
-        return "UnnamedChannel"
+        return self._name
 
     @property
     def camera(self):
@@ -48,8 +46,7 @@ class Image(object):
     def __init__(self, timestamp, raw_array, height, width):
         self._timestamp = timestamp
         self._raw_data = raw_array
-        self._height = height
-        self._width = width
+        self._data = np.reshape(self._raw_data, (height, width))
 
     @property
     def timestamp(self):
@@ -58,7 +55,7 @@ class Image(object):
 
     @property
     def data(self):
-        return np.reshape(self._raw_data, (self._height, self._width))
+        return self._data
 
     def show(self):
         skimage.io.imshow(self.data)

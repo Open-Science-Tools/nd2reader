@@ -7,49 +7,64 @@ import logging
 from nd2reader.model import Channel, ImageSet, Image
 
 log = logging.getLogger("nd2reader")
+log.setLevel(logging.DEBUG)
 chunk = namedtuple('Chunk', ['location', 'length'])
 field_of_view = namedtuple('FOV', ['number', 'x', 'y', 'z', 'pfs_offset'])
 
 
 class BaseNd2(object):
     def __init__(self, filename):
-        self._parser = Nd2Reader(filename)
+        self._reader = Nd2Reader(filename)
+        self._channel_offset = None
 
     @property
     def height(self):
-        return self._parser.metadata['ImageAttributes']['SLxImageAttributes']['uiHeight']
+        return self._metadata['ImageAttributes']['SLxImageAttributes']['uiHeight']
 
     @property
     def width(self):
-        return self._parser.metadata['ImageAttributes']['SLxImageAttributes']['uiWidth']
-
-    def _get_timepoint_count(self):
-        return len(self._parser.metadata['ImageEvents']['RLxExperimentRecord']['pEvents'][''])
+        return self._metadata['ImageAttributes']['SLxImageAttributes']['uiWidth']
 
     @property
-    def _fields_of_view(self):
-        """
-        Fields of view are the various places in the xy-plane where images were taken.
-
-        """
-        # Grab all the metadata about fields of view
-        fov_metadata = self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']
-        # The attributes include x, y, and z coordinates, and perfect focus (PFS) offset
-        fov_attributes = fov_metadata['uLoopPars']['Points']['']
-        # If you crop fields of view from your ND2 file, the metadata is retained and only this list is
-        # updated to indicate that the fields of view have been deleted.
-        fov_validity = fov_metadata['pItemValid']
-        # We only yield valid (i.e. uncropped) fields of view
-        for number, (fov, valid) in enumerate(zip(fov_attributes, fov_validity)):
-            if valid:
-                yield field_of_view(number=number + 1,
-                                    x=fov['dPosX'],
-                                    y=fov['dPosY'],
-                                    z=fov['dPosZ'],
-                                    pfs_offset=fov['dPFSOffset'])
+    def _image_count(self):
+        return self._metadata['ImageAttributes']['SLxImageAttributes']['uiSequenceCount']
 
     @property
-    def _fov_count(self):
+    def _sequence_count(self):
+        return self._metadata['ImageEvents']['RLxExperimentRecord']['uiCount']
+
+    @property
+    def _timepoint_count(self):
+        return self._image_count / self._field_of_view_count / self._z_level_count
+
+    # @property
+    # def _fields_of_view(self):
+    #     """
+    #     Fields of view are the various places in the xy-plane where images were taken.
+    #
+    #     """
+    #     # Grab all the metadata about fields of view
+    #     fov_metadata = self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']
+    #     # The attributes include x, y, and z coordinates, and perfect focus (PFS) offset
+    #     fov_attributes = fov_metadata['uLoopPars']['Points']['']
+    #     # If you crop fields of view from your ND2 file, the metadata is retained and only this list is
+    #     # updated to indicate that the fields of view have been deleted.
+    #     fov_validity = fov_metadata['pItemValid']
+    #     # We only yield valid (i.e. uncropped) fields of view
+    #     for number, (fov, valid) in enumerate(zip(fov_attributes, fov_validity)):
+    #         if valid:
+    #             yield field_of_view(number=number + 1,
+    #                                 x=fov['dPosX'],
+    #                                 y=fov['dPosY'],
+    #                                 z=fov['dPosZ'],
+    #                                 pfs_offset=fov['dPFSOffset'])
+
+    @property
+    def _z_level_count(self):
+        return self._image_count / self._sequence_count
+
+    @property
+    def _field_of_view_count(self):
         """
         The metadata contains information about fields of view, but it contains it even if some fields
         of view were cropped. We can't find anything that states which fields of view are actually
@@ -60,9 +75,13 @@ class BaseNd2(object):
         return sum(self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['pItemValid'])
 
     @property
-    def _channels(self):
+    def channels(self):
         metadata = self._metadata['ImageMetadataSeq']['SLxPictureMetadata']['sPicturePlanes']
-        validity = self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['ppNextLevelEx']['']['pItemValid']
+        try:
+            validity = self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['ppNextLevelEx']['']['pItemValid']
+        except KeyError:
+            # If none of the channels have been deleted, there is no validity list, so we just make one
+            validity = [True for i in metadata]
         # Channel information is contained in dictionaries with the keys a0, a1...an where the number
         # indicates the order in which the channel is stored. So by sorting the dicts alphabetically
         # we get the correct order.
@@ -75,37 +94,19 @@ class BaseNd2(object):
             yield Channel(name, camera, exposure_time)
 
     @property
-    def _channel_count(self):
-        return self._metadata['ImageAttributes']["SLxImageAttributes"]["uiComp"]
-
-    # @property
-    # def _z_levels(self):
-    #     for i in self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['ppNextLevelEx'][''].items():
-    #         yield i
-
-    # @property
-    # def _z_level_count(self):
-    #     """
-    #     The number of different z-axis levels.
-    #
-    #     """
-    #     return 1
+    def channel_offset(self):
+        if self._channel_offset is None:
+            self._channel_offset = {}
+            for n, channel in enumerate(self.channels):
+                self._channel_offset[channel.name] = n
+        return self._channel_offset
 
     @property
     def _metadata(self):
-        return self._parser.metadata
+        return self._reader.metadata
 
-    def _get_image_set(self, nr):
-        chunk = self._parser._label_map["ImageDataSeq|%d!" % nr]
-        d = self._parser._read_chunk(chunk.location)
-        timestamp = struct.unpack("d", d[:8])[0]
-        image_set = ImageSet()
-        # The images for the various channels are interleaved within each other.
-        for i in range(self._channel_count):
-            image_data = array.array("H", d)
-            image = Image(timestamp, image_data[4+i::self._channel_count], self.height, self.width)
-            image_set.add(image)
-        return image_set
+    def _calculate_image_set_number(self, timepoint, fov, z_level):
+        return timepoint * self._field_of_view_count * self._z_level_count + (fov * self._z_level_count + z_level)
 
 
 class Nd2Reader(object):
@@ -127,6 +128,20 @@ class Nd2Reader(object):
         if self._file_handler is None:
             self._file_handler = open(self._filename, "rb")
         return self._file_handler
+
+    @property
+    def channel_count(self):
+        return self._metadata['ImageAttributes']["SLxImageAttributes"]["uiComp"]
+
+    def get_raw_image_data(self, image_set_number, channel_offset):
+        chunk = self._label_map["ImageDataSeq|%d!" % image_set_number]
+        data = self._read_chunk(chunk.location)
+        timestamp = struct.unpack("d", data[:8])[0]
+        # The images for the various channels are interleaved within each other. Yes, this is an incredibly unintuitive and nonsensical way
+        # to store data.
+        image_data = array.array("H", data)
+        image_data_start = 4 + channel_offset
+        return timestamp, image_data[image_data_start::self.channel_count]
 
     def _parse_dict_data(self):
         # TODO: Don't like this name
@@ -260,6 +275,15 @@ class Nd2Reader(object):
     def as_numpy_array(arr):
         return np.frombuffer(arr)
 
+    def _z_level_count(self):
+        """read the microscope coordinates and temperatures
+        Missing: get chunknames and types from xml metadata"""
+        res = {}
+        name = "CustomData|Z!"
+        st = self._read_chunk(self._label_map[name].location)
+        res = array.array("d", st)
+        return len(res)
+
     def read_lv_encoding(self, data, count):
         data = StringIO(data)
         res = {}
@@ -267,14 +291,12 @@ class Nd2Reader(object):
         for c in range(count):
             lastpos = data.tell()
             total_count += 1
-            # log.debug("%s: %s" % (total_count, lastpos))
             hdr = data.read(2)
             if not hdr:
                 break
             typ = ord(hdr[0])
             bname = data.read(2*ord(hdr[1]))
             name = bname.decode("utf16")[:-1].encode("utf8")
-            log.debug(name)
             if typ == 1:
                 value, = struct.unpack("B", data.read(1))
             elif typ in [2, 3]:
