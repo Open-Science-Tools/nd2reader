@@ -1,5 +1,8 @@
 import numpy as np
 import skimage.io
+import logging
+
+log = logging.getLogger("nd2reader")
 
 
 class Channel(object):
@@ -43,23 +46,30 @@ class ImageSet(object):
 
 
 class Image(object):
-    def __init__(self, timestamp, raw_array, height, width):
+    def __init__(self, timestamp, raw_array, field_of_view, channel, z_level, height, width):
         self._timestamp = timestamp
         self._raw_data = raw_array
-        self._data = np.reshape(self._raw_data, (height, width))
+        self._field_of_view = field_of_view
+        self._channel = channel
+        self._z_level = z_level
+        self._height = height
+        self._width = width
+        self._data = None
 
     @property
     def timestamp(self):
         # TODO: Convert to datetime object
-        return self._timestamp
+        return self._timestamp / 1000.0
 
     @property
     def data(self):
+        if self._data is None:
+            self._data = np.reshape(self._raw_data, (self._height, self._width))
         return self._data
 
     @property
     def is_valid(self):
-        return np.any(self._data)
+        return np.any(self.data)
 
     def show(self):
         skimage.io.imshow(self.data)

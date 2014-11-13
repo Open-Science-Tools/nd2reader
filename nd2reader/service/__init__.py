@@ -72,6 +72,10 @@ class BaseNd2(object):
         return sum(self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['pItemValid'])
 
     @property
+    def _channel_count(self):
+        return self._reader.channel_count
+
+    @property
     def channel_offset(self):
         if self._channel_offset is None:
             self._channel_offset = {}
