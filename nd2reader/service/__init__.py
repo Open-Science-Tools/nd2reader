@@ -26,55 +26,6 @@ class BaseNd2(object):
         return self._metadata['ImageAttributes']['SLxImageAttributes']['uiWidth']
 
     @property
-    def _image_count(self):
-        return self._metadata['ImageAttributes']['SLxImageAttributes']['uiSequenceCount']
-
-    @property
-    def _sequence_count(self):
-        return self._metadata['ImageEvents']['RLxExperimentRecord']['uiCount']
-
-    @property
-    def _timepoint_count(self):
-        return self._image_count / self._field_of_view_count / self._z_level_count
-
-    # @property
-    # def _fields_of_view(self):
-    #     """
-    #     Fields of view are the various places in the xy-plane where images were taken.
-    #
-    #     """
-    #     # Grab all the metadata about fields of view
-    #     fov_metadata = self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']
-    #     # The attributes include x, y, and z coordinates, and perfect focus (PFS) offset
-    #     fov_attributes = fov_metadata['uLoopPars']['Points']['']
-    #     # If you crop fields of view from your ND2 file, the metadata is retained and only this list is
-    #     # updated to indicate that the fields of view have been deleted.
-    #     fov_validity = fov_metadata['pItemValid']
-    #     # We only yield valid (i.e. uncropped) fields of view
-    #     for number, (fov, valid) in enumerate(zip(fov_attributes, fov_validity)):
-    #         if valid:
-    #             yield field_of_view(number=number + 1,
-    #                                 x=fov['dPosX'],
-    #                                 y=fov['dPosY'],
-    #                                 z=fov['dPosZ'],
-    #                                 pfs_offset=fov['dPFSOffset'])
-
-    @property
-    def _z_level_count(self):
-        return self._image_count / self._sequence_count
-
-    @property
-    def _field_of_view_count(self):
-        """
-        The metadata contains information about fields of view, but it contains it even if some fields
-        of view were cropped. We can't find anything that states which fields of view are actually
-        in the image data, so we have to calculate it. There probably is something somewhere, since
-        NIS Elements can figure it out, but we haven't found it yet.
-
-        """
-        return sum(self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['pItemValid'])
-
-    @property
     def channels(self):
         metadata = self._metadata['ImageMetadataSeq']['SLxPictureMetadata']['sPicturePlanes']
         try:
@@ -92,6 +43,33 @@ class BaseNd2(object):
             exposure_time = metadata['sSampleSetting'][label]['dExposureTime']
             camera = metadata['sSampleSetting'][label]['pCameraSetting']['CameraUserName']
             yield Channel(name, camera, exposure_time)
+
+    @property
+    def _image_count(self):
+        return self._metadata['ImageAttributes']['SLxImageAttributes']['uiSequenceCount']
+
+    @property
+    def _sequence_count(self):
+        return self._metadata['ImageEvents']['RLxExperimentRecord']['uiCount']
+
+    @property
+    def _timepoint_count(self):
+        return self._image_count / self._field_of_view_count / self._z_level_count
+
+    @property
+    def _z_level_count(self):
+        return self._image_count / self._sequence_count
+
+    @property
+    def _field_of_view_count(self):
+        """
+        The metadata contains information about fields of view, but it contains it even if some fields
+        of view were cropped. We can't find anything that states which fields of view are actually
+        in the image data, so we have to calculate it. There probably is something somewhere, since
+        NIS Elements can figure it out, but we haven't found it yet.
+
+        """
+        return sum(self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['pItemValid'])
 
     @property
     def channel_offset(self):

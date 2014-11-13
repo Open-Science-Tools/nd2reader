@@ -57,6 +57,10 @@ class Image(object):
     def data(self):
         return self._data
 
+    @property
+    def is_valid(self):
+        return np.any(self._data)
+
     def show(self):
         skimage.io.imshow(self.data)
         skimage.io.show()
