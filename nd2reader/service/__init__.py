@@ -54,14 +54,14 @@ class BaseNd2(object):
 
     @property
     def _timepoint_count(self):
-        return self._image_count / self._field_of_view_count / self._z_level_count
+        return self._image_count / self.field_of_view_count / self._z_level_count
 
     @property
     def _z_level_count(self):
         return self._image_count / self._sequence_count
 
     @property
-    def _field_of_view_count(self):
+    def field_of_view_count(self):
         """
         The metadata contains information about fields of view, but it contains it even if some fields
         of view were cropped. We can't find anything that states which fields of view are actually
@@ -88,7 +88,7 @@ class BaseNd2(object):
         return self._reader.metadata
 
     def _calculate_image_set_number(self, timepoint, fov, z_level):
-        return timepoint * self._field_of_view_count * self._z_level_count + (fov * self._z_level_count + z_level)
+        return timepoint * self.field_of_view_count * self._z_level_count + (fov * self._z_level_count + z_level)
 
 
 class Nd2Reader(object):
