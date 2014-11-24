@@ -1,6 +1,10 @@
 import numpy as np
 import skimage.io
 import logging
+from io import BytesIO
+import array
+import struct
+
 
 log = logging.getLogger("nd2reader")
 
@@ -76,9 +80,111 @@ class Image(object):
         skimage.io.show()
 
 
-from io import BytesIO
-import array
-import struct
+class MetadataItem(object):
+    def __init__(self, start, data):
+        self._datatype = ord(data[start])
+        self._label_length = 2 * ord(data[start + 1])
+        self._data = data
+
+    @property
+    def is_valid(self):
+        return self._datatype > 0
+
+    @property
+    def key(self):
+        return self._data[2:self._label_length].decode("utf16").encode("utf8")
+
+    @property
+    def length(self):
+        return self._length
+
+    @property
+    def data_start(self):
+        return self._label_length + 2
+
+    @property
+    def _body(self):
+        """
+        All data after the header.
+
+        """
+        return self._data[self.data_start:]
+
+    def _get_bytes(self, count):
+        return self._data[self.data_start: self.data_start + count]
+
+    @property
+    def value(self):
+        parser = {1: self._parse_unsigned_char,
+                  2: self._parse_unsigned_int,
+                  3: self._parse_unsigned_int,
+                  5: self._parse_unsigned_long,
+                  6: self._parse_double,
+                  8: self._parse_string,
+                  9: self._parse_char_array,
+                  }
+        return parser[self._datatype]()
+
+    def _parse_unsigned_char(self):
+        self._length = 1
+        return self._unpack("B", self._get_bytes(self._length))
+
+    def _parse_unsigned_int(self):
+        self._length = 4
+        return self._unpack("I", self._get_bytes(self._length))
+
+    def _parse_unsigned_long(self):
+        self._length = 8
+        return self._unpack("Q", self._get_bytes(self._length))
+
+    def _parse_double(self):
+        self._length = 8
+        return self._unpack("d", self._get_bytes(self._length))
+
+    def _parse_string(self):
+        # the string is of unknown length but ends at the first instance of \x00\x00
+        stop = self._body.index("\x00\x00")
+        self._length = stop
+        return self._body[:stop - 1].decode("utf16").encode("utf8")
+
+    def _parse_char_array(self):
+        array_length = self._unpack("Q", self._get_bytes(8))
+        self._length = array_length + 8
+        return array.array("B", self._body[8:array_length])
+
+    def _parse_metadata_item(self):
+        count, length = struct.unpack("<IQ", self._get_bytes(12))
+        metadata_set = MetadataSet(self._body, 0, count)
+
+    def _unpack(self, kind, data):
+        """
+        :param kind:    the datatype to interpret the bytes as (see: https://docs.python.org/2/library/struct.html#struct-format-strings)
+        :type kind:     str
+        :param data:    the bytes to be converted
+        :type data:     bytes
+
+        Parses a sequence of bytes and converts them to a Python data type.
+        struct.unpack() returns a tuple but we only want the first element.
+
+        """
+        return struct.unpack(kind, data)[0]
+
+
+class MetadataSet(object):
+    """
+    A container of metadata items. Can contain other MetadataSet objects.
+
+    """
+    def __init__(self, data, start, item_count):
+        self._items = []
+        self._parse(data, start, item_count)
+
+    def _parse(self, data, start, item_count):
+        for item in range(item_count):
+            metadata_item = MetadataItem(start, data)
+            if not metadata_item.is_valid:
+                break
+            start += metadata_item.length
 
 
 class Chunkmap(object):
