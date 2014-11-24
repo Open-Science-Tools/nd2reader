@@ -23,7 +23,7 @@ class Nd2(BaseNd2):
 
         """
         for i in range(self._image_count):
-            for fov in range(self._field_of_view_count):
+            for fov in range(self.field_of_view_count):
                 for z_level in range(self._z_level_count):
                     for channel in self.channels:
                         image = self.get_image(i, fov, channel.name, z_level)
