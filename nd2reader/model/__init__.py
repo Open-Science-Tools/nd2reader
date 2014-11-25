@@ -62,13 +62,19 @@ class Image(object):
 
     @property
     def timestamp(self):
-        # TODO: Convert to datetime object
+        """
+        The number of seconds after the beginning of the acquisition that the image was taken. Note that for a given field
+        of view and z-level offset, if you have images of multiple channels, they will all be given the same timestamp.
+        No, this doesn't make much sense. But that's how ND2s are structured, so if your experiment depends on millisecond
+        accuracy, you need to find an alternative imaging system.
+
+        """
         return self._timestamp / 1000.0
 
     @property
     def data(self):
         if self._data is None:
-            self._data = np.reshape(self._raw_data, (self._height, self._width))
+            self._data = np.reshape(self._raw_data, (self._height, self._width)).astype(np.float64)
         return self._data
 
     @property

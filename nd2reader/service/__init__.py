@@ -29,7 +29,7 @@ class BaseNd2(object):
     def channels(self):
         metadata = self._metadata['ImageMetadataSeq']['SLxPictureMetadata']['sPicturePlanes']
         try:
-            validity = self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['ppNextLevelEx']['']['pItemValid']
+            validity = self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx'][''][0]['ppNextLevelEx'][''][0]['pItemValid']
         except KeyError:
             # If none of the channels have been deleted, there is no validity list, so we just make one
             validity = [True for i in metadata]
@@ -69,7 +69,7 @@ class BaseNd2(object):
         NIS Elements can figure it out, but we haven't found it yet.
 
         """
-        return sum(self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['pItemValid'])
+        return sum(self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx'][''][0]['pItemValid'])
 
     @property
     def channel_count(self):
