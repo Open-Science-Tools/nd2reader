@@ -53,11 +53,11 @@ class BaseNd2(object):
         return self._metadata['ImageEvents']['RLxExperimentRecord']['uiCount']
 
     @property
-    def _timepoint_count(self):
-        return self._image_count / self.field_of_view_count / self._z_level_count
+    def timepoint_count(self):
+        return self._image_count / self.field_of_view_count / self.z_level_count
 
     @property
-    def _z_level_count(self):
+    def z_level_count(self):
         return self._image_count / self._sequence_count
 
     @property
@@ -72,7 +72,7 @@ class BaseNd2(object):
         return sum(self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['pItemValid'])
 
     @property
-    def _channel_count(self):
+    def channel_count(self):
         return self._reader.channel_count
 
     @property
@@ -88,7 +88,7 @@ class BaseNd2(object):
         return self._reader.metadata
 
     def _calculate_image_set_number(self, timepoint, fov, z_level):
-        return timepoint * self.field_of_view_count * self._z_level_count + (fov * self._z_level_count + z_level)
+        return timepoint * self.field_of_view_count * self.z_level_count + (fov * self.z_level_count + z_level)
 
 
 class Nd2Reader(object):

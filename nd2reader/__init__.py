@@ -24,7 +24,7 @@ class Nd2(BaseNd2):
         """
         for i in range(self._image_count):
             for fov in range(self.field_of_view_count):
-                for z_level in range(self._z_level_count):
+                for z_level in range(self.z_level_count):
                     for channel in self.channels:
                         image = self.get_image(i, fov, channel.name, z_level)
                         if image.is_valid:
@@ -34,9 +34,9 @@ class Nd2(BaseNd2):
         """
         Gets all the images for a given field of view and
         """
-        timepoint_set = xrange(self._timepoint_count) if timepoints is None else timepoints
+        timepoint_set = xrange(self.timepoint_count) if timepoints is None else timepoints
         channel_set = [channel.name for channel in self.channels] if channels is None else channels
-        z_level_set = xrange(self._z_level_count) if z_levels is None else z_levels
+        z_level_set = xrange(self.z_level_count) if z_levels is None else z_levels
 
         for timepoint in timepoint_set:
             image_set = ImageSet()
