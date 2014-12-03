@@ -258,9 +258,6 @@ class Nd2Reader(object):
         return np.frombuffer(arr)
 
     def _z_level_count(self):
-        """read the microscope coordinates and temperatures
-        Missing: get chunknames and types from xml metadata"""
-        res = {}
         name = "CustomData|Z!"
         st = self._read_chunk(self._label_map[name].location)
         res = array.array("d", st)

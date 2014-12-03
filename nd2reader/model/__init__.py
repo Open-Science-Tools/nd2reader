@@ -128,6 +128,7 @@ class MetadataItem(object):
                   6: self._parse_double,
                   8: self._parse_string,
                   9: self._parse_char_array,
+                  11: self._parse_metadata_item
                   }
         return parser[self._datatype]()
 
@@ -238,7 +239,6 @@ class Chunkmap(object):
                 length -= data.tell()-lastpos
                 nextdata = data.read(length)
                 value = self.parse(nextdata, newcount)
-                print("WE GOT A NEW DICT")
                 # Skip some offsets
                 data.read(newcount * 8)
             else:
