@@ -69,7 +69,12 @@ class BaseNd2(object):
         NIS Elements can figure it out, but we haven't found it yet.
 
         """
-        return sum(self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx'][''][0]['pItemValid'])
+        try:
+            valid_fovs = self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx'][''][0]['pItemValid']
+        except KeyError:
+            # if nothing was deleted, there won't be a 0 key
+            valid_fovs = self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['pItemValid']
+        return sum(valid_fovs)
 
     @property
     def channel_count(self):

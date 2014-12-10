@@ -30,11 +30,11 @@ class Nd2(BaseNd2):
                         if image.is_valid:
                             yield image
 
-    def image_sets(self, field_of_view, timepoints=None, channels=None, z_levels=None):
+    def image_sets(self, field_of_view, time_indices=None, channels=None, z_levels=None):
         """
         Gets all the images for a given field of view and
         """
-        timepoint_set = xrange(self.timepoint_count) if timepoints is None else timepoints
+        timepoint_set = xrange(self.timepoint_count) if time_indices is None else time_indices
         channel_set = [channel.name for channel in self.channels] if channels is None else channels
         z_level_set = xrange(self.z_level_count) if z_levels is None else z_levels
 
