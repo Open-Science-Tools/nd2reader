@@ -72,7 +72,6 @@ class BaseNd2(object):
         try:
             valid_fovs = self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx'][''][0]['pItemValid']
         except KeyError:
-            # if nothing was deleted, there won't be a 0 key
             valid_fovs = self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['pItemValid']
         return sum(valid_fovs)
 
