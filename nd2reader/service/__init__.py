@@ -19,10 +19,18 @@ class BaseNd2(object):
 
     @property
     def height(self):
+        """
+        :return:    height of each image, in pixels
+
+        """
         return self._metadata['ImageAttributes']['SLxImageAttributes']['uiHeight']
 
     @property
     def width(self):
+        """
+        :return:    width of each image, in pixels
+
+        """
         return self._metadata['ImageAttributes']['SLxImageAttributes']['uiWidth']
 
     @property
@@ -54,6 +62,13 @@ class BaseNd2(object):
 
     @property
     def timepoint_count(self):
+        """
+        The number of images for a given field of view, channel, and z_level combination.
+        Effectively the number of frames.
+
+        :rtype:     int
+
+        """
         return self._image_count / self.field_of_view_count / self.z_level_count
 
     @property

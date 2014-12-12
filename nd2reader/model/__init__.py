@@ -72,9 +72,18 @@ class Image(object):
         return self._timestamp / 1000.0
 
     @property
+    def channel(self):
+        return self._channel
+
+    @property
+    def z_level(self):
+        return self._z_level
+
+    @property
     def data(self):
         if self._data is None:
-            self._data = np.reshape(self._raw_data, (self._height, self._width)).astype(np.float64)
+            # The data is just a flat, 1-dimensional array. We convert it to a 2D array and cast the data points as 16-bit integers
+            self._data = np.reshape(self._raw_data, (self._height, self._width)).astype(np.int64).astype(np.uint16)
         return self._data
 
     @property
