@@ -4,7 +4,7 @@ import struct
 from StringIO import StringIO
 from collections import namedtuple
 import logging
-from nd2reader.model import Channel, ImageSet, Image
+from nd2reader.model import Channel
 
 log = logging.getLogger("nd2reader")
 log.setLevel(logging.DEBUG)
