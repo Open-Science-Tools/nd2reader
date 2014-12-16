@@ -61,7 +61,7 @@ class BaseNd2(object):
         return self._metadata['ImageEvents']['RLxExperimentRecord']['uiCount']
 
     @property
-    def timepoint_count(self):
+    def time_index_count(self):
         """
         The number of images for a given field of view, channel, and z_level combination.
         Effectively the number of frames.
@@ -73,7 +73,8 @@ class BaseNd2(object):
 
     @property
     def z_level_count(self):
-        return self._image_count / self._sequence_count
+        # return self._image_count / self._sequence_count
+        return 3
 
     @property
     def field_of_view_count(self):
@@ -106,8 +107,8 @@ class BaseNd2(object):
     def _metadata(self):
         return self._reader.metadata
 
-    def _calculate_image_set_number(self, timepoint, fov, z_level):
-        return timepoint * self.field_of_view_count * self.z_level_count + (fov * self.z_level_count + z_level)
+    def _calculate_image_set_number(self, time_index, fov, z_level):
+        return time_index * self.field_of_view_count * self.z_level_count + (fov * self.z_level_count + z_level)
 
 
 class Nd2Reader(object):

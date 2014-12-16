@@ -11,8 +11,8 @@ class Nd2(BaseNd2):
     def __init__(self, filename):
         super(Nd2, self).__init__(filename)
 
-    def get_image(self, timepoint, fov, channel_name, z_level):
-        image_set_number = self._calculate_image_set_number(timepoint, fov, z_level)
+    def get_image(self, time_index, fov, channel_name, z_level):
+        image_set_number = self._calculate_image_set_number(time_index, fov, z_level)
         timestamp, raw_image_data = self._reader.get_raw_image_data(image_set_number, self.channel_offset[channel_name])
         return Image(timestamp, raw_image_data, fov, channel_name, z_level, self.height, self.width)
 
@@ -34,7 +34,7 @@ class Nd2(BaseNd2):
         """
         Gets all the images for a given field of view and
         """
-        timepoint_set = xrange(self.timepoint_count) if time_indices is None else time_indices
+        timepoint_set = xrange(self.time_index_count) if time_indices is None else time_indices
         channel_set = [channel.name for channel in self.channels] if channels is None else channels
         z_level_set = xrange(self.z_level_count) if z_levels is None else z_levels
 
