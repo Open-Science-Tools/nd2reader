@@ -156,12 +156,22 @@ class Nd2Reader(object):
 
         """
         pattern = r""".*?T'\((\d+)\).*?"""
-        return int(re.match(pattern, self._dimensions).group(1))
+        try:
+            count = int(re.match(pattern, self._dimensions).group(1))
+        except AttributeError:
+            return 1
+        else:
+            return count
 
     @property
     def z_level_count(self):
         pattern = r""".*?Z\((\d+)\).*?"""
-        return int(re.match(pattern, self._dimensions).group(1))
+        try:
+            count = int(re.match(pattern, self._dimensions).group(1))
+        except AttributeError:
+            return 1
+        else:
+            return count
 
     @property
     def field_of_view_count(self):
@@ -173,12 +183,22 @@ class Nd2Reader(object):
 
         """
         pattern = r""".*?XY\((\d+)\).*?"""
-        return int(re.match(pattern, self._dimensions).group(1))
+        try:
+            count = int(re.match(pattern, self._dimensions).group(1))
+        except AttributeError:
+            return 1
+        else:
+            return count
 
     @property
     def channel_count(self):
         pattern = r""".*?λ\((\d+)\).*?"""
-        return int(re.match(pattern, self._dimensions).group(1))
+        try:
+            count = int(re.match(pattern, self._dimensions).group(1))
+        except AttributeError:
+            return 1
+        else:
+            return count
 
     def get_raw_image_data(self, image_set_number, channel_offset):
         chunk = self._label_map["ImageDataSeq|%d!" % image_set_number]
