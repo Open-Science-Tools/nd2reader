@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
+
 import array
 import numpy as np
 import struct
+import re
 from StringIO import StringIO
 from collections import namedtuple
 import logging
@@ -69,12 +72,11 @@ class BaseNd2(object):
         :rtype:     int
 
         """
-        return self._image_count / self.field_of_view_count / self.z_level_count
+        return self._reader.time_index_count
 
     @property
     def z_level_count(self):
-        # return self._image_count / self._sequence_count
-        return 3
+        return self._reader.z_level_count
 
     @property
     def field_of_view_count(self):
@@ -85,11 +87,7 @@ class BaseNd2(object):
         NIS Elements can figure it out, but we haven't found it yet.
 
         """
-        try:
-            valid_fovs = self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx'][''][0]['pItemValid']
-        except KeyError:
-            valid_fovs = self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx']['']['pItemValid']
-        return sum(valid_fovs)
+        return self._reader.field_of_view_count
 
     @property
     def channel_count(self):
@@ -124,6 +122,23 @@ class Nd2Reader(object):
         self._metadata = {}
         self._read_map()
         self._parse_dict_data()
+        self.__dimensions = None
+
+    @property
+    def _dimensions(self):
+        if self.__dimensions is None:
+            # TODO: Replace this with a single regex
+            for line in self._metadata['ImageTextInfo']['SLxImageTextInfo'].values():
+                if "Dimensions:" in line:
+                    metadata = line
+                    break
+            else:
+                raise Exception("Could not parse metadata dimensions!")
+            for line in metadata.split("\r\n"):
+                if line.startswith("Dimensions:"):
+                    self.__dimensions = line
+                    break
+        return self.__dimensions
 
     @property
     def fh(self):
@@ -132,8 +147,38 @@ class Nd2Reader(object):
         return self._file_handler
 
     @property
+    def time_index_count(self):
+        """
+        The number of images for a given field of view, channel, and z_level combination.
+        Effectively the number of frames.
+
+        :rtype:     int
+
+        """
+        pattern = r""".*?T'\((\d+)\).*?"""
+        return int(re.match(pattern, self._dimensions).group(1))
+
+    @property
+    def z_level_count(self):
+        pattern = r""".*?Z\((\d+)\).*?"""
+        return int(re.match(pattern, self._dimensions).group(1))
+
+    @property
+    def field_of_view_count(self):
+        """
+        The metadata contains information about fields of view, but it contains it even if some fields
+        of view were cropped. We can't find anything that states which fields of view are actually
+        in the image data, so we have to calculate it. There probably is something somewhere, since
+        NIS Elements can figure it out, but we haven't found it yet.
+
+        """
+        pattern = r""".*?XY\((\d+)\).*?"""
+        return int(re.match(pattern, self._dimensions).group(1))
+
+    @property
     def channel_count(self):
-        return self._metadata['ImageAttributes']["SLxImageAttributes"]["uiComp"]
+        pattern = r""".*?λ\((\d+)\).*?"""
+        return int(re.match(pattern, self._dimensions).group(1))
 
     def get_raw_image_data(self, image_set_number, channel_offset):
         chunk = self._label_map["ImageDataSeq|%d!" % image_set_number]
