@@ -56,6 +56,17 @@ class BaseNd2(object):
             yield Channel(name, camera, exposure_time)
 
     @property
+    def channel_names(self):
+        """
+        A convenience method for getting an alphabetized list of channel names.
+
+        :return:    list[str]
+
+        """
+        for channel in sorted(self.channels, key=lambda x: x.name):
+            yield channel.name
+
+    @property
     def _image_count(self):
         return self._metadata['ImageAttributes']['SLxImageAttributes']['uiSequenceCount']
 
