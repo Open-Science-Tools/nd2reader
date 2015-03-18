@@ -61,6 +61,10 @@ class Image(object):
         self._data = None
 
     @property
+    def field_of_view(self):
+        return self._field_of_view
+
+    @property
     def timestamp(self):
         """
         The number of seconds after the beginning of the acquisition that the image was taken. Note that for a given field
