@@ -8,6 +8,7 @@ from StringIO import StringIO
 from collections import namedtuple
 import logging
 from nd2reader.model import Channel
+from datetime import datetime
 
 log = logging.getLogger("nd2reader")
 log.setLevel(logging.DEBUG)
@@ -35,6 +36,10 @@ class BaseNd2(object):
 
         """
         return self._metadata['ImageAttributes']['SLxImageAttributes']['uiWidth']
+
+    @property
+    def absolute_start(self):
+        return self._reader.absolute_start
 
     @property
     def channels(self):
@@ -126,6 +131,7 @@ class Nd2Reader(object):
 
     """
     def __init__(self, filename):
+        self._absolute_start = None
         self._filename = filename
         self._file_handler = None
         self._chunk_map_start_location = None
@@ -138,7 +144,7 @@ class Nd2Reader(object):
     @property
     def _dimensions(self):
         if self.__dimensions is None:
-            # TODO: Replace this with a single regex
+            # The particular slot that this data shows up in changes (seemingly) randomly
             for line in self._metadata['ImageTextInfo']['SLxImageTextInfo'].values():
                 if "Dimensions:" in line:
                     metadata = line
@@ -150,6 +156,18 @@ class Nd2Reader(object):
                     self.__dimensions = line
                     break
         return self.__dimensions
+
+    @property
+    def absolute_start(self):
+        if self._absolute_start is None:
+            for line in self._metadata['ImageTextInfo']['SLxImageTextInfo'].values():
+                try:
+                    absolute_start = datetime.strptime(line, "%m/%d/%Y  %I:%M:%S %p")
+                except ValueError:
+                    continue
+                else:
+                    self._absolute_start = absolute_start
+        return self._absolute_start
 
     @property
     def fh(self):
