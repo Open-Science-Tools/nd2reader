@@ -6,7 +6,7 @@ import array
 import struct
 
 
-log = logging.getLogger("nd2reader")
+log = logging.getLogger(__name__)
 
 
 class Channel(object):

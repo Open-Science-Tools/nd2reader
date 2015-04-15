@@ -2,8 +2,7 @@ import logging
 from nd2reader.service import BaseNd2
 from nd2reader.model import Image, ImageSet
 
-log = logging.getLogger("nd2reader")
-log.addHandler(logging.StreamHandler())
+log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
 

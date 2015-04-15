@@ -10,7 +10,7 @@ import logging
 from nd2reader.model import Channel
 from datetime import datetime
 
-log = logging.getLogger("nd2reader")
+log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 chunk = namedtuple('Chunk', ['location', 'length'])
 field_of_view = namedtuple('FOV', ['number', 'x', 'y', 'z', 'pfs_offset'])
@@ -161,12 +161,25 @@ class Nd2Reader(object):
     def absolute_start(self):
         if self._absolute_start is None:
             for line in self._metadata['ImageTextInfo']['SLxImageTextInfo'].values():
+                absolute_start_12 = None
+                absolute_start_24 = None
+
+                # ND2s seem to randomly switch between 12- and 24-hour representations.
                 try:
-                    absolute_start = datetime.strptime(line, "%m/%d/%Y  %I:%M:%S %p")
+                    absolute_start_24 = datetime.strptime(line, "%m/%d/%Y  %H:%M:%S")
                 except ValueError:
+                    pass
+
+                try:
+                    absolute_start_12 = datetime.strptime(line, "%m/%d/%Y  %I:%M:%S %p")
+                except ValueError:
+                    pass
+
+                if not absolute_start_12 and not absolute_start_24:
                     continue
-                else:
-                    self._absolute_start = absolute_start
+
+                self._absolute_start = absolute_start_12 if absolute_start_12 else absolute_start_24
+
         return self._absolute_start
 
     @property
