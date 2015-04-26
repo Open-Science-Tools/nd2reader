@@ -1,131 +1,12 @@
-# -*- coding: utf-8 -*-
-
 import array
 import numpy as np
 import struct
 import re
 from StringIO import StringIO
-from collections import namedtuple
-import logging
-from nd2reader.model import Channel
 from datetime import datetime
 
-log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
-chunk = namedtuple('Chunk', ['location', 'length'])
-field_of_view = namedtuple('FOV', ['number', 'x', 'y', 'z', 'pfs_offset'])
 
-
-class BaseNd2(object):
-    def __init__(self, filename):
-        self._reader = Nd2Reader(filename)
-        self._channel_offset = None
-
-    @property
-    def height(self):
-        """
-        :return:    height of each image, in pixels
-
-        """
-        return self._metadata['ImageAttributes']['SLxImageAttributes']['uiHeight']
-
-    @property
-    def width(self):
-        """
-        :return:    width of each image, in pixels
-
-        """
-        return self._metadata['ImageAttributes']['SLxImageAttributes']['uiWidth']
-
-    @property
-    def absolute_start(self):
-        return self._reader.absolute_start
-
-    @property
-    def channels(self):
-        metadata = self._metadata['ImageMetadataSeq']['SLxPictureMetadata']['sPicturePlanes']
-        try:
-            validity = self._metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx'][''][0]['ppNextLevelEx'][''][0]['pItemValid']
-        except KeyError:
-            # If none of the channels have been deleted, there is no validity list, so we just make one
-            validity = [True for i in metadata]
-        # Channel information is contained in dictionaries with the keys a0, a1...an where the number
-        # indicates the order in which the channel is stored. So by sorting the dicts alphabetically
-        # we get the correct order.
-        for (label, chan), valid in zip(sorted(metadata['sPlaneNew'].items()), validity):
-            if not valid:
-                continue
-            name = chan['sDescription']
-            exposure_time = metadata['sSampleSetting'][label]['dExposureTime']
-            camera = metadata['sSampleSetting'][label]['pCameraSetting']['CameraUserName']
-            yield Channel(name, camera, exposure_time)
-
-    @property
-    def channel_names(self):
-        """
-        A convenience method for getting an alphabetized list of channel names.
-
-        :return:    list[str]
-
-        """
-        for channel in sorted(self.channels, key=lambda x: x.name):
-            yield channel.name
-
-    @property
-    def _image_count(self):
-        return self._metadata['ImageAttributes']['SLxImageAttributes']['uiSequenceCount']
-
-    @property
-    def _sequence_count(self):
-        return self._metadata['ImageEvents']['RLxExperimentRecord']['uiCount']
-
-    @property
-    def time_index_count(self):
-        """
-        The number of images for a given field of view, channel, and z_level combination.
-        Effectively the number of frames.
-
-        :rtype:     int
-
-        """
-        return self._reader.time_index_count
-
-    @property
-    def z_level_count(self):
-        return self._reader.z_level_count
-
-    @property
-    def field_of_view_count(self):
-        """
-        The metadata contains information about fields of view, but it contains it even if some fields
-        of view were cropped. We can't find anything that states which fields of view are actually
-        in the image data, so we have to calculate it. There probably is something somewhere, since
-        NIS Elements can figure it out, but we haven't found it yet.
-
-        """
-        return self._reader.field_of_view_count
-
-    @property
-    def channel_count(self):
-        return self._reader.channel_count
-
-    @property
-    def channel_offset(self):
-        if self._channel_offset is None:
-            self._channel_offset = {}
-            for n, channel in enumerate(self.channels):
-                self._channel_offset[channel.name] = n
-        return self._channel_offset
-
-    @property
-    def _metadata(self):
-        return self._reader.metadata
-
-    def _calculate_image_set_number(self, time_index, fov, z_level):
-        return time_index * self.field_of_view_count * self.z_level_count + (fov * self.z_level_count + z_level)
-
-
-class Nd2Reader(object):
+class Nd2FileReader(object):
     """
     Reads .nd2 files, provides an interface to the metadata, and generates numpy arrays from the image data.
 
@@ -278,60 +159,24 @@ class Nd2Reader(object):
         grab the subsequent data (always 16 bytes long), advance to the next label and repeat.
 
         """
-        raw_text = self._get_raw_chunk_map_text()
-        label_start = self._find_first_label_offset(raw_text)
+        self.fh.seek(-8, 2)
+        chunk_map_start_location = struct.unpack("Q", self.fh.read(8))[0]
+        self.fh.seek(chunk_map_start_location)
+        raw_text = self.fh.read(-1)
+        label_start = raw_text.index("ND2 FILEMAP SIGNATURE NAME 0001!") + 32
+
         while True:
-            data_start = self._get_data_start(label_start, raw_text)
-            label, value = self._extract_map_key(label_start, data_start, raw_text)
+            data_start = raw_text.index("!", label_start) + 1
+            key = raw_text[label_start: data_start]
+            location, length = struct.unpack("QQ", raw_text[data_start: data_start + 16])
+            label, value = key, chunk(location=location, length=length)
+
             if label == "ND2 CHUNK MAP SIGNATURE 0000001!":
                 # We've reached the end of the chunk map
                 break
 
             self._label_map[label] = value
             label_start = data_start + 16
-
-    @staticmethod
-    def _find_first_label_offset(raw_text):
-        """
-        The chunk map starts with some number of (seemingly) useless bytes, followed
-        by "ND2 FILEMAP SIGNATURE NAME 0001!". We return the location of the first character after this sequence,
-        which is the actual beginning of the chunk map.
-
-        """
-        return raw_text.index("ND2 FILEMAP SIGNATURE NAME 0001!") + 32
-
-    @staticmethod
-    def _get_data_start(label_start, raw_text):
-        """
-        The data for a given label begins immediately after the first exclamation point
-
-        """
-        return raw_text.index("!", label_start) + 1
-
-    @staticmethod
-    def _extract_map_key(label_start, data_start, raw_text):
-        """
-        Chunk map entries are a string label of arbitrary length followed by 16 bytes of data, which represent
-        the byte offset from the beginning of the file where that data can be found.
-
-        """
-        key = raw_text[label_start: data_start]
-        location, length = struct.unpack("QQ", raw_text[data_start: data_start + 16])
-        return key, chunk(location=location, length=length)
-
-    @property
-    def chunk_map_start_location(self):
-        """
-        The position in bytes from the beginning of the file where the chunk map begins.
-        The chunk map is a series of string labels followed by the position (in bytes) of the respective data.
-
-        """
-        if self._chunk_map_start_location is None:
-            # Put the cursor 8 bytes before the end of the file
-            self.fh.seek(-8, 2)
-            # Read the last 8 bytes of the file
-            self._chunk_map_start_location = struct.unpack("Q", self.fh.read(8))[0]
-        return self._chunk_map_start_location
 
     def _read_chunk(self, chunk_location):
         """
@@ -377,8 +222,7 @@ class Nd2Reader(object):
         Reads the entire chunk map and returns it as a string.
 
         """
-        self.fh.seek(self.chunk_map_start_location)
-        return self.fh.read(-1)
+
 
     @staticmethod
     def as_numpy_array(arr):
