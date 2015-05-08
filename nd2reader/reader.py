@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import array
 import numpy as np
 import struct
