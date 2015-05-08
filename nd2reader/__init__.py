@@ -9,8 +9,9 @@ from nd2reader.reader import Nd2FileReader
 chunk = namedtuple('Chunk', ['location', 'length'])
 field_of_view = namedtuple('FOV', ['number', 'x', 'y', 'z', 'pfs_offset'])
 
+print(__name__)
 log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
+log.setLevel(logging.WARN)
 
 
 class Nd2(Nd2FileReader):
