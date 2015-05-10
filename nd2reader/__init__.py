@@ -1,27 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from collections import namedtuple
 from nd2reader.model import Channel
+from datetime import datetime
 import logging
 from nd2reader.model import Image, ImageSet
 from nd2reader.reader import Nd2FileReader
 
-chunk = namedtuple('Chunk', ['location', 'length'])
-field_of_view = namedtuple('FOV', ['number', 'x', 'y', 'z', 'pfs_offset'])
 
-print(__name__)
 log = logging.getLogger(__name__)
+log.addHandler(logging.StreamHandler())
 log.setLevel(logging.WARN)
 
 
 class Nd2(Nd2FileReader):
     def __init__(self, filename):
         super(Nd2, self).__init__(filename)
-
-    def get_image(self, time_index, fov, channel_name, z_level):
-        image_set_number = self._calculate_image_set_number(time_index, fov, z_level)
-        timestamp, raw_image_data = self.get_raw_image_data(image_set_number, self.channel_offset[channel_name])
-        return Image(timestamp, raw_image_data, fov, channel_name, z_level, self.height, self.width)
 
     def __iter__(self):
         """
@@ -57,20 +50,8 @@ class Nd2(Nd2FileReader):
         self._channel_offset = None
 
     @property
-    def height(self):
-        """
-        :return:    height of each image, in pixels
-
-        """
-        return self._metadata['ImageAttributes']['SLxImageAttributes']['uiHeight']
-
-    @property
-    def width(self):
-        """
-        :return:    width of each image, in pixels
-
-        """
-        return self._metadata['ImageAttributes']['SLxImageAttributes']['uiWidth']
+    def metadata(self):
+        return self._metadata
 
     @property
     def channels(self):
@@ -103,22 +84,21 @@ class Nd2(Nd2FileReader):
             yield channel.name
 
     @property
-    def _image_count(self):
-        return self._metadata['ImageAttributes']['SLxImageAttributes']['uiSequenceCount']
-
-    @property
-    def _sequence_count(self):
-        return self._metadata['ImageEvents']['RLxExperimentRecord']['uiCount']
-
-    @property
-    def channel_offset(self):
-        if self._channel_offset is None:
-            self._channel_offset = {}
-            for n, channel in enumerate(self.channels):
-                self._channel_offset[channel.name] = n
-        return self._channel_offset
-
-    def _calculate_image_set_number(self, time_index, fov, z_level):
-        return time_index * self.field_of_view_count * self.z_level_count + (fov * self.z_level_count + z_level)
-
-
+    def absolute_start(self):
+        if self._absolute_start is None:
+            for line in self._metadata['ImageTextInfo']['SLxImageTextInfo'].values():
+                absolute_start_12 = None
+                absolute_start_24 = None
+                # ND2s seem to randomly switch between 12- and 24-hour representations.
+                try:
+                    absolute_start_24 = datetime.strptime(line, "%m/%d/%Y  %H:%M:%S")
+                except ValueError:
+                    pass
+                try:
+                    absolute_start_12 = datetime.strptime(line, "%m/%d/%Y  %I:%M:%S %p")
+                except ValueError:
+                    pass
+                if not absolute_start_12 and not absolute_start_24:
+                    continue
+                self._absolute_start = absolute_start_12 if absolute_start_12 else absolute_start_24
+        return self._absolute_start
