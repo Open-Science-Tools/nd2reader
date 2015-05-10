@@ -228,48 +228,49 @@ class Nd2FileReader(object):
 
     def read_lv_encoding(self, data, count):
         data = StringIO(data)
-        res = {}
+        metadata = {}
         total_count = 0
-        for c in range(count):
-            lastpos = data.tell()
+        for _ in xrange(count):
+            cursor_position = data.tell()
             total_count += 1
-            hdr = data.read(2)
-            if not hdr:
+            header = data.read(2)
+            if not header:
                 break
-            typ = ord(hdr[0])
-            bname = data.read(2*ord(hdr[1]))
-            name = bname.decode("utf16")[:-1].encode("utf8")
-            if typ == 1:
+            data_type, name_length = map(ord, header)
+            name = data.read(name_length * 2).decode("utf16")[:-1].encode("utf8")
+            if data_type == 1:
                 value, = struct.unpack("B", data.read(1))
-            elif typ in [2, 3]:
+            elif data_type in [2, 3]:
                 value, = struct.unpack("I", data.read(4))
-            elif typ == 5:
+            elif data_type == 5:
                 value, = struct.unpack("Q", data.read(8))
-            elif typ == 6:
+            elif data_type == 6:
                 value, = struct.unpack("d", data.read(8))
-            elif typ == 8:
+            elif data_type == 8:
                 value = data.read(2)
                 while value[-2:] != "\x00\x00":
                     value += data.read(2)
                 value = value.decode("utf16")[:-1].encode("utf8")
-            elif typ == 9:
+            elif data_type == 9:
                 cnt, = struct.unpack("Q", data.read(8))
                 value = array.array("B", data.read(cnt))
-            elif typ == 11:
-                newcount, length = struct.unpack("<IQ", data.read(12))
-                length -= data.tell()-lastpos
-                nextdata = data.read(length)
-                value = self.read_lv_encoding(nextdata, newcount)
+            elif data_type == 11:
+                new_count, length = struct.unpack("<IQ", data.read(12))
+                length -= data.tell() - cursor_position
+                next_data_length = data.read(length)
+                value = self.read_lv_encoding(next_data_length, new_count)
                 # Skip some offsets
-                data.read(newcount * 8)
+                data.read(new_count * 8)
+            if name not in metadata:
+                metadata[name] = value
             else:
-                assert 0, "%s hdr %x:%x unknown" % (name, ord(hdr[0]),  ord(hdr[1]))
-            if not name in res:
-                res[name] = value
-            else:
-                if not isinstance(res[name], list):
-                    res[name] = [res[name]]
-                res[name].append(value)
-        x = data.read()
-        assert not x, "skip %d %s" % (len(x), repr(x[:30]))
-        return res
+                if not isinstance(metadata[name], list):
+                    # We have encountered this key exactly once before. Since we're seeing it again, we know we
+                    # need to convert it to a list before proceeding.
+                    metadata[name] = [metadata[name]]
+                # We've encountered this key before so we're guaranteed to be dealing with a list. Thus we append
+                # the value to the already-existing list.
+                metadata[name].append(value)
+        # x = data.read()
+        # assert not x, "skip %d %s" % (len(x), repr(x[:30]))
+        return metadata
