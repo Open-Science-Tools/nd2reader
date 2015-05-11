@@ -1,5 +1,4 @@
 import numpy as np
-import skimage.io
 import logging
 
 log = logging.getLogger(__name__)
@@ -70,7 +69,3 @@ class Image(object):
     @property
     def is_valid(self):
         return np.any(self.data)
-
-    def show(self):
-        skimage.io.imshow(self.data)
-        skimage.io.show()
