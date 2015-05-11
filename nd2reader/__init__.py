@@ -28,8 +28,8 @@ class Nd2(Nd2Parser):
         for i in range(self._image_count):
             for fov in range(self.field_of_view_count):
                 for z_level in range(self.z_level_count):
-                    for channel in self.channels:
-                        image = self.get_image(i, fov, channel.name, z_level)
+                    for channel_name in self.channels:
+                        image = self.get_image(i, fov, channel_name, z_level)
                         if image.is_valid:
                             yield image
 
@@ -168,7 +168,7 @@ class Nd2(Nd2Parser):
         """
         channel_offset = {}
         for n, channel in enumerate(self.channels):
-            self._channel_offset[channel.name] = n
+            channel_offset[channel] = n
         return channel_offset
 
     def _get_raw_image_data(self, image_set_number, channel_offset):
