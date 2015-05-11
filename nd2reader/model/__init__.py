@@ -5,25 +5,6 @@ import logging
 log = logging.getLogger(__name__)
 
 
-class Channel(object):
-    def __init__(self, name, camera, exposure_time):
-        self._name = name
-        self._camera = camera
-        self._exposure_time = exposure_time
-
-    @property
-    def name(self):
-        return self._name
-
-    @property
-    def camera(self):
-        return self._camera
-
-    @property
-    def exposure_time(self):
-        return self._exposure_time
-
-
 class ImageSet(object):
     """
     A group of images that share the same timestamp. NIS Elements doesn't store a unique timestamp for every
