@@ -68,4 +68,4 @@ class Image(object):
 
     @property
     def is_valid(self):
-        return np.any(self.data)
+        return np.any(self._raw_data)
