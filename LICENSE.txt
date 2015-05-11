@@ -10,7 +10,3 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-Author: Jim Rybarski <jim@rybarski.com>
-
-Thanks to M.Kauer and B.Kauer who wrote the [SLOTH library](http://pythonhosted.org/SLOTH/_modules/sloth/read_nd2.html), upon which nd2reader is based.

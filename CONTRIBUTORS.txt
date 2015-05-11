@@ -1,0 +1,4 @@
+Author: Jim Rybarski <jim@rybarski.com>
+
+nd2reader is based on the read_nd2 module from the SLOTH library (http://pythonhosted.org/SLOTH/_modules/sloth/read_nd2.html).
+Thanks to M.Kauer and B.Kauer for solving the hardest part of this puzzle.
