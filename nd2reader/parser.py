@@ -22,7 +22,7 @@ class Nd2Parser(object):
         self._filename = filename
         self._fh = None
         self._chunk_map_start_location = None
-        self._cursor_position = None
+        self._cursor_position = 0
         self._dimension_text = None
         self._label_map = {}
         self.metadata = {}
@@ -62,11 +62,10 @@ class Nd2Parser(object):
 
     def _parse_metadata(self):
         for label in self._label_map.keys():
-            if not label.endswith("LV!") or "LV|" in label:
-                continue
-            data = self._read_chunk(self._label_map[label])
-            stop = label.index("LV")
-            self.metadata[label[:stop]] = self._read_metadata(data, 1)
+            if label.endswith("LV!") or "LV|" in label:
+                data = self._read_chunk(self._label_map[label])
+                stop = label.index("LV")
+                self.metadata[label[:stop]] = self._read_metadata(data, 1)
 
     def _read_map(self):
         """
@@ -134,10 +133,9 @@ class Nd2Parser(object):
         array_length = struct.unpack("Q", data.read(8))[0]
         return array.array("B", data.read(array_length))
 
-    def _parse_metadata_item(self, args):
-        data, cursor_position = args
+    def _parse_metadata_item(self, data):
         new_count, length = struct.unpack("<IQ", data.read(12))
-        length -= data.tell() - cursor_position
+        length -= data.tell() - self._cursor_position
         next_data_length = data.read(length)
         value = self._read_metadata(next_data_length, new_count)
         # Skip some offsets
@@ -145,15 +143,15 @@ class Nd2Parser(object):
         return value
 
     def _get_value(self, data, data_type):
-        parser = {1: {'method': self._parse_unsigned_char, 'args': data},
-                  2: {'method': self._parse_unsigned_int, 'args': data},
-                  3: {'method': self._parse_unsigned_int, 'args': data},
-                  5: {'method': self._parse_unsigned_long, 'args': data},
-                  6: {'method': self._parse_double, 'args': data},
-                  8: {'method': self._parse_string, 'args': data},
-                  9: {'method': self._parse_char_array, 'args': data},
-                  11: {'method': self._parse_metadata_item, 'args': (data, self._cursor_position)}}
-        return parser[data_type]['method'](parser[data_type]['args'])
+        parser = {1: self._parse_unsigned_char,
+                  2: self._parse_unsigned_int,
+                  3: self._parse_unsigned_int,
+                  5: self._parse_unsigned_long,
+                  6: self._parse_double,
+                  8: self._parse_string,
+                  9: self._parse_char_array,
+                  11: self._parse_metadata_item}
+        return parser[data_type](data)
 
     def _read_metadata(self, data, count):
         data = StringIO(data)
@@ -166,7 +164,7 @@ class Nd2Parser(object):
             data_type, name_length = map(ord, header)
             name = data.read(name_length * 2).decode("utf16")[:-1].encode("utf8")
             value = self._get_value(data, data_type)
-            if name not in metadata:
+            if name not in metadata.keys():
                 metadata[name] = value
             else:
                 if not isinstance(metadata[name], list):
