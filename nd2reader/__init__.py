@@ -5,7 +5,6 @@ from datetime import datetime
 import logging
 from nd2reader.model import Image, ImageSet
 from nd2reader.parser import Nd2Parser
-import numpy as np
 import re
 import struct
 
@@ -57,7 +56,7 @@ class Nd2(Nd2Parser):
             validity = self.metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx'][''][0]['ppNextLevelEx'][''][0]['pItemValid']
         except KeyError:
             # If none of the channels have been deleted, there is no validity list, so we just make one
-            validity = [True for i in metadata]
+            validity = [True for _ in metadata]
         # Channel information is contained in dictionaries with the keys a0, a1...an where the number
         # indicates the order in which the channel is stored. So by sorting the dicts alphabetically
         # we get the correct order.
@@ -158,10 +157,6 @@ class Nd2(Nd2Parser):
             return 1
         else:
             return count
-
-    @staticmethod
-    def as_numpy_array(arr):
-        return np.frombuffer(arr)
 
     @property
     def _channel_offset(self):
