@@ -1,24 +1,14 @@
 FROM ubuntu
 MAINTAINER Jim Rybarski <jim@rybarski.com>
 
+RUN mkdir -p /var/nds2
 RUN apt-get update && apt-get install -y \
-  gcc \
-  gfortran \
-  libblas-dev \
-  liblapack-dev \
-  libatlas-dev \
-  tk \
-  tk-dev \
-  libpng12-dev \  
-  python \
-  python-dev \
-  python-pip \
-  libfreetype6-dev \
-  python-skimage
- 
-RUN pip install numpy
-RUN pip install --upgrade scikit-image
+    python-numpy \
+    python-setuptools
 
 COPY . /opt/nd2reader
 WORKDIR /opt/nd2reader
 RUN python setup.py install
+WORKDIR /var/nd2s
+
+CMD /usr/bin/python2.7

@@ -9,14 +9,14 @@ field_of_view = namedtuple('FOV', ['number', 'x', 'y', 'z', 'pfs_offset'])
 
 
 class Nd2Parser(object):
-    CHUNK_HEADER = 0xabeceda
-    CHUNK_MAP_START = "ND2 FILEMAP SIGNATURE NAME 0001!"
-    CHUNK_MAP_END = "ND2 CHUNK MAP SIGNATURE 0000001!"
-    
     """
     Reads .nd2 files, provides an interface to the metadata, and generates numpy arrays from the image data.
 
     """
+    CHUNK_HEADER = 0xabeceda
+    CHUNK_MAP_START = "ND2 FILEMAP SIGNATURE NAME 0001!"
+    CHUNK_MAP_END = "ND2 CHUNK MAP SIGNATURE 0000001!"
+    
     def __init__(self, filename):
         self._absolute_start = None
         self._filename = filename

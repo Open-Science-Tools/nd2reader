@@ -4,27 +4,6 @@ import logging
 log = logging.getLogger(__name__)
 
 
-class ImageSet(object):
-    """
-    A group of images that share the same timestamp. NIS Elements doesn't store a unique timestamp for every
-    image, rather, it stores one for each set of images that share the same field of view and z-axis level.
-
-    """
-    def __init__(self):
-        self._images = []
-
-    def add(self, image):
-        """
-        :type image:    nd2reader.model.Image()
-
-        """
-        self._images.append(image)
-
-    def __iter__(self):
-        for image in self._images:
-            yield image
-
-
 class Image(object):
     def __init__(self, timestamp, raw_array, field_of_view, channel, z_level, height, width):
         self._timestamp = timestamp
@@ -69,3 +48,24 @@ class Image(object):
     @property
     def is_valid(self):
         return np.any(self._raw_data)
+
+
+class ImageSet(object):
+    """
+    A group of images that share the same timestamp. NIS Elements doesn't store a unique timestamp for every
+    image, rather, it stores one for each set of images that share the same field of view and z-axis level.
+
+    """
+    def __init__(self):
+        self._images = []
+
+    def add(self, image):
+        """
+        :type image:    nd2reader.model.Image()
+
+        """
+        self._images.append(image)
+
+    def __iter__(self):
+        for image in self._images:
+            yield image
