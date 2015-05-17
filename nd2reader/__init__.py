@@ -34,7 +34,7 @@ class Nd2(Nd2Parser):
                 for z_level in range(self.z_level_count):
                     for channel_name in self.channels:
                         image = self.get_image(i, fov, channel_name, z_level)
-                        if image.is_valid:
+                        if image is not None:
                             yield image
 
     @property
@@ -45,14 +45,19 @@ class Nd2(Nd2Parser):
                 for channel_name in self.channels:
                     for z_level in xrange(self.z_level_count):
                         image = self.get_image(time_index, fov, channel_name, z_level)
-                        if image.is_valid:
+                        if image is not None:
                             image_set.add(image)
                 yield image_set
 
     def get_image(self, time_index, fov, channel_name, z_level):
         image_set_number = self._calculate_image_set_number(time_index, fov, z_level)
-        timestamp, raw_image_data = self._get_raw_image_data(image_set_number, self._channel_offset[channel_name])
-        return Image(timestamp, raw_image_data, fov, channel_name, z_level, self.height, self.width)
+        try:
+            timestamp, raw_image_data = self._get_raw_image_data(image_set_number, self._channel_offset[channel_name])
+            image = Image(timestamp, raw_image_data, fov, channel_name, z_level, self.height, self.width)
+        except TypeError:
+            return None
+        else:
+            return image
 
     @property
     def channels(self):
@@ -178,7 +183,9 @@ class Nd2(Nd2Parser):
         # The images for the various channels are interleaved within each other.
         image_data = array.array("H", data)
         image_data_start = 4 + channel_offset
-        return timestamp, image_data[image_data_start::self.channel_count]
+        if any(image_data):
+            return timestamp, image_data[image_data_start::self.channel_count]
+        return None
 
     def _calculate_image_set_number(self, time_index, fov, z_level):
         return time_index * self.field_of_view_count * self.z_level_count + (fov * self.z_level_count + z_level)

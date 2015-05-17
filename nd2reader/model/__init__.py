@@ -46,20 +46,6 @@ class Image(object):
             self._data = np.reshape(self._raw_data, (self._height, self._width))
         return self._data
 
-    @property
-    def is_valid(self):
-        """
-        Not every image stored in an ND2 is a real image! If you take 4 images at one field of view and 2 at another
-        in a repeating cycle, there will be 4 images at BOTH field of view. The 2 non-images are the same size as all
-        the other images, only pure black (i.e. every pixel has a value of zero).
-
-        This is probably an artifact of some algorithm in NIS Elements determining the maximum number of possible
-        images and pre-allocating the space with zeros. Regardless of why they exit, we can't tell that they're
-        not actual images until we examine the data. If every pixel value is exactly 0, it's a gap image.
-
-        """
-        return np.any(self._raw_data)
-
 
 class ImageSet(object):
     """
