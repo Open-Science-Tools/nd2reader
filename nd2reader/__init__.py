@@ -10,7 +10,7 @@ import struct
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.StreamHandler())
-log.setLevel(logging.WARN)
+log.setLevel(logging.DEBUG)
 
 
 class Nd2(Nd2Parser):
@@ -19,12 +19,6 @@ class Nd2(Nd2Parser):
         self._use_image_sets = image_sets
 
     def __iter__(self):
-        if self._use_image_sets:
-            return self.image_sets()
-        else:
-            return self.images()
-
-    def images(self):
         for i in range(self._image_count):
             for fov in range(self.field_of_view_count):
                 for z_level in range(self.z_level_count):
@@ -33,6 +27,7 @@ class Nd2(Nd2Parser):
                         if image.is_valid:
                             yield image
 
+    @property
     def image_sets(self):
         for time_index in xrange(self.time_index_count):
             image_set = ImageSet()
@@ -42,7 +37,7 @@ class Nd2(Nd2Parser):
                         image = self.get_image(time_index, fov, channel_name, z_level)
                         if image.is_valid:
                             image_set.add(image)
-            yield image_set
+                yield image_set
 
     def get_image(self, time_index, fov, channel_name, z_level):
         image_set_number = self._calculate_image_set_number(time_index, fov, z_level)
@@ -83,23 +78,22 @@ class Nd2(Nd2Parser):
 
     @property
     def absolute_start(self):
-        if self._absolute_start is None:
-            for line in self.metadata['ImageTextInfo']['SLxImageTextInfo'].values():
-                absolute_start_12 = None
-                absolute_start_24 = None
-                # ND2s seem to randomly switch between 12- and 24-hour representations.
-                try:
-                    absolute_start_24 = datetime.strptime(line, "%m/%d/%Y  %H:%M:%S")
-                except ValueError:
-                    pass
-                try:
-                    absolute_start_12 = datetime.strptime(line, "%m/%d/%Y  %I:%M:%S %p")
-                except ValueError:
-                    pass
-                if not absolute_start_12 and not absolute_start_24:
-                    continue
-                self._absolute_start = absolute_start_12 if absolute_start_12 else absolute_start_24
-        return self._absolute_start
+        for line in self.metadata['ImageTextInfo']['SLxImageTextInfo'].values():
+            absolute_start_12 = None
+            absolute_start_24 = None
+            # ND2s seem to randomly switch between 12- and 24-hour representations.
+            try:
+                absolute_start_24 = datetime.strptime(line, "%m/%d/%Y  %H:%M:%S")
+            except ValueError:
+                pass
+            try:
+                absolute_start_12 = datetime.strptime(line, "%m/%d/%Y  %I:%M:%S %p")
+            except ValueError:
+                pass
+            if not absolute_start_12 and not absolute_start_24:
+                continue
+            return absolute_start_12 if absolute_start_12 else absolute_start_24
+        raise ValueError("This ND2 has no recorded start time. This is probably a bug.")
 
     @property
     def channel_count(self):
