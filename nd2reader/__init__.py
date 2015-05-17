@@ -14,9 +14,19 @@ log.setLevel(logging.DEBUG)
 
 
 class Nd2(Nd2Parser):
-    def __init__(self, filename, image_sets=False):
+    def __init__(self, filename):
         super(Nd2, self).__init__(filename)
-        self._use_image_sets = image_sets
+        self._filename = filename
+
+    def __repr__(self):
+        return "\n".join(["ND2: %s" % self._filename,
+                          "Created: %s" % self.absolute_start.strftime("%Y-%m-%d %H:%M:%S"),
+                          "Image size: %sx%s (HxW)" % (self.height, self.width),
+                          "Image cycles: %s" % self.time_index_count,
+                          "Channels: %s" % ", ".join(["'%s'" % channel for channel in self.channels]),
+                          "Fields of View: %s" % self.field_of_view_count,
+                          "Z-Levels: %s" % self.z_level_count
+                          ])
 
     def __iter__(self):
         for i in range(self._image_count):
@@ -125,11 +135,7 @@ class Nd2(Nd2Parser):
     @property
     def time_index_count(self):
         """
-        The number of image sets. If images were acquired using some kind of cycle, all images at each step in the
-        program will have the same timestamp (even though they may have varied by a few seconds in reality). For example,
-        if you have four fields of view that you're constantly monitoring, and you take a bright field and GFP image of
-        each, and you repeat that process 100 times, you'll have 800 individual images. But there will only be 400
-        time indexes.
+        The number of cycles.
 
         :rtype:     int
 
