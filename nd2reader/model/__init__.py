@@ -1,3 +1,4 @@
+import collections
 import numpy as np
 import logging
 
@@ -22,10 +23,10 @@ class Image(object):
     @property
     def timestamp(self):
         """
-        The number of seconds after the beginning of the acquisition that the image was taken. Note that for a given field
-        of view and z-level offset, if you have images of multiple channels, they will all be given the same timestamp.
-        No, this doesn't make much sense. But that's how ND2s are structured, so if your experiment depends on millisecond
-        accuracy, you need to find an alternative imaging system.
+        The number of seconds after the beginning of the acquisition that the image was taken. Note that for a given
+        field of view and z-level offset, if you have images of multiple channels, they will all be given the same
+        timestamp. No, this doesn't make much sense. But that's how ND2s are structured, so if your experiment depends
+        on millisecond accuracy, you need to find an alternative imaging system.
 
         """
         return self._timestamp / 1000.0
@@ -47,6 +48,16 @@ class Image(object):
 
     @property
     def is_valid(self):
+        """
+        Not every image stored in an ND2 is a real image! If you take 4 images at one field of view and 2 at another
+        in a repeating cycle, there will be 4 images at BOTH field of view. The 2 non-images are the same size as all
+        the other images, only pure black (i.e. every pixel has a value of zero).
+
+        This is probably an artifact of some algorithm in NIS Elements determining the maximum number of possible
+        images and pre-allocating the space with zeros. Regardless of why they exit, we can't tell that they're
+        not actual images until we examine the data. If every pixel value is exactly 0, it's a gap image.
+
+        """
         return np.any(self._raw_data)
 
 
@@ -57,15 +68,27 @@ class ImageSet(object):
 
     """
     def __init__(self):
-        self._images = []
+        self._images = collections.defaultdict(dict)
+
+    def get(self, channel="", z_level=0):
+        """
+        Retrieve an image with a given channel and z-level. For most users, z_level will always be 0.
+
+        """
+        try:
+            image = self._images[channel][z_level]
+        except KeyError:
+            return None
+        else:
+            return image
+
+    def __len__(self):
+        """ The number of images in the image set. """
+        return sum([len(channel) for channel in self._images.values()])
 
     def add(self, image):
         """
         :type image:    nd2reader.model.Image()
 
         """
-        self._images.append(image)
-
-    def __iter__(self):
-        for image in self._images:
-            yield image
+        self._images[image.channel][image.z_level] = image
