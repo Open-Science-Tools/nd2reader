@@ -176,8 +176,3 @@ class Nd2(Nd2Parser):
 
     def _calculate_image_set_number(self, time_index, fov, z_level):
         return time_index * self.field_of_view_count * self.z_level_count + (fov * self.z_level_count + z_level)
-
-
-
-for image_set in Nd2("FYLM-141111-001.nd2").image_sets:
-    print(image_set.get("", 1).data)
