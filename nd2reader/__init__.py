@@ -10,7 +10,7 @@ import struct
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.StreamHandler())
-log.setLevel(logging.DEBUG)
+log.setLevel(logging.WARNING)
 
 
 class Nd2(Nd2Parser):
