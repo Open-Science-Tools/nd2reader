@@ -16,6 +16,15 @@ class Image(object):
         self._width = width
         self._data = None
 
+    def __repr__(self):
+        return "\n".join(["<ND2 Image>",
+                          "%sx%s (HxW)" % (self._height, self._width),
+                          "Timestamp: %s" % self.timestamp,
+                          "Field of View: %s" % self.field_of_view,
+                          "Channel: %s" % self.channel,
+                          "Z-Level: %s" % self.z_level,
+                          ])
+
     @property
     def field_of_view(self):
         return self._field_of_view
@@ -55,6 +64,10 @@ class ImageSet(object):
     """
     def __init__(self):
         self._images = collections.defaultdict(dict)
+
+    def __repr__(self):
+        return "\n".join(["<ND2 Image Set>",
+                          "Image count: %s" % len(self)])
 
     def get(self, channel="", z_level=0):
         """

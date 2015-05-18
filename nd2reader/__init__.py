@@ -16,7 +16,7 @@ class Nd2(Nd2Parser):
         self._filename = filename
 
     def __repr__(self):
-        return "\n".join(["ND2: %s" % self._filename,
+        return "\n".join(["<ND2 %s>" % self._filename,
                           "Created: %s" % self._absolute_start.strftime("%Y-%m-%d %H:%M:%S"),
                           "Image size: %sx%s (HxW)" % (self.height, self.width),
                           "Image cycles: %s" % self._time_index_count,
