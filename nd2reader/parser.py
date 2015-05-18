@@ -2,6 +2,9 @@
 
 import array
 from collections import namedtuple
+from datetime import datetime
+import numpy as np
+import re
 import struct
 from StringIO import StringIO
 
@@ -18,7 +21,6 @@ class Nd2Parser(object):
     CHUNK_MAP_END = "ND2 CHUNK MAP SIGNATURE 0000001!"
     
     def __init__(self, filename):
-        self._absolute_start = None
         self._filename = filename
         self._fh = None
         self._chunk_map_start_location = None
@@ -34,6 +36,18 @@ class Nd2Parser(object):
         if self._fh is None:
             self._fh = open(self._filename, "rb")
         return self._fh
+
+    def _get_raw_image_data(self, image_set_number, channel_offset):
+        chunk = self._label_map["ImageDataSeq|%d!" % image_set_number]
+        data = self._read_chunk(chunk)
+        timestamp = struct.unpack("d", data[:8])[0]
+        # The images for the various channels are interleaved within each other.
+        image_set_data = array.array("H", data)
+        image_data_start = 4 + channel_offset
+        image_data = image_set_data[image_data_start::self._channel_count]
+        if np.any(image_data):
+            return timestamp, image_data
+        return None
 
     @property
     def _dimensions(self):
@@ -51,6 +65,110 @@ class Nd2Parser(object):
             else:
                 raise ValueError("Could not parse metadata dimensions!")
         return self._dimension_text
+
+    @property
+    def _channels(self):
+        metadata = self.metadata['ImageMetadataSeq']['SLxPictureMetadata']['sPicturePlanes']
+        try:
+            validity = self.metadata['ImageMetadata']['SLxExperiment']['ppNextLevelEx'][''][0]['ppNextLevelEx'][''][0]['pItemValid']
+        except KeyError:
+            # If none of the channels have been deleted, there is no validity list, so we just make one
+            validity = [True for _ in metadata]
+        # Channel information is contained in dictionaries with the keys a0, a1...an where the number
+        # indicates the order in which the channel is stored. So by sorting the dicts alphabetically
+        # we get the correct order.
+        for (label, chan), valid in zip(sorted(metadata['sPlaneNew'].items()), validity):
+            if not valid:
+                continue
+            yield chan['sDescription']
+
+    def _calculate_image_set_number(self, time_index, fov, z_level):
+        return time_index * self._field_of_view_count * self._z_level_count + (fov * self._z_level_count + z_level)
+
+    @property
+    def _channel_offset(self):
+        """
+        Image data is interleaved for each image set. That is, if there are four images in a set, the first image
+        will consist of pixels 1, 5, 9, etc, the second will be pixels 2, 6, 10, and so forth. Why this would be the
+        case is beyond me, but that's how it works.
+
+        """
+        channel_offset = {}
+        for n, channel in enumerate(self._channels):
+            channel_offset[channel] = n
+        return channel_offset
+
+    @property
+    def _absolute_start(self):
+        for line in self.metadata['ImageTextInfo']['SLxImageTextInfo'].values():
+            absolute_start_12 = None
+            absolute_start_24 = None
+            # ND2s seem to randomly switch between 12- and 24-hour representations.
+            try:
+                absolute_start_24 = datetime.strptime(line, "%m/%d/%Y  %H:%M:%S")
+            except ValueError:
+                pass
+            try:
+                absolute_start_12 = datetime.strptime(line, "%m/%d/%Y  %I:%M:%S %p")
+            except ValueError:
+                pass
+            if not absolute_start_12 and not absolute_start_24:
+                continue
+            return absolute_start_12 if absolute_start_12 else absolute_start_24
+        raise ValueError("This ND2 has no recorded start time. This is probably a bug.")
+
+    @property
+    def _channel_count(self):
+        pattern = r""".*?λ\((\d+)\).*?"""
+        try:
+            count = int(re.match(pattern, self._dimensions).group(1))
+        except AttributeError:
+            return 1
+        else:
+            return count
+
+    @property
+    def _field_of_view_count(self):
+        """
+        The metadata contains information about fields of view, but it contains it even if some fields
+        of view were cropped. We can't find anything that states which fields of view are actually
+        in the image data, so we have to calculate it. There probably is something somewhere, since
+        NIS Elements can figure it out, but we haven't found it yet.
+
+        """
+        pattern = r""".*?XY\((\d+)\).*?"""
+        try:
+            count = int(re.match(pattern, self._dimensions).group(1))
+        except AttributeError:
+            return 1
+        else:
+            return count
+
+    @property
+    def _time_index_count(self):
+        """
+        The number of cycles.
+
+        :rtype:     int
+
+        """
+        pattern = r""".*?T'\((\d+)\).*?"""
+        try:
+            count = int(re.match(pattern, self._dimensions).group(1))
+        except AttributeError:
+            return 1
+        else:
+            return count
+
+    @property
+    def _z_level_count(self):
+        pattern = r""".*?Z\((\d+)\).*?"""
+        try:
+            count = int(re.match(pattern, self._dimensions).group(1))
+        except AttributeError:
+            return 1
+        else:
+            return count
 
     @property
     def _image_count(self):
@@ -105,10 +223,6 @@ class Nd2Parser(object):
         # start of the actual data field, which is at some arbitrary place after the metadata.
         self._file_handle.seek(chunk_location + 16 + relative_offset)
         return self._file_handle.read(data_length)
-
-    def _z_level_count(self):
-        st = self._read_chunk(self._label_map["CustomData|Z!"])
-        return len(array.array("d", st))
 
     def _parse_unsigned_char(self, data):
         return struct.unpack("B", data.read(1))[0]
