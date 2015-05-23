@@ -94,7 +94,7 @@ class Nd2(Nd2Parser):
         :rtype: nd2reader.model.Image() or None
 
         """
-        image_set_number = self._calculate_image_set_number(time_index, field_of_view, z_level)
+        image_set_number = self._calculate_image_group_number(time_index, field_of_view, z_level)
         try:
             timestamp, raw_image_data = self._get_raw_image_data(image_set_number, self._channel_offset[channel_name])
             image = Image(timestamp, raw_image_data, field_of_view, channel_name, z_level, self.height, self.width)
