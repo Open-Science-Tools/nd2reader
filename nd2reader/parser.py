@@ -64,8 +64,8 @@ class Nd2Parser(object):
         image_data = image_group_data[image_data_start::self._channel_count]
         # Skip images that are all zeros! This is important, since NIS Elements creates blank "gap" images if you
         # don't have the same number of images each cycle. We discovered this because we only took GFP images every
-        # other cycle to reduce phototoxicity, but NIS Elements still allocated memory as if we were going to take them
-        # every cyle.
+        # other cycle to reduce phototoxicity, but NIS Elements still allocated memory as if we were going to take
+        # them every cycle.
         if np.any(image_data):
             return timestamp, image_data
         return None
@@ -137,7 +137,7 @@ class Nd2Parser(object):
         Image data is interleaved for each image set. That is, if there are four images in a set, the first image
         will consist of pixels 1, 5, 9, etc, the second will be pixels 2, 6, 10, and so forth.
 
-        :rtype: int
+        :rtype: dict
 
         """
         channel_offset = {}
