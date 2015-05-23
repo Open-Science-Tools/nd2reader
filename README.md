@@ -77,11 +77,9 @@ array([[1809, 1783, 1830, ..., 1923, 1920, 1914],
 2
 >>> image.z_level
 1
-```
 
-You can also get a quick summary of image data.
+# You can also get a quick summary of image data:
 
-```python
 >>> image
 <ND2 Image>
 1280x800 (HxW)
