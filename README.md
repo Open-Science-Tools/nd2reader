@@ -10,13 +10,16 @@
 
 ### Installation
 
-Just use pip:
+Just use pip (`numpy` is required):
 
-`pip install nd2reader`
+`pip install numpy nd2reader`
 
 If you want to install via git, clone the repo and run:
 
-`python setup.py install`
+```
+pip install numpy
+python setup.py install
+```
 
 ### ND2s
 
