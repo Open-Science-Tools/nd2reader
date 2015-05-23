@@ -1,4 +1,4 @@
-.PHONY: build test shell
+.PHONY: build shell
 
 build:
 	docker build -t jimrybarski/nd2reader .
