@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="nd2reader",
     packages=find_packages(),
-    install_requires=['numpy>=1.9.2'],
+    requires=['numpy>=1.9.2'],
     version="1.0.1",
     description='A tool for reading ND2 files produced by NIS Elements',
     author='Jim Rybarski',
