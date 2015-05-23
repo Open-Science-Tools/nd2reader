@@ -8,6 +8,7 @@ import re
 import struct
 from StringIO import StringIO
 
+
 field_of_view = namedtuple('FOV', ['number', 'x', 'y', 'z', 'pfs_offset'])
 
 
