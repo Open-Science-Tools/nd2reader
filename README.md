@@ -18,6 +18,21 @@ If you want to install via git, clone the repo and run:
 
 `python setup.py install`
 
+### ND2s
+
+A quick summary of ND2 metadata can be obtained as shown below.
+```python
+>>> import nd2reader
+>>> nd2 = nd2reader.Nd2("/path/to/my_images.nd2")
+>>> nd2
+<ND2 /path/to/my_images.nd2>
+Created: 2014-11-11 15:59:19
+Image size: 1280x800 (HxW)
+Image cycles: 636
+Channels: '', 'GFP'
+Fields of View: 8
+Z-Levels: 3
+
 ### Simple Iteration
 
 For most cases, you'll just want to iterate over each image:
@@ -88,3 +103,13 @@ Field of View: 2
 Channel: GFP
 Z-Level: 1
 ```
+
+### Bug Reports and Features
+
+If this fails to work exactly as expected, please open a Github issue. If you get an unhandled exception, please
+paste the entire stack trace into the issue as well.
+
+### Contributing
+
+Please feel free to submit a pull request with any new features you think would be useful. You can also create an
+issue if you'd just like to propose or discuss a potential idea.
