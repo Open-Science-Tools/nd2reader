@@ -1,14 +1,12 @@
 # nd2reader
 
-## Simple access to .nd2 files
-
 ### About
 
 `nd2reader` is a pure-Python package that reads images produced by NIS Elements.
 
 .nd2 files contain images and metadata, which can be split along multiple dimensions: time, fields of view (xy-plane), focus (z-plane), and filter channel.
 
-`nd2reader` produces data in numpy arrays, which makes it trivial to use with the image analysis packages `scikit-image` and `OpenCV`.
+`nd2reader` produces data in numpy arrays, which makes it trivial to use with the image analysis packages such as `scikit-image` and `OpenCV`.
 
 ### Installation
 
@@ -20,9 +18,9 @@ If you want to install via git, clone the repo and run:
 
 `python setup.py install`
 
-### Usage
+### Simple Iteration
 
-nd2reader provides two main ways to view image data. For most cases, you'll just want to iterate over each image:
+For most cases, you'll just want to iterate over each image:
 
 ```
 import nd2reader
@@ -31,10 +29,12 @@ for image in nd2:
     do_something(image.data)
 ```
 
+### Image Sets
+
 If you have complicated hierarchical data, it may be easier to use image sets, which groups images together if they
 share the same time index and field of view:
 
-```
+```python
 import nd2reader
 nd2 = nd2reader.Nd2("/path/to/my_complicated_images.nd2")
 for image_set in nd2.image_sets:
@@ -46,6 +46,14 @@ for image_set in nd2.image_sets:
     out_of_focus_image = image_set.get("Bright Field", z_level=1)
     do_something_out_of_focus_related(out_of_focus_image)
 ```
+
+### Direct Image Access
+
+There is a method, `get_image`, which allows random access to images. This might not always return an image, however,
+if you acquired different numbers of images in each cycle of a program. For example, if you acquire GFP images every
+other minute, but acquire bright field images every minute, `get_image` will return `None` at certain time indexes.
+
+### Images
 
 `Image` objects provide several pieces of useful data.
 
