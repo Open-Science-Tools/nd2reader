@@ -1,20 +1,84 @@
-nd2reader
-=========
+# nd2reader
 
-## Simple access to hierarchical .nd2 files 
+## Simple access to .nd2 files
 
-# About
+### About
 
-`nd2reader` is a pure-Python package that reads images produced by Nikon microscopes. Though it more or less works, it is currently under development and is not quite ready for use by the general public. Version 1.0 should be released in early 2015.
+`nd2reader` is a pure-Python package that reads images produced by NIS Elements.
 
-.nd2 files contain images and metadata, which can be split along multiple dimensions: time, fields of view (xy-axis), focus (z-axis), and filter channel. `nd2reader` allows you to view any subset of images based on any or all of these dimensions.
+.nd2 files contain images and metadata, which can be split along multiple dimensions: time, fields of view (xy-plane), focus (z-plane), and filter channel.
 
-`nd2reader` holds data in numpy arrays, which makes it trivial to use with the image analysis packages `scikit-image` and `OpenCV`.
+`nd2reader` produces data in numpy arrays, which makes it trivial to use with the image analysis packages `scikit-image` and `OpenCV`.
 
-# Dependencies
+### Installation
 
-numpy 
+Just use pip:
 
-# Installation
+`pip install nd2reader`
 
-I'll write this eventually.
+If you want to install via git, clone the repo and run:
+
+`python setup.py install`
+
+### Usage
+
+nd2reader provides two main ways to view image data. For most cases, you'll just want to iterate over each image:
+
+```
+import nd2reader
+nd2 = nd2reader.Nd2("/path/to/my_images.nd2")
+for image in nd2:
+    do_something(image.data)
+```
+
+If you have complicated hierarchical data, it may be easier to use image sets, which groups images together if they
+share the same time index and field of view:
+
+```
+import nd2reader
+nd2 = nd2reader.Nd2("/path/to/my_complicated_images.nd2")
+for image_set in nd2.image_sets:
+    # you can select images by channel
+    gfp_image = image_set.get("GFP")
+    do_something_gfp_related(gfp_image)
+
+    # you can also specify the z-level. this defaults to 0 if not given
+    out_of_focus_image = image_set.get("Bright Field", z_level=1)
+    do_something_out_of_focus_related(out_of_focus_image)
+```
+
+`Image` objects provide several pieces of useful data.
+
+```
+>>> import nd2reader
+>>> nd2 = nd2reader.Nd2("/path/to/my_images.nd2")
+>>> image = nd2.get_image(14, 2, "GFP", 1)
+>>> image.data
+array([[1809, 1783, 1830, ..., 1923, 1920, 1914],
+       [1687, 1855, 1792, ..., 1986, 1903, 1889],
+       [1758, 1901, 1849, ..., 1911, 2010, 1954],
+       ...,
+       [3363, 3370, 3570, ..., 3565, 3601, 3459],
+       [3480, 3428, 3328, ..., 3542, 3461, 3575],
+       [3497, 3666, 3635, ..., 3817, 3867, 3779]])
+>>> image.channel
+'GFP'
+>>> image.timestamp
+1699.7947813408175
+>>> image.field_of_view
+2
+>>> image.z_level
+1
+```
+
+You can also get a quick summary of image data.
+
+```
+>>> image
+<ND2 Image>
+1280x800 (HxW)
+Timestamp: 1699.79478134
+Field of View: 2
+Channel: GFP
+Z-Level: 1
+```
