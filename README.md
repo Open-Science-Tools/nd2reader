@@ -117,3 +117,7 @@ paste the entire stack trace into the issue as well.
 
 Please feel free to submit a pull request with any new features you think would be useful. You can also create an
 issue if you'd just like to propose or discuss a potential idea.
+
+### Acknowledgments
+
+Support for the development of this package was provided by the [Finkelstein Laboratory](http://finkelsteinlab.org/).
