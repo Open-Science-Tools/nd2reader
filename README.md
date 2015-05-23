@@ -22,7 +22,7 @@ If you want to install via git, clone the repo and run:
 
 For most cases, you'll just want to iterate over each image:
 
-```
+```python
 import nd2reader
 nd2 = nd2reader.Nd2("/path/to/my_images.nd2")
 for image in nd2:
@@ -57,7 +57,7 @@ other minute, but acquire bright field images every minute, `get_image` will ret
 
 `Image` objects provide several pieces of useful data.
 
-```
+```python
 >>> import nd2reader
 >>> nd2 = nd2reader.Nd2("/path/to/my_images.nd2")
 >>> image = nd2.get_image(14, 2, "GFP", 1)
@@ -81,7 +81,7 @@ array([[1809, 1783, 1830, ..., 1923, 1920, 1914],
 
 You can also get a quick summary of image data.
 
-```
+```python
 >>> image
 <ND2 Image>
 1280x800 (HxW)
