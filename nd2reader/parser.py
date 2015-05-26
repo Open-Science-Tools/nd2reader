@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import array
-from collections import namedtuple
 from datetime import datetime
 import numpy as np
 import re
 import struct
 from StringIO import StringIO
-
-
-field_of_view = namedtuple('FOV', ['number', 'x', 'y', 'z', 'pfs_offset'])
 
 
 class Nd2Parser(object):
