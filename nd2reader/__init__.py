@@ -56,6 +56,31 @@ class Nd2(Nd2Parser):
                         if image is not None:
                             yield image
 
+    def __getitem__(self, item):
+        if isinstance(item, int):
+            try:
+                channel_offset = item % self._channel_count
+                fov = self._calculate_field_of_view(item)
+                channel = self._calculate_channel(item)
+                z_level = self._calculate_z_level(item)
+                item -= channel_offset
+                item /= self._channel_count
+                timestamp, raw_image_data = self._get_raw_image_data(item, channel_offset)
+                image = Image(timestamp, raw_image_data, fov, channel, z_level, self.height, self.width)
+            except TypeError:
+                return None
+            else:
+                return image
+
+    def _calculate_field_of_view(self, frame_number):
+        return (frame_number - (frame_number % (self._channel_count + self._z_level_count))) % self._field_of_view_count
+
+    def _calculate_channel(self, frame_number):
+        pass
+
+    def _calculate_z_level(self, frame_number):
+        pass
+
     @property
     def image_sets(self):
         """
