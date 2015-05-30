@@ -73,13 +73,13 @@ class Nd2(Nd2Parser):
                 return image
 
     def _calculate_field_of_view(self, frame_number):
-        return (frame_number - (frame_number % (self._channel_count + self._z_level_count))) % self._field_of_view_count
+        return (frame_number - (frame_number % (len(self.channels) + len(self.z_levels))) % len(self.fields_of_view)
 
     def _calculate_channel(self, frame_number):
-        pass
+        return self._channels[frame_number % self._channel_count]
 
     def _calculate_z_level(self, frame_number):
-        pass
+        return self._z_levels[]
 
     @property
     def image_sets(self):
@@ -119,9 +119,9 @@ class Nd2(Nd2Parser):
         :rtype: nd2reader.model.Image() or None
 
         """
-        image_set_number = self._calculate_image_group_number(time_index, field_of_view, z_level)
+        image_group_number = self._calculate_image_group_number(time_index, field_of_view, z_level)
         try:
-            timestamp, raw_image_data = self._get_raw_image_data(image_set_number, self._channel_offset[channel_name])
+            timestamp, raw_image_data = self._get_raw_image_data(image_group_number, self._channel_offset[channel_name])
             image = Image(timestamp, raw_image_data, field_of_view, channel_name, z_level, self.height, self.width)
         except TypeError:
             return None
