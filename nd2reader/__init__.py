@@ -34,19 +34,55 @@ class Nd2(Nd2Parser):
         """
         return self._image_count * self._channel_count
 
-    def __getitem__(self, frame_number):
-        if isinstance(frame_number, int):
+    def __getitem__(self, item):
+        """
+        Allows slicing ND2s.
+
+        >>> nd2 = Nd2("my_images.nd2")
+        >>> image = nd2[16]  # gets 17th frame
+        >>> for image in nd2[100:200]:  # iterate over the 100th to 200th images
+        >>>     do_something(image.data)
+        >>> for image in nd2[::-1]:  # iterate backwards
+        >>>     do_something(image.data)
+        >>> for image in nd2[37:422:17]:  # do something super weird if you really want to
+        >>>     do_something(image.data)
+
+        :type item: int or slice
+        :rtype: nd2reader.model.Image() or generator
+
+        """
+        if isinstance(item, int):
             try:
-                channel_offset = frame_number % len(self.channels)
-                fov = self._calculate_field_of_view(frame_number)
-                channel = self._calculate_channel(frame_number)
-                z_level = self._calculate_z_level(frame_number)
-                timestamp, raw_image_data = self._get_raw_image_data(frame_number, channel_offset)
+                channel_offset = item % len(self.channels)
+                fov = self._calculate_field_of_view(item)
+                channel = self._calculate_channel(item)
+                z_level = self._calculate_z_level(item)
+                timestamp, raw_image_data = self._get_raw_image_data(item, channel_offset)
                 image = Image(timestamp, raw_image_data, fov, channel, z_level, self.height, self.width)
             except (TypeError, ValueError):
                 return None
             else:
                 return image
+        elif isinstance(item, slice):
+            return self._slice(item.start, item.stop, item.step)
+        raise IndexError
+
+    def _slice(self, start, stop, step):
+        """
+        Allows for iteration over a selection of the entire dataset.
+
+        :type start: int
+        :type stop: int
+        :type step: int
+        :rtype: nd2reader.model.Image() or None
+
+        """
+        start = start if start is not None else 0
+        step = step if step is not None else 1
+        stop = stop if stop is not None else len(self)
+        # This weird thing with the step allows you to iterate backwards over the images
+        for i in range(start, stop)[::step]:
+            yield self[i]
 
     @property
     def image_sets(self):
