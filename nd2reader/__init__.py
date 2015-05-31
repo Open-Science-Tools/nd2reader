@@ -61,9 +61,9 @@ class Nd2(Nd2Parser):
         """
         for time_index in self.time_indexes:
             image_set = ImageSet()
-            for fov in self._fields_of_view:
-                for channel_name in self._channels:
-                    for z_level in self._z_levels:
+            for fov in self.fields_of_view:
+                for channel_name in self.channels:
+                    for z_level in self.z_levels:
                         image = self.get_image(time_index, fov, channel_name, z_level)
                         if image is not None:
                             image_set.add(image)
