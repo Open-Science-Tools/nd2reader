@@ -24,6 +24,16 @@ class Nd2(Nd2Parser):
                           "Z-Levels: %s" % self._z_level_count
                           ])
 
+    def __len__(self):
+        """
+        This should be the total number of images in the ND2, but it may be inaccurate. If the ND2 contains a
+        different number of images in a cycle (i.e. there are "gap" images) it will be higher than reality.
+
+        :rtype: int
+
+        """
+        return self._image_count * self._channel_count
+
     @property
     def height(self):
         """
