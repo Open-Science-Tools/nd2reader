@@ -34,6 +34,41 @@ class Nd2(Nd2Parser):
         """
         return self._image_count * self._channel_count
 
+    def __getitem__(self, frame_number):
+        if isinstance(frame_number, int):
+            try:
+                channel_offset = frame_number % len(self.channels)
+                fov = self._calculate_field_of_view(frame_number)
+                channel = self._calculate_channel(frame_number)
+                z_level = self._calculate_z_level(frame_number)
+                timestamp, raw_image_data = self._get_raw_image_data(frame_number, channel_offset)
+                image = Image(timestamp, raw_image_data, fov, channel, z_level, self.height, self.width)
+            except (TypeError, ValueError):
+                return None
+            else:
+                return image
+
+    @property
+    def image_sets(self):
+        """
+        Iterates over groups of related images. This is useful if your ND2 contains multiple fields of view.
+        A typical use case might be that you have, say, four areas of interest that you're monitoring, and every
+        minute you take a bright field and GFP image of each one. For each cycle, this method would produce four
+        ImageSet objects, each containing one bright field and one GFP image.
+
+        :return: model.ImageSet()
+
+        """
+        for time_index in self.time_indexes:
+            image_set = ImageSet()
+            for fov in self._fields_of_view:
+                for channel_name in self._channels:
+                    for z_level in self._z_levels:
+                        image = self.get_image(time_index, fov, channel_name, z_level)
+                        if image is not None:
+                            image_set.add(image)
+                yield image_set
+
     @property
     def height(self):
         """
@@ -52,66 +87,15 @@ class Nd2(Nd2Parser):
         """
         return self.metadata[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiWidth')]
 
-    def __iter__(self):
-        """
-        Iterates over every image, in the order they were taken.
-
-        :return: model.Image()
-
-        """
-        for i in range(self._image_count):
-            for fov in self._fields_of_view:
-                for z_level in self._z_levels:
-                    for channel_name in self._channels:
-                        image = self.get_image(i, fov, channel_name, z_level)
-                        if image is not None:
-                            yield image
-
-    def __getitem__(self, item):
-        if isinstance(item, int):
-            try:
-                channel_offset = item % len(self.channels)
-                fov = self._calculate_field_of_view(item)
-                channel = self._calculate_channel(item)
-                z_level = self._calculate_z_level(item)
-                item -= channel_offset
-                item /= len(self.channels)
-                timestamp, raw_image_data = self._get_raw_image_data(item, channel_offset)
-                image = Image(timestamp, raw_image_data, fov, channel, z_level, self.height, self.width)
-            except TypeError:
-                return None
-            else:
-                return image
-
     def _calculate_field_of_view(self, frame_number):
-        return int((frame_number - (frame_number % (len(self.z_levels) * len(self.channels)))) / (len(self.z_levels) * len(self.channels)))
+        images_per_cycle = len(self.z_levels) * len(self.channels)
+        return int((frame_number - (frame_number % images_per_cycle)) / images_per_cycle) % len(self.fields_of_view)
 
     def _calculate_channel(self, frame_number):
         return self._channels[frame_number % len(self.channels)]
 
     def _calculate_z_level(self, frame_number):
-        return self.z_levels[int(((frame_number - (frame_number % len(self.channels))) / 2) % len(self.z_levels))]
-
-    @property
-    def image_sets(self):
-        """
-        Iterates over groups of related images. This is useful if your ND2 contains multiple fields of view.
-        A typical use case might be that you have, say, four areas of interest that you're monitoring, and every
-        minute you take a bright field and GFP image of each one. For each cycle, this method would produce four
-        ImageSet objects, each containing one bright field and one GFP image.
-
-        :return: model.ImageSet()
-
-        """
-        for time_index in self._time_indexes:
-            image_set = ImageSet()
-            for fov in self._fields_of_view:
-                for channel_name in self._channels:
-                    for z_level in self._z_levels:
-                        image = self.get_image(time_index, fov, channel_name, z_level)
-                        if image is not None:
-                            image_set.add(image)
-                yield image_set
+        return self.z_levels[int(((frame_number - (frame_number % len(self.channels))) / len(self.channels)) % len(self.z_levels))]
 
     def get_image(self, time_index, field_of_view, channel_name, z_level):
         """

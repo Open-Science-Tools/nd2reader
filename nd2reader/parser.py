@@ -63,7 +63,7 @@ class Nd2Parser(object):
         # The images for the various channels are interleaved within the same array. For example, the second image
         # of a four image group will be composed of bytes 2, 6, 10, etc. If you understand why someone would design
         # a data structure that way, please send the author of this library a message.
-        image_data = image_group_data[image_data_start::self._channel_count]
+        image_data = image_group_data[image_data_start::len(self.channels)]
         # Skip images that are all zeros! This is important, since NIS Elements creates blank "gap" images if you
         # don't have the same number of images each cycle. We discovered this because we only took GFP images every
         # other cycle to reduce phototoxicity, but NIS Elements still allocated memory as if we were going to take
