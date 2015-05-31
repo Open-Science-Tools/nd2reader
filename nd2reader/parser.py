@@ -95,8 +95,6 @@ class Nd2Parser(object):
                     break
             else:
                 raise ValueError("Could not parse metadata dimensions!")
-        if six.PY3:
-            return self._dimension_text.decode("utf8")
         return self._dimension_text
 
     @property
@@ -183,20 +181,11 @@ class Nd2Parser(object):
             count = int(re.match(pattern, self._dimensions).group(1))
         except AttributeError:
             return [0]
+        except TypeError:
+            count = int(re.match(pattern, self._dimensions.decode("utf8")).group(1))
+            return list(range(count))
         else:
-            return range(count)
-
-    @property
-    def channel_count(self):
-        """
-        The number of different channels used, including bright field.
-
-        :rtype: int
-
-        """
-        if self._channel_count is None:
-            self._channel_count = self._parse_dimension_text(r""".*?λ\((\d+)\).*?""")
-        return self._channel_count
+            return list(range(count))
 
     @property
     def fields_of_view(self):

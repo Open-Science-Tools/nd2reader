@@ -18,10 +18,10 @@ class Nd2(Nd2Parser):
         return "\n".join(["<ND2 %s>" % self._filename,
                           "Created: %s" % self._absolute_start.strftime("%Y-%m-%d %H:%M:%S"),
                           "Image size: %sx%s (HxW)" % (self.height, self.width),
-                          "Image cycles: %s" % self._time_index_count,
-                          "Channels: %s" % ", ".join(["'%s'" % str(channel) for channel in self._channels]),
-                          "Fields of View: %s" % self._field_of_view_count,
-                          "Z-Levels: %s" % self._z_level_count
+                          "Image cycles: %s" % len(self.time_indexes),
+                          "Channels: %s" % ", ".join(["'%s'" % str(channel) for channel in self.channels]),
+                          "Fields of View: %s" % len(self.fields_of_view),
+                          "Z-Levels: %s" % len(self.z_levels)
                           ])
 
     def __len__(self):
@@ -60,8 +60,8 @@ class Nd2(Nd2Parser):
 
         """
         for i in range(self._image_count):
-            for fov in range(self._field_of_view_count):
-                for z_level in range(self._z_level_count):
+            for fov in self._fields_of_view:
+                for z_level in self._z_levels:
                     for channel_name in self._channels:
                         image = self.get_image(i, fov, channel_name, z_level)
                         if image is not None:
@@ -70,12 +70,12 @@ class Nd2(Nd2Parser):
     def __getitem__(self, item):
         if isinstance(item, int):
             try:
-                channel_offset = item % self._channel_count
+                channel_offset = item % len(self.channels)
                 fov = self._calculate_field_of_view(item)
                 channel = self._calculate_channel(item)
                 z_level = self._calculate_z_level(item)
                 item -= channel_offset
-                item /= self._channel_count
+                item /= len(self.channels)
                 timestamp, raw_image_data = self._get_raw_image_data(item, channel_offset)
                 image = Image(timestamp, raw_image_data, fov, channel, z_level, self.height, self.width)
             except TypeError:
@@ -84,13 +84,13 @@ class Nd2(Nd2Parser):
                 return image
 
     def _calculate_field_of_view(self, frame_number):
-        return (frame_number - (frame_number % (len(self.channels) + len(self.z_levels))) % len(self.fields_of_view)
+        return (frame_number - (frame_number % (len(self.channels) + len(self.z_levels)))) % len(self.fields_of_view)
 
     def _calculate_channel(self, frame_number):
-        return self._channels[frame_number % self._channel_count]
+        return self._channels[frame_number % len(self.channels)]
 
     def _calculate_z_level(self, frame_number):
-        return self._z_levels[]
+        return self.z_levels[frame_number % len(self.channels) % len(self.fields_of_view)]
 
     @property
     def image_sets(self):
@@ -103,11 +103,11 @@ class Nd2(Nd2Parser):
         :return: model.ImageSet()
 
         """
-        for time_index in range(self._time_index_count):
+        for time_index in self._time_indexes:
             image_set = ImageSet()
-            for fov in range(self._field_of_view_count):
+            for fov in self._fields_of_view:
                 for channel_name in self._channels:
-                    for z_level in range(self._z_level_count):
+                    for z_level in self._z_levels:
                         image = self.get_image(time_index, fov, channel_name, z_level)
                         if image is not None:
                             image_set.add(image)
