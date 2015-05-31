@@ -2,6 +2,7 @@
 
 from nd2reader.model import Image, ImageSet
 from nd2reader.parser import Nd2Parser
+import six
 
 
 class Nd2(Nd2Parser):
@@ -18,10 +19,20 @@ class Nd2(Nd2Parser):
                           "Created: %s" % self._absolute_start.strftime("%Y-%m-%d %H:%M:%S"),
                           "Image size: %sx%s (HxW)" % (self.height, self.width),
                           "Image cycles: %s" % self._time_index_count,
-                          "Channels: %s" % ", ".join(["'%s'" % channel for channel in self._channels]),
+                          "Channels: %s" % ", ".join(["'%s'" % str(channel) for channel in self._channels]),
                           "Fields of View: %s" % self._field_of_view_count,
                           "Z-Levels: %s" % self._z_level_count
                           ])
+
+    def __len__(self):
+        """
+        This should be the total number of images in the ND2, but it may be inaccurate. If the ND2 contains a
+        different number of images in a cycle (i.e. there are "gap" images) it will be higher than reality.
+
+        :rtype: int
+
+        """
+        return self._image_count * self._channel_count
 
     @property
     def height(self):
@@ -30,7 +41,7 @@ class Nd2(Nd2Parser):
         :rtype: int
 
         """
-        return self.metadata['ImageAttributes']['SLxImageAttributes']['uiHeight']
+        return self.metadata[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiHeight')]
 
     @property
     def width(self):
@@ -39,7 +50,7 @@ class Nd2(Nd2Parser):
         :rtype: int
 
         """
-        return self.metadata['ImageAttributes']['SLxImageAttributes']['uiWidth']
+        return self.metadata[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiWidth')]
 
     def __iter__(self):
         """
@@ -92,11 +103,11 @@ class Nd2(Nd2Parser):
         :return: model.ImageSet()
 
         """
-        for time_index in xrange(self._time_index_count):
+        for time_index in range(self._time_index_count):
             image_set = ImageSet()
             for fov in range(self._field_of_view_count):
                 for channel_name in self._channels:
-                    for z_level in xrange(self._z_level_count):
+                    for z_level in range(self._z_level_count):
                         image = self.get_image(time_index, fov, channel_name, z_level)
                         if image is not None:
                             image_set.add(image)
