@@ -21,13 +21,18 @@ class Nd2Parser(object):
     def __init__(self, filename):
         self._filename = filename
         self._fh = None
+        self._channels = None
+        self._channel_count = None
         self._chunk_map_start_location = None
         self._cursor_position = 0
         self._dimension_text = None
+        self._fields_of_view = None
         self._label_map = {}
         self.metadata = {}
         self._read_map()
+        self._time_indexes = None
         self._parse_metadata()
+        self._z_levels = None
 
     @property
     def _file_handle(self):
@@ -58,7 +63,7 @@ class Nd2Parser(object):
         # The images for the various channels are interleaved within the same array. For example, the second image
         # of a four image group will be composed of bytes 2, 6, 10, etc. If you understand why someone would design
         # a data structure that way, please send the author of this library a message.
-        image_data = image_group_data[image_data_start::self._channel_count]
+        image_data = image_group_data[image_data_start::len(self.channels)]
         # Skip images that are all zeros! This is important, since NIS Elements creates blank "gap" images if you
         # don't have the same number of images each cycle. We discovered this because we only took GFP images every
         # other cycle to reduce phototoxicity, but NIS Elements still allocated memory as if we were going to take
@@ -90,12 +95,10 @@ class Nd2Parser(object):
                     break
             else:
                 raise ValueError("Could not parse metadata dimensions!")
-        if six.PY3:
-            return self._dimension_text.decode("utf8")
         return self._dimension_text
 
     @property
-    def _channels(self):
+    def channels(self):
         """
         These are labels created by the NIS Elements user. Typically they may a short description of the filter cube
         used (e.g. "bright field", "GFP", etc.)
@@ -103,19 +106,22 @@ class Nd2Parser(object):
         :rtype: str
 
         """
-        metadata = self.metadata[six.b('ImageMetadataSeq')][six.b('SLxPictureMetadata')][six.b('sPicturePlanes')]
-        try:
-            validity = self.metadata[six.b('ImageMetadata')][six.b('SLxExperiment')][six.b('ppNextLevelEx')][six.b('')][0][six.b('ppNextLevelEx')][six.b('')][0][six.b('pItemValid')]
-        except KeyError:
-            # If none of the channels have been deleted, there is no validity list, so we just make one
-            validity = [True for _ in metadata]
-        # Channel information is contained in dictionaries with the keys a0, a1...an where the number
-        # indicates the order in which the channel is stored. So by sorting the dicts alphabetically
-        # we get the correct order.
-        for (label, chan), valid in zip(sorted(metadata[six.b('sPlaneNew')].items()), validity):
-            if not valid:
-                continue
-            yield chan[six.b('sDescription')].decode("utf8")
+        if not self._channels:
+            self._channels = []
+            metadata = self.metadata[six.b('ImageMetadataSeq')][six.b('SLxPictureMetadata')][six.b('sPicturePlanes')]
+            try:
+                validity = self.metadata[six.b('ImageMetadata')][six.b('SLxExperiment')][six.b('ppNextLevelEx')][six.b('')][0][six.b('ppNextLevelEx')][six.b('')][0][six.b('pItemValid')]
+            except KeyError:
+                # If none of the channels have been deleted, there is no validity list, so we just make one
+                validity = [True for _ in metadata]
+            # Channel information is contained in dictionaries with the keys a0, a1...an where the number
+            # indicates the order in which the channel is stored. So by sorting the dicts alphabetically
+            # we get the correct order.
+            for (label, chan), valid in zip(sorted(metadata[six.b('sPlaneNew')].items()), validity):
+                if not valid:
+                    continue
+                self._channels.append(chan[six.b('sDescription')].decode("utf8"))
+        return self._channels
 
     def _calculate_image_group_number(self, time_index, fov, z_level):
         """
@@ -128,7 +134,7 @@ class Nd2Parser(object):
         :rtype: int
 
         """
-        return time_index * self._field_of_view_count * self._z_level_count + (fov * self._z_level_count + z_level)
+        return time_index * len(self.fields_of_view) * len(self.z_levels) + (fov * len(self.z_levels) + z_level)
 
     @property
     def _channel_offset(self):
@@ -170,24 +176,19 @@ class Nd2Parser(object):
             return absolute_start_12 if absolute_start_12 else absolute_start_24
         raise ValueError("This ND2 has no recorded start time. This is probably a bug.")
 
-    @property
-    def _channel_count(self):
-        """
-        The number of different channels used, including bright field.
-
-        :rtype: int
-
-        """
-        pattern = r""".*?λ\((\d+)\).*?"""
+    def _parse_dimension_text(self, pattern):
         try:
             count = int(re.match(pattern, self._dimensions).group(1))
-        except AttributeError as e:
-            return 1
+        except AttributeError:
+            return [0]
+        except TypeError:
+            count = int(re.match(pattern, self._dimensions.decode("utf8")).group(1))
+            return list(range(count))
         else:
-            return count
+            return list(range(count))
 
     @property
-    def _field_of_view_count(self):
+    def fields_of_view(self):
         """
         The metadata contains information about fields of view, but it contains it even if some fields
         of view were cropped. We can't find anything that states which fields of view are actually
@@ -197,45 +198,33 @@ class Nd2Parser(object):
         :rtype: int
 
         """
-        pattern = r""".*?XY\((\d+)\).*?"""
-        try:
-            count = int(re.match(pattern, self._dimensions).group(1))
-        except AttributeError:
-            return 1
-        else:
-            return count
+        if self._fields_of_view is None:
+            self._fields_of_view = self._parse_dimension_text(r""".*?XY\((\d+)\).*?""")
+        return self._fields_of_view
 
     @property
-    def _time_index_count(self):
+    def time_indexes(self):
         """
         The number of cycles.
 
         :rtype:     int
 
         """
-        pattern = r""".*?T'\((\d+)\).*?"""
-        try:
-            count = int(re.match(pattern, self._dimensions).group(1))
-        except AttributeError:
-            return 1
-        else:
-            return count
+        if self._time_indexes is None:
+            self._time_indexes = self._parse_dimension_text(r""".*?T'\((\d+)\).*?""")
+        return self._time_indexes
 
     @property
-    def _z_level_count(self):
+    def z_levels(self):
         """
-        The number of different levels in the Z-plane.
+        The different levels in the Z-plane. Just a sequence from 0 to n.
 
         :rtype: int
 
         """
-        pattern = r""".*?Z\((\d+)\).*?"""
-        try:
-            count = int(re.match(pattern, self._dimensions).group(1))
-        except AttributeError:
-            return 1
-        else:
-            return count
+        if self._z_levels is None:
+            self._z_levels = self._parse_dimension_text(r""".*?Z\((\d+)\).*?""")
+        return self._z_levels
 
     @property
     def _image_count(self):
