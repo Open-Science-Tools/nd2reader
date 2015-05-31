@@ -84,13 +84,13 @@ class Nd2(Nd2Parser):
                 return image
 
     def _calculate_field_of_view(self, frame_number):
-        return (frame_number - (frame_number % (len(self.channels) + len(self.z_levels)))) % len(self.fields_of_view)
+        return frame_number - (frame_number % (len(self.z_levels) + len(self.channels)))
 
     def _calculate_channel(self, frame_number):
         return self._channels[frame_number % len(self.channels)]
 
     def _calculate_z_level(self, frame_number):
-        return self.z_levels[frame_number % len(self.channels) % len(self.fields_of_view)]
+        return self.z_levels[(frame_number * len(self.channels)) % len(self.z_levels) - frame_number % len(self.channels)]
 
     @property
     def image_sets(self):
