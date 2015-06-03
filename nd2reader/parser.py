@@ -133,7 +133,7 @@ class Nd2Parser(object):
         return int((frame_number - (frame_number % images_per_cycle)) / images_per_cycle) % len(self.fields_of_view)
 
     def _calculate_channel(self, frame_number):
-        return self._channels[frame_number % len(self.channels)]
+        return self.channels[frame_number % len(self.channels)]
 
     def _calculate_z_level(self, frame_number):
         return self.z_levels[int(((frame_number - (frame_number % len(self.channels))) / len(self.channels)) % len(self.z_levels))]

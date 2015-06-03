@@ -72,12 +72,36 @@ class TestNd2Parser(unittest.TestCase):
         for i in range(70, 84):
             self.assertEqual(Nd2Parser._calculate_field_of_view(nd2, i), 1)
 
-    def test_calculate_channel_simple(self):
+    def test_calculate_field_of_view_2c3f5z(self):
+        """ All prime numbers to elucidate any errors that won't show up when numbers are multiples of each other """
+        nd2 = MockNd2Parser(['', 'GFP'], [0, 1, 2], [0, 1, 2, 3, 4])
+        for i in range(10):
+            self.assertEqual(Nd2Parser._calculate_field_of_view(nd2, i), 0)
+        for i in range(10, 20):
+            self.assertEqual(Nd2Parser._calculate_field_of_view(nd2, i), 1)
+        for i in range(20, 30):
+            self.assertEqual(Nd2Parser._calculate_field_of_view(nd2, i), 2)
+        for i in range(30, 40):
+            self.assertEqual(Nd2Parser._calculate_field_of_view(nd2, i), 0)
+        for i in range(40, 50):
+            self.assertEqual(Nd2Parser._calculate_field_of_view(nd2, i), 1)
+        for i in range(50, 60):
+            self.assertEqual(Nd2Parser._calculate_field_of_view(nd2, i), 2)
 
+    def test_calculate_channel(self):
+        nd2 = MockNd2Parser(['', 'GFP', 'dsRed', 'dTomato', 'lulzBlue', 'jimbotronPurple', 'orange'], [0], [0])
+        for i in range(1000):
+            for n, channel in enumerate(['', 'GFP', 'dsRed', 'dTomato', 'lulzBlue', 'jimbotronPurple', 'orange'], start=i*7):
+                self.assertEqual(Nd2Parser._calculate_channel(nd2, n), channel)
 
+    def test_calculate_channel_7c2fov1z(self):
+        nd2 = MockNd2Parser(['', 'GFP', 'dsRed', 'dTomato', 'lulzBlue', 'jimbotronPurple', 'orange'], [0, 1], [0])
+        for i in range(1000):
+            for n, channel in enumerate(['', 'GFP', 'dsRed', 'dTomato', 'lulzBlue', 'jimbotronPurple', 'orange'], start=i*7):
+                self.assertEqual(Nd2Parser._calculate_channel(nd2, n), channel)
 
-
-
-
-
-
+    def test_calculate_channel_ludicrous_values(self):
+        nd2 = MockNd2Parser(['', 'GFP', 'dsRed', 'dTomato', 'lulzBlue', 'jimbotronPurple', 'orange'], list(range(31)), list(range(17)))
+        for i in range(1000):
+            for n, channel in enumerate(['', 'GFP', 'dsRed', 'dTomato', 'lulzBlue', 'jimbotronPurple', 'orange'], start=i*7):
+                self.assertEqual(Nd2Parser._calculate_channel(nd2, n), channel)
