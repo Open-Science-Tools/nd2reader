@@ -88,6 +88,11 @@ class TestNd2Parser(unittest.TestCase):
         for i in range(50, 60):
             self.assertEqual(Nd2Parser._calculate_field_of_view(nd2, i), 2)
 
+    def test_calculate_channel_simple(self):
+        nd2 = MockNd2Parser(['GFP'], [0], [0])
+        for i in range(1000):
+            self.assertEqual(Nd2Parser._calculate_channel(nd2, i), 'GFP')
+
     def test_calculate_channel(self):
         nd2 = MockNd2Parser(['', 'GFP', 'dsRed', 'dTomato', 'lulzBlue', 'jimbotronPurple', 'orange'], [0], [0])
         for i in range(1000):
@@ -105,3 +110,4 @@ class TestNd2Parser(unittest.TestCase):
         for i in range(1000):
             for n, channel in enumerate(['', 'GFP', 'dsRed', 'dTomato', 'lulzBlue', 'jimbotronPurple', 'orange'], start=i*7):
                 self.assertEqual(Nd2Parser._calculate_channel(nd2, n), channel)
+
