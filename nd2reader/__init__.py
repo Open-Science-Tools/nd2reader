@@ -61,6 +61,8 @@ class Nd2(Nd2Parser):
                 image = Image(timestamp, raw_image_data, fov, channel, z_level, self.height, self.width)
             except (TypeError, ValueError):
                 return None
+            except KeyError:
+                raise IndexError("Invalid frame number.")
             else:
                 return image
         elif isinstance(item, slice):
