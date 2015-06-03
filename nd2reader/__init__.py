@@ -16,7 +16,7 @@ class Nd2(Nd2Parser):
 
     def __repr__(self):
         return "\n".join(["<ND2 %s>" % self._filename,
-                          "Created: %s" % self._absolute_start.strftime("%Y-%m-%d %H:%M:%S"),
+                          "Created: %s" % self.absolute_start.strftime("%Y-%m-%d %H:%M:%S"),
                           "Image size: %sx%s (HxW)" % (self.height, self.width),
                           "Image cycles: %s" % len(self.time_indexes),
                           "Channels: %s" % ", ".join(["'%s'" % str(channel) for channel in self.channels]),
@@ -32,7 +32,7 @@ class Nd2(Nd2Parser):
         :rtype: int
 
         """
-        return self._image_count * self._channel_count
+        return self._total_images_per_channel * self._channel_count
 
     def __getitem__(self, item):
         """
