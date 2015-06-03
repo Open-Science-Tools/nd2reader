@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:15.04
 MAINTAINER Jim Rybarski <jim@rybarski.com>
 
 RUN mkdir -p /var/nds2
@@ -15,6 +15,3 @@ COPY . /opt/nd2reader
 WORKDIR /opt/nd2reader
 RUN python setup.py install
 RUN python3 setup.py install
-WORKDIR /var/nd2s
-
-CMD /usr/bin/python3.4

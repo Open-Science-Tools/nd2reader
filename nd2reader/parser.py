@@ -128,6 +128,16 @@ class Nd2Parser(object):
             self._z_levels = self._parse_dimension_text(r""".*?Z\((\d+)\).*?""")
         return self._z_levels
 
+    def _calculate_field_of_view(self, frame_number):
+        images_per_cycle = len(self.z_levels) * len(self.channels)
+        return int((frame_number - (frame_number % images_per_cycle)) / images_per_cycle) % len(self.fields_of_view)
+
+    def _calculate_channel(self, frame_number):
+        return self._channels[frame_number % len(self.channels)]
+
+    def _calculate_z_level(self, frame_number):
+        return self.z_levels[int(((frame_number - (frame_number % len(self.channels))) / len(self.channels)) % len(self.z_levels))]
+
     @property
     def _file_handle(self):
         if self._fh is None:
