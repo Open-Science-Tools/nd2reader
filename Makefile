@@ -8,3 +8,7 @@ py2shell:
 
 py3shell:
 	docker run --rm -v ~/Documents/nd2s:/var/nd2s -it jimrybarski/nd2reader python3.4
+
+test:	build
+	docker run --rm -it jimrybarski/nd2reader python3.4 /opt/nd2reader/tests.py
+

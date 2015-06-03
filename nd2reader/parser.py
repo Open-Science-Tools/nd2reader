@@ -19,6 +19,7 @@ class Nd2Parser(object):
     CHUNK_MAP_END = six.b("ND2 CHUNK MAP SIGNATURE 0000001!")
 
     def __init__(self, filename):
+        self._absolute_start = None
         self._filename = filename
         self._fh = None
         self._channels = None
@@ -33,6 +34,109 @@ class Nd2Parser(object):
         self._time_indexes = None
         self._parse_metadata()
         self._z_levels = None
+
+    @property
+    def absolute_start(self):
+        """
+        The date and time when acquisition began.
+
+        :rtype: datetime.datetime()
+
+        """
+        if self._absolute_start is None:
+            for line in self.metadata[six.b('ImageTextInfo')][six.b('SLxImageTextInfo')].values():
+                line = line.decode("utf8")
+                absolute_start_12 = None
+                absolute_start_24 = None
+                # ND2s seem to randomly switch between 12- and 24-hour representations.
+                try:
+                    absolute_start_24 = datetime.strptime(line, "%m/%d/%Y  %H:%M:%S")
+                except (TypeError, ValueError):
+                    pass
+                try:
+                    absolute_start_12 = datetime.strptime(line, "%m/%d/%Y  %I:%M:%S %p")
+                except (TypeError, ValueError):
+                    pass
+                if not absolute_start_12 and not absolute_start_24:
+                    continue
+                return absolute_start_12 if absolute_start_12 else absolute_start_24
+            raise ValueError("This ND2 has no recorded start time. This is probably a bug.")
+        return self._absolute_start
+
+    @property
+    def channels(self):
+        """
+        These are labels created by the NIS Elements user. Typically they may a short description of the filter cube
+        used (e.g. "bright field", "GFP", etc.)
+
+        :rtype: str
+
+        """
+        if not self._channels:
+            self._channels = []
+            metadata = self.metadata[six.b('ImageMetadataSeq')][six.b('SLxPictureMetadata')][six.b('sPicturePlanes')]
+            try:
+                validity = self.metadata[six.b('ImageMetadata')][six.b('SLxExperiment')][six.b('ppNextLevelEx')][six.b('')][0][six.b('ppNextLevelEx')][six.b('')][0][six.b('pItemValid')]
+            except KeyError:
+                # If none of the channels have been deleted, there is no validity list, so we just make one
+                validity = [True for _ in metadata]
+            # Channel information is contained in dictionaries with the keys a0, a1...an where the number
+            # indicates the order in which the channel is stored. So by sorting the dicts alphabetically
+            # we get the correct order.
+            for (label, chan), valid in zip(sorted(metadata[six.b('sPlaneNew')].items()), validity):
+                if not valid:
+                    continue
+                self._channels.append(chan[six.b('sDescription')].decode("utf8"))
+        return self._channels
+
+    @property
+    def fields_of_view(self):
+        """
+        The metadata contains information about fields of view, but it contains it even if some fields
+        of view were cropped. We can't find anything that states which fields of view are actually
+        in the image data, so we have to calculate it. There probably is something somewhere, since
+        NIS Elements can figure it out, but we haven't found it yet.
+
+        :rtype: int
+
+        """
+        if self._fields_of_view is None:
+            self._fields_of_view = self._parse_dimension_text(r""".*?XY\((\d+)\).*?""")
+        return self._fields_of_view
+
+    @property
+    def time_indexes(self):
+        """
+        The number of cycles.
+
+        :rtype:     int
+
+        """
+        if self._time_indexes is None:
+            self._time_indexes = self._parse_dimension_text(r""".*?T'\((\d+)\).*?""")
+        return self._time_indexes
+
+    @property
+    def z_levels(self):
+        """
+        The different levels in the Z-plane. Just a sequence from 0 to n.
+
+        :rtype: int
+
+        """
+        if self._z_levels is None:
+            self._z_levels = self._parse_dimension_text(r""".*?Z\((\d+)\).*?""")
+        return self._z_levels
+
+    def _calculate_field_of_view(self, frame_number):
+        images_per_cycle = len(self.z_levels) * len(self.channels)
+        return int((frame_number - (frame_number % images_per_cycle)) / images_per_cycle) % len(self.fields_of_view)
+
+    def _calculate_channel(self, frame_number):
+        return self.channels[frame_number % len(self.channels)]
+
+    def _calculate_z_level(self, frame_number):
+        return self.z_levels[int(((frame_number - (frame_number % len(self.channels))) / len(self.channels)) % len(self.z_levels))]
 
     @property
     def _file_handle(self):
@@ -97,32 +201,6 @@ class Nd2Parser(object):
                 raise ValueError("Could not parse metadata dimensions!")
         return self._dimension_text
 
-    @property
-    def channels(self):
-        """
-        These are labels created by the NIS Elements user. Typically they may a short description of the filter cube
-        used (e.g. "bright field", "GFP", etc.)
-
-        :rtype: str
-
-        """
-        if not self._channels:
-            self._channels = []
-            metadata = self.metadata[six.b('ImageMetadataSeq')][six.b('SLxPictureMetadata')][six.b('sPicturePlanes')]
-            try:
-                validity = self.metadata[six.b('ImageMetadata')][six.b('SLxExperiment')][six.b('ppNextLevelEx')][six.b('')][0][six.b('ppNextLevelEx')][six.b('')][0][six.b('pItemValid')]
-            except KeyError:
-                # If none of the channels have been deleted, there is no validity list, so we just make one
-                validity = [True for _ in metadata]
-            # Channel information is contained in dictionaries with the keys a0, a1...an where the number
-            # indicates the order in which the channel is stored. So by sorting the dicts alphabetically
-            # we get the correct order.
-            for (label, chan), valid in zip(sorted(metadata[six.b('sPlaneNew')].items()), validity):
-                if not valid:
-                    continue
-                self._channels.append(chan[six.b('sDescription')].decode("utf8"))
-        return self._channels
-
     def _calculate_image_group_number(self, time_index, fov, z_level):
         """
         Images are grouped together if they share the same time index, field of view, and z-level.
@@ -150,32 +228,6 @@ class Nd2Parser(object):
             channel_offset[channel] = n
         return channel_offset
 
-    @property
-    def _absolute_start(self):
-        """
-        The date and time when acquisition began.
-
-        :rtype: datetime.datetime()
-
-        """
-        for line in self.metadata[six.b('ImageTextInfo')][six.b('SLxImageTextInfo')].values():
-            line = line.decode("utf8")
-            absolute_start_12 = None
-            absolute_start_24 = None
-            # ND2s seem to randomly switch between 12- and 24-hour representations.
-            try:
-                absolute_start_24 = datetime.strptime(line, "%m/%d/%Y  %H:%M:%S")
-            except (TypeError, ValueError):
-                pass
-            try:
-                absolute_start_12 = datetime.strptime(line, "%m/%d/%Y  %I:%M:%S %p")
-            except (TypeError, ValueError):
-                pass
-            if not absolute_start_12 and not absolute_start_24:
-                continue
-            return absolute_start_12 if absolute_start_12 else absolute_start_24
-        raise ValueError("This ND2 has no recorded start time. This is probably a bug.")
-
     def _parse_dimension_text(self, pattern):
         try:
             count = int(re.match(pattern, self._dimensions).group(1))
@@ -188,48 +240,9 @@ class Nd2Parser(object):
             return list(range(count))
 
     @property
-    def fields_of_view(self):
+    def _total_images_per_channel(self):
         """
-        The metadata contains information about fields of view, but it contains it even if some fields
-        of view were cropped. We can't find anything that states which fields of view are actually
-        in the image data, so we have to calculate it. There probably is something somewhere, since
-        NIS Elements can figure it out, but we haven't found it yet.
-
-        :rtype: int
-
-        """
-        if self._fields_of_view is None:
-            self._fields_of_view = self._parse_dimension_text(r""".*?XY\((\d+)\).*?""")
-        return self._fields_of_view
-
-    @property
-    def time_indexes(self):
-        """
-        The number of cycles.
-
-        :rtype:     int
-
-        """
-        if self._time_indexes is None:
-            self._time_indexes = self._parse_dimension_text(r""".*?T'\((\d+)\).*?""")
-        return self._time_indexes
-
-    @property
-    def z_levels(self):
-        """
-        The different levels in the Z-plane. Just a sequence from 0 to n.
-
-        :rtype: int
-
-        """
-        if self._z_levels is None:
-            self._z_levels = self._parse_dimension_text(r""".*?Z\((\d+)\).*?""")
-        return self._z_levels
-
-    @property
-    def _image_count(self):
-        """
-        The total number of images in the ND2. Warning: this may be inaccurate as it includes "gap" images.
+        The total number of images per channel. Warning: this may be inaccurate as it includes "gap" images.
 
         :rtype: int
 

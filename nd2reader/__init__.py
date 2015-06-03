@@ -16,7 +16,7 @@ class Nd2(Nd2Parser):
 
     def __repr__(self):
         return "\n".join(["<ND2 %s>" % self._filename,
-                          "Created: %s" % self._absolute_start.strftime("%Y-%m-%d %H:%M:%S"),
+                          "Created: %s" % self.absolute_start.strftime("%Y-%m-%d %H:%M:%S"),
                           "Image size: %sx%s (HxW)" % (self.height, self.width),
                           "Image cycles: %s" % len(self.time_indexes),
                           "Channels: %s" % ", ".join(["'%s'" % str(channel) for channel in self.channels]),
@@ -32,7 +32,7 @@ class Nd2(Nd2Parser):
         :rtype: int
 
         """
-        return self._image_count * self._channel_count
+        return self._total_images_per_channel * self._channel_count
 
     def __getitem__(self, item):
         """
@@ -122,16 +122,6 @@ class Nd2(Nd2Parser):
 
         """
         return self.metadata[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiWidth')]
-
-    def _calculate_field_of_view(self, frame_number):
-        images_per_cycle = len(self.z_levels) * len(self.channels)
-        return int((frame_number - (frame_number % images_per_cycle)) / images_per_cycle) % len(self.fields_of_view)
-
-    def _calculate_channel(self, frame_number):
-        return self._channels[frame_number % len(self.channels)]
-
-    def _calculate_z_level(self, frame_number):
-        return self.z_levels[int(((frame_number - (frame_number % len(self.channels))) / len(self.channels)) % len(self.z_levels))]
 
     def get_image(self, time_index, field_of_view, channel_name, z_level):
         """
