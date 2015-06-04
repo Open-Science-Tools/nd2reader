@@ -10,16 +10,19 @@
 
 ### Installation
 
-Just use pip (`numpy` is required):
+Dependencies will automatically be installed if you don't have them. That said, for optimal performance, you should
+install the following packages before installing nd2reader:
 
-`pip install numpy nd2reader`
+#### Ubuntu
+`apt-get install python-numpy python-six` (Python 2.x)
+`apt-get install python3-numpy python3-six` (Python 3.x)
 
-If you want to install via git, clone the repo and run:
+#### Other operating systems
+These have not been tested yet.
 
-```
-pip install numpy
-python setup.py install
-```
+nd2reader is compatible with both Python 2.x and 3.x. I recommend installing using pip:
+
+`pip install nd2reader` (Python 2.x) or `pip3 install nd2reader` (Python 3.x)
 
 ### ND2s
 
@@ -50,7 +53,7 @@ You can also get some metadata about the nd2 programatically:
 
 ### Images
 
-`nd2reader` will always return an `Image` object, which contains some metadata about the image as well as the
+Every method returns an `Image` object, which contains some metadata about the image as well as the
 raw pixel data itself. Images are always a 16-bit grayscale image. The `data` attribute holds the numpy array
 with the image data:
 
@@ -161,6 +164,10 @@ You can also see how many images are in your image set:
 >>> len(image_set)
 7
 ```
+
+### Protips
+
+nd2reader is about 14 times faster under Python 3.4 compared to Python 2.7. If you know why, please get in touch!
 
 ### Bug Reports and Features
 

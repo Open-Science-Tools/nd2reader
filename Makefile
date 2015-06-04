@@ -1,4 +1,4 @@
-.PHONY: build shell
+.PHONY: build py2shell py3shell test
 
 build:
 	docker build -t jimrybarski/nd2reader .

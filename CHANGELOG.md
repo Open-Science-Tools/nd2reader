@@ -7,7 +7,8 @@
 - Unit tests
 
 ### CHANGED
-- Made the interface for most metadata public.
+- Switched to setuptools to automatically install missing dependencies
+- Made the interface for most metadata public
 - Refactored some poorly-named things
 
 ## [1.0.0] - 2015-05-23
