@@ -1,10 +1,14 @@
-from distutils.core import setup
+from setuptools import setup
 
 VERSION = "1.1.0"
 
 setup(
     name="nd2reader",
     packages=['nd2reader', 'nd2reader.model'],
+    install_requires=[
+        'numpy>=1.6.2, <2.0',
+        'six>=1.4, <2.0'
+    ],
     version=VERSION,
     description='A tool for reading ND2 files produced by NIS Elements',
     author='Jim Rybarski',

@@ -10,16 +10,19 @@
 
 ### Installation
 
-Just use pip (`numpy` is required):
+Dependencies will automatically be installed if you don't have them. That said, for optimal performance, you should
+install the following packages before installing nd2reader:
 
-`pip install numpy nd2reader`
+#### Ubuntu
+`apt-get install python-numpy python-six` (Python 2.x)
+`apt-get install python3-numpy python3-six` (Python 3.x)
 
-If you want to install via git, clone the repo and run:
+#### Other operating systems
+These have not been tested yet.
 
-```
-pip install numpy
-python setup.py install
-```
+nd2reader is compatible with both Python 2.x and 3.x. I recommend installing using pip:
+
+`pip install nd2reader` (Python 2.x) or `pip3 install nd2reader` (Python 3.x)
 
 ### ND2s
 
@@ -37,68 +40,38 @@ Fields of View: 8
 Z-Levels: 3
 ```
 
-### Simple Iteration
-
-For most cases, you'll just want to iterate over each image:
+You can also get some metadata about the nd2 programatically:
 
 ```python
-import nd2reader
-nd2 = nd2reader.Nd2("/path/to/my_images.nd2")
-for image in nd2:
-    do_something(image.data)
+>>> nd2.height
+1280
+>>> nd2.width
+800
+>>> len(nd2)
+30528
 ```
-
-### Image Sets
-
-If you have complicated hierarchical data, it may be easier to use image sets, which groups images together if they
-share the same time index and field of view:
-
-```python
-import nd2reader
-nd2 = nd2reader.Nd2("/path/to/my_complicated_images.nd2")
-for image_set in nd2.image_sets:
-    # you can select images by channel
-    gfp_image = image_set.get("GFP")
-    do_something_gfp_related(gfp_image)
-
-    # you can also specify the z-level. this defaults to 0 if not given
-    out_of_focus_image = image_set.get("Bright Field", z_level=1)
-    do_something_out_of_focus_related(out_of_focus_image)
-```
-
-### Direct Image Access
-
-There is a method, `get_image`, which allows random access to images. This might not always return an image, however,
-if you acquired different numbers of images in each cycle of a program. For example, if you acquire GFP images every
-other minute, but acquire bright field images every minute, `get_image` will return `None` at certain time indexes.
 
 ### Images
 
-`Image` objects provide several pieces of useful data.
+Every method returns an `Image` object, which contains some metadata about the image as well as the
+raw pixel data itself. Images are always a 16-bit grayscale image. The `data` attribute holds the numpy array
+with the image data:
 
 ```python
->>> import nd2reader
->>> nd2 = nd2reader.Nd2("/path/to/my_images.nd2")
->>> image = nd2.get_image(14, 2, "GFP", 1)
->>> image.data
-array([[1809, 1783, 1830, ..., 1923, 1920, 1914],
-       [1687, 1855, 1792, ..., 1986, 1903, 1889],
-       [1758, 1901, 1849, ..., 1911, 2010, 1954],
+>>> image = nd2[20]
+>>> print(image.data)
+array([[1894, 1949, 1941, ..., 2104, 2135, 2114],
+       [1825, 1846, 1848, ..., 1994, 2149, 2064],
+       [1909, 1820, 1821, ..., 1995, 1952, 2062],
        ...,
-       [3363, 3370, 3570, ..., 3565, 3601, 3459],
-       [3480, 3428, 3328, ..., 3542, 3461, 3575],
-       [3497, 3666, 3635, ..., 3817, 3867, 3779]])
->>> image.channel
-'GFP'
->>> image.timestamp
-1699.7947813408175
->>> image.field_of_view
-2
->>> image.z_level
-1
+       [3487, 3512, 3594, ..., 3603, 3643, 3492],
+       [3642, 3475, 3525, ..., 3712, 3682, 3609],
+       [3687, 3777, 3738, ..., 3784, 3870, 4008]], dtype=uint16)
+```
 
-# You can also get a quick summary of image data:
+You can get a quick summary of image data by examining the `Image` object:
 
+```python
 >>> image
 <ND2 Image>
 1280x800 (HxW)
@@ -107,6 +80,94 @@ Field of View: 2
 Channel: GFP
 Z-Level: 1
 ```
+
+Or you can access it programmatically:
+
+```python
+image = nd2[0]
+print(image.timestamp)
+print(image.field_of_view)
+print(image.channel)
+print(image.z_level)
+```
+
+Often, you may want to just iterate over each image:
+
+```python
+import nd2reader
+nd2 = nd2reader.Nd2("/path/to/my_images.nd2")
+for image in nd2:
+    do_something(image.data)
+```
+
+You can also get an image directly by indexing. Here, we look at the 38th image:
+
+```python
+>>> nd2[37]
+<ND2 Image>
+1280x800 (HxW)
+Timestamp: 1699.79478134
+Field of View: 2
+Channel: GFP
+Z-Level: 1
+```
+
+Slicing is also supported and is extremely memory efficient, as images are only read when directly accessed:
+
+```python
+my_subset = nd2[50:433]
+for image in my_subset:
+    do_something(image.data)
+```
+
+Step sizes are also accepted:
+
+```python
+for image in nd2[:100:2]:
+    # gets every other image in the first 100 images
+    do_something(image.data)
+
+for image in nd2[::-1]:
+    # iterate backwards over every image, if you're into that kind of thing
+    do_something_image.data)
+```
+
+### Image Sets
+
+If you have complicated hierarchical data, it may be easier to use image sets, which groups images together if they
+share the same time index (not timestamp!) and field of view:
+
+```python
+import nd2reader
+nd2 = nd2reader.Nd2("/path/to/my_complicated_images.nd2")
+for image_set in nd2.image_sets:
+    # you can select images by channel
+    gfp_image = image_set.get("GFP")
+    do_something_gfp_related(gfp_image.data)
+
+    # you can also specify the z-level. this defaults to 0 if not given
+    out_of_focus_image = image_set.get("Bright Field", z_level=1)
+    do_something_out_of_focus_related(out_of_focus_image.data)
+```
+
+To get an image from an image set, you must specify a channel. It defaults to the 0th z-level, so if you have
+more than one z-level you will need to specify it when using `get`:
+
+```python
+image = image_set.get("YFP")
+image = image_set.get("YFP", z_level=2)
+```
+
+You can also see how many images are in your image set:
+
+```python
+>>> len(image_set)
+7
+```
+
+### Protips
+
+nd2reader is about 14 times faster under Python 3.4 compared to Python 2.7. If you know why, please get in touch!
 
 ### Bug Reports and Features
 
