@@ -32,7 +32,7 @@ class Nd2(Nd2Parser):
         :rtype: int
 
         """
-        return self._total_images_per_channel * self._channel_count
+        return self._total_images_per_channel * len(self.channels)
 
     def __getitem__(self, item):
         """
@@ -128,8 +128,7 @@ class Nd2(Nd2Parser):
     def get_image(self, time_index, field_of_view, channel_name, z_level):
         """
         Returns an Image if data exists for the given parameters, otherwise returns None. In general, you should avoid
-        using this method unless you're very familiar with the structure of ND2 files. If you have a use case that
-        cannot be met by the `__iter__` or `image_sets` methods above, please create an issue on Github.
+        using this method unless you're very familiar with the structure of ND2 files.
 
         :param time_index: the frame number
         :type time_index: int
