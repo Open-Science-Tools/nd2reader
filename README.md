@@ -130,7 +130,7 @@ for image in nd2[:100:2]:
 
 for image in nd2[::-1]:
     # iterate backwards over every image, if you're into that kind of thing
-    do_something_image.data)
+    do_something(image.data)
 ```
 
 ### Image Sets
