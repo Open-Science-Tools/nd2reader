@@ -2,7 +2,7 @@
 
 ### About
 
-`nd2reader` is a pure-Python package that reads images produced by NIS Elements version 4.0+. It has only been definitely tested on Version 4.30.02 Build 1053. Support for older versions is planned.
+`nd2reader` is a pure-Python package that reads images produced by NIS Elements 4.0+. It has only been definitely tested on NIS Elements 4.30.02 Build 1053. Support for older versions is planned.
 
 .nd2 files contain images and metadata, which can be split along multiple dimensions: time, fields of view (xy-plane), focus (z-plane), and filter channel.
 
