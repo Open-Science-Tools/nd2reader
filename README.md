@@ -2,7 +2,7 @@
 
 ### About
 
-`nd2reader` is a pure-Python package that reads images produced by NIS Elements.
+`nd2reader` is a pure-Python package that reads images produced by NIS Elements 4.0+. It has only been definitively tested on NIS Elements 4.30.02 Build 1053. Support for older versions is planned.
 
 .nd2 files contain images and metadata, which can be split along multiple dimensions: time, fields of view (xy-plane), focus (z-plane), and filter channel.
 
@@ -14,15 +14,16 @@ Dependencies will automatically be installed if you don't have them. That said, 
 install the following packages before installing nd2reader:
 
 #### Ubuntu
-`apt-get install python-numpy python-six` (Python 2.x)
-`apt-get install python3-numpy python3-six` (Python 3.x)
+`apt-get install python-numpy python-six` (Python 2.x)  
+`apt-get install python3-numpy python3-six` (Python 3.x)  
 
 #### Other operating systems
 These have not been tested yet.
 
 nd2reader is compatible with both Python 2.x and 3.x. I recommend installing using pip:
 
-`pip install nd2reader` (Python 2.x) or `pip3 install nd2reader` (Python 3.x)
+`pip install nd2reader` (Python 2.x)  
+`pip3 install nd2reader` (Python 3.x)
 
 ### ND2s
 
@@ -129,7 +130,7 @@ for image in nd2[:100:2]:
 
 for image in nd2[::-1]:
     # iterate backwards over every image, if you're into that kind of thing
-    do_something_image.data)
+    do_something(image.data)
 ```
 
 ### Image Sets
