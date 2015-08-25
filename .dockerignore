@@ -6,3 +6,6 @@ Dockerfile
 Makefile
 setup.cfg
 env
+*.egg-info
+build
+dist
