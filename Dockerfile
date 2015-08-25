@@ -16,12 +16,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python-pip \
     python3-pip \
     libfreetype6-dev \
+    python-numpy \
+    python3-numpy \
     python3-matplotlib \
     libfreetype6-dev \
     libpng-dev \
     libjpeg-dev \
     pkg-config \
     python3-skimage \
+    tk \
+    tk-dev \
+    python3-tk \
  && pip3 install -U cython \
     scikit-image \
  && rm -rf /var/lib/apt/lists/*
