@@ -1,0 +1,8 @@
+.gitignore
+.git
+*.md
+*.txt
+Dockerfile
+Makefile
+setup.cfg
+env
