@@ -15,6 +15,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-dev \
     python-pip \
     python3-pip \
+    python-numpy \
+    python3-numpy \
     libfreetype6-dev \
     python-numpy \
     python3-numpy \
