@@ -24,6 +24,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libjpeg-dev \
     pkg-config \
     python3-skimage \
+    tk \
+    tk-dev \
+    python3-tk \
  && pip3 install -U cython \
     scikit-image \
  && rm -rf /var/lib/apt/lists/*
