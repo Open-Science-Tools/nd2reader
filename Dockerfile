@@ -18,8 +18,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python-numpy \
     python3-numpy \
     libfreetype6-dev \
-    python-numpy \
-    python3-numpy \
     python3-matplotlib \
     libfreetype6-dev \
     libpng-dev \
