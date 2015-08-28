@@ -57,7 +57,8 @@ class Nd2(Nd2Parser):
                 fov = self._calculate_field_of_view(item)
                 channel = self._calculate_channel(item)
                 z_level = self._calculate_z_level(item)
-                timestamp, raw_image_data = self._get_raw_image_data(item, channel_offset)
+                image_group_number = int(item / len(self.channels))
+                timestamp, raw_image_data = self._get_raw_image_data(image_group_number, channel_offset)
                 image = Image(timestamp, raw_image_data, fov, channel, z_level, self.height, self.width)
             except (TypeError, ValueError):
                 return None
