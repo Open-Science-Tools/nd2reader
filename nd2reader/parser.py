@@ -234,8 +234,10 @@ class Nd2Parser(object):
         except AttributeError:
             return [0]
         except TypeError:
-            count = int(re.match(pattern, self._dimensions.decode("utf8")).group(1))
-            return list(range(count))
+            match = re.match(pattern, self._dimensions.decode("utf8"))
+            if not match:
+                return [0]
+            return list(range(int(match.group(1))))
         else:
             return list(range(count))
 
