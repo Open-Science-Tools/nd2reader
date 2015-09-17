@@ -8,10 +8,12 @@ log = logging.getLogger(__name__)
 
 
 class Image(object):
-    def __init__(self, timestamp, raw_array, field_of_view, channel, z_level, height, width):
+    def __init__(self, timestamp, frame_number, raw_array, field_of_view, channel, z_level, height, width):
         """
         A wrapper around the raw pixel data of an image.
 
+        :param timestamp: The frame number relative to the .
+        :type timestamp: int
         :param timestamp: The number of milliseconds after the beginning of the acquisition that this image was taken.
         :type timestamp: int
         :param raw_array: The raw sequence of bytes that represents the image.
@@ -29,6 +31,7 @@ class Image(object):
 
         """
         self._timestamp = timestamp
+        self._frame_number = int(frame_number)
         self._raw_data = raw_array
         self._field_of_view = field_of_view
         self._channel = channel
@@ -41,6 +44,7 @@ class Image(object):
         return "\n".join(["<ND2 Image>",
                           "%sx%s (HxW)" % (self._height, self._width),
                           "Timestamp: %s" % self.timestamp,
+                          "Frame: %s" % self._frame_number,
                           "Field of View: %s" % self.field_of_view,
                           "Channel: %s" % self.channel,
                           "Z-Level: %s" % self.z_level,
@@ -82,6 +86,10 @@ class Image(object):
 
         """
         return self._timestamp / 1000.0
+
+    @property
+    def frame_number(self):
+        return self._frame_number
 
     @property
     def channel(self):
