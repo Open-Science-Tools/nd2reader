@@ -69,7 +69,7 @@ class Nd2Parser(object):
         These are labels created by the NIS Elements user. Typically they may a short description of the filter cube
         used (e.g. "bright field", "GFP", etc.)
 
-        :rtype: str
+        :rtype: list
 
         """
         if not self._channels:
@@ -97,7 +97,7 @@ class Nd2Parser(object):
         in the image data, so we have to calculate it. There probably is something somewhere, since
         NIS Elements can figure it out, but we haven't found it yet.
 
-        :rtype: int
+        :rtype: list
 
         """
         if self._fields_of_view is None:
@@ -109,7 +109,7 @@ class Nd2Parser(object):
         """
         The number of cycles.
 
-        :rtype:     int
+        :rtype:     list
 
         """
         if self._time_indexes is None:
@@ -121,7 +121,7 @@ class Nd2Parser(object):
         """
         The different levels in the Z-plane. Just a sequence from 0 to n.
 
-        :rtype: int
+        :rtype: list
 
         """
         if self._z_levels is None:
@@ -213,6 +213,9 @@ class Nd2Parser(object):
 
         """
         return time_index * len(self.fields_of_view) * len(self.z_levels) + (fov * len(self.z_levels) + z_level)
+
+    def _calculate_frame_number(self, image_group_number, fov, z_level):
+        return (image_group_number - (fov * len(self.z_levels) + z_level)) / (len(self.fields_of_view) * len(self.z_levels))
 
     @property
     def _channel_offset(self):

@@ -58,8 +58,9 @@ class Nd2(Nd2Parser):
                 channel = self._calculate_channel(item)
                 z_level = self._calculate_z_level(item)
                 image_group_number = int(item / len(self.channels))
+                frame_number = self._calculate_frame_number(image_group_number, fov, z_level)
                 timestamp, raw_image_data = self._get_raw_image_data(image_group_number, channel_offset)
-                image = Image(timestamp, raw_image_data, fov, channel, z_level, self.height, self.width)
+                image = Image(timestamp, frame_number, raw_image_data, fov, channel, z_level, self.height, self.width)
             except (TypeError, ValueError):
                 return None
             except KeyError:
@@ -126,13 +127,12 @@ class Nd2(Nd2Parser):
         """
         return self.metadata[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiWidth')]
 
-    def get_image(self, time_index, field_of_view, channel_name, z_level):
+    def get_image(self, frame_number, field_of_view, channel_name, z_level):
         """
         Returns an Image if data exists for the given parameters, otherwise returns None. In general, you should avoid
         using this method unless you're very familiar with the structure of ND2 files.
 
-        :param time_index: the frame number
-        :type time_index: int
+        :type frame_number: int
         :param field_of_view: the label for the place in the XY-plane where this image was taken.
         :type field_of_view: int
         :param channel_name: the name of the color of this image
@@ -142,10 +142,10 @@ class Nd2(Nd2Parser):
         :rtype: nd2reader.model.Image() or None
 
         """
-        image_group_number = self._calculate_image_group_number(time_index, field_of_view, z_level)
+        image_group_number = self._calculate_image_group_number(frame_number, field_of_view, z_level)
         try:
             timestamp, raw_image_data = self._get_raw_image_data(image_group_number, self._channel_offset[channel_name])
-            image = Image(timestamp, raw_image_data, field_of_view, channel_name, z_level, self.height, self.width)
+            image = Image(timestamp, frame_number, raw_image_data, field_of_view, channel_name, z_level, self.height, self.width)
         except TypeError:
             return None
         else:
