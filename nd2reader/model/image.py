@@ -3,8 +3,11 @@
 import numpy as np
 
 
-class Image(object):
-    def __init__(self, timestamp, frame_number, raw_array, field_of_view, channel, z_level, height, width):
+class Image(np.ndarray):
+    def __new__(cls, array):
+        return np.asarray(array).view(cls)
+
+    def add_params(self, timestamp, frame_number, field_of_view, channel, z_level):
         """
         A wrapper around the raw pixel data of an image.
 
@@ -12,8 +15,6 @@ class Image(object):
         :type timestamp: int
         :param timestamp: The number of milliseconds after the beginning of the acquisition that this image was taken.
         :type timestamp: int
-        :param raw_array: The raw sequence of bytes that represents the image.
-        :type raw_array: array.array()
         :param field_of_view: The label for the place in the XY-plane where this image was taken.
         :type field_of_view: int
         :param channel: The name of the color of this image
@@ -28,37 +29,19 @@ class Image(object):
         """
         self._timestamp = timestamp
         self._frame_number = int(frame_number)
-        self._raw_data = raw_array
         self._field_of_view = field_of_view
         self._channel = channel
         self._z_level = z_level
-        self._height = height
-        self._width = width
-        self._data = None
 
     def __repr__(self):
         return "\n".join(["<ND2 Image>",
-                          "%sx%s (HxW)" % (self._height, self._width),
+                          "%sx%s (HxW)" % (self.height, self.width),
                           "Timestamp: %s" % self.timestamp,
                           "Frame: %s" % self._frame_number,
                           "Field of View: %s" % self.field_of_view,
                           "Channel: %s" % self.channel,
                           "Z-Level: %s" % self.z_level,
                           ])
-
-    @property
-    def data(self):
-        """
-        The actual image data.
-
-        :rtype np.array()
-
-        """
-        if self._data is None:
-            # The data is just a 1-dimensional array originally.
-            # We convert it to a 2D image here.
-            self._data = np.reshape(self._raw_data, (self._height, self._width))
-        return self._data
 
     @property
     def field_of_view(self):

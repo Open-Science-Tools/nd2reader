@@ -6,6 +6,7 @@ import numpy as np
 import re
 import struct
 import six
+from nd2reader.model.image import Image
 
 
 class Nd2Parser(object):
@@ -29,11 +30,21 @@ class Nd2Parser(object):
         self._dimension_text = None
         self._fields_of_view = None
         self._label_map = {}
-        self.metadata = {}
+        self._metadata = {}
         self._read_map()
         self._time_indexes = None
         self._parse_metadata()
         self._z_levels = None
+
+    def get_image(self, index):
+        channel_offset = index % len(self._metadata.channels)
+        fov = self._calculate_field_of_view(index)
+        channel = self._calculate_channel(index)
+        z_level = self._calculate_z_level(index)
+        image_group_number = int(index / len(self._metadata.channels))
+        frame_number = self._calculate_frame_number(image_group_number, fov, z_level)
+        timestamp, image = self._get_raw_image_data(image_group_number, channel_offset, self._metadata.height, self._metadata.width)
+        image.add_params(timestamp, frame_number, fov, channel, z_level)
 
     @property
     def absolute_start(self):
@@ -144,7 +155,7 @@ class Nd2Parser(object):
             self._fh = open(self._filename, "rb")
         return self._fh
 
-    def _get_raw_image_data(self, image_group_number, channel_offset):
+    def _get_raw_image_data(self, image_group_number, channel_offset, height, width):
         """
         Reads the raw bytes and the timestamp of an image.
 
@@ -167,13 +178,13 @@ class Nd2Parser(object):
         # The images for the various channels are interleaved within the same array. For example, the second image
         # of a four image group will be composed of bytes 2, 6, 10, etc. If you understand why someone would design
         # a data structure that way, please send the author of this library a message.
-        image_data = image_group_data[image_data_start::len(self.channels)]
+        image_data = np.reshape(image_group_data[image_data_start::len(self.channels)], (height, width))
         # Skip images that are all zeros! This is important, since NIS Elements creates blank "gap" images if you
         # don't have the same number of images each cycle. We discovered this because we only took GFP images every
         # other cycle to reduce phototoxicity, but NIS Elements still allocated memory as if we were going to take
         # them every cycle.
         if np.any(image_data):
-            return timestamp, image_data
+            return timestamp, Image(image_data)
         return None
 
     @property

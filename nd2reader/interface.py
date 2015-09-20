@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from nd2reader.model import Image, ImageGroup
+from nd2reader.model import ImageGroup
 from nd2reader.driver import get_driver
 from nd2reader.driver.version import get_version
-import six
+import warnings
 
 
 class Nd2(object):
@@ -12,13 +12,14 @@ class Nd2(object):
 
     """
     def __init__(self, filename):
+        self._filename = filename
         version = get_version(filename)
         self._driver = get_driver(filename, version)
         self._metadata = self._driver.get_metadata()
         
     def __repr__(self):
-        return "\n".join(["<ND2 %s>" % self._driver._filename,
-                          "Created: %s" % self._driver.absolute_start,
+        return "\n".join(["<ND2 %s>" % self._filename,
+                          "Created: %s" % self.date,
                           "Image size: %sx%s (HxW)" % (self.height, self.width),
                           "Frames: %s" % len(self.frames),
                           "Channels: %s" % ", ".join(["'%s'" % str(channel) for channel in self.channels]),
@@ -43,32 +44,18 @@ class Nd2(object):
         >>> nd2 = Nd2("my_images.nd2")
         >>> image = nd2[16]  # gets 17th frame
         >>> for image in nd2[100:200]:  # iterate over the 100th to 200th images
-        >>>     do_something(image.data)
+        >>>     do_something(image)
         >>> for image in nd2[::-1]:  # iterate backwards
-        >>>     do_something(image.data)
+        >>>     do_something(image)
         >>> for image in nd2[37:422:17]:  # do something super weird if you really want to
-        >>>     do_something(image.data)
+        >>>     do_something(image)
 
         :type item: int or slice
         :rtype: nd2reader.model.Image() or generator
 
         """
         if isinstance(item, int):
-            try:
-                channel_offset = item % len(self.channels)
-                fov = self._calculate_field_of_view(item)
-                channel = self._calculate_channel(item)
-                z_level = self._calculate_z_level(item)
-                image_group_number = int(item / len(self.channels))
-                frame_number = self._calculate_frame_number(image_group_number, fov, z_level)
-                timestamp, raw_image_data = self._get_raw_image_data(image_group_number, channel_offset)
-                image = Image(timestamp, frame_number, raw_image_data, fov, channel, z_level, self.height, self.width)
-            except (TypeError, ValueError):
-                return None
-            except KeyError:
-                raise IndexError("Invalid frame number.")
-            else:
-                return image
+            return self._driver.get_image(item)
         elif isinstance(item, slice):
             return self._slice(item.start, item.stop, item.step)
         raise IndexError
@@ -80,7 +67,7 @@ class Nd2(object):
         :type start: int
         :type stop: int
         :type step: int
-        :rtype: nd2reader.model.Image() or None
+        :rtype: nd2reader.model.Image()
 
         """
         start = start if start is not None else 0
@@ -101,15 +88,37 @@ class Nd2(object):
         :return: model.ImageSet()
 
         """
-        for time_index in self.time_indexes:
-            image_set = ImageGroup()
+        warnings.warn("nd2.image_sets will be removed from the nd2reader library in the near future.", DeprecationWarning)
+
+        for frame in self.frames:
+            image_group = ImageGroup()
             for fov in self.fields_of_view:
                 for channel_name in self.channels:
                     for z_level in self.z_levels:
-                        image = self.get_image(time_index, fov, channel_name, z_level)
+                        image = self.get_image(frame, fov, channel_name, z_level)
                         if image is not None:
-                            image_set.add(image)
-                yield image_set
+                            image_group.add(image)
+                yield image_group
+
+    @property
+    def date(self):
+        return self._metadata.date
+
+    @property
+    def z_levels(self):
+        return self._metadata.z_levels
+
+    @property
+    def fields_of_view(self):
+        return self._metadata.fields_of_view
+
+    @property
+    def channels(self):
+        return self._metadata.channels
+
+    @property
+    def frames(self):
+        return self._metadata.frames
 
     @property
     def height(self):
@@ -118,7 +127,7 @@ class Nd2(object):
         :rtype: int
 
         """
-        return self.metadata[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiHeight')]
+        return self._metadata.height
 
     @property
     def width(self):
@@ -127,12 +136,11 @@ class Nd2(object):
         :rtype: int
 
         """
-        return self.metadata[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiWidth')]
+        return self._metadata.width
 
     def get_image(self, frame_number, field_of_view, channel_name, z_level):
         """
-        Returns an Image if data exists for the given parameters, otherwise returns None. In general, you should avoid
-        using this method unless you're very familiar with the structure of ND2 files.
+        Returns an Image if data exists for the given parameters, otherwise returns None.
 
         :type frame_number: int
         :param field_of_view: the label for the place in the XY-plane where this image was taken.
@@ -141,14 +149,8 @@ class Nd2(object):
         :type channel_name: str
         :param z_level: the label for the location in the Z-plane where this image was taken.
         :type z_level: int
-        :rtype: nd2reader.model.Image() or None
+
+        :rtype: nd2reader.model.Image()
 
         """
-        image_group_number = self._calculate_image_group_number(frame_number, field_of_view, z_level)
-        try:
-            timestamp, raw_image_data = self._get_raw_image_data(image_group_number, self._channel_offset[channel_name])
-            image = Image(timestamp, frame_number, raw_image_data, field_of_view, channel_name, z_level, self.height, self.width)
-        except TypeError:
-            return None
-        else:
-            return image
+        return self._driver.get_image_by_attributes(frame_number, field_of_view, channel_name, z_level)
