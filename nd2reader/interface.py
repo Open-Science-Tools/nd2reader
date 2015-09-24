@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from nd2reader.model import ImageGroup
-from nd2reader.driver import get_driver
-from nd2reader.driver.version import get_version
+from nd2reader.parser import get_parser
+from nd2reader.version import get_version
 import warnings
 
 
@@ -12,10 +12,11 @@ class Nd2(object):
 
     """
     def __init__(self, filename):
-        self._filename = filename
         version = get_version(filename)
-        self._driver = get_driver(filename, version)
-        self._metadata = self._driver.get_metadata()
+        parser = get_parser(filename, version)
+        self._driver = parser.driver
+        self._metadata = parser.metadata
+        self._filename = filename
         
     def __repr__(self):
         return "\n".join(["<ND2 %s>" % self._filename,
