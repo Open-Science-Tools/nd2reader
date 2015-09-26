@@ -12,8 +12,8 @@ class Nd2(object):
 
     """
     def __init__(self, filename):
-        version = get_version(filename)
-        parser = get_parser(filename, version)
+        major_version, minor_version = get_version(filename)
+        parser = get_parser(filename, major_version, minor_version)
         self._driver = parser.driver
         self._metadata = parser.metadata
         self._filename = filename
@@ -89,7 +89,7 @@ class Nd2(object):
         :return: model.ImageSet()
 
         """
-        warnings.warn("nd2.image_sets will be removed from the nd2reader library in the near future.", DeprecationWarning)
+        warnings.warn("Nd2.image_sets will be removed from the nd2reader library in the near future.", DeprecationWarning)
 
         for frame in self.frames:
             image_group = ImageGroup()
