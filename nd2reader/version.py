@@ -1,8 +1,5 @@
 import re
-
-
-class InvalidVersionError(Exception):
-    pass
+from nd2reader.exc import InvalidVersionError
 
 
 def get_version(filename):

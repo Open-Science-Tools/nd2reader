@@ -21,10 +21,6 @@ class Image(np.ndarray):
         :type channel: str
         :param z_level: The label for the location in the Z-plane where this image was taken.
         :type z_level: int
-        :param height: The height of the image in pixels.
-        :type height: int
-        :param width: The width of the image in pixels.
-        :type width: int
 
         """
         self._timestamp = timestamp
@@ -37,11 +33,19 @@ class Image(np.ndarray):
         return "\n".join(["<ND2 Image>",
                           "%sx%s (HxW)" % (self.height, self.width),
                           "Timestamp: %s" % self.timestamp,
-                          "Frame: %s" % self._frame_number,
+                          "Frame: %s" % self.frame_number,
                           "Field of View: %s" % self.field_of_view,
                           "Channel: %s" % self.channel,
                           "Z-Level: %s" % self.z_level,
                           ])
+
+    @property
+    def height(self):
+        return self.shape[1]
+
+    @property
+    def width(self):
+        return self.shape[0]
 
     @property
     def field_of_view(self):
