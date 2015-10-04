@@ -3,12 +3,13 @@
 import array
 from datetime import datetime
 from nd2reader.model.metadata import Metadata
+from nd2reader.parser.parser import BaseParser
 import re
 import six
 import struct
 
 
-class V3Parser(object):
+class V3Parser(BaseParser):
     """ Parses ND2 files and creates a Metadata and ImageReader object. """
     CHUNK_HEADER = 0xabeceda
     CHUNK_MAP_START = six.b("ND2 FILEMAP SIGNATURE NAME 0001!")
@@ -18,6 +19,36 @@ class V3Parser(object):
         self._filename = filename
         self._fh = None
         self._metadata = None
+
+    @property
+    def metadata(self):
+        if not self._metadata:
+            self._parse_metadata()
+        return self.metadata
+
+    @property
+    def driver(self):
+        raise NotImplementedError
+
+    def _parse_metadata(self):
+        """
+        Reads all metadata.
+
+        """
+        metadata_dict = {}
+        label_map = self._build_label_map()
+        for label in label_map.keys():
+            if label.endswith(six.b("LV!")) or six.b("LV|") in label:
+                data = self._read_chunk(label_map[label])
+                stop = label.index(six.b("LV"))
+                metadata_dict[label[:stop]] = self._read_metadata(data, 1)
+
+        channels = self._parse_channels(metadata_dict)
+        date = self._parse_fields_of_view(metadata_dict)
+        fields_of_view = self._parse_fields_of_view(metadata_dict)
+        frames = self._parse_frames(metadata_dict)
+        z_levels = self._parse_z_levels(metadata_dict)
+        self._metadata = Metadata(channels, date, fields_of_view, frames, z_levels)
 
     def _parse_date(self, metadata_dict):
         """
@@ -98,8 +129,7 @@ class V3Parser(object):
         """
         return self._parse_dimension(r""".*?Z\((\d+)\).*?""", metadata_dict)
 
-    @property
-    def _file_handle(self):
+    def _get_file_handle(self):
         if self._fh is None:
             self._fh = open(self._filename, "rb")
         return self._fh
@@ -128,18 +158,14 @@ class V3Parser(object):
         return dimension_text
 
     def _parse_dimension(self, pattern, metadata_dict):
-        try:
-            dimension_text = self._parse_dimension_text(metadata_dict)
-            count = int(re.match(pattern, dimension_text).group(1))
-        except AttributeError:
+        dimension_text = self._parse_dimension_text(metadata_dict)
+        if six.PY3:
+            dimension_text = dimension_text.decode("utf8")
+        match = re.match(pattern, dimension_text)
+        if not match:
             return [0]
-        except TypeError:
-            match = re.match(pattern, dimension_text.decode("utf8"))
-            if not match:
-                return [0]
-            return list(range(int(match.group(1))))
-        else:
-            return list(range(count))
+        count = int(match.group(1))
+        return list(range(count))
 
     def _parse_total_images_per_channel(self, metadata_dict):
         """
@@ -149,26 +175,6 @@ class V3Parser(object):
 
         """
         return metadata_dict[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiSequenceCount')]
-
-    def _parse_metadata(self):
-        """
-        Reads all metadata.
-
-        """
-        metadata_dict = {}
-        label_map = self._build_label_map()
-        for label in label_map.keys():
-            if label.endswith(six.b("LV!")) or six.b("LV|") in label:
-                data = self._read_chunk(label_map[label])
-                stop = label.index(six.b("LV"))
-                metadata_dict[label[:stop]] = self._read_metadata(data, 1)
-
-        channels = self._parse_channels(metadata_dict)
-        date = self._parse_fields_of_view(metadata_dict)
-        fields_of_view = self._parse_fields_of_view(metadata_dict)
-        frames = self._parse_frames(metadata_dict)
-        z_levels = self._parse_z_levels(metadata_dict)
-        self._metadata = Metadata(channels, date, fields_of_view, frames, z_levels)
 
     def _build_label_map(self):
         """
@@ -180,10 +186,10 @@ class V3Parser(object):
 
         """
         label_map = {}
-        self._file_handle.seek(-8, 2)
-        chunk_map_start_location = struct.unpack("Q", self._file_handle.read(8))[0]
-        self._file_handle.seek(chunk_map_start_location)
-        raw_text = self._file_handle.read(-1)
+        self._get_file_handle().seek(-8, 2)
+        chunk_map_start_location = struct.unpack("Q", self._get_file_handle().read(8))[0]
+        self._get_file_handle().seek(chunk_map_start_location)
+        raw_text = self._get_file_handle().read(-1)
         label_start = raw_text.index(V3Parser.CHUNK_MAP_START) + 32
 
         while True:
@@ -202,16 +208,19 @@ class V3Parser(object):
         Gets the data for a given chunk pointer
 
         """
-        self._file_handle.seek(chunk_location)
+        self._get_file_handle().seek(chunk_location)
         # The chunk metadata is always 16 bytes long
-        chunk_metadata = self._file_handle.read(16)
+        chunk_metadata = self._get_file_handle().read(16)
         header, relative_offset, data_length = struct.unpack("IIQ", chunk_metadata)
         if header != V3Parser.CHUNK_HEADER:
             raise ValueError("The ND2 file seems to be corrupted.")
         # We start at the location of the chunk metadata, skip over the metadata, and then proceed to the
         # start of the actual data field, which is at some arbitrary place after the metadata.
-        self._file_handle.seek(chunk_location + 16 + relative_offset)
-        return self._file_handle.read(data_length)
+        self._get_file_handle().seek(chunk_location + 16 + relative_offset)
+        val = self._get_file_handle().read(data_length)
+        print("**************************")
+        print(type(val))
+        return val
 
     def _parse_unsigned_char(self, data):
         return struct.unpack("B", data.read(1))[0]
