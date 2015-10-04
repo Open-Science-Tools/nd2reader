@@ -3,7 +3,7 @@
 import array
 from datetime import datetime
 from nd2reader.model.metadata import Metadata
-from nd2reader.parser.parser import BaseParser
+from nd2reader.parser.base import BaseParser
 import re
 import six
 import struct
@@ -24,7 +24,7 @@ class V3Parser(BaseParser):
     def metadata(self):
         if not self._metadata:
             self._parse_metadata()
-        return self.metadata
+        return self._metadata
 
     @property
     def driver(self):
@@ -207,6 +207,8 @@ class V3Parser(BaseParser):
         """
         Gets the data for a given chunk pointer
 
+        :rtype: bytes
+
         """
         self._get_file_handle().seek(chunk_location)
         # The chunk metadata is always 16 bytes long
@@ -217,10 +219,7 @@ class V3Parser(BaseParser):
         # We start at the location of the chunk metadata, skip over the metadata, and then proceed to the
         # start of the actual data field, which is at some arbitrary place after the metadata.
         self._get_file_handle().seek(chunk_location + 16 + relative_offset)
-        val = self._get_file_handle().read(data_length)
-        print("**************************")
-        print(type(val))
-        return val
+        return self._get_file_handle().read(data_length)
 
     def _parse_unsigned_char(self, data):
         return struct.unpack("B", data.read(1))[0]

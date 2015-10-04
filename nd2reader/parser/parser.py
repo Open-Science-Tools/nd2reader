@@ -1,6 +1,5 @@
 from nd2reader.parser.v3 import V3Parser
 from nd2reader.exc import InvalidVersionError
-from abc import abstractproperty
 
 
 def get_parser(filename, major_version, minor_version):
@@ -9,13 +8,3 @@ def get_parser(filename, major_version, minor_version):
     if not parser:
         raise InvalidVersionError("No parser is available for that version.")
     return parser(filename)
-
-
-class BaseParser(object):
-    @abstractproperty
-    def metadata(self):
-        raise NotImplementedError
-
-    @abstractproperty
-    def driver(self):
-        raise NotImplementedError
