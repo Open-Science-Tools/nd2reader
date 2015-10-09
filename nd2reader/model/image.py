@@ -7,6 +7,13 @@ class Image(np.ndarray):
     def __new__(cls, array):
         return np.asarray(array).view(cls)
 
+    def __init__(self, array):
+        self._timestamp = None
+        self._frame_number = None
+        self._field_of_view = None
+        self._channel = None
+        self._z_level = None
+
     def add_params(self, timestamp, frame_number, field_of_view, channel, z_level):
         """
         A wrapper around the raw pixel data of an image.
@@ -28,16 +35,6 @@ class Image(np.ndarray):
         self._field_of_view = field_of_view
         self._channel = channel
         self._z_level = z_level
-
-    def __repr__(self):
-        return "\n".join(["<ND2 Image>",
-                          "%sx%s (HxW)" % (self.height, self.width),
-                          "Timestamp: %s" % self.timestamp,
-                          "Frame: %s" % self.frame_number,
-                          "Field of View: %s" % self.field_of_view,
-                          "Channel: %s" % self.channel,
-                          "Z-Level: %s" % self.z_level,
-                          ])
 
     @property
     def height(self):

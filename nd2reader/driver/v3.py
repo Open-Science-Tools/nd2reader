@@ -7,10 +7,14 @@ import six
 from nd2reader.model.image import Image
 
 
-class V3ImageReader(object):
-    def __init__(self, metadata):
-        self._metadata = metadata
+class V3Driver(object):
+    CHUNK_HEADER = 0xabeceda
 
+    def __init__(self, metadata, label_map, file_handle):
+        self._metadata = metadata
+        self._label_map = label_map
+        self._file_handle = file_handle
+        
     def _calculate_field_of_view(self, frame_number):
         images_per_cycle = len(self._metadata.z_levels) * len(self._metadata.channels)
         return int((frame_number - (frame_number % images_per_cycle)) / images_per_cycle) % len(self._metadata.fields_of_view)
@@ -46,6 +50,7 @@ class V3ImageReader(object):
         frame_number = self._calculate_frame_number(image_group_number, fov, z_level)
         timestamp, image = self._get_raw_image_data(image_group_number, channel_offset, self._metadata.height, self._metadata.width)
         image.add_params(timestamp, frame_number, fov, channel, z_level)
+        return image
 
     @property
     def _channel_offset(self):
@@ -92,3 +97,21 @@ class V3ImageReader(object):
         if np.any(image_data):
             return timestamp, Image(image_data)
         return None
+
+    def _read_chunk(self, chunk_location):
+        """
+        Gets the data for a given chunk pointer
+
+        :rtype: bytes
+
+        """
+        self._file_handle.seek(chunk_location)
+        # The chunk metadata is always 16 bytes long
+        chunk_metadata = self._file_handle.read(16)
+        header, relative_offset, data_length = struct.unpack("IIQ", chunk_metadata)
+        if header != V3Driver.CHUNK_HEADER:
+            raise ValueError("The ND2 file seems to be corrupted.")
+        # We start at the location of the chunk metadata, skip over the metadata, and then proceed to the
+        # start of the actual data field, which is at some arbitrary place after the metadata.
+        self._file_handle.seek(chunk_location + 16 + relative_offset)
+        return self._file_handle.read(data_length)

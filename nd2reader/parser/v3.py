@@ -4,6 +4,7 @@ import array
 from datetime import datetime
 from nd2reader.model.metadata import Metadata
 from nd2reader.parser.base import BaseParser
+from nd2reader.driver.v3 import V3Driver
 import re
 import six
 import struct
@@ -19,6 +20,7 @@ class V3Parser(BaseParser):
         self._filename = filename
         self._fh = None
         self._metadata = None
+        self._label_map = None
 
     @property
     def metadata(self):
@@ -28,7 +30,7 @@ class V3Parser(BaseParser):
 
     @property
     def driver(self):
-        raise NotImplementedError
+        return V3Driver(self.metadata, self._label_map, self._get_file_handle())
 
     def _parse_metadata(self):
         """
@@ -36,19 +38,21 @@ class V3Parser(BaseParser):
 
         """
         metadata_dict = {}
-        label_map = self._build_label_map()
-        for label in label_map.keys():
+        self._label_map = self._build_label_map()
+        for label in self._label_map.keys():
             if label.endswith(six.b("LV!")) or six.b("LV|") in label:
-                data = self._read_chunk(label_map[label])
+                data = self._read_chunk(self._label_map[label])
                 stop = label.index(six.b("LV"))
                 metadata_dict[label[:stop]] = self._read_metadata(data, 1)
 
+        height = metadata_dict[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiHeight')]
+        width = metadata_dict[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiWidth')]
         channels = self._parse_channels(metadata_dict)
-        date = self._parse_fields_of_view(metadata_dict)
+        date = self._parse_date(metadata_dict)
         fields_of_view = self._parse_fields_of_view(metadata_dict)
         frames = self._parse_frames(metadata_dict)
         z_levels = self._parse_z_levels(metadata_dict)
-        self._metadata = Metadata(channels, date, fields_of_view, frames, z_levels)
+        self._metadata = Metadata(height, width, channels, date, fields_of_view, frames, z_levels)
 
     def _parse_date(self, metadata_dict):
         """

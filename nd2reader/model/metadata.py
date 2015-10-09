@@ -1,11 +1,21 @@
 class Metadata(object):
     """ A simple container for ND2 metadata. """
-    def __init__(self, channels, date, fields_of_view, frames, z_levels):
+    def __init__(self, height, width, channels, date, fields_of_view, frames, z_levels):
+        self._height = height
+        self._width = width
         self._channels = channels
         self._date = date
         self._fields_of_view = fields_of_view
         self._frames = frames
         self._z_levels = z_levels
+
+    @property
+    def height(self):
+        return self._height
+
+    @property
+    def width(self):
+        return self._width
 
     @property
     def date(self):
