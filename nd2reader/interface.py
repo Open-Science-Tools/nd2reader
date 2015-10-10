@@ -12,12 +12,19 @@ class Nd2(object):
 
     """
     def __init__(self, filename):
+        self._filename = filename
         self._fh = open(filename, "rb")
         major_version, minor_version = get_version(self._fh)
         parser = get_parser(self._fh, major_version, minor_version)
         self._driver = parser.driver
         self._metadata = parser.metadata
-        self._filename = filename
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self._fh is not None:
+            self._fh.close()
         
     def __repr__(self):
         return "\n".join(["<ND2 %s>" % self._filename,
