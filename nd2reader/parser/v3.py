@@ -10,15 +10,33 @@ import six
 import struct
 
 
+def read_chunk(fh, chunk_location):
+    """
+    Gets the data for a given chunk pointer
+
+    :rtype: bytes
+
+    """
+    fh.seek(chunk_location)
+    # The chunk metadata is always 16 bytes long
+    chunk_metadata = fh.read(16)
+    header, relative_offset, data_length = struct.unpack("IIQ", chunk_metadata)
+    if header != 0xabeceda:
+        raise ValueError("The ND2 file seems to be corrupted.")
+    # We start at the location of the chunk metadata, skip over the metadata, and then proceed to the
+    # start of the actual data field, which is at some arbitrary place after the metadata.
+    fh.seek(chunk_location + 16 + relative_offset)
+    return fh.read(data_length)
+
+
 class V3Parser(BaseParser):
     """ Parses ND2 files and creates a Metadata and ImageReader object. """
     CHUNK_HEADER = 0xabeceda
     CHUNK_MAP_START = six.b("ND2 FILEMAP SIGNATURE NAME 0001!")
     CHUNK_MAP_END = six.b("ND2 CHUNK MAP SIGNATURE 0000001!")
 
-    def __init__(self, filename):
-        self._filename = filename
-        self._fh = None
+    def __init__(self, fh):
+        self._fh = fh
         self._metadata = None
         self._label_map = None
 
@@ -30,7 +48,7 @@ class V3Parser(BaseParser):
 
     @property
     def driver(self):
-        return V3Driver(self.metadata, self._label_map, self._get_file_handle())
+        return V3Driver(self.metadata, self._label_map, self._fh)
 
     def _parse_metadata(self):
         """
@@ -41,7 +59,7 @@ class V3Parser(BaseParser):
         self._label_map = self._build_label_map()
         for label in self._label_map.keys():
             if label.endswith(six.b("LV!")) or six.b("LV|") in label:
-                data = self._read_chunk(self._label_map[label])
+                data = read_chunk(self._fh, self._label_map[label])
                 stop = label.index(six.b("LV"))
                 metadata_dict[label[:stop]] = self._read_metadata(data, 1)
 
@@ -134,11 +152,6 @@ class V3Parser(BaseParser):
         """
         return self._parse_dimension(r""".*?Z\((\d+)\).*?""", metadata_dict)
 
-    def _get_file_handle(self):
-        if self._fh is None:
-            self._fh = open(self._filename, "rb")
-        return self._fh
-
     def _parse_dimension_text(self, metadata_dict):
         """
         While there are metadata values that represent a lot of what we want to capture, they seem to be unreliable.
@@ -191,10 +204,10 @@ class V3Parser(BaseParser):
 
         """
         label_map = {}
-        self._get_file_handle().seek(-8, 2)
-        chunk_map_start_location = struct.unpack("Q", self._get_file_handle().read(8))[0]
-        self._get_file_handle().seek(chunk_map_start_location)
-        raw_text = self._get_file_handle().read(-1)
+        self._fh.seek(-8, 2)
+        chunk_map_start_location = struct.unpack("Q", self._fh.read(8))[0]
+        self._fh.seek(chunk_map_start_location)
+        raw_text = self._fh.read(-1)
         label_start = raw_text.index(V3Parser.CHUNK_MAP_START) + 32
 
         while True:
@@ -207,24 +220,6 @@ class V3Parser(BaseParser):
             label_map[key] = location
             label_start = data_start + 16
         return label_map
-
-    def _read_chunk(self, chunk_location):
-        """
-        Gets the data for a given chunk pointer
-
-        :rtype: bytes
-
-        """
-        self._get_file_handle().seek(chunk_location)
-        # The chunk metadata is always 16 bytes long
-        chunk_metadata = self._get_file_handle().read(16)
-        header, relative_offset, data_length = struct.unpack("IIQ", chunk_metadata)
-        if header != V3Parser.CHUNK_HEADER:
-            raise ValueError("The ND2 file seems to be corrupted.")
-        # We start at the location of the chunk metadata, skip over the metadata, and then proceed to the
-        # start of the actual data field, which is at some arbitrary place after the metadata.
-        self._get_file_handle().seek(chunk_location + 16 + relative_offset)
-        return self._get_file_handle().read(data_length)
 
     def _parse_unsigned_char(self, data):
         return struct.unpack("B", data.read(1))[0]

@@ -2,7 +2,7 @@ import re
 from nd2reader.exc import InvalidVersionError
 
 
-def get_version(filename):
+def get_version(fh):
     """
     Determines what version the ND2 is.
 
@@ -10,11 +10,10 @@ def get_version(filename):
     :type filename:     str
 
     """
-    with open(filename, 'rb') as f:
-        # the first 16 bytes seem to have no meaning, so we skip them
-        f.seek(16)
-        # the next 38 bytes contain the string that we want to parse. Unlike most of the ND2, this is in UTF-8
-        data = f.read(38).decode("utf8")
+    # the first 16 bytes seem to have no meaning, so we skip them
+    fh.seek(16)
+    # the next 38 bytes contain the string that we want to parse. Unlike most of the ND2, this is in UTF-8
+    data = fh.read(38).decode("utf8")
     return parse_version(data)
 
 

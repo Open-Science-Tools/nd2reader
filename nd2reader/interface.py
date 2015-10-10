@@ -12,8 +12,9 @@ class Nd2(object):
 
     """
     def __init__(self, filename):
-        major_version, minor_version = get_version(filename)
-        parser = get_parser(filename, major_version, minor_version)
+        self._fh = open(filename, "rb")
+        major_version, minor_version = get_version(self._fh)
+        parser = get_parser(self._fh, major_version, minor_version)
         self._driver = parser.driver
         self._metadata = parser.metadata
         self._filename = filename
@@ -160,3 +161,6 @@ class Nd2(object):
 
         """
         return self._driver.get_image_by_attributes(frame_number, field_of_view, channel_name, z_level)
+
+    def close(self):
+        self._fh.close()

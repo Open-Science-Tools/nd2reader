@@ -5,11 +5,10 @@ import numpy as np
 import struct
 import six
 from nd2reader.model.image import Image
+from nd2reader.parser.v3 import read_chunk
 
 
 class V3Driver(object):
-    CHUNK_HEADER = 0xabeceda
-
     def __init__(self, metadata, label_map, file_handle):
         self._metadata = metadata
         self._label_map = label_map
@@ -79,7 +78,7 @@ class V3Driver(object):
 
         """
         chunk = self._label_map[six.b("ImageDataSeq|%d!" % image_group_number)]
-        data = self._read_chunk(chunk)
+        data = read_chunk(self._file_handle, chunk)
         # All images in the same image group share the same timestamp! So if you have complicated image data,
         # your timestamps may not be entirely accurate. Practically speaking though, they'll only be off by a few
         # seconds unless you're doing something super weird.
@@ -97,21 +96,3 @@ class V3Driver(object):
         if np.any(image_data):
             return timestamp, Image(image_data)
         return None
-
-    def _read_chunk(self, chunk_location):
-        """
-        Gets the data for a given chunk pointer
-
-        :rtype: bytes
-
-        """
-        self._file_handle.seek(chunk_location)
-        # The chunk metadata is always 16 bytes long
-        chunk_metadata = self._file_handle.read(16)
-        header, relative_offset, data_length = struct.unpack("IIQ", chunk_metadata)
-        if header != V3Driver.CHUNK_HEADER:
-            raise ValueError("The ND2 file seems to be corrupted.")
-        # We start at the location of the chunk metadata, skip over the metadata, and then proceed to the
-        # start of the actual data field, which is at some arbitrary place after the metadata.
-        self._file_handle.seek(chunk_location + 16 + relative_offset)
-        return self._file_handle.read(data_length)
