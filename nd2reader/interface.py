@@ -36,7 +36,7 @@ class Nd2(object):
         :rtype: int
 
         """
-        return self._driver.total_images_per_channel * len(self.channels)
+        return self._metadata.total_images_per_channel * len(self.channels)
 
     def __getitem__(self, item):
         """
@@ -56,7 +56,12 @@ class Nd2(object):
 
         """
         if isinstance(item, int):
-            return self._driver.get_image(item)
+            try:
+                image = self._driver.get_image(item)
+            except KeyError:
+                raise IndexError
+            else:
+                return image
         elif isinstance(item, slice):
             return self._slice(item.start, item.stop, item.step)
         raise IndexError

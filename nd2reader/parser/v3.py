@@ -52,7 +52,8 @@ class V3Parser(BaseParser):
         fields_of_view = self._parse_fields_of_view(metadata_dict)
         frames = self._parse_frames(metadata_dict)
         z_levels = self._parse_z_levels(metadata_dict)
-        self._metadata = Metadata(height, width, channels, date, fields_of_view, frames, z_levels)
+        total_images_per_channel = self._parse_total_images_per_channel(metadata_dict)
+        self._metadata = Metadata(height, width, channels, date, fields_of_view, frames, z_levels, total_images_per_channel)
 
     def _parse_date(self, metadata_dict):
         """
@@ -122,7 +123,7 @@ class V3Parser(BaseParser):
         :rtype:     list
 
         """
-        return self._parse_dimension(r""".*?T'\((\d+)\).*?""", metadata_dict)
+        return self._parse_dimension(r""".*?T'?\((\d+)\).*?""", metadata_dict)
 
     def _parse_z_levels(self, metadata_dict):
         """
