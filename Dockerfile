@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     liblapack-dev \
     libblas-dev \
+    libatlas3-base \
     python \
     python3 \
     python-dev \
