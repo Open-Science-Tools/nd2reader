@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## [1.1.2] - 2015-10-09
 ### ADDED
 - `Image` objects now have a `frame_number` attribute.
@@ -10,6 +11,8 @@
 - The `data` attribute is no longer needed since `Image` is now a Numpy array.
 - The `image_sets` iterator will be removed in the near future. You should implement this yourself.
 
+=======
+>>>>>>> origin/master
 ## [1.1.1] - 2015-09-02
 ### FIXED
 - Images returned by indexing would sometimes be skipped when the file contained multiple channels
