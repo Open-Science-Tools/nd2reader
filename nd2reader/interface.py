@@ -93,7 +93,8 @@ class Nd2(object):
         :return: model.ImageSet()
 
         """
-        warnings.warn("Nd2.image_sets will be removed from the nd2reader library in the near future.", DeprecationWarning)
+        warnings.warn("Nd2.image_sets will be removed from the nd2reader library in the near future.",
+                      DeprecationWarning)
 
         for frame in self.frames:
             image_group = ImageGroup()
