@@ -50,15 +50,6 @@ class Nd2(object):
         """
         Allows slicing ND2s.
 
-        >>> nd2 = Nd2("my_images.nd2")
-        >>> image = nd2[16]  # gets 17th frame
-        >>> for image in nd2[100:200]:  # iterate over the 100th to 200th images
-        >>>     do_something(image)
-        >>> for image in nd2[::-1]:  # iterate backwards
-        >>>     do_something(image)
-        >>> for image in nd2[37:422:17]:  # do something super weird if you really want to
-        >>>     do_something(image)
-
         :type item: int or slice
         :rtype: nd2reader.model.Image() or generator
 
