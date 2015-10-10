@@ -6,8 +6,7 @@ def get_version(fh):
     """
     Determines what version the ND2 is.
 
-    :param filename:    the path (absolute or relative) to the ND2
-    :type filename:     str
+    :param fh:    a file handle to the ND2
 
     """
     # the first 16 bytes seem to have no meaning, so we skip them
