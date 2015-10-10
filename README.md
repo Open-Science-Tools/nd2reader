@@ -52,6 +52,14 @@ You can also get some metadata about the nd2 programatically:
 30528
 ```
 
+`Nd2` is also a context manager, if you care about that sort of thing:
+
+```
+>>> import nd2reader
+>>> with nd2reader.Nd2("/path/to/my_images.nd2") as nd2:
+...     for image in nd2:
+...         do_something(image)
+
 ### Images
 
 `Image` objects are just Numpy arrays with some extra metadata bolted on:
