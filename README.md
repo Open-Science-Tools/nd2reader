@@ -6,7 +6,7 @@
 
 .nd2 files contain images and metadata, which can be split along multiple dimensions: time, fields of view (xy-plane), focus (z-plane), and filter channel.
 
-`nd2reader` produces data in Numpy arrays, which makes it trivial to use with the image analysis packages such as `scikit-image` and `OpenCV`.
+`nd2reader` loads images as Numpy arrays, which makes it trivial to use with the image analysis packages such as `scikit-image` and `OpenCV`.
 
 ### Installation
 
