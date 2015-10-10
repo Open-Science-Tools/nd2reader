@@ -1,4 +1,4 @@
-## [1.1.2] - 2015-10-09
+## [2.0.0] - 2015-10-09
 ### CHANGED
 - `Image` objects now directly subclass Numpy arrays, so the `data` attribute is no longer needed (and has been removed).
 - Refactored code to permit parsing of different versions of ND2s, which will allow us to add support for NIS Elements 3.x.

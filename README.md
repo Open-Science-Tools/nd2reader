@@ -6,7 +6,7 @@
 
 .nd2 files contain images and metadata, which can be split along multiple dimensions: time, fields of view (xy-plane), focus (z-plane), and filter channel.
 
-`nd2reader` produces data in numpy arrays, which makes it trivial to use with the image analysis packages such as `scikit-image` and `OpenCV`.
+`nd2reader` produces data in Numpy arrays, which makes it trivial to use with the image analysis packages such as `scikit-image` and `OpenCV`.
 
 ### Installation
 
@@ -54,13 +54,11 @@ You can also get some metadata about the nd2 programatically:
 
 ### Images
 
-Every method returns an `Image` object, which contains some metadata about the image as well as the
-raw pixel data itself. Images are always a 16-bit grayscale image. The `data` attribute holds the numpy array
-with the image data:
+`Image` objects are just Numpy arrays with some extra metadata bolted on:
 
 ```python
 >>> image = nd2[20]
->>> print(image.data)
+>>> print(image)
 array([[1894, 1949, 1941, ..., 2104, 2135, 2114],
        [1825, 1846, 1848, ..., 1994, 2149, 2064],
        [1909, 1820, 1821, ..., 1995, 1952, 2062],
@@ -68,49 +66,26 @@ array([[1894, 1949, 1941, ..., 2104, 2135, 2114],
        [3487, 3512, 3594, ..., 3603, 3643, 3492],
        [3642, 3475, 3525, ..., 3712, 3682, 3609],
        [3687, 3777, 3738, ..., 3784, 3870, 4008]], dtype=uint16)
+
+>>> print(image.timestamp)
+10.1241241248
+>>> print(image.frame_number)
+11
+>>> print(image.field_of_view)
+6
+>>> print(image.channel)
+'GFP'
+>>> print(image.z_level)
+0
 ```
 
-You can get a quick summary of image data by examining the `Image` object:
-
-```python
->>> image
-<ND2 Image>
-1280x800 (HxW)
-Timestamp: 1699.79478134
-Field of View: 2
-Channel: GFP
-Z-Level: 1
-```
-
-Or you can access it programmatically:
-
-```python
-image = nd2[0]
-print(image.timestamp)
-print(image.field_of_view)
-print(image.channel)
-print(image.z_level)
-```
-
-Often, you may want to just iterate over each image:
+Often, you may want to just iterate over each image in the order they were acquired:
 
 ```python
 import nd2reader
 nd2 = nd2reader.Nd2("/path/to/my_images.nd2")
 for image in nd2:
-    do_something(image.data)
-```
-
-You can also get an image directly by indexing. Here, we look at the 38th image:
-
-```python
->>> nd2[37]
-<ND2 Image>
-1280x800 (HxW)
-Timestamp: 1699.79478134
-Field of View: 2
-Channel: GFP
-Z-Level: 1
+    do_something(image)
 ```
 
 Slicing is also supported and is extremely memory efficient, as images are only read when directly accessed:
@@ -118,7 +93,7 @@ Slicing is also supported and is extremely memory efficient, as images are only 
 ```python
 my_subset = nd2[50:433]
 for image in my_subset:
-    do_something(image.data)
+    do_something(image)
 ```
 
 Step sizes are also accepted:
@@ -126,44 +101,11 @@ Step sizes are also accepted:
 ```python
 for image in nd2[:100:2]:
     # gets every other image in the first 100 images
-    do_something(image.data)
+    do_something(image)
 
 for image in nd2[::-1]:
     # iterate backwards over every image, if you're into that kind of thing
-    do_something(image.data)
-```
-
-### Image Sets
-
-If you have complicated hierarchical data, it may be easier to use image sets, which groups images together if they
-share the same time index (not timestamp!) and field of view:
-
-```python
-import nd2reader
-nd2 = nd2reader.Nd2("/path/to/my_complicated_images.nd2")
-for image_set in nd2.image_sets:
-    # you can select images by channel
-    gfp_image = image_set.get("GFP")
-    do_something_gfp_related(gfp_image.data)
-
-    # you can also specify the z-level. this defaults to 0 if not given
-    out_of_focus_image = image_set.get("Bright Field", z_level=1)
-    do_something_out_of_focus_related(out_of_focus_image.data)
-```
-
-To get an image from an image set, you must specify a channel. It defaults to the 0th z-level, so if you have
-more than one z-level you will need to specify it when using `get`:
-
-```python
-image = image_set.get("YFP")
-image = image_set.get("YFP", z_level=2)
-```
-
-You can also see how many images are in your image set:
-
-```python
->>> len(image_set)
-7
+    do_something(image)
 ```
 
 ### Protips
