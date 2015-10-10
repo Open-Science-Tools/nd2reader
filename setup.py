@@ -1,10 +1,6 @@
 from setuptools import setup
 
-<<<<<<< HEAD
 VERSION = "1.1.2"
-=======
-VERSION = "1.1.1"
->>>>>>> origin/master
 
 setup(
     name="nd2reader",

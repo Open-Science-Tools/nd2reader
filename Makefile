@@ -14,13 +14,13 @@ build:
 	docker build -t jimrybarski/nd2reader .
 
 shell:
-	xhost local:root; docker run --rm -v ~/Documents/nd2s:/var/nd2s -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$(DISPLAY) -it jimrybarski/nd2reader bash
+	xhost local:root; docker run --rm -v ~/nd2s:/var/nd2s -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$(DISPLAY) -it jimrybarski/nd2reader bash
 
 py2:
-	xhost local:root; docker run --rm -v ~/Documents/nd2s:/var/nd2s -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$(DISPLAY) -it jimrybarski/nd2reader python2.7
+	xhost local:root; docker run --rm -v ~/nd2s:/var/nd2s -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$(DISPLAY) -it jimrybarski/nd2reader python2.7
 
 py3:
-	xhost local:root; docker run --rm -v ~/Documents/nd2s:/var/nd2s -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$(DISPLAY) -it jimrybarski/nd2reader python3.4
+	xhost local:root; docker run --rm -v ~/nd2s:/var/nd2s -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$(DISPLAY) -it jimrybarski/nd2reader python3.4
 
 test:	build
 	docker run --rm -it jimrybarski/nd2reader python3.4 /opt/nd2reader/tests.py
