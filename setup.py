@@ -4,7 +4,7 @@ VERSION = "1.1.2"
 
 setup(
     name="nd2reader",
-    packages=['nd2reader', 'nd2reader.model'],
+    packages=['nd2reader', 'nd2reader.model', 'nd2reader.driver', 'nd2reader.parser', 'nd2reader.common'],
     install_requires=[
         'numpy>=1.6.2, <2.0',
         'six>=1.4, <2.0'
