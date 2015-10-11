@@ -10,7 +10,7 @@ import unittest
 
 class FunctionalTests(unittest.TestCase):
     def setUp(self):
-        self.nd2 = Nd2("FYLM-141111-001.nd2")
+        self.nd2 = Nd2("/var/nd2s/FYLM-141111-001.nd2")
 
     def tearDown(self):
         self.nd2.close()

@@ -36,4 +36,3 @@ COPY . /opt/nd2reader
 WORKDIR /opt/nd2reader
 RUN python setup.py install
 RUN python3 setup.py install
-WORKDIR /var/nd2s
