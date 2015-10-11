@@ -2,6 +2,7 @@
 ### ADDED
 - `Image` objects now have a `frame_number` attribute.
 - `Nd2` can be used as a context manager.
+- More unit tests and functional tests
 
 ### CHANGED
 - `Image` objects now directly subclass Numpy arrays.

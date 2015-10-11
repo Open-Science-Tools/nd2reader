@@ -40,11 +40,11 @@ class Image(np.ndarray):
 
     @property
     def height(self):
-        return self.shape[1]
+        return self.shape[0]
 
     @property
     def width(self):
-        return self.shape[0]
+        return self.shape[1]
 
     @property
     def field_of_view(self):
