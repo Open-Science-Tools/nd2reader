@@ -19,10 +19,11 @@ class Image(np.ndarray):
         """
         A wrapper around the raw pixel data of an image.
 
-        :param timestamp: The frame number relative to the .
-        :type timestamp: int
         :param timestamp: The number of milliseconds after the beginning of the acquisition that this image was taken.
-        :type timestamp: int
+        :type timestamp: float
+        :param frame_number:    The order in which this image was taken, with images of different channels/z-levels
+                                at the same field of view treated as being in the same frame.
+        :type frame_number:     int
         :param field_of_view: The label for the place in the XY-plane where this image was taken.
         :type field_of_view: int
         :param channel: The name of the color of this image

@@ -6,6 +6,7 @@ import struct
 import six
 from nd2reader.model.image import Image
 from nd2reader.common.v3 import read_chunk
+from nd2reader.exc import NoImageError
 
 
 class V3Driver(object):
@@ -47,9 +48,13 @@ class V3Driver(object):
         z_level = self._calculate_z_level(index)
         image_group_number = int(index / len(self._metadata.channels))
         frame_number = self._calculate_frame_number(image_group_number, fov, z_level)
-        timestamp, image = self._get_raw_image_data(image_group_number, channel_offset, self._metadata.height, self._metadata.width)
-        image.add_params(timestamp, frame_number, fov, channel, z_level)
-        return image
+        try:
+            timestamp, image = self._get_raw_image_data(image_group_number, channel_offset, self._metadata.height, self._metadata.width)
+        except NoImageError:
+            return None
+        else:
+            image.add_params(timestamp, frame_number, fov, channel, z_level)
+            return image
 
     @property
     def _channel_offset(self):
@@ -95,4 +100,4 @@ class V3Driver(object):
         # them every cycle.
         if np.any(image_data):
             return timestamp, Image(image_data)
-        return None
+        raise NoImageError

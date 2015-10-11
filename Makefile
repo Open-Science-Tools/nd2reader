@@ -24,4 +24,5 @@ py3:
 
 test:	build
 	docker run --rm -it jimrybarski/nd2reader python3.4 /opt/nd2reader/tests.py
+	docker run --rm -it jimrybarski/nd2reader python2.7 /opt/nd2reader/tests.py
 

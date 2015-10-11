@@ -12,10 +12,22 @@ class Metadata(object):
 
     @property
     def height(self):
+        """
+        The image height in pixels.
+
+        :rtype: int
+
+        """
         return self._height
 
     @property
     def width(self):
+        """
+        The image width in pixels.
+
+        :rtype: int
+
+        """
         return self._width
 
     @property
