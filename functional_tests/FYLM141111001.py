@@ -54,3 +54,15 @@ class FunctionalTests(unittest.TestCase):
     def test_bad_image(self):
         image = self.nd2[13]
         self.assertIsNone(image)
+
+    def test_iteration(self):
+        images = [image for image in self.nd2[:10]]
+        self.assertEqual(len(images), 10)
+
+    def test_iteration_step(self):
+        images = [image for image in self.nd2[:10:2]]
+        self.assertEqual(len(images), 5)
+
+    def test_iteration_backwards(self):
+        images = [image for image in self.nd2[:10:-1]]
+        self.assertEqual(len(images), 10)
