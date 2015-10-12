@@ -28,7 +28,7 @@ class Nd2(object):
         
     def __repr__(self):
         return "\n".join(["<ND2 %s>" % self._filename,
-                          "Created: %s" % self.date,
+                          "Created: %s" % self.date if self.date is not None else "Unknown",
                           "Image size: %sx%s (HxW)" % (self.height, self.width),
                           "Frames: %s" % len(self.frames),
                           "Channels: %s" % ", ".join(["'%s'" % str(channel) for channel in self.channels]),

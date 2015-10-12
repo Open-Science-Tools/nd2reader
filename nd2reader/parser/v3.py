@@ -59,7 +59,7 @@ class V3Parser(BaseParser):
         """
         The date and time when acquisition began.
 
-        :rtype: datetime.datetime()
+        :rtype: datetime.datetime() or None
 
         """
         for line in metadata_dict[six.b('ImageTextInfo')][six.b('SLxImageTextInfo')].values():
@@ -78,7 +78,7 @@ class V3Parser(BaseParser):
             if not absolute_start_12 and not absolute_start_24:
                 continue
             return absolute_start_12 if absolute_start_12 else absolute_start_24
-        raise ValueError("This ND2 has no recorded start time. This is probably a bug.")
+        return None
 
     def _parse_channels(self, metadata_dict):
         """

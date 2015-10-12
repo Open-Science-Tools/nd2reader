@@ -35,7 +35,7 @@ class Metadata(object):
         """
         The date and time when acquisition began.
 
-        :rtype: datetime.datetime()
+        :rtype: datetime.datetime() or None
 
         """
         return self._date
