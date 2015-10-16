@@ -148,13 +148,13 @@ class V3Parser(BaseParser):
                 metadata = line
                 break
         else:
-            raise ValueError("Could not parse metadata dimensions!")
+            return six.b("")
         for line in metadata.split(six.b("\r\n")):
             if line.startswith(six.b("Dimensions:")):
                 dimension_text = line
                 break
         else:
-            raise ValueError("Could not parse metadata dimensions!")
+            return six.b("")
         return dimension_text
 
     def _parse_dimension(self, pattern, metadata_dict):

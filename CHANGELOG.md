@@ -1,3 +1,7 @@
+## [1.1.3] - 2015-10-16
+### FIXED
+- ND2s with a single image can now be parsed
+
 ## [1.1.2] - 2015-10-09
 ### ADDED
 - `Image` objects now have a `frame_number` attribute.
