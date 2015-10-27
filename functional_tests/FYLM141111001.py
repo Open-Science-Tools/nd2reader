@@ -66,3 +66,15 @@ class FunctionalTests(unittest.TestCase):
     def test_iteration_backwards(self):
         images = [image for image in self.nd2[:10:-1]]
         self.assertEqual(len(images), 10)
+
+    def test_get_image_by_attribute_ok(self):
+        image = self.nd2.get_image(4, 0, "GFP", 1)
+        self.assertIsNotNone(image)
+        image = self.nd2.get_image(4, 0, "", 0)
+        self.assertIsNotNone(image)
+        image = self.nd2.get_image(4, 0, "", 1)
+        self.assertIsNotNone(image)
+
+    def test_get_image_by_attribute_none(self):
+        image = self.nd2.get_image(4, 0, "GFP", 0)
+        self.assertIsNone(image)
