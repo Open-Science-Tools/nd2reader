@@ -159,7 +159,7 @@ class Nd2(object):
         :rtype: nd2reader.model.Image()
 
         """
-        return self._driver.get_image_by_attributes(frame_number, field_of_view, channel_name, z_level)
+        return self._driver.get_image_by_attributes(frame_number, field_of_view, channel_name, z_level, self.height, self.width)
 
     def close(self):
         self._fh.close()

@@ -101,3 +101,17 @@ class V3Driver(object):
         if np.any(image_data):
             return timestamp, Image(image_data)
         raise NoImageError
+
+    def get_image_by_attributes(self, frame_number, field_of_view, channel_name, z_level, height, width):
+        image_group_number = self._calculate_image_group_number(frame_number, field_of_view, z_level)
+        try:
+            timestamp, raw_image_data = self._get_raw_image_data(image_group_number,
+                                                                 self._channel_offset[channel_name],
+                                                                 height,
+                                                                 width)
+            image = Image(raw_image_data)
+            image.add_params(timestamp, frame_number, field_of_view, channel_name, z_level)
+        except (TypeError, NoImageError):
+            return None
+        else:
+            return image
