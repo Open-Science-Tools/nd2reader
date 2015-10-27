@@ -1,6 +1,6 @@
 from setuptools import setup
 
-VERSION = "1.1.3"
+VERSION = "1.1.4"
 
 setup(
     name="nd2reader",

@@ -1,3 +1,7 @@
+## [1.1.4] - 2015-10-27
+### FIXED
+- Implemented missing get_image_by_attributes method
+
 ## [1.1.3] - 2015-10-16
 ### FIXED
 - ND2s with a single image can now be parsed
