@@ -30,3 +30,5 @@ ftest:	build
 	docker run --rm -v ~/nd2s:/var/nd2s -it jimrybarski/nd2reader python3.4 /opt/nd2reader/ftests.py
 	docker run --rm -v ~/nd2s:/var/nd2s -it jimrybarski/nd2reader python2.7 /opt/nd2reader/ftests.py
 	
+publish:
+	python setup.py sdist upload -r pypi
