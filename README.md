@@ -11,6 +11,7 @@
 ### Installation
 
 `pip3 install nd2reader` for Python 3.x
+
 `pip install nd2reader` for Python 2.x
 
 If you don't already have the packages `numpy` and `six`, they will be installed automatically.
