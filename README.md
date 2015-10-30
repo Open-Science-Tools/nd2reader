@@ -10,20 +10,11 @@
 
 ### Installation
 
-Dependencies will automatically be installed if you don't have them. That said, for optimal performance, you should
-install the following packages before installing nd2reader:
+`pip3 install nd2reader` for Python 3.x
 
-#### Ubuntu
-`apt-get install python-numpy python-six` (Python 2.x)  
-`apt-get install python3-numpy python3-six` (Python 3.x)  
+`pip install nd2reader` for Python 2.x
 
-#### Other operating systems
-These have not been tested yet.
-
-nd2reader is compatible with both Python 2.x and 3.x. I recommend installing using pip:
-
-`pip install nd2reader` (Python 2.x)  
-`pip3 install nd2reader` (Python 3.x)
+If you don't already have the packages `numpy` and `six`, they will be installed automatically.
 
 ### ND2s
 
