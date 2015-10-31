@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import warnings
 
 
 class Image(np.ndarray):
@@ -99,8 +98,3 @@ class Image(np.ndarray):
 
         """
         return self._z_level
-
-    @property
-    def data(self):
-        warnings.warn("Image objects now directly subclass Numpy arrays, so using the data attribute will be removed in the near future.", DeprecationWarning)
-        return self
