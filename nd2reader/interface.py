@@ -2,7 +2,6 @@
 
 from nd2reader.parser import get_parser
 from nd2reader.version import get_version
-import warnings
 
 
 class Nd2(object):
