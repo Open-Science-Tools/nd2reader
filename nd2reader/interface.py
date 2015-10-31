@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from nd2reader.model import ImageGroup
 from nd2reader.parser import get_parser
 from nd2reader.version import get_version
 import warnings
@@ -81,30 +80,6 @@ class Nd2(object):
         # This weird thing with the step allows you to iterate backwards over the images
         for i in range(start, stop)[::step]:
             yield self[i]
-
-    @property
-    def image_sets(self):
-        """
-        Iterates over groups of related images. This is useful if your ND2 contains multiple fields of view.
-        A typical use case might be that you have, say, four areas of interest that you're monitoring, and every
-        minute you take a bright field and GFP image of each one. For each cycle, this method would produce four
-        ImageSet objects, each containing one bright field and one GFP image.
-
-        :return: model.ImageSet()
-
-        """
-        warnings.warn("Nd2.image_sets will be removed from the nd2reader library in the near future.",
-                      DeprecationWarning)
-
-        for frame in self.frames:
-            image_group = ImageGroup()
-            for fov in self.fields_of_view:
-                for channel_name in self.channels:
-                    for z_level in self.z_levels:
-                        image = self.get_image(frame, fov, channel_name, z_level)
-                        if image is not None:
-                            image_group.add(image)
-                yield image_group
 
     @property
     def date(self):
