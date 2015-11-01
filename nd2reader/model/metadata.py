@@ -86,4 +86,10 @@ class Metadata(object):
 
     @property
     def total_images_per_channel(self):
+        """
+        The total number of images of a particular channel (wavelength, filter, etc) in the entire ND2.
+
+        :rtype:    int
+
+        """
         return self._total_images_per_channel

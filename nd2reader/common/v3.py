@@ -3,7 +3,11 @@ import struct
 
 def read_chunk(fh, chunk_location):
     """
-    Gets the data for a given chunk pointer
+    Reads a piece of data given the location of its pointer.
+
+    :param fh:    an open file handle to the ND2
+    :param chunk_location:    a pointer
+    :type chunk_location:    int
 
     :rtype: bytes
 
