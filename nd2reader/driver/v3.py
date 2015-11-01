@@ -10,38 +10,88 @@ from nd2reader.exc import NoImageError
 
 
 class V3Driver(object):
+    """
+    Accesses images from ND2 files made with NIS Elements 4.x. Confusingly, files of this type have a version number of 3.0+.
+
+    """
     def __init__(self, metadata, label_map, file_handle):
+        """
+        :param metadata:    a Metadata object
+        :param label_map:    a raw dictionary of pointers to image locations
+        :param file_handle:    an open file handle to the ND2
+
+        """
         self._metadata = metadata
         self._label_map = label_map
         self._file_handle = file_handle
         
-    def _calculate_field_of_view(self, frame_number):
+    def _calculate_field_of_view(self, index):
+        """
+        Determines what field of view was being imaged for a given image.
+
+        :type index:    int
+        :rtype:    int
+
+        """
         images_per_cycle = len(self._metadata.z_levels) * len(self._metadata.channels)
-        return int((frame_number - (frame_number % images_per_cycle)) / images_per_cycle) % len(self._metadata.fields_of_view)
+        return int((index - (index % images_per_cycle)) / images_per_cycle) % len(self._metadata.fields_of_view)
 
-    def _calculate_channel(self, frame_number):
-        return self._metadata.channels[frame_number % len(self._metadata.channels)]
+    def _calculate_channel(self, index):
+        """
+        Determines what channel a particular image is.
 
-    def _calculate_z_level(self, frame_number):
-        return self._metadata.z_levels[int(((frame_number - (frame_number % len(self._metadata.channels))) / len(self._metadata.channels)) % len(self._metadata.z_levels))]
+        :type index:    int
+        :rtype:    str
 
-    def _calculate_image_group_number(self, time_index, fov, z_level):
+        """
+        return self._metadata.channels[index % len(self._metadata.channels)]
+
+    def _calculate_z_level(self, index):
+        """
+        Determines the plane in the z-axis a given image was taken in. In the future, this will be replaced with the actual offset in micrometers.
+
+        :type index:    int
+        :rtype:    int
+        """
+        return self._metadata.z_levels[int(((index - (index % len(self._metadata.channels))) / len(self._metadata.channels)) % len(self._metadata.z_levels))]
+
+    def _calculate_image_group_number(self, frame_number, fov, z_level):
         """
         Images are grouped together if they share the same time index, field of view, and z-level.
 
-        :type time_index: int
+        :type frame_number: int
         :type fov: int
         :type z_level: int
 
         :rtype: int
 
         """
-        return time_index * len(self._metadata.fields_of_view) * len(self._metadata.z_levels) + (fov * len(self._metadata.z_levels) + z_level)
+        return frame_number * len(self._metadata.fields_of_view) * len(self._metadata.z_levels) + (fov * len(self._metadata.z_levels) + z_level)
 
-    def _calculate_frame_number(self, image_group_number, fov, z_level):
-        return (image_group_number - (fov * len(self._metadata.z_levels) + z_level)) / (len(self._metadata.fields_of_view) * len(self._metadata.z_levels))
+    def _calculate_frame_number(self, image_group_number, field_of_view, z_level):
+        """
+        Images are in the same frame if they share the same group number and field of view and are taken sequentially.
+
+        :type image_group_number:    int
+        :type field_of_view:    int
+        :type z_level:    int
+
+        :rtype:    int
+
+        """
+        return (image_group_number - (field_of_view * len(self._metadata.z_levels) + z_level)) / (len(self._metadata.fields_of_view) * len(self._metadata.z_levels))
 
     def get_image(self, index):
+        """
+        Creates an Image object and adds its metadata, based on the index, which is simply the order in which the image was acquired. May return None if the ND2 contains
+        multiple channels and not all were taken in each cycle (for example, if you take bright field images every minute, and GFP images every five minutes, there will be some
+        indexes that do not contain an image. The reason for this is complicated, but suffice it to say that we hope to eliminate this possibility in future releases. For now,
+        you'll need to check if your image is None if you're doing anything as described above.
+
+        :type index:    int
+        :rtype:    Image or None
+
+        """
         channel_offset = index % len(self._metadata.channels)
         fov = self._calculate_field_of_view(index)
         channel = self._calculate_channel(index)

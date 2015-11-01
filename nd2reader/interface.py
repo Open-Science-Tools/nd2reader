@@ -82,28 +82,62 @@ class Nd2(object):
 
     @property
     def date(self):
+        """
+        The date and time that the acquisition began. Not guaranteed to have been recorded.
+
+        :rtype: datetime.datetime() or None
+
+        """
         return self._metadata.date
 
     @property
     def z_levels(self):
+        """
+        A list of integers that represent the different levels on the Z-axis that images were taken. Currently this is just a list of numbers from 0 to N.
+        For example, an ND2 where images were taken at -3µm, 0µm, and +5µm from a set position would be represented by 0, 1 and 2, respectively. ND2s do store the actual
+        offset of each image in micrometers and in the future this will hopefully be available. For now, however, you will have to match up the order yourself.
+
+        :return:    list of int
+
+        """
         return self._metadata.z_levels
 
     @property
     def fields_of_view(self):
+        """
+        A list of integers representing the various stage locations, in the order they were taken in the first round of acquisition.
+
+        :return:    list of int
+
+        """
         return self._metadata.fields_of_view
 
     @property
     def channels(self):
+        """
+        A list of channel (i.e. wavelength) names. These are set by the user in NIS Elements.
+
+        :return:    list of str
+
+        """
         return self._metadata.channels
 
     @property
     def frames(self):
+        """
+        A list of integers representing groups of images. ND2s consider images to be part of the same frame if they are in the same field of view and don't have the same channel.
+        So if you take a bright field and GFP image at four different fields of view over and over again, you'll have 8 images and 4 frames per cycle.
+
+        :return:    list of int
+
+        """
         return self._metadata.frames
 
     @property
     def height(self):
         """
-        :return: height of each image, in pixels
+        The height of each image in pixels.
+
         :rtype: int
 
         """
@@ -112,7 +146,8 @@ class Nd2(object):
     @property
     def width(self):
         """
-        :return: width of each image, in pixels
+        The width of each image in pixels.
+
         :rtype: int
 
         """
@@ -120,7 +155,7 @@ class Nd2(object):
 
     def get_image(self, frame_number, field_of_view, channel_name, z_level):
         """
-        Returns an Image if data exists for the given parameters, otherwise returns None.
+        Attempts to return the image with the unique combination of given attributes. None will be returned if a match is not found.
 
         :type frame_number: int
         :param field_of_view: the label for the place in the XY-plane where this image was taken.
@@ -130,7 +165,7 @@ class Nd2(object):
         :param z_level: the label for the location in the Z-plane where this image was taken.
         :type z_level: int
 
-        :rtype: nd2reader.model.Image()
+        :rtype: nd2reader.model.Image() or None
 
         """
         return self._driver.get_image_by_attributes(frame_number, field_of_view, channel_name, z_level, self.height, self.width)
