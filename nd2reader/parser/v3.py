@@ -12,18 +12,26 @@ import struct
 
 
 class V3Parser(BaseParser):
-    """ Parses ND2 files and creates a Metadata and ImageReader object. """
+    """ Parses ND2 files and creates a Metadata and driver object. """
     CHUNK_HEADER = 0xabeceda
     CHUNK_MAP_START = six.b("ND2 FILEMAP SIGNATURE NAME 0001!")
     CHUNK_MAP_END = six.b("ND2 CHUNK MAP SIGNATURE 0000001!")
 
     def __init__(self, fh):
+        """
+        :type fh:    file
+
+        """
         self._fh = fh
         self._metadata = None
         self._label_map = None
 
     @property
     def metadata(self):
+        """
+        :rtype:    Metadata
+
+        """
         if not self._metadata:
             self._parse_metadata()
         return self._metadata
@@ -34,7 +42,7 @@ class V3Parser(BaseParser):
 
     def _parse_metadata(self):
         """
-        Reads all metadata.
+        Reads all metadata and instantiates the Metadata object.
 
         """
         metadata_dict = {}
@@ -59,6 +67,7 @@ class V3Parser(BaseParser):
         """
         The date and time when acquisition began.
 
+        :type metadata_dict:    dict
         :rtype: datetime.datetime() or None
 
         """
@@ -85,6 +94,7 @@ class V3Parser(BaseParser):
         These are labels created by the NIS Elements user. Typically they may a short description of the filter cube
         used (e.g. "bright field", "GFP", etc.)
 
+        :type metadata_dict:    dict
         :rtype: list
 
         """
@@ -111,7 +121,8 @@ class V3Parser(BaseParser):
         in the image data, so we have to calculate it. There probably is something somewhere, since
         NIS Elements can figure it out, but we haven't found it yet.
 
-        :rtype: list
+        :type metadata_dict:    dict
+        :rtype:    list
 
         """
         return self._parse_dimension(r""".*?XY\((\d+)\).*?""", metadata_dict)
@@ -120,6 +131,7 @@ class V3Parser(BaseParser):
         """
         The number of cycles.
 
+        :type metadata_dict:    dict
         :rtype:     list
 
         """
@@ -129,7 +141,8 @@ class V3Parser(BaseParser):
         """
         The different levels in the Z-plane. Just a sequence from 0 to n.
 
-        :rtype: list
+        :type metadata_dict:    dict
+        :rtype:    list
 
         """
         return self._parse_dimension(r""".*?Z\((\d+)\).*?""", metadata_dict)
@@ -140,7 +153,8 @@ class V3Parser(BaseParser):
         Sometimes certain elements don't exist, or change their data type randomly. However, the human-readable text
         is always there and in the same exact format, so we just parse that instead.
 
-        :rtype: str
+        :type metadata_dict:    dict
+        :rtype:    str
 
         """
         for line in metadata_dict[six.b('ImageTextInfo')][six.b('SLxImageTextInfo')].values():
@@ -158,6 +172,14 @@ class V3Parser(BaseParser):
         return dimension_text
 
     def _parse_dimension(self, pattern, metadata_dict):
+        """
+        :param pattern:    a valid regex pattern
+        :type pattern:    str
+        :type metadata_dict:    dict
+
+        :rtype:    list of int
+
+        """
         dimension_text = self._parse_dimension_text(metadata_dict)
         if six.PY3:
             dimension_text = dimension_text.decode("utf8")
@@ -171,6 +193,7 @@ class V3Parser(BaseParser):
         """
         The total number of images per channel. Warning: this may be inaccurate as it includes "gap" images.
 
+        :type metadata_dict:    dict
         :rtype: int
 
         """

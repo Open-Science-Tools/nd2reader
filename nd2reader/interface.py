@@ -5,10 +5,8 @@ from nd2reader.version import get_version
 
 
 class Nd2(object):
-    """
-    Allows easy access to NIS Elements .nd2 image files.
+    """ Allows easy access to NIS Elements .nd2 image files. """
 
-    """
     def __init__(self, filename):
         self._filename = filename
         self._fh = open(filename, "rb")
@@ -39,7 +37,7 @@ class Nd2(object):
         This should be the total number of images in the ND2, but it may be inaccurate. If the ND2 contains a
         different number of images in a cycle (i.e. there are "gap" images) it will be higher than reality.
 
-        :rtype: int
+        :rtype:    int
 
         """
         return self._metadata.total_images_per_channel * len(self.channels)
@@ -48,8 +46,8 @@ class Nd2(object):
         """
         Allows slicing ND2s.
 
-        :type item: int or slice
-        :rtype: nd2reader.model.Image() or generator
+        :type item:    int or slice
+        :rtype:    nd2reader.model.Image() or generator
 
         """
         if isinstance(item, int):
@@ -67,10 +65,10 @@ class Nd2(object):
         """
         Allows for iteration over a selection of the entire dataset.
 
-        :type start: int
-        :type stop: int
-        :type step: int
-        :rtype: nd2reader.model.Image()
+        :type start:    int
+        :type stop:    int
+        :type step:    int
+        :rtype:    nd2reader.model.Image()
 
         """
         start = start if start is not None else 0
@@ -85,7 +83,7 @@ class Nd2(object):
         """
         The date and time that the acquisition began. Not guaranteed to have been recorded.
 
-        :rtype: datetime.datetime() or None
+        :rtype:    datetime.datetime() or None
 
         """
         return self._metadata.date
@@ -138,7 +136,7 @@ class Nd2(object):
         """
         The height of each image in pixels.
 
-        :rtype: int
+        :rtype:    int
 
         """
         return self._metadata.height
@@ -148,7 +146,7 @@ class Nd2(object):
         """
         The width of each image in pixels.
 
-        :rtype: int
+        :rtype:    int
 
         """
         return self._metadata.width
@@ -157,13 +155,13 @@ class Nd2(object):
         """
         Attempts to return the image with the unique combination of given attributes. None will be returned if a match is not found.
 
-        :type frame_number: int
-        :param field_of_view: the label for the place in the XY-plane where this image was taken.
-        :type field_of_view: int
-        :param channel_name: the name of the color of this image
-        :type channel_name: str
-        :param z_level: the label for the location in the Z-plane where this image was taken.
-        :type z_level: int
+        :type frame_number:    int
+        :param field_of_view:    the label for the place in the XY-plane where this image was taken.
+        :type field_of_view:    int
+        :param channel_name:    the name of the color of this image
+        :type channel_name:    str
+        :param z_level:    the label for the location in the Z-plane where this image was taken.
+        :type z_level:    int
 
         :rtype: nd2reader.model.Image() or None
 
@@ -171,4 +169,8 @@ class Nd2(object):
         return self._driver.get_image_by_attributes(frame_number, field_of_view, channel_name, z_level, self.height, self.width)
 
     def close(self):
+        """
+        Closes the file handle to the image. This actually sometimes will prevent problems so it's good to do this or use Nd2 as a context manager.
+
+        """
         self._fh.close()
