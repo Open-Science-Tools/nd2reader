@@ -1,10 +1,6 @@
 import six
 import struct
-from collections import namedtuple
 import re
-
-
-data_location = namedtuple("DataLocation", ["location", "length"])
 
 
 class LabelMap(object):
@@ -22,11 +18,15 @@ class LabelMap(object):
 
     def _parse_data_location(self, label_location):
         location, length = struct.unpack("QQ", self._data[label_location: label_location + 16])
-        return data_location(location=location, length=length)
+        return location
 
     @property
     def image_text_info(self):
         return self._get_location(six.b("ImageTextInfoLV!"))
+
+    @property
+    def image_metadata(self):
+        return self._get_location(six.b("ImageMetadataLV!"))
 
     @property
     def image_metadata_sequence(self):
@@ -39,7 +39,6 @@ class LabelMap(object):
         regex = re.compile(six.b("""ImageDataSeq\|(\d+)!"""))
         for match in regex.finditer(self._data):
             if match:
-                print(match.start(), match.end())
                 location = self._parse_data_location(match.end())
                 image_data[int(match.group(1))] = location
         return image_data
