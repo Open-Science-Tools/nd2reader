@@ -3,6 +3,7 @@
 import array
 from datetime import datetime
 from nd2reader.model.metadata import Metadata
+from nd2reader.model.label import LabelMap
 from nd2reader.parser.base import BaseParser
 from nd2reader.driver.v3 import V3Driver
 from nd2reader.common.v3 import read_chunk
@@ -40,11 +41,7 @@ class V3Parser(BaseParser):
     def driver(self):
         return V3Driver(self.metadata, self._label_map, self._fh)
 
-    def _parse_metadata(self):
-        """
-        Reads all metadata and instantiates the Metadata object.
-
-        """
+    def _build_metadata_dict(self):
         metadata_dict = {}
         self._label_map = self._build_label_map()
         for label in self._label_map.keys():
@@ -52,7 +49,14 @@ class V3Parser(BaseParser):
                 data = read_chunk(self._fh, self._label_map[label])
                 stop = label.index(six.b("LV"))
                 metadata_dict[label[:stop]] = self._read_metadata(data, 1)
+        return metadata_dict
 
+    def _parse_metadata(self):
+        """
+        Reads all metadata and instantiates the Metadata object.
+
+        """
+        metadata_dict = self._build_metadata_dict()
         height = metadata_dict[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiHeight')]
         width = metadata_dict[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiWidth')]
         channels = self._parse_channels(metadata_dict)
@@ -208,23 +212,24 @@ class V3Parser(BaseParser):
         :rtype: dict
 
         """
-        label_map = {}
+        # label_map = {}
         self._fh.seek(-8, 2)
         chunk_map_start_location = struct.unpack("Q", self._fh.read(8))[0]
         self._fh.seek(chunk_map_start_location)
         raw_text = self._fh.read(-1)
-        label_start = raw_text.index(V3Parser.CHUNK_MAP_START) + 32
+        # label_start = raw_text.index(V3Parser.CHUNK_MAP_START) + 32
+        return LabelMap(raw_text)
 
-        while True:
-            data_start = raw_text.index(six.b("!"), label_start) + 1
-            key = raw_text[label_start: data_start]
-            location, length = struct.unpack("QQ", raw_text[data_start: data_start + 16])
-            if key == V3Parser.CHUNK_MAP_END:
-                # We've reached the end of the chunk map
-                break
-            label_map[key] = location
-            label_start = data_start + 16
-        return label_map
+        # while True:
+        #     data_start = raw_text.index(six.b("!"), label_start) + 1
+        #     key = raw_text[label_start: data_start]
+        #     location, length = struct.unpack("QQ", raw_text[data_start: data_start + 16])
+        #     if key == V3Parser.CHUNK_MAP_END:
+        #         # We've reached the end of the chunk map
+        #         break
+        #     label_map[key] = location
+        #     label_start = data_start + 16
+        # return label_map
 
     def _parse_unsigned_char(self, data):
         return struct.unpack("B", data.read(1))[0]
