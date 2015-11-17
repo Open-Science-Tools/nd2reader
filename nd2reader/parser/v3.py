@@ -77,8 +77,8 @@ class V3Parser(BaseParser):
 
         """
         metadata_dict = self._build_metadata_dict()
-        height = metadata_dict[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiHeight')]
-        width = metadata_dict[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiWidth')]
+        height = metadata_dict['image_attributes'][six.b('SLxImageAttributes')][six.b('uiHeight')]
+        width = metadata_dict['image_attributes'][six.b('SLxImageAttributes')][six.b('uiWidth')]
         channels = self._parse_channels(metadata_dict)
         date = self._parse_date(metadata_dict)
         fields_of_view = self._parse_fields_of_view(metadata_dict)
@@ -95,7 +95,7 @@ class V3Parser(BaseParser):
         :rtype: datetime.datetime() or None
 
         """
-        for line in metadata_dict[six.b('ImageTextInfo')][six.b('SLxImageTextInfo')].values():
+        for line in metadata_dict['image_text_info'][six.b('SLxImageTextInfo')].values():
             line = line.decode("utf8")
             absolute_start_12 = None
             absolute_start_24 = None
@@ -123,9 +123,9 @@ class V3Parser(BaseParser):
 
         """
         channels = []
-        metadata = metadata_dict[six.b('ImageMetadataSeq')][six.b('SLxPictureMetadata')][six.b('sPicturePlanes')]
+        metadata = metadata_dict['image_metadata_sequence'][six.b('SLxPictureMetadata')][six.b('sPicturePlanes')]
         try:
-            validity = metadata_dict[six.b('ImageMetadata')][six.b('SLxExperiment')][six.b('ppNextLevelEx')][six.b('')][0][six.b('ppNextLevelEx')][six.b('')][0][six.b('pItemValid')]
+            validity = metadata_dict['image_metadata'][six.b('SLxExperiment')][six.b('ppNextLevelEx')][six.b('')][0][six.b('ppNextLevelEx')][six.b('')][0][six.b('pItemValid')]
         except KeyError:
             # If none of the channels have been deleted, there is no validity list, so we just make one
             validity = [True for _ in metadata]
@@ -181,7 +181,7 @@ class V3Parser(BaseParser):
         :rtype:    str
 
         """
-        for line in metadata_dict[six.b('ImageTextInfo')][six.b('SLxImageTextInfo')].values():
+        for line in metadata_dict['image_text_info'][six.b('SLxImageTextInfo')].values():
             if six.b("Dimensions:") in line:
                 metadata = line
                 break
@@ -221,7 +221,7 @@ class V3Parser(BaseParser):
         :rtype: int
 
         """
-        return metadata_dict[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiSequenceCount')]
+        return metadata_dict['image_attributes'][six.b('SLxImageAttributes')][six.b('uiSequenceCount')]
 
     def _build_label_map(self):
         """

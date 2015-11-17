@@ -8,6 +8,7 @@ class LabelMap(object):
     """
     def __init__(self, raw_binary_data):
         self._data = raw_binary_data
+        self._image_data = {}
 
     def _get_location(self, label):
         try:
@@ -33,15 +34,14 @@ class LabelMap(object):
         # there is always only one of these, even though it has a pipe followed by a zero, which is how they do indexes
         return self._get_location(six.b("ImageMetadataSeqLV|0!"))
 
-    @property
-    def image_data(self):
-        image_data = {}
-        regex = re.compile(six.b("""ImageDataSeq\|(\d+)!"""))
-        for match in regex.finditer(self._data):
-            if match:
-                location = self._parse_data_location(match.end())
-                image_data[int(match.group(1))] = location
-        return image_data
+    def get_image_data_location(self, index):
+        if not self._image_data:
+            regex = re.compile(six.b("""ImageDataSeq\|(\d+)!"""))
+            for match in regex.finditer(self._data):
+                if match:
+                    location = self._parse_data_location(match.end())
+                    self._image_data[int(match.group(1))] = location
+        return self._image_data[index]
 
     @property
     def image_calibration(self):
