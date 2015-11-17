@@ -130,7 +130,7 @@ class V3Driver(object):
         :raises:    NoImageError
 
         """
-        chunk = self._label_map[six.b("ImageDataSeq|%d!" % image_group_number)]
+        chunk = self._label_map.get_image_data_location(image_group_number)
         data = read_chunk(self._file_handle, chunk)
         # All images in the same image group share the same timestamp! So if you have complicated image data,
         # your timestamps may not be entirely accurate. Practically speaking though, they'll only be off by a few

@@ -3,6 +3,7 @@
 import array
 from datetime import datetime
 from nd2reader.model.metadata import Metadata
+from nd2reader.model.label import LabelMap
 from nd2reader.parser.base import BaseParser
 from nd2reader.driver.v3 import V3Driver
 from nd2reader.common.v3 import read_chunk
@@ -40,21 +41,44 @@ class V3Parser(BaseParser):
     def driver(self):
         return V3Driver(self.metadata, self._label_map, self._fh)
 
+    def _build_metadata_dict(self):
+        self._label_map = self._build_label_map()
+        raw_data = {"image_text_info": read_chunk(self._fh, self._label_map.image_text_info),
+                    "image_metadata_sequence": read_chunk(self._fh, self._label_map.image_metadata_sequence),
+                    # "image_data": read_chunk(self._fh, self._label_map.image_data),
+                    "image_calibration": read_chunk(self._fh, self._label_map.image_calibration),
+                    "image_attributes": read_chunk(self._fh, self._label_map.image_attributes),
+                    # "x_data": read_chunk(self._fh, self._label_map.x_data),
+                    # "y_data": read_chunk(self._fh, self._label_map.y_data),
+                    # "z_data": read_chunk(self._fh, self._label_map.z_data),
+                    # "roi_metadata": read_chunk(self._fh, self._label_map.roi_metadata),
+                    # "pfs_status": read_chunk(self._fh, self._label_map.pfs_status),
+                    # "pfs_offset": read_chunk(self._fh, self._label_map.pfs_offset),
+                    # "guid": read_chunk(self._fh, self._label_map.guid),
+                    # "description": read_chunk(self._fh, self._label_map.description),
+                    # "camera_exposure_time": read_chunk(self._fh, self._label_map.camera_exposure_time),
+                    # "camera_temp": read_chunk(self._fh, self._label_map.camera_temp),
+                    # "acquisition_times": read_chunk(self._fh, self._label_map.acquisition_times),
+                    # "acquisition_times_2": read_chunk(self._fh, self._label_map.acquisition_times_2),
+                    # "acquisition_frames": read_chunk(self._fh, self._label_map.acquisition_frames),
+                    # "lut_data": read_chunk(self._fh, self._label_map.lut_data),
+                    # "grabber_settings": read_chunk(self._fh, self._label_map.grabber_settings),
+                    # "custom_data": read_chunk(self._fh, self._label_map.custom_data),
+                    # "app_info": read_chunk(self._fh, self._label_map.app_info)
+                    }
+        if self._label_map.image_metadata:
+            raw_data["image_metadata"] = read_chunk(self._fh, self._label_map.image_metadata)
+
+        return {key: self._read_metadata(data, 1) for key, data in raw_data.items()}
+
     def _parse_metadata(self):
         """
         Reads all metadata and instantiates the Metadata object.
 
         """
-        metadata_dict = {}
-        self._label_map = self._build_label_map()
-        for label in self._label_map.keys():
-            if label.endswith(six.b("LV!")) or six.b("LV|") in label:
-                data = read_chunk(self._fh, self._label_map[label])
-                stop = label.index(six.b("LV"))
-                metadata_dict[label[:stop]] = self._read_metadata(data, 1)
-
-        height = metadata_dict[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiHeight')]
-        width = metadata_dict[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiWidth')]
+        metadata_dict = self._build_metadata_dict()
+        height = metadata_dict['image_attributes'][six.b('SLxImageAttributes')][six.b('uiHeight')]
+        width = metadata_dict['image_attributes'][six.b('SLxImageAttributes')][six.b('uiWidth')]
         channels = self._parse_channels(metadata_dict)
         date = self._parse_date(metadata_dict)
         fields_of_view = self._parse_fields_of_view(metadata_dict)
@@ -71,7 +95,7 @@ class V3Parser(BaseParser):
         :rtype: datetime.datetime() or None
 
         """
-        for line in metadata_dict[six.b('ImageTextInfo')][six.b('SLxImageTextInfo')].values():
+        for line in metadata_dict['image_text_info'][six.b('SLxImageTextInfo')].values():
             line = line.decode("utf8")
             absolute_start_12 = None
             absolute_start_24 = None
@@ -99,9 +123,9 @@ class V3Parser(BaseParser):
 
         """
         channels = []
-        metadata = metadata_dict[six.b('ImageMetadataSeq')][six.b('SLxPictureMetadata')][six.b('sPicturePlanes')]
+        metadata = metadata_dict['image_metadata_sequence'][six.b('SLxPictureMetadata')][six.b('sPicturePlanes')]
         try:
-            validity = metadata_dict[six.b('ImageMetadata')][six.b('SLxExperiment')][six.b('ppNextLevelEx')][six.b('')][0][six.b('ppNextLevelEx')][six.b('')][0][six.b('pItemValid')]
+            validity = metadata_dict['image_metadata'][six.b('SLxExperiment')][six.b('ppNextLevelEx')][six.b('')][0][six.b('ppNextLevelEx')][six.b('')][0][six.b('pItemValid')]
         except KeyError:
             # If none of the channels have been deleted, there is no validity list, so we just make one
             validity = [True for _ in metadata]
@@ -157,7 +181,7 @@ class V3Parser(BaseParser):
         :rtype:    str
 
         """
-        for line in metadata_dict[six.b('ImageTextInfo')][six.b('SLxImageTextInfo')].values():
+        for line in metadata_dict['image_text_info'][six.b('SLxImageTextInfo')].values():
             if six.b("Dimensions:") in line:
                 metadata = line
                 break
@@ -197,7 +221,7 @@ class V3Parser(BaseParser):
         :rtype: int
 
         """
-        return metadata_dict[six.b('ImageAttributes')][six.b('SLxImageAttributes')][six.b('uiSequenceCount')]
+        return metadata_dict['image_attributes'][six.b('SLxImageAttributes')][six.b('uiSequenceCount')]
 
     def _build_label_map(self):
         """
@@ -205,26 +229,14 @@ class V3Parser(BaseParser):
         as some of the bytes contain the value 33, which is the ASCII code for "!". So we iteratively find each label,
         grab the subsequent data (always 16 bytes long), advance to the next label and repeat.
 
-        :rtype: dict
+        :rtype: LabelMap
 
         """
-        label_map = {}
         self._fh.seek(-8, 2)
         chunk_map_start_location = struct.unpack("Q", self._fh.read(8))[0]
         self._fh.seek(chunk_map_start_location)
         raw_text = self._fh.read(-1)
-        label_start = raw_text.index(V3Parser.CHUNK_MAP_START) + 32
-
-        while True:
-            data_start = raw_text.index(six.b("!"), label_start) + 1
-            key = raw_text[label_start: data_start]
-            location, length = struct.unpack("QQ", raw_text[data_start: data_start + 16])
-            if key == V3Parser.CHUNK_MAP_END:
-                # We've reached the end of the chunk map
-                break
-            label_map[key] = location
-            label_start = data_start + 16
-        return label_map
+        return LabelMap(raw_text)
 
     def _parse_unsigned_char(self, data):
         return struct.unpack("B", data.read(1))[0]

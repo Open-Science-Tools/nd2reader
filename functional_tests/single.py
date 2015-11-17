@@ -25,6 +25,13 @@ class FunctionalTests(unittest.TestCase):
     def test_length(self):
         self.assertEqual(len(self.nd2), 1)
 
+    def test_actual_length(self):
+        count = 0
+        for image in self.nd2:
+            if image is not None:
+                count += 1
+        self.assertEqual(len(self.nd2), count)
+
     def test_frames(self):
         self.assertEqual(len(self.nd2.frames), 1)
 
