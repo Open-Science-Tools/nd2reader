@@ -3,7 +3,6 @@
 import array
 import numpy as np
 import struct
-import six
 from nd2reader.model.image import Image
 from nd2reader.common.v3 import read_chunk
 from nd2reader.exc import NoImageError

@@ -6,7 +6,7 @@ from nd2reader.model.metadata import Metadata
 from nd2reader.model.label import LabelMap
 from nd2reader.parser.base import BaseParser
 from nd2reader.driver.v3 import V3Driver
-from nd2reader.common.v3 import read_chunk
+from nd2reader.common.v3 import read_chunk, read_array
 import re
 import six
 import struct
@@ -43,33 +43,28 @@ class V3Parser(BaseParser):
 
     def _build_metadata_dict(self):
         self._label_map = self._build_label_map()
-        raw_data = {"image_text_info": read_chunk(self._fh, self._label_map.image_text_info),
-                    "image_metadata_sequence": read_chunk(self._fh, self._label_map.image_metadata_sequence),
-                    # "image_data": read_chunk(self._fh, self._label_map.image_data),
-                    "image_calibration": read_chunk(self._fh, self._label_map.image_calibration),
-                    "image_attributes": read_chunk(self._fh, self._label_map.image_attributes),
-                    # "x_data": read_chunk(self._fh, self._label_map.x_data),
-                    # "y_data": read_chunk(self._fh, self._label_map.y_data),
-                    # "z_data": read_chunk(self._fh, self._label_map.z_data),
-                    # "roi_metadata": read_chunk(self._fh, self._label_map.roi_metadata),
-                    # "pfs_status": read_chunk(self._fh, self._label_map.pfs_status),
-                    # "pfs_offset": read_chunk(self._fh, self._label_map.pfs_offset),
-                    # "guid": read_chunk(self._fh, self._label_map.guid),
-                    # "description": read_chunk(self._fh, self._label_map.description),
-                    # "camera_exposure_time": read_chunk(self._fh, self._label_map.camera_exposure_time),
-                    # "camera_temp": read_chunk(self._fh, self._label_map.camera_temp),
-                    # "acquisition_times": read_chunk(self._fh, self._label_map.acquisition_times),
-                    # "acquisition_times_2": read_chunk(self._fh, self._label_map.acquisition_times_2),
-                    # "acquisition_frames": read_chunk(self._fh, self._label_map.acquisition_frames),
-                    # "lut_data": read_chunk(self._fh, self._label_map.lut_data),
-                    # "grabber_settings": read_chunk(self._fh, self._label_map.grabber_settings),
-                    # "custom_data": read_chunk(self._fh, self._label_map.custom_data),
-                    # "app_info": read_chunk(self._fh, self._label_map.app_info)
+        raw_data = {"image_text_info": self._read_metadata(read_chunk(self._fh, self._label_map.image_text_info), 1),
+                    "image_metadata_sequence": self._read_metadata(read_chunk(self._fh, self._label_map.image_metadata_sequence), 1),
+                    "image_calibration": self._read_metadata(read_chunk(self._fh, self._label_map.image_calibration), 1),
+                    "image_attributes": self._read_metadata(read_chunk(self._fh, self._label_map.image_attributes), 1),
+                    "x_data": read_array(self._fh, 'double', self._label_map.x_data),
+                    "y_data": read_array(self._fh, 'double', self._label_map.y_data),
+                    "z_data": read_array(self._fh, 'double', self._label_map.z_data),
+                    "roi_metadata": read_chunk(self._fh, self._label_map.roi_metadata),
+                    "pfs_status": read_array(self._fh, 'int', self._label_map.pfs_status),
+                    "pfs_offset": read_array(self._fh, 'int', self._label_map.pfs_offset),
+                    "camera_exposure_time": read_array(self._fh, 'double', self._label_map.camera_exposure_time),
+                    "camera_temp": map(lambda x: round(x * 100.0, 2), read_array(self._fh, 'double', self._label_map.camera_temp)),
+                    "acquisition_times": map(lambda x: x / 1000.0, read_array(self._fh, 'double', self._label_map.acquisition_times)),
+                    "lut_data": read_chunk(self._fh, self._label_map.lut_data),
+                    "grabber_settings": read_chunk(self._fh, self._label_map.grabber_settings),
+                    "custom_data": read_chunk(self._fh, self._label_map.custom_data),
+                    "app_info": read_chunk(self._fh, self._label_map.app_info),
                     }
         if self._label_map.image_metadata:
-            raw_data["image_metadata"] = read_chunk(self._fh, self._label_map.image_metadata)
+            raw_data["image_metadata"] = self._read_metadata(read_chunk(self._fh, self._label_map.image_metadata), 1)
 
-        return {key: self._read_metadata(data, 1) for key, data in raw_data.items()}
+        return raw_data
 
     def _parse_metadata(self):
         """

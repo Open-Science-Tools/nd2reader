@@ -1,4 +1,5 @@
 import struct
+import array
 
 
 def read_chunk(fh, chunk_location):
@@ -22,3 +23,13 @@ def read_chunk(fh, chunk_location):
     # start of the actual data field, which is at some arbitrary place after the metadata.
     fh.seek(chunk_location + 16 + relative_offset)
     return fh.read(data_length)
+
+
+def read_array(fh, kind, chunk_location):
+    kinds = {'double': 'd',
+             'int': 'i',
+             'float': 'f'}
+    if kind not in kinds:
+        raise ValueError('You attempted to read an array of an unknown type.')
+    raw_data = read_chunk(fh, chunk_location)
+    return array.array(kinds[kind], raw_data)
