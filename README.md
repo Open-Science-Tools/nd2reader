@@ -46,8 +46,7 @@ for image in nd2:
 Slicing is also supported and is extremely memory efficient, as images are only read when directly accessed:
 
 ```python
-my_subset = nd2[50:433]
-for image in my_subset:
+for image in nd2[50:433]:
     do_something(image)
 
 # get every other image in the first 100 images
@@ -59,7 +58,7 @@ for image in nd2[::-1]:
     do_something(image)
 ```
 
-You can also just index a single images:
+You can also just index a single image:
 
 ```python
 # gets the 18th image
@@ -76,16 +75,6 @@ The `Nd2` object has some useful metadata:
 >>> len(nd2)
 30528
 ```
-
-It can also be used as a context manager:
-
-```
-import nd2reader
-with nd2reader.Nd2("/path/to/my_images.nd2") as nd2:
-    for image in nd2:
-        do_something(image)
-```
-
 ### Images
 
 `Image` objects are just Numpy arrays with some extra metadata bolted on:
