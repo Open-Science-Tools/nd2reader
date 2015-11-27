@@ -11,9 +11,9 @@ class Nd2(object):
         self._filename = filename
         self._fh = open(filename, "rb")
         major_version, minor_version = get_version(self._fh)
-        parser = get_parser(self._fh, major_version, minor_version)
-        self._driver = parser.driver
-        self._metadata = parser.metadata
+        self._parser = get_parser(self._fh, major_version, minor_version)
+        self._driver = self._parser.driver
+        self._metadata = self._parser.metadata
 
     def __enter__(self):
         return self
