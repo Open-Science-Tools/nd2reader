@@ -43,6 +43,31 @@ for image in nd2:
     do_something(image)
 ```
 
+`Image` objects are just Numpy arrays with some extra metadata bolted on:
+
+```python
+>>> image = nd2[20]
+>>> print(image)
+array([[1894, 1949, 1941, ..., 2104, 2135, 2114],
+       [1825, 1846, 1848, ..., 1994, 2149, 2064],
+       [1909, 1820, 1821, ..., 1995, 1952, 2062],
+       ...,
+       [3487, 3512, 3594, ..., 3603, 3643, 3492],
+       [3642, 3475, 3525, ..., 3712, 3682, 3609],
+       [3687, 3777, 3738, ..., 3784, 3870, 4008]], dtype=uint16)
+
+>>> print(image.timestamp)
+10.1241241248
+>>> print(image.frame_number)
+11
+>>> print(image.field_of_view)
+6
+>>> print(image.channel)
+'GFP'
+>>> print(image.z_level)
+0
+```
+
 Slicing is also supported and is extremely memory efficient, as images are only read when directly accessed:
 
 ```python
@@ -74,32 +99,6 @@ The `Nd2` object has some useful metadata:
 800
 >>> len(nd2)
 30528
-```
-### Images
-
-`Image` objects are just Numpy arrays with some extra metadata bolted on:
-
-```python
->>> image = nd2[20]
->>> print(image)
-array([[1894, 1949, 1941, ..., 2104, 2135, 2114],
-       [1825, 1846, 1848, ..., 1994, 2149, 2064],
-       [1909, 1820, 1821, ..., 1995, 1952, 2062],
-       ...,
-       [3487, 3512, 3594, ..., 3603, 3643, 3492],
-       [3642, 3475, 3525, ..., 3712, 3682, 3609],
-       [3687, 3777, 3738, ..., 3784, 3870, 4008]], dtype=uint16)
-
->>> print(image.timestamp)
-10.1241241248
->>> print(image.frame_number)
-11
->>> print(image.field_of_view)
-6
->>> print(image.channel)
-'GFP'
->>> print(image.z_level)
-0
 ```
 
 ### Bug Reports and Features
