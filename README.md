@@ -24,7 +24,7 @@ A quick summary of ND2 metadata can be obtained as shown below.
 ```python
 >>> import nd2reader
 >>> nd2 = nd2reader.Nd2("/path/to/my_images.nd2")
->>> print(nd2)
+>>> nd2
 <ND2 /path/to/my_images.nd2>
 Created: 2014-11-11 15:59:19
 Image size: 1280x800 (HxW)
@@ -47,7 +47,7 @@ for image in nd2:
 
 ```python
 >>> image = nd2[20]
->>> print(image)
+>>> image
 array([[1894, 1949, 1941, ..., 2104, 2135, 2114],
        [1825, 1846, 1848, ..., 1994, 2149, 2064],
        [1909, 1820, 1821, ..., 1995, 1952, 2062],
@@ -56,15 +56,15 @@ array([[1894, 1949, 1941, ..., 2104, 2135, 2114],
        [3642, 3475, 3525, ..., 3712, 3682, 3609],
        [3687, 3777, 3738, ..., 3784, 3870, 4008]], dtype=uint16)
 
->>> print(image.timestamp)
+>>> image.timestamp
 10.1241241248
->>> print(image.frame_number)
+>>> image.frame_number
 11
->>> print(image.field_of_view)
+>>> image.field_of_view
 6
->>> print(image.channel)
+>>> image.channel
 'GFP'
->>> print(image.z_level)
+>>> image.z_level
 0
 ```
 
@@ -90,7 +90,7 @@ You can also just index a single image:
 my_important_image = nd2[17] 
 ```
 
-The `Nd2` object has some useful metadata:
+The `Nd2` object has some programmatically-accessible metadata: 
 
 ```python
 >>> nd2.height
