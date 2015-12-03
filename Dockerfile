@@ -19,20 +19,22 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python-numpy \
     python3-numpy \
     libfreetype6-dev \
+    python-matplotlib \
     python3-matplotlib \
     libfreetype6-dev \
     libpng-dev \
     libjpeg-dev \
     pkg-config \
+    python-skimage \
     python3-skimage \
     tk \
     tk-dev \
+    python-tk \
     python3-tk \
+ && pip install -U cython \
+    scikit-image \
  && pip3 install -U cython \
     scikit-image \
  && rm -rf /var/lib/apt/lists/*
 
-COPY . /opt/nd2reader
 WORKDIR /opt/nd2reader
-RUN python setup.py install
-RUN python3 setup.py install

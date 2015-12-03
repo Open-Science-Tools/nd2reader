@@ -101,6 +101,37 @@ The `Nd2` object has some programmatically-accessible metadata:
 30528
 ```
 
+Each camera has its own settings. If you image multiple wavelengths with one camera, each channel will appear as its
+own camera:
+
+```python
+>>> nd2.camera_settings
+{'GFP': <Camera Settings: GFP>
+Camera: Andor Zyla VSC-00461
+Camera ID: VSC-00461
+Exposure Time (ms): 100.0
+Binning: 2x2, 'BF': <Camera Settings: BF>
+Camera: Andor Zyla VSC-00461
+Camera ID: VSC-00461
+Exposure Time (ms): 100.0
+Binning: 2x2}
+```
+
+Camera information can be accessed programmatically:
+
+```python
+>>> nd2.camera_settings['GFP'].id
+'VSC-00461'
+>>> nd2.camera_settings['GFP'].name
+'Andor Zyla VSC-00461'
+>>> nd2.camera_settings['GFP'].exposure
+100.0
+>>> nd2.camera_settings['GFP'].x_binning
+2
+>>> nd2.camera_settings['GFP'].y_binning
+2
+```
+
 ### Bug Reports and Features
 
 If this fails to work exactly as expected, please open a Github issue. If you get an unhandled exception, please

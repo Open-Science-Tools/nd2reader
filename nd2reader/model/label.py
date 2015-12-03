@@ -5,10 +5,15 @@ import re
 
 class LabelMap(object):
     """
+    Contains pointers to metadata. This might only be valid for V3 files.
+
     """
     def __init__(self, raw_binary_data):
         self._data = raw_binary_data
         self._image_data = {}
+
+    def image_attributes(self):
+        return self._get_location(six.b("ImageAttributesLV!"))
 
     def _get_location(self, label):
         try:

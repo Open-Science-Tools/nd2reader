@@ -11,10 +11,9 @@ class Nd2(object):
         self._filename = filename
         self._fh = open(filename, "rb")
         major_version, minor_version = get_version(self._fh)
-        parser = get_parser(self._fh, major_version, minor_version)
-        self._driver = parser.driver
-        self._metadata = parser.metadata
-
+        self._parser = get_parser(self._fh, major_version, minor_version)
+        self._metadata = self._parser.metadata
+        
     def __enter__(self):
         return self
 
@@ -27,7 +26,7 @@ class Nd2(object):
                           "Created: %s" % (self.date if self.date is not None else "Unknown"),
                           "Image size: %sx%s (HxW)" % (self.height, self.width),
                           "Frames: %s" % len(self.frames),
-                          "Channels: %s" % ", ".join(["'%s'" % str(channel) for channel in self.channels]),
+                          "Channels: %s" % ", ".join(["%s" % str(channel) for channel in self.channels]),
                           "Fields of View: %s" % len(self.fields_of_view),
                           "Z-Levels: %s" % len(self.z_levels)
                           ])
@@ -52,7 +51,7 @@ class Nd2(object):
         """
         if isinstance(item, int):
             try:
-                image = self._driver.get_image(item)
+                image = self._parser.driver.get_image(item)
             except KeyError:
                 raise IndexError
             else:
@@ -79,6 +78,10 @@ class Nd2(object):
             yield self[i]
 
     @property
+    def camera_settings(self):
+        return self._parser.camera_metadata
+    
+    @property
     def date(self):
         """
         The date and time that the acquisition began. Not guaranteed to have been recorded.
@@ -91,9 +94,11 @@ class Nd2(object):
     @property
     def z_levels(self):
         """
-        A list of integers that represent the different levels on the Z-axis that images were taken. Currently this is just a list of numbers from 0 to N.
-        For example, an ND2 where images were taken at -3µm, 0µm, and +5µm from a set position would be represented by 0, 1 and 2, respectively. ND2s do store the actual
-        offset of each image in micrometers and in the future this will hopefully be available. For now, however, you will have to match up the order yourself.
+        A list of integers that represent the different levels on the Z-axis that images were taken. Currently this is
+        just a list of numbers from 0 to N. For example, an ND2 where images were taken at -3µm, 0µm, and +5µm from a
+        set position would be represented by 0, 1 and 2, respectively. ND2s do store the actual offset of each image
+        in micrometers and in the future this will hopefully be available. For now, however, you will have to match up
+        the order yourself.
 
         :return:    list of int
 
@@ -103,7 +108,8 @@ class Nd2(object):
     @property
     def fields_of_view(self):
         """
-        A list of integers representing the various stage locations, in the order they were taken in the first round of acquisition.
+        A list of integers representing the various stage locations, in the order they were taken in the first round
+        of acquisition.
 
         :return:    list of int
 
@@ -123,8 +129,9 @@ class Nd2(object):
     @property
     def frames(self):
         """
-        A list of integers representing groups of images. ND2s consider images to be part of the same frame if they are in the same field of view and don't have the same channel.
-        So if you take a bright field and GFP image at four different fields of view over and over again, you'll have 8 images and 4 frames per cycle.
+        A list of integers representing groups of images. ND2s consider images to be part of the same frame if they
+        are in the same field of view and don't have the same channel. So if you take a bright field and GFP image at
+        four different fields of view over and over again, you'll have 8 images and 4 frames per cycle.
 
         :return:    list of int
 
@@ -153,7 +160,8 @@ class Nd2(object):
 
     def get_image(self, frame_number, field_of_view, channel_name, z_level):
         """
-        Attempts to return the image with the unique combination of given attributes. None will be returned if a match is not found.
+        Attempts to return the image with the unique combination of given attributes. None will be returned if a match
+        is not found.
 
         :type frame_number:    int
         :param field_of_view:    the label for the place in the XY-plane where this image was taken.
@@ -166,11 +174,17 @@ class Nd2(object):
         :rtype: nd2reader.model.Image() or None
 
         """
-        return self._driver.get_image_by_attributes(frame_number, field_of_view, channel_name, z_level, self.height, self.width)
+        return self._parser.driver.get_image_by_attributes(frame_number,
+                                                           field_of_view,
+                                                           channel_name,
+                                                           z_level,
+                                                           self.height,
+                                                           self.width)
 
     def close(self):
         """
-        Closes the file handle to the image. This actually sometimes will prevent problems so it's good to do this or use Nd2 as a context manager.
+        Closes the file handle to the image. This actually sometimes will prevent problems so it's good to do this or
+        use Nd2 as a context manager.
 
         """
         self._fh.close()
