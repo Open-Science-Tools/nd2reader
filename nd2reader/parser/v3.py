@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-from nd2reader.model.metadata import Metadata
+from nd2reader.model.metadata import Metadata, CameraSettings
 from nd2reader.model.label import LabelMap
 from nd2reader.parser.base import BaseParser
 from nd2reader.driver.v3 import V3Driver
@@ -138,6 +138,8 @@ class V3Parser(BaseParser):
         self._metadata = None
         self._raw_metadata = None
         self._label_map = None
+        self._camera_metadata = {}
+        self._parse_metadata()
 
     @property
     def metadata(self):
@@ -145,9 +147,11 @@ class V3Parser(BaseParser):
         :rtype:    Metadata
 
         """
-        if not self._metadata:
-            self._parse_metadata()
         return self._metadata
+
+    @property
+    def camera_metadata(self):
+        return self._camera_metadata
 
     @property
     def driver(self):
@@ -167,13 +171,30 @@ class V3Parser(BaseParser):
         """
         height = self.raw_metadata.image_attributes[six.b('SLxImageAttributes')][six.b('uiHeight')]
         width = self.raw_metadata.image_attributes[six.b('SLxImageAttributes')][six.b('uiWidth')]
-        channels = self._parse_channels(self.raw_metadata)
         date = self._parse_date(self.raw_metadata)
         fields_of_view = self._parse_fields_of_view(self.raw_metadata)
         frames = self._parse_frames(self.raw_metadata)
         z_levels = self._parse_z_levels(self.raw_metadata)
         total_images_per_channel = self._parse_total_images_per_channel(self.raw_metadata)
-        self._metadata = Metadata(height, width, channels, date, fields_of_view, frames, z_levels, total_images_per_channel)
+        channels = []
+        for camera_setting in self._parse_camera_settings():
+            channels.append(camera_setting.channel_name)
+            self._camera_metadata[camera_setting.channel_name] = camera_setting
+        self._metadata = Metadata(height, width, sorted(list(channels)), date, fields_of_view, frames, z_levels, total_images_per_channel)
+
+    def _parse_camera_settings(self):
+        for camera in self._raw_metadata.image_metadata_sequence[six.b('SLxPictureMetadata')][six.b('sPicturePlanes')][six.b('sSampleSetting')].values():
+            name = camera[six.b('pCameraSetting')][six.b('CameraUserName')]
+            id = camera[six.b('pCameraSetting')][six.b('CameraUniqueName')]
+            exposure = camera[six.b('dExposureTime')]
+            x_binning = camera[six.b('pCameraSetting')][six.b('FormatFast')][six.b('fmtDesc')][six.b('dBinningX')]
+            y_binning = camera[six.b('pCameraSetting')][six.b('FormatFast')][six.b('fmtDesc')][six.b('dBinningY')]
+            optical_configs = camera[six.b('sOpticalConfigs')]
+            if six.b('') in optical_configs.keys():
+                channel_name = optical_configs[six.b('')][six.b('sOpticalConfigName')]
+            else:
+                channel_name = None
+            yield CameraSettings(name, id, exposure, x_binning, y_binning, channel_name)
 
     def _parse_date(self, raw_metadata):
         """
