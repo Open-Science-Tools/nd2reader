@@ -102,7 +102,7 @@ class V3Driver(object):
         except NoImageError:
             return None
         else:
-            image.add_params(timestamp, frame_number, field_of_view, channel, z_level)
+            image.add_params(index, timestamp, frame_number, field_of_view, channel, z_level)
             return image
 
     @property
@@ -169,7 +169,7 @@ class V3Driver(object):
                                                                  height,
                                                                  width)
             image = Image(raw_image_data)
-            image.add_params(timestamp, frame_number, field_of_view, channel_name, z_level)
+            image.add_params(image_group_number, timestamp, frame_number, field_of_view, channel_name, z_level)
         except (TypeError, NoImageError):
             return None
         else:

@@ -7,6 +7,7 @@ from nd2reader import Nd2
 import numpy as np
 from datetime import datetime
 import unittest
+import six
 
 
 class FunctionalTests(unittest.TestCase):
@@ -108,18 +109,57 @@ class FunctionalTests(unittest.TestCase):
         self.assertTupleEqual((self.nd2[54].z_level, self.nd2[54].channel), (0, 'BF'))
 
     def test_get_image_by_attribute_none(self):
+        # Should handle missing images without an exception
         image = self.nd2.get_image(4, 0, "GFP", 0)
         self.assertIsNone(image)
 
-    def test_fast_filter(self):
+    def test_index(self):
+        # Do indexes get added to images properly?
+        for n, image in enumerate(self.nd2):
+            if image is not None:
+                self.assertEqual(n, image.index)
+            if n > 50:
+                break
+
+    def test_filter(self):
+        # If we take the first 20 GFP images, they should be identical to the first 20 items iterated from filter()
+        # if we set our criteria to just "GFP"
         manual_images = []
-        for _, image in zip(range(200), self.nd2):
+        for _, image in zip(range(20), self.nd2):
             if image is not None and image.channel == 'GFP':
                 manual_images.append(image)
         filter_images = []
-        for image in self.nd2.filter(channels=['GFP']):
+
+        for image in self.nd2.filter(channels='GFP'):
             filter_images.append(image)
             if len(filter_images) == len(manual_images):
                 break
         for a, b in zip(manual_images, filter_images):
             self.assertTrue(np.array_equal(a, b))
+
+    def test_filter_order_all(self):
+        # If we select every possible image using filter(), we should just get every image in order
+        n = 0
+        for image in self.nd2.filter(channels=['BF', 'GFP'], z_levels=[0, 1, 2], fields_of_view=list(range(8))):
+            while True:
+                indexed_image = self.nd2[n]
+                if indexed_image is not None:
+                    break
+                n += 1
+            self.assertTrue(np.array_equal(image, indexed_image))
+            n += 1
+            if n > 100:
+                break
+
+    def test_filter_order_subset(self):
+        # Test that images are always yielded in increasing order. This guarantees that no matter what subset of images
+        # we're filtering, we still get them in the chronological order they were acquired
+        n = -1
+        for image in self.nd2.filter(channels='BF', z_levels=[0, 1], fields_of_view=[1, 2, 4]):
+            self.assertGreater(image.index, n)
+            self.assertEqual(image.channel, 'BF')
+            self.assertIn(image.field_of_view, (1, 2, 4))
+            self.assertIn(image.z_level, (0, 1))
+            n = image.index
+            if n > 100:
+                break

@@ -194,10 +194,10 @@ class Nd2(object):
         z_levels = self._to_list(z_levels, self.z_levels)
 
         for frame in self.frames:
-            for fov in fields_of_view:
+            for f in fields_of_view:
                 for z in z_levels:
                     for c in channels:
-                        image = self.get_image(frame, fov, c, z)
+                        image = self.get_image(frame, f, c, z)
                         if image is not None:
                             yield image
 
