@@ -2,6 +2,7 @@
 
 from nd2reader.parser import get_parser
 from nd2reader.version import get_version
+import six
 
 
 class Nd2(object):
@@ -181,6 +182,29 @@ class Nd2(object):
                                                            self.height,
                                                            self.width)
 
+    def filter(self, fields_of_view=None, channels=None, z_levels=None):
+        """
+        Iterates over images matching the given criteria. This can be 2-10 times faster than manually iterating over
+        the Nd2 and checking the attributes of each image, as this method will not read from disk until a valid image is
+        found.
+
+        """
+        fields_of_view = self._to_list(fields_of_view, self.fields_of_view)
+        channels = self._to_list(channels, self.channels)
+        z_levels = self._to_list(z_levels, self.z_levels)
+
+        for frame in self.frames:
+            for f in fields_of_view:
+                for z in z_levels:
+                    for c in channels:
+                        image = self.get_image(frame, f, c, z)
+                        if image is not None:
+                            yield image
+
+    def _to_list(self, value, default):
+        value = default if value is None else value
+        return [value] if isinstance(value, int) or isinstance(value, six.string_types) else value
+
     def close(self):
         """
         Closes the file handle to the image. This actually sometimes will prevent problems so it's good to do this or
@@ -188,3 +212,4 @@ class Nd2(object):
 
         """
         self._fh.close()
+1

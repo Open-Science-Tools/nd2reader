@@ -12,14 +12,17 @@ class Image(np.ndarray):
         return np.asarray(array).view(cls)
 
     def __init__(self, array):
+        self._index = None
         self._timestamp = None
         self._frame_number = None
         self._field_of_view = None
         self._channel = None
         self._z_level = None
 
-    def add_params(self, timestamp, frame_number, field_of_view, channel, z_level):
+    def add_params(self, index, timestamp, frame_number, field_of_view, channel, z_level):
         """
+        :param index: The integer that can be used to directly index this image
+        :type index: int
         :param timestamp: The number of milliseconds after the beginning of the acquisition that this image was taken.
         :type timestamp: float
         :param frame_number:    The order in which this image was taken, with images of different channels/z-levels
@@ -33,11 +36,16 @@ class Image(np.ndarray):
         :type z_level: int
 
         """
+        self._index = index
         self._timestamp = timestamp
         self._frame_number = int(frame_number)
         self._field_of_view = field_of_view
         self._channel = channel
         self._z_level = z_level
+
+    @property
+    def index(self):
+        return self._index
 
     @property
     def height(self):

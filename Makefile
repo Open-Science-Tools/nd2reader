@@ -17,7 +17,7 @@ build:
 	docker build -t jimrybarski/nd2reader .
 
 shell:
-	xhost local:root; docker run --rm -v ~/nd2s:/var/nd2s -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$(DISPLAY) -it jimrybarski/nd2reader bash
+	xhost local:root; docker run --rm -v $(CURDIR):/opt/nd2reader -v ~/nd2s:/var/nd2s -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$(DISPLAY) -it jimrybarski/nd2reader bash
 
 py2:
 	xhost local:root; docker run --rm -v $(CURDIR):/opt/nd2reader -v ~/nd2s:/var/nd2s -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$(DISPLAY) -it jimrybarski/nd2reader python2.7
@@ -30,7 +30,7 @@ test:	build
 	docker run --rm -v $(CURDIR):/opt/nd2reader -it jimrybarski/nd2reader python2.7 test.py
 
 ftest:	build
-	docker run --rm -v $(CURDIR):/opt/nd2reader -v ~/nd2s:/var/nd2s -it jimrybarski/nd2reader python3.4 /opt/nd2reader/ftest.py
+	xhost local:root; docker run --rm -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$(DISPLAY) -v $(CURDIR):/opt/nd2reader -v ~/nd2s:/var/nd2s -it jimrybarski/nd2reader python3.4 /opt/nd2reader/ftest.py
 	docker run --rm -v $(CURDIR):/opt/nd2reader -v ~/nd2s:/var/nd2s -it jimrybarski/nd2reader python2.7 /opt/nd2reader/ftest.py
 	
 publish:
