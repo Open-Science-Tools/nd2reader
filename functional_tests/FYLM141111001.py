@@ -4,6 +4,7 @@ run them unless you're Jim Rybarski.
 
 """
 from nd2reader import Nd2
+import numpy as np
 from datetime import datetime
 import unittest
 
@@ -109,3 +110,16 @@ class FunctionalTests(unittest.TestCase):
     def test_get_image_by_attribute_none(self):
         image = self.nd2.get_image(4, 0, "GFP", 0)
         self.assertIsNone(image)
+
+    def test_fast_filter(self):
+        manual_images = []
+        for _, image in zip(range(200), self.nd2):
+            if image is not None and image.channel == 'GFP':
+                manual_images.append(image)
+        filter_images = []
+        for image in self.nd2.filter(channels=['GFP']):
+            filter_images.append(image)
+            if len(filter_images) == len(manual_images):
+                break
+        for a, b in zip(manual_images, filter_images):
+            self.assertTrue(np.array_equal(a, b))
