@@ -10,7 +10,7 @@
 
 ### Installation
 
-If you don't already have the packages `numpy` and `six`, they will be installed automatically:
+If you don't already have the packages `numpy`, `six` and `xmltodict`, they will be installed automatically:
 
 `pip3 install nd2reader` for Python 3.x
 

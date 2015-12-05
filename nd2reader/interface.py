@@ -212,4 +212,3 @@ class Nd2(object):
 
         """
         self._fh.close()
-1

@@ -7,7 +7,6 @@ from nd2reader import Nd2
 import numpy as np
 from datetime import datetime
 import unittest
-import six
 
 
 class FunctionalTests(unittest.TestCase):
