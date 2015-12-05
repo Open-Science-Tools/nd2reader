@@ -9,6 +9,7 @@ from nd2reader.common.v3 import read_chunk, read_array, read_metadata
 import re
 import six
 import struct
+import xmltodict
 
 
 def ignore_missing(func):
@@ -83,22 +84,22 @@ class V3RawMetadata(object):
     @property
     @ignore_missing
     def lut_data(self):
-        return read_chunk(self._fh, self._label_map.lut_data)
+        return xmltodict.parse(read_chunk(self._fh, self._label_map.lut_data))
 
     @property
     @ignore_missing
     def grabber_settings(self):
-        return read_chunk(self._fh, self._label_map.grabber_settings)
+        return xmltodict.parse(read_chunk(self._fh, self._label_map.grabber_settings))
 
     @property
     @ignore_missing
     def custom_data(self):
-        return read_chunk(self._fh, self._label_map.custom_data)
+        return xmltodict.parse(read_chunk(self._fh, self._label_map.custom_data))
 
     @property
     @ignore_missing
     def app_info(self):
-        return read_chunk(self._fh, self._label_map.app_info)
+        return xmltodict.parse(read_chunk(self._fh, self._label_map.app_info))
 
     @property
     @ignore_missing
