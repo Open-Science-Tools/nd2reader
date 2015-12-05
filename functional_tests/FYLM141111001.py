@@ -120,8 +120,8 @@ class FunctionalTests(unittest.TestCase):
             if n > 50:
                 break
 
-    def test_filter(self):
-        # If we take the first 20 GFP images, they should be identical to the first 20 items iterated from filter()
+    def test_select(self):
+        # If we take the first 20 GFP images, they should be identical to the first 20 items iterated from select()
         # if we set our criteria to just "GFP"
         manual_images = []
         for _, image in zip(range(20), self.nd2):
@@ -129,7 +129,7 @@ class FunctionalTests(unittest.TestCase):
                 manual_images.append(image)
         filter_images = []
 
-        for image in self.nd2.filter(channels='GFP'):
+        for image in self.nd2.select(channels='GFP'):
             filter_images.append(image)
             if len(filter_images) == len(manual_images):
                 break
@@ -137,9 +137,9 @@ class FunctionalTests(unittest.TestCase):
             self.assertTrue(np.array_equal(a, b))
 
     def test_filter_order_all(self):
-        # If we select every possible image using filter(), we should just get every image in order
+        # If we select every possible image using select(), we should just get every image in order
         n = 0
-        for image in self.nd2.filter(channels=['BF', 'GFP'], z_levels=[0, 1, 2], fields_of_view=list(range(8))):
+        for image in self.nd2.select(channels=['BF', 'GFP'], z_levels=[0, 1, 2], fields_of_view=list(range(8))):
             while True:
                 indexed_image = self.nd2[n]
                 if indexed_image is not None:
@@ -154,7 +154,7 @@ class FunctionalTests(unittest.TestCase):
         # Test that images are always yielded in increasing order. This guarantees that no matter what subset of images
         # we're filtering, we still get them in the chronological order they were acquired
         n = -1
-        for image in self.nd2.filter(channels='BF', z_levels=[0, 1], fields_of_view=[1, 2, 4]):
+        for image in self.nd2.select(channels='BF', z_levels=[0, 1], fields_of_view=[1, 2, 4]):
             self.assertGreater(image.index, n)
             self.assertEqual(image.channel, 'BF')
             self.assertIn(image.field_of_view, (1, 2, 4))

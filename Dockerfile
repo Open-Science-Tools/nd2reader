@@ -31,10 +31,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tk-dev \
     python-tk \
     python3-tk \
- && pip install -U cython \
+ && pip install -U \
+    cython \
     scikit-image \
- && pip3 install -U cython \
+    xmltodict \
+ && pip3 install -U \
+    cython \
     scikit-image \
+    xmltodict \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/nd2reader

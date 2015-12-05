@@ -15,13 +15,6 @@ class Nd2(object):
         self._parser = get_parser(self._fh, major_version, minor_version)
         self._metadata = self._parser.metadata
         
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if self._fh is not None:
-            self._fh.close()
-        
     def __repr__(self):
         return "\n".join(["<ND2 %s>" % self._filename,
                           "Created: %s" % (self.date if self.date is not None else "Unknown"),
@@ -31,6 +24,13 @@ class Nd2(object):
                           "Fields of View: %s" % len(self.fields_of_view),
                           "Z-Levels: %s" % len(self.z_levels)
                           ])
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self._fh is not None:
+            self._fh.close()
 
     def __len__(self):
         """
@@ -61,36 +61,48 @@ class Nd2(object):
             return self._slice(item.start, item.stop, item.step)
         raise IndexError
 
-    def _slice(self, start, stop, step):
+    def select(self, fields_of_view=None, channels=None, z_levels=None):
         """
-        Allows for iteration over a selection of the entire dataset.
+        Iterates over images matching the given criteria. This can be 2-10 times faster than manually iterating over
+        the Nd2 and checking the attributes of each image, as this method skips disk reads for any images that don't
+        meet the criteria.
 
-        :type start:    int
-        :type stop:    int
-        :type step:    int
-        :rtype:    nd2reader.model.Image()
+        :type fields_of_view:   int or tuple or list
+        :type channels:     str or tuple or list
+        :type z_levels:     int or tuple or list
 
         """
-        start = start if start is not None else 0
-        step = step if step is not None else 1
-        stop = stop if stop is not None else len(self)
-        # This weird thing with the step allows you to iterate backwards over the images
-        for i in range(start, stop)[::step]:
-            yield self[i]
+        fields_of_view = self._to_list(fields_of_view, self.fields_of_view)
+        channels = self._to_list(channels, self.channels)
+        z_levels = self._to_list(z_levels, self.z_levels)
+
+        for frame in self.frames:
+            for f in fields_of_view:
+                for z in z_levels:
+                    for c in channels:
+                        image = self.get_image(frame, f, c, z)
+                        if image is not None:
+                            yield image
 
     @property
-    def camera_settings(self):
-        return self._parser.camera_metadata
-    
+    def height(self):
+        """
+        The height of each image in pixels.
+
+        :rtype:    int
+
+        """
+        return self._metadata.height
+
     @property
-    def date(self):
+    def width(self):
         """
-        The date and time that the acquisition began. Not guaranteed to have been recorded.
+        The width of each image in pixels.
 
-        :rtype:    datetime.datetime() or None
+        :rtype:    int
 
         """
-        return self._metadata.date
+        return self._metadata.width
 
     @property
     def z_levels(self):
@@ -140,24 +152,18 @@ class Nd2(object):
         return self._metadata.frames
 
     @property
-    def height(self):
-        """
-        The height of each image in pixels.
-
-        :rtype:    int
-
-        """
-        return self._metadata.height
-
+    def camera_settings(self):
+        return self._parser.camera_metadata
+    
     @property
-    def width(self):
+    def date(self):
         """
-        The width of each image in pixels.
+        The date and time that the acquisition began. Not guaranteed to have been recorded.
 
-        :rtype:    int
+        :rtype:    datetime.datetime() or None
 
         """
-        return self._metadata.width
+        return self._metadata.date
 
     def get_image(self, frame_number, field_of_view, channel_name, z_level):
         """
@@ -182,28 +188,35 @@ class Nd2(object):
                                                            self.height,
                                                            self.width)
 
-    def filter(self, fields_of_view=None, channels=None, z_levels=None):
+    def _slice(self, start, stop, step):
         """
-        Iterates over images matching the given criteria. This can be 2-10 times faster than manually iterating over
-        the Nd2 and checking the attributes of each image, as this method will not read from disk until a valid image is
-        found.
+        Allows for iteration over a selection of the entire dataset.
+
+        :type start:    int
+        :type stop:    int
+        :type step:    int
+        :rtype:    nd2reader.model.Image()
 
         """
-        fields_of_view = self._to_list(fields_of_view, self.fields_of_view)
-        channels = self._to_list(channels, self.channels)
-        z_levels = self._to_list(z_levels, self.z_levels)
-
-        for frame in self.frames:
-            for f in fields_of_view:
-                for z in z_levels:
-                    for c in channels:
-                        image = self.get_image(frame, f, c, z)
-                        if image is not None:
-                            yield image
+        start = start if start is not None else 0
+        step = step if step is not None else 1
+        stop = stop if stop is not None else len(self)
+        # This weird thing with the step allows you to iterate backwards over the images
+        for i in range(start, stop)[::step]:
+            yield self[i]
 
     def _to_list(self, value, default):
+        """
+        Idempotently converts a value to a tuple. This allows users to pass in scalar values and iterables to
+        select(), which is more ergonomic than having to remember to pass in single-member lists
+
+        :type value:    int or str or tuple or list
+        :type default:  tuple or list
+        :rtype:     tuple
+
+        """
         value = default if value is None else value
-        return [value] if isinstance(value, int) or isinstance(value, six.string_types) else value
+        return (value,) if isinstance(value, int) or isinstance(value, six.string_types) else tuple(value)
 
     def close(self):
         """
