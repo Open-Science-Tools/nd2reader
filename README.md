@@ -152,8 +152,8 @@ http://dx.doi.org/10.6084/m9.figshare.1619960
 
 ### Bug Reports and Features
 
-If this fails to work exactly as expected, please open a Github issue. If you get an unhandled exception, please
-paste the entire stack trace into the issue as well.
+If this fails to work exactly as expected, please open an [issue](https://github.com/jimrybarski/nd2reader/issues).
+If you get an unhandled exception, please paste the entire stack trace into the issue as well.
 
 ### Contributing
 
