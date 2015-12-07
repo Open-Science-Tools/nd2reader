@@ -14,7 +14,7 @@ class ImageTests(unittest.TestCase):
                           [45, 12, 9],
                           [12, 12, 99]])
         self.image = Image(array)
-        self.image.add_params(1200.314, 17, 2, 'GFP', 1)
+        self.image.add_params(1, 1200.314, 17, 2, 'GFP', 1)
 
     def test_size(self):
         self.assertEqual(self.image.height, 3)

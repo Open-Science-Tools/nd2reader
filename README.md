@@ -68,6 +68,15 @@ array([[1894, 1949, 1941, ..., 2104, 2135, 2114],
 0
 ```
 
+If you only want to view images that meet certain criteria, you can use `select()`. It's much faster than iterating
+and checking attributes of images manually. You can specify scalars or lists of values. Criteria that aren't specified
+default to every possible value. Currently, slicing and selecting can't be done at the same time:
+
+```python
+for image in nd2.select(channels="GFP", fields_of_view=(1, 2, 7)):
+    do_something(image)
+```
+
 Slicing is also supported and is extremely memory efficient, as images are only read when directly accessed:
 
 ```python
