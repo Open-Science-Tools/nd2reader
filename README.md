@@ -141,6 +141,15 @@ Camera information can be accessed programmatically:
 2
 ```
 
+### How to Cite nd2reader
+
+You can cite nd2reader in your research if you want:
+
+```
+Rybarski, Jim (2015): nd2reader. figshare.
+http://dx.doi.org/10.6084/m9.figshare.1619960
+```
+
 ### Bug Reports and Features
 
 If this fails to work exactly as expected, please open a Github issue. If you get an unhandled exception, please
