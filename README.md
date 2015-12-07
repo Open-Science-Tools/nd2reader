@@ -141,7 +141,7 @@ Camera information can be accessed programmatically:
 2
 ```
 
-### How to Cite nd2reader
+### Citation
 
 You can cite nd2reader in your research if you want:
 
