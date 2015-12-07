@@ -23,7 +23,58 @@ class V3Driver(object):
         self._metadata = metadata
         self._label_map = label_map
         self._file_handle = file_handle
-        
+
+    def get_image(self, index):
+        """
+        Creates an Image object and adds its metadata, based on the index (which is simply the order in which the image was acquired). May return None if the ND2 contains
+        multiple channels and not all were taken in each cycle (for example, if you take bright field images every minute, and GFP images every five minutes, there will be some
+        indexes that do not contain an image. The reason for this is complicated, but suffice it to say that we hope to eliminate this possibility in future releases. For now,
+        you'll need to check if your image is None if you're doing anything out of the ordinary.
+
+        :type index:    int
+        :rtype:    Image or None
+
+        """
+        channel_offset = index % len(self._metadata.channels)
+        field_of_view = self._calculate_field_of_view(index)
+        channel = self._calculate_channel(index)
+        z_level = self._calculate_z_level(index)
+        image_group_number = int(index / len(self._metadata.channels))
+        frame_number = self._calculate_frame_number(image_group_number, field_of_view, z_level)
+        try:
+            timestamp, image = self._get_raw_image_data(image_group_number, channel_offset, self._metadata.height, self._metadata.width)
+        except NoImageError:
+            return None
+        else:
+            image.add_params(index, timestamp, frame_number, field_of_view, channel, z_level)
+            return image
+
+    def get_image_by_attributes(self, frame_number, field_of_view, channel_name, z_level, height, width):
+        """
+        Attempts to get Image based on attributes alone.
+
+        :type frame_number:    int
+        :type field_of_view:    int
+        :type channel_name:    str
+        :type z_level:    int
+        :type height:    int
+        :type width:    int
+
+        :rtype: Image or None
+        """
+        image_group_number = self._calculate_image_group_number(frame_number, field_of_view, z_level)
+        try:
+            timestamp, raw_image_data = self._get_raw_image_data(image_group_number,
+                                                                 self._channel_offset[channel_name],
+                                                                 height,
+                                                                 width)
+            image = Image(raw_image_data)
+            image.add_params(image_group_number, timestamp, frame_number, field_of_view, channel_name, z_level)
+        except (TypeError, NoImageError):
+            return None
+        else:
+            return image
+
     def _calculate_field_of_view(self, index):
         """
         Determines what field of view was being imaged for a given image.
@@ -80,31 +131,6 @@ class V3Driver(object):
         """
         return (image_group_number - (field_of_view * len(self._metadata.z_levels) + z_level)) / (len(self._metadata.fields_of_view) * len(self._metadata.z_levels))
 
-    def get_image(self, index):
-        """
-        Creates an Image object and adds its metadata, based on the index (which is simply the order in which the image was acquired). May return None if the ND2 contains
-        multiple channels and not all were taken in each cycle (for example, if you take bright field images every minute, and GFP images every five minutes, there will be some
-        indexes that do not contain an image. The reason for this is complicated, but suffice it to say that we hope to eliminate this possibility in future releases. For now,
-        you'll need to check if your image is None if you're doing anything out of the ordinary.
-
-        :type index:    int
-        :rtype:    Image or None
-
-        """
-        channel_offset = index % len(self._metadata.channels)
-        field_of_view = self._calculate_field_of_view(index)
-        channel = self._calculate_channel(index)
-        z_level = self._calculate_z_level(index)
-        image_group_number = int(index / len(self._metadata.channels))
-        frame_number = self._calculate_frame_number(image_group_number, field_of_view, z_level)
-        try:
-            timestamp, image = self._get_raw_image_data(image_group_number, channel_offset, self._metadata.height, self._metadata.width)
-        except NoImageError:
-            return None
-        else:
-            image.add_params(index, timestamp, frame_number, field_of_view, channel, z_level)
-            return image
-
     @property
     def _channel_offset(self):
         """
@@ -148,29 +174,3 @@ class V3Driver(object):
         if np.any(image_data):
             return timestamp, Image(image_data)
         raise NoImageError
-
-    def get_image_by_attributes(self, frame_number, field_of_view, channel_name, z_level, height, width):
-        """
-        Attempts to get Image based on attributes alone.
-        
-        :type frame_number:    int
-        :type field_of_view:    int
-        :type channel_name:    str
-        :type z_level:    int
-        :type height:    int
-        :type width:    int
-
-        :rtype: Image or None
-        """
-        image_group_number = self._calculate_image_group_number(frame_number, field_of_view, z_level)
-        try:
-            timestamp, raw_image_data = self._get_raw_image_data(image_group_number,
-                                                                 self._channel_offset[channel_name],
-                                                                 height,
-                                                                 width)
-            image = Image(raw_image_data)
-            image.add_params(image_group_number, timestamp, frame_number, field_of_view, channel_name, z_level)
-        except (TypeError, NoImageError):
-            return None
-        else:
-            return image

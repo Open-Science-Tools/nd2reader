@@ -143,20 +143,20 @@ class V3Parser(BaseParser):
         self._parse_metadata()
 
     @property
-    def metadata(self):
-        """
-        :rtype:    Metadata
-
-        """
-        return self._metadata
-
-    @property
     def camera_metadata(self):
         return self._camera_metadata
 
     @property
     def driver(self):
         return V3Driver(self.metadata, self._label_map, self._fh)
+
+    @property
+    def metadata(self):
+        """
+        :rtype:    Metadata
+
+        """
+        return self._metadata
 
     @property
     def raw_metadata(self):
