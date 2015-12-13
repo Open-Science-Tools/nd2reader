@@ -133,8 +133,13 @@ class FunctionalTests(unittest.TestCase):
             filter_images.append(image)
             if len(filter_images) == len(manual_images):
                 break
+        self.assertEqual(len(manual_images), len(filter_images))
+        self.assertGreater(len(manual_images), 0)
         for a, b in zip(manual_images, filter_images):
             self.assertTrue(np.array_equal(a, b))
+            self.assertEqual(a.index, b.index)
+            self.assertEqual(a.field_of_view, b.field_of_view)
+            self.assertEqual(a.channel, b.channel)
 
     def test_filter_order_all(self):
         # If we select every possible image using select(), we should just get every image in order
