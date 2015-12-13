@@ -24,6 +24,12 @@ class V3Driver(object):
         self._label_map = label_map
         self._file_handle = file_handle
 
+    def calculate_image_properties(self, index):
+        field_of_view = self._calculate_field_of_view(index)
+        channel = self._calculate_channel(index)
+        z_level = self._calculate_z_level(index)
+        return field_of_view, channel, z_level
+
     def get_image(self, index):
         """
         Creates an Image object and adds its metadata, based on the index (which is simply the order in which the image was acquired). May return None if the ND2 contains
@@ -35,10 +41,8 @@ class V3Driver(object):
         :rtype:    Image or None
 
         """
+        field_of_view, channel, z_level = self.calculate_image_properties(index)
         channel_offset = index % len(self._metadata.channels)
-        field_of_view = self._calculate_field_of_view(index)
-        channel = self._calculate_channel(index)
-        z_level = self._calculate_z_level(index)
         image_group_number = int(index / len(self._metadata.channels))
         frame_number = self._calculate_frame_number(image_group_number, field_of_view, z_level)
         try:

@@ -77,12 +77,11 @@ class Nd2(object):
         z_levels = self._to_list(z_levels, self.z_levels)
 
         for frame in self.frames:
-            for f in fields_of_view:
-                for z in z_levels:
-                    for c in channels:
-                        image = self.get_image(frame, f, c, z)
-                        if image is not None:
-                            yield image
+            field_of_view, channel, z_level = self._parser.driver.calculate_image_properties(frame)
+            if field_of_view in fields_of_view and channel in channels and z_level in z_levels:
+                image = self._parser.driver.get_image(frame)
+                if image is not None:
+                    yield image
 
     @property
     def height(self):
