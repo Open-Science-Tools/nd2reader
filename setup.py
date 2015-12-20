@@ -1,5 +1,6 @@
 from setuptools import setup
-from nd2reader import __version__
+
+VERSION = '2.0.0'
 
 if __name__ == '__main__':
     setup(
@@ -10,12 +11,12 @@ if __name__ == '__main__':
             'six>=1.4, <2.0',
             'xmltodict>=0.9.2, <1.0'
         ],
-        version=__version__,
+        version=VERSION,
         description='A tool for reading ND2 files produced by NIS Elements',
         author='Jim Rybarski',
         author_email='jim@rybarski.com',
         url='https://github.com/jimrybarski/nd2reader',
-        download_url='https://github.com/jimrybarski/nd2reader/tarball/%s' % __version__,
+        download_url='https://github.com/jimrybarski/nd2reader/tarball/%s' % VERSION,
         keywords=['nd2', 'nikon', 'microscopy', 'NIS Elements'],
         classifiers=['Development Status :: 5 - Production/Stable',
                      'Intended Audience :: Science/Research',
