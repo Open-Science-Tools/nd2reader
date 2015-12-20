@@ -1,24 +1,28 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import warnings
 
 
 class Image(np.ndarray):
+    """
+    Holds the raw pixel data of an image and provides access to some metadata.
+
+    """
     def __new__(cls, array):
         return np.asarray(array).view(cls)
 
     def __init__(self, array):
+        self._index = None
         self._timestamp = None
         self._frame_number = None
         self._field_of_view = None
         self._channel = None
         self._z_level = None
 
-    def add_params(self, timestamp, frame_number, field_of_view, channel, z_level):
+    def add_params(self, index, timestamp, frame_number, field_of_view, channel, z_level):
         """
-        A wrapper around the raw pixel data of an image.
-
+        :param index: The integer that can be used to directly index this image
+        :type index: int
         :param timestamp: The number of milliseconds after the beginning of the acquisition that this image was taken.
         :type timestamp: float
         :param frame_number:    The order in which this image was taken, with images of different channels/z-levels
@@ -32,6 +36,7 @@ class Image(np.ndarray):
         :type z_level: int
 
         """
+        self._index = index
         self._timestamp = timestamp
         self._frame_number = int(frame_number)
         self._field_of_view = field_of_view
@@ -39,19 +44,35 @@ class Image(np.ndarray):
         self._z_level = z_level
 
     @property
+    def index(self):
+        return self._index
+
+    @property
     def height(self):
+        """
+        The height in pixels.
+
+        :rtype:    int
+
+        """
         return self.shape[0]
 
     @property
     def width(self):
+        """
+        The width in pixels.
+
+        :rtype:    int
+
+        """
         return self.shape[1]
 
     @property
     def field_of_view(self):
         """
-        Which of the fixed locations this image was taken at.
+        The index of the stage location where this image was acquired.
 
-        :rtype int:
+        :rtype:    int
 
         """
         return self._field_of_view
@@ -61,16 +82,23 @@ class Image(np.ndarray):
         """
         The number of seconds after the beginning of the acquisition that the image was taken. Note that for a given
         field of view and z-level offset, if you have images of multiple channels, they will all be given the same
-        timestamp. No, this doesn't make much sense. But that's how ND2s are structured, so if your experiment depends
-        on millisecond accuracy, you need to find an alternative imaging system.
+        timestamp. That's just how ND2s are structured, so if your experiment depends on millisecond accuracy,
+        you need to find an alternative imaging system.
 
-        :rtype float:
+        :rtype:    float
 
         """
+        # data is actually stored in milliseconds
         return self._timestamp / 1000.0
 
     @property
     def frame_number(self):
+        """
+        The index of the group of images taken sequentially that all have the same group number and field of view.
+
+        :rtype:    int
+
+        """
         return self._frame_number
 
     @property
@@ -78,7 +106,7 @@ class Image(np.ndarray):
         """
         The name of the filter used to acquire this image. These are user-supplied in NIS Elements.
 
-        :rtype str:
+        :rtype:    str
 
         """
         return self._channel
@@ -95,12 +123,7 @@ class Image(np.ndarray):
         0 µm: 1
         +3 µm: 2
 
-        :rtype int:
+        :rtype:    int
 
         """
         return self._z_level
-
-    @property
-    def data(self):
-        warnings.warn("Image objects now directly subclass Numpy arrays, so using the data attribute will be removed in the near future.", DeprecationWarning)
-        return self

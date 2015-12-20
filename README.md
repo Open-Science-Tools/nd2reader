@@ -10,7 +10,7 @@
 
 ### Installation
 
-If you don't already have the packages `numpy` and `six`, they will be installed automatically:
+If you don't already have the packages `numpy`, `six` and `xmltodict`, they will be installed automatically:
 
 `pip3 install nd2reader` for Python 3.x
 
@@ -68,6 +68,15 @@ array([[1894, 1949, 1941, ..., 2104, 2135, 2114],
 0
 ```
 
+If you only want to view images that meet certain criteria, you can use `select()`. It's much faster than iterating
+and checking attributes of images manually. You can specify scalars or lists of values. Criteria that aren't specified
+default to every possible value. Currently, slicing and selecting can't be done at the same time:
+
+```python
+for image in nd2.select(channels="GFP", fields_of_view=(1, 2, 7)):
+    do_something(image)
+```
+
 Slicing is also supported and is extremely memory efficient, as images are only read when directly accessed:
 
 ```python
@@ -101,10 +110,50 @@ The `Nd2` object has some programmatically-accessible metadata:
 30528
 ```
 
+Each camera has its own settings. If you image multiple wavelengths with one camera, each channel will appear as its
+own camera:
+
+```python
+>>> nd2.camera_settings
+{'GFP': <Camera Settings: GFP>
+Camera: Andor Zyla VSC-00461
+Camera ID: VSC-00461
+Exposure Time (ms): 100.0
+Binning: 2x2, 'BF': <Camera Settings: BF>
+Camera: Andor Zyla VSC-00461
+Camera ID: VSC-00461
+Exposure Time (ms): 100.0
+Binning: 2x2}
+```
+
+Camera information can be accessed programmatically:
+
+```python
+>>> nd2.camera_settings['GFP'].id
+'VSC-00461'
+>>> nd2.camera_settings['GFP'].name
+'Andor Zyla VSC-00461'
+>>> nd2.camera_settings['GFP'].exposure
+100.0
+>>> nd2.camera_settings['GFP'].x_binning
+2
+>>> nd2.camera_settings['GFP'].y_binning
+2
+```
+
+### Citation
+
+You can cite nd2reader in your research if you want:
+
+```
+Rybarski, Jim (2015): nd2reader. figshare.
+http://dx.doi.org/10.6084/m9.figshare.1619960
+```
+
 ### Bug Reports and Features
 
-If this fails to work exactly as expected, please open a Github issue. If you get an unhandled exception, please
-paste the entire stack trace into the issue as well.
+If this fails to work exactly as expected, please open an [issue](https://github.com/jimrybarski/nd2reader/issues).
+If you get an unhandled exception, please paste the entire stack trace into the issue as well.
 
 ### Contributing
 
