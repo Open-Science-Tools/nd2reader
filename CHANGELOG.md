@@ -7,6 +7,9 @@
 - The version number is now available in the nd2reader module
 - Created a DOI to allow citation of the code
 
+### FIXED
+- Channel names were not always being parsed properly
+
 ### REMOVED
 - The `ImageGroup` container object
 - The `data` attribute on Images. Images now inherit from ndarray, making this redundant
