@@ -72,9 +72,9 @@ class Nd2(object):
         :type z_levels:     int or tuple or list
 
         """
-        fields_of_view = self._to_list(fields_of_view, self.fields_of_view)
-        channels = self._to_list(channels, self.channels)
-        z_levels = self._to_list(z_levels, self.z_levels)
+        fields_of_view = self._to_tuple(fields_of_view, self.fields_of_view)
+        channels = self._to_tuple(channels, self.channels)
+        z_levels = self._to_tuple(z_levels, self.z_levels)
 
         for frame in self.frames:
             field_of_view, channel, z_level = self._parser.driver.calculate_image_properties(frame)
@@ -152,6 +152,12 @@ class Nd2(object):
 
     @property
     def camera_settings(self):
+        """
+        Basic information about the physical cameras used.
+
+        :return:    dict of {channel_name: model.metadata.CameraSettings}
+
+        """
         return self._parser.camera_metadata
     
     @property
@@ -187,6 +193,14 @@ class Nd2(object):
                                                            self.height,
                                                            self.width)
 
+    def close(self):
+        """
+        Closes the file handle to the image. This actually sometimes will prevent problems so it's good to do this or
+        use Nd2 as a context manager.
+
+        """
+        self._fh.close()
+
     def _slice(self, start, stop, step):
         """
         Allows for iteration over a selection of the entire dataset.
@@ -204,7 +218,7 @@ class Nd2(object):
         for i in range(start, stop)[::step]:
             yield self[i]
 
-    def _to_list(self, value, default):
+    def _to_tuple(self, value, default):
         """
         Idempotently converts a value to a tuple. This allows users to pass in scalar values and iterables to
         select(), which is more ergonomic than having to remember to pass in single-member lists
@@ -216,11 +230,3 @@ class Nd2(object):
         """
         value = default if value is None else value
         return (value,) if isinstance(value, int) or isinstance(value, six.string_types) else tuple(value)
-
-    def close(self):
-        """
-        Closes the file handle to the image. This actually sometimes will prevent problems so it's good to do this or
-        use Nd2 as a context manager.
-
-        """
-        self._fh.close()

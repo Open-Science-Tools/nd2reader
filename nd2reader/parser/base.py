@@ -2,18 +2,15 @@ from abc import abstractproperty
 
 
 class BaseParser(object):
-    @abstractproperty
-    def metadata(self):
-        """
-        Instantiates a Metadata object.
-
-        """
-        raise NotImplementedError
+    def __init__(self, fh):
+        self._fh = fh
+        self.camera_metadata = None
+        self.metadata = None
 
     @abstractproperty
     def driver(self):
         """
-        Instantiates a driver object.
+        Must return an object that can look up and read images.
 
         """
         raise NotImplementedError

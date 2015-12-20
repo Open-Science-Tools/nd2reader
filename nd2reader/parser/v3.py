@@ -135,36 +135,32 @@ class V3Parser(BaseParser):
         :type fh:    file
 
         """
-        self._fh = fh
-        self._metadata = None
-        self._raw_metadata = None
-        self._label_map = None
-        self._camera_metadata = {}
+        if six.PY3:
+            super().__init__(fh)
+        else:
+            super(V3Parser, self).__init__(fh)
+        self._label_map = self._build_label_map()
+        self.raw_metadata = V3RawMetadata(self._fh, self._label_map)
+        self._parse_camera_metadata()
         self._parse_metadata()
 
     @property
-    def camera_metadata(self):
-        return self._camera_metadata
-
-    @property
     def driver(self):
+        """
+        Provides an object that knows how to look up and read images based on an index.
+
+        """
         return V3Driver(self.metadata, self._label_map, self._fh)
 
-    @property
-    def metadata(self):
+    def _parse_camera_metadata(self):
         """
-        :rtype:    Metadata
+        Gets parsed data about the physical cameras used to produce images and throws them in a dictionary.
 
         """
-        return self._metadata
-
-    @property
-    def raw_metadata(self):
-        if not self._raw_metadata:
-            self._label_map = self._build_label_map()
-            self._raw_metadata = V3RawMetadata(self._fh, self._label_map)
-        return self._raw_metadata
-
+        self.camera_metadata = {}
+        for camera_setting in self._parse_camera_settings():
+            self.camera_metadata[camera_setting.channel_name] = camera_setting
+            
     def _parse_metadata(self):
         """
         Reads all metadata and instantiates the Metadata object.
@@ -177,14 +173,17 @@ class V3Parser(BaseParser):
         frames = self._parse_frames(self.raw_metadata)
         z_levels = self._parse_z_levels(self.raw_metadata)
         total_images_per_channel = self._parse_total_images_per_channel(self.raw_metadata)
-        channels = []
-        for camera_setting in self._parse_camera_settings():
-            channels.append(camera_setting.channel_name)
-            self._camera_metadata[camera_setting.channel_name] = camera_setting
-        self._metadata = Metadata(height, width, sorted(list(channels)), date, fields_of_view, frames, z_levels, total_images_per_channel)
+        channels = sorted([key for key in self.camera_metadata.keys()])
+        self.metadata = Metadata(height, width, channels, date, fields_of_view, frames, z_levels, total_images_per_channel)
 
     def _parse_camera_settings(self):
-        for camera in self._raw_metadata.image_metadata_sequence[six.b('SLxPictureMetadata')][six.b('sPicturePlanes')][six.b('sSampleSetting')].values():
+        """
+        Looks up information in the raw metadata about the camera(s) and puts it into a CameraSettings object.
+        Duplicate cameras can be returned if the same one was used for multiple channels.
+
+        :return:
+        """
+        for camera in self.raw_metadata.image_metadata_sequence[six.b('SLxPictureMetadata')][six.b('sPicturePlanes')][six.b('sSampleSetting')].values():
             name = camera[six.b('pCameraSetting')][six.b('CameraUserName')]
             id = camera[six.b('pCameraSetting')][six.b('CameraUniqueName')]
             exposure = camera[six.b('dExposureTime')]
