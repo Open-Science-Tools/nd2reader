@@ -1,1 +1,3 @@
-from nd2reader.interface import Nd2
+from nd2reader.main import Nd2
+
+__version__ = '2.0.0'

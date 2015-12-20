@@ -99,6 +99,7 @@ class Metadata(object):
 
 
 class CameraSettings(object):
+    """ Contains some basic information about a physical camera and its settings. """
     def __init__(self, name, id, exposure, x_binning, y_binning, channel_name):
         self.name = name.decode("utf8")
         self.id = id.decode("utf8")
