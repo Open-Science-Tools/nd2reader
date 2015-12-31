@@ -76,7 +76,7 @@ class Nd2(object):
         channels = self._to_tuple(channels, self.channels)
         z_levels = self._to_tuple(z_levels, self.z_levels)
 
-        for frame in self.frames:
+        for frame in range(len(self)):
             field_of_view, channel, z_level = self._parser.driver.calculate_image_properties(frame)
             if field_of_view in fields_of_view and channel in channels and z_level in z_levels:
                 image = self._parser.driver.get_image(frame)
