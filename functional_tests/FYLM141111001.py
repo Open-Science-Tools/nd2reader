@@ -34,7 +34,7 @@ class FunctionalTests(unittest.TestCase):
         self.assertEqual(len(self.nd2.fields_of_view), 8)
 
     def test_channels(self):
-        self.assertTupleEqual(tuple(sorted(self.nd2.channels)), ('BF', 'GFP'))
+        self.assertTupleEqual(tuple(sorted(self.nd2.channels)), ('', 'GFP'))
 
     def test_z_levels(self):
         self.assertTupleEqual(tuple(self.nd2.z_levels), (0, 1, 2))
@@ -44,7 +44,7 @@ class FunctionalTests(unittest.TestCase):
         self.assertEqual(image.field_of_view, 2)
         self.assertEqual(image.frame_number, 0)
         self.assertAlmostEqual(image.timestamp, 19.0340758)
-        self.assertEqual(image.channel, 'BF')
+        self.assertEqual(image.channel, '')
         self.assertEqual(image.z_level, 1)
         self.assertEqual(image.height, self.nd2.height)
         self.assertEqual(image.width, self.nd2.width)
@@ -70,46 +70,46 @@ class FunctionalTests(unittest.TestCase):
         self.assertEqual(len(images), 10)
 
     def test_get_image_by_attribute_ok(self):
-        image = self.nd2.get_image(4, 0, "GFP", 1)
+        image = self.nd2.get_image(4, 0, 'GFP', 1)
         self.assertIsNotNone(image)
-        image = self.nd2.get_image(4, 0, "BF", 0)
+        image = self.nd2.get_image(4, 0, '', 0)
         self.assertIsNotNone(image)
-        image = self.nd2.get_image(4, 0, "BF", 1)
+        image = self.nd2.get_image(4, 0, '', 1)
         self.assertIsNotNone(image)
 
     def test_images(self):
-        self.assertTupleEqual((self.nd2[0].z_level, self.nd2[0].channel), (0, 'BF'))
+        self.assertTupleEqual((self.nd2[0].z_level, self.nd2[0].channel), (0, ''))
         self.assertIsNone(self.nd2[1])
-        self.assertTupleEqual((self.nd2[2].z_level, self.nd2[2].channel), (1, 'BF'))
+        self.assertTupleEqual((self.nd2[2].z_level, self.nd2[2].channel), (1, ''))
         self.assertTupleEqual((self.nd2[3].z_level, self.nd2[3].channel), (1, 'GFP'))
-        self.assertTupleEqual((self.nd2[4].z_level, self.nd2[4].channel), (2, 'BF'))
+        self.assertTupleEqual((self.nd2[4].z_level, self.nd2[4].channel), (2, ''))
         self.assertIsNone(self.nd2[5])
-        self.assertTupleEqual((self.nd2[6].z_level, self.nd2[6].channel), (0, 'BF'))
+        self.assertTupleEqual((self.nd2[6].z_level, self.nd2[6].channel), (0, ''))
         self.assertIsNone(self.nd2[7])
-        self.assertTupleEqual((self.nd2[8].z_level, self.nd2[8].channel), (1, 'BF'))
+        self.assertTupleEqual((self.nd2[8].z_level, self.nd2[8].channel), (1, ''))
         self.assertTupleEqual((self.nd2[9].z_level, self.nd2[9].channel), (1, 'GFP'))
-        self.assertTupleEqual((self.nd2[10].z_level, self.nd2[10].channel), (2, 'BF'))
+        self.assertTupleEqual((self.nd2[10].z_level, self.nd2[10].channel), (2, ''))
         self.assertIsNone(self.nd2[11])
-        self.assertTupleEqual((self.nd2[12].z_level, self.nd2[12].channel), (0, 'BF'))
+        self.assertTupleEqual((self.nd2[12].z_level, self.nd2[12].channel), (0, ''))
         self.assertIsNone(self.nd2[13])
-        self.assertTupleEqual((self.nd2[14].z_level, self.nd2[14].channel), (1, 'BF'))
+        self.assertTupleEqual((self.nd2[14].z_level, self.nd2[14].channel), (1, ''))
         self.assertTupleEqual((self.nd2[15].z_level, self.nd2[15].channel), (1, 'GFP'))
-        self.assertTupleEqual((self.nd2[16].z_level, self.nd2[16].channel), (2, 'BF'))
+        self.assertTupleEqual((self.nd2[16].z_level, self.nd2[16].channel), (2, ''))
         self.assertIsNone(self.nd2[17])
-        self.assertTupleEqual((self.nd2[18].z_level, self.nd2[18].channel), (0, 'BF'))
+        self.assertTupleEqual((self.nd2[18].z_level, self.nd2[18].channel), (0, ''))
         self.assertIsNone(self.nd2[19])
         self.assertIsNone(self.nd2[47])
-        self.assertTupleEqual((self.nd2[48].z_level, self.nd2[48].channel), (0, 'BF'))
+        self.assertTupleEqual((self.nd2[48].z_level, self.nd2[48].channel), (0, ''))
         self.assertIsNone(self.nd2[49])
-        self.assertTupleEqual((self.nd2[50].z_level, self.nd2[50].channel), (1, 'BF'))
+        self.assertTupleEqual((self.nd2[50].z_level, self.nd2[50].channel), (1, ''))
         self.assertIsNone(self.nd2[51])
-        self.assertTupleEqual((self.nd2[52].z_level, self.nd2[52].channel), (2, 'BF'))
+        self.assertTupleEqual((self.nd2[52].z_level, self.nd2[52].channel), (2, ''))
         self.assertIsNone(self.nd2[53])
-        self.assertTupleEqual((self.nd2[54].z_level, self.nd2[54].channel), (0, 'BF'))
+        self.assertTupleEqual((self.nd2[54].z_level, self.nd2[54].channel), (0, ''))
 
     def test_get_image_by_attribute_none(self):
         # Should handle missing images without an exception
-        image = self.nd2.get_image(4, 0, "GFP", 0)
+        image = self.nd2.get_image(4, 0, 'GFP', 0)
         self.assertIsNone(image)
 
     def test_index(self):
@@ -122,7 +122,7 @@ class FunctionalTests(unittest.TestCase):
 
     def test_select(self):
         # If we take the first 20 GFP images, they should be identical to the first 20 items iterated from select()
-        # if we set our criteria to just "GFP"
+        # if we set our criteria to just 'GFP'
         manual_images = []
         for _, image in zip(range(20), self.nd2):
             if image is not None and image.channel == 'GFP':
@@ -144,7 +144,7 @@ class FunctionalTests(unittest.TestCase):
     def test_filter_order_all(self):
         # If we select every possible image using select(), we should just get every image in order
         n = 0
-        for image in self.nd2.select(channels=['BF', 'GFP'], z_levels=[0, 1, 2], fields_of_view=list(range(8))):
+        for image in self.nd2.select(channels=['', 'GFP'], z_levels=[0, 1, 2], fields_of_view=list(range(8))):
             while True:
                 indexed_image = self.nd2[n]
                 if indexed_image is not None:
@@ -159,9 +159,9 @@ class FunctionalTests(unittest.TestCase):
         # Test that images are always yielded in increasing order. This guarantees that no matter what subset of images
         # we're filtering, we still get them in the chronological order they were acquired
         n = -1
-        for image in self.nd2.select(channels='BF', z_levels=[0, 1], fields_of_view=[1, 2, 4]):
+        for image in self.nd2.select(channels='', z_levels=[0, 1], fields_of_view=[1, 2, 4]):
             self.assertGreater(image.index, n)
-            self.assertEqual(image.channel, 'BF')
+            self.assertEqual(image.channel, '')
             self.assertIn(image.field_of_view, (1, 2, 4))
             self.assertIn(image.z_level, (0, 1))
             n = image.index
