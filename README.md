@@ -141,6 +141,16 @@ Camera information can be accessed programmatically:
 2
 ```
 
+### Contributing
+
+If you'd like to help with the development of nd2reader or just have an idea for improvement, please see the [contributing](https://github.com/jimrybarski/nd2reader/issues) page
+for more information.
+
+### Bug Reports and Features
+
+If this fails to work exactly as expected, please open an [issue](https://github.com/jimrybarski/nd2reader/issues).
+If you get an unhandled exception, please paste the entire stack trace into the issue as well.
+
 ### Citation
 
 You can cite nd2reader in your research if you want:
@@ -149,16 +159,6 @@ You can cite nd2reader in your research if you want:
 Rybarski, Jim (2015): nd2reader. figshare.
 http://dx.doi.org/10.6084/m9.figshare.1619960
 ```
-
-### Bug Reports and Features
-
-If this fails to work exactly as expected, please open an [issue](https://github.com/jimrybarski/nd2reader/issues).
-If you get an unhandled exception, please paste the entire stack trace into the issue as well.
-
-### Contributing
-
-Please feel free to submit a pull request with any new features you think would be useful. You can also create an
-issue if you'd just like to propose or discuss a potential idea.
 
 ### Acknowledgments
 
