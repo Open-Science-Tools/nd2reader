@@ -1,3 +1,7 @@
+## [2.0.2] - 2016-01-06
+### ADDED
+- `Nd2.pixel_microns` gives the width of a pixel
+
 ## [2.0.1] - 2016-01-06
 ### FIXED
 - Channel name parsing issue
