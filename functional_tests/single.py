@@ -25,6 +25,9 @@ class SingleTests(unittest.TestCase):
     def test_length(self):
         self.assertEqual(len(self.nd2), 1)
 
+    def test_channels(self):
+        self.assertEqual(self.nd2.channels, ['Quad Band 2'])
+
     def test_actual_length(self):
         count = 0
         for image in self.nd2:
