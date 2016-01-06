@@ -174,7 +174,8 @@ class V3Parser(BaseParser):
         z_levels = self._parse_z_levels(self.raw_metadata)
         total_images_per_channel = self._parse_total_images_per_channel(self.raw_metadata)
         channels = self._parse_channels(self.raw_metadata)
-        self.metadata = Metadata(height, width, channels, date, fields_of_view, frames, z_levels, total_images_per_channel)
+        pixel_microns = self.raw_metadata.image_calibration.get(six.b('SLxCalibration'), {}).get(six.b('dCalibration'))
+        self.metadata = Metadata(height, width, channels, date, fields_of_view, frames, z_levels, total_images_per_channel, pixel_microns)
 
     def _parse_camera_settings(self):
         """

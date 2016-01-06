@@ -17,6 +17,9 @@ class Monocycle1Tests(unittest.TestCase):
     def test_channels(self):
         self.assertListEqual(self.nd2.channels, ['Cy3Narrow', 'TxRed-modified', 'FITC', 'DAPI'])
 
+    def test_pixel_size(self):
+        self.assertGreater(self.nd2.pixel_microns, 0.0)
+
     def test_select(self):
         manual_images = []
         for _, image in zip(range(20), self.nd2):
@@ -77,6 +80,9 @@ class Monocycle2Tests(unittest.TestCase):
 
     def tearDown(self):
         self.nd2.close()
+
+    def test_pixel_size(self):
+        self.assertGreater(self.nd2.pixel_microns, 0.0)
 
     def test_select(self):
         manual_images = []

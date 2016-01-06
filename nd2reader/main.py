@@ -170,6 +170,16 @@ class Nd2(object):
         """
         return self._metadata.date
 
+    @property
+    def pixel_microns(self):
+        """
+        The width of a pixel in microns.
+
+        :rtype:     float
+
+        """
+        return self._metadata.pixel_microns
+
     def get_image(self, frame_number, field_of_view, channel_name, z_level):
         """
         Attempts to return the image with the unique combination of given attributes. None will be returned if a match
