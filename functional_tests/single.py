@@ -8,7 +8,7 @@ from datetime import datetime
 import unittest
 
 
-class FunctionalTests(unittest.TestCase):
+class SingleTests(unittest.TestCase):
     def setUp(self):
         self.nd2 = Nd2("/var/nd2s/single.nd2")
 
