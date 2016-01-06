@@ -9,7 +9,7 @@ from datetime import datetime
 import unittest
 
 
-class FunctionalTests(unittest.TestCase):
+class FYLM141111Tests(unittest.TestCase):
     def setUp(self):
         self.nd2 = Nd2("/var/nd2s/FYLM-141111-001.nd2")
 
@@ -23,9 +23,9 @@ class FunctionalTests(unittest.TestCase):
     def test_date(self):
         self.assertEqual(self.nd2.date, datetime(2014, 11, 11, 15, 59, 19))
 
-    # def test_length(self):
-    #     # This will fail until we address issue #59
-    #     self.assertEqual(len(self.nd2), 17808)
+    @unittest.skip("This will fail until we address issue #59")
+    def test_length(self):
+        self.assertEqual(len(self.nd2), 17808)
 
     def test_frames(self):
         self.assertEqual(len(self.nd2.frames), 636)
@@ -127,12 +127,13 @@ class FunctionalTests(unittest.TestCase):
         for _, image in zip(range(20), self.nd2):
             if image is not None and image.channel == 'GFP':
                 manual_images.append(image)
-        filter_images = []
 
+        filter_images = []
         for image in self.nd2.select(channels='GFP'):
             filter_images.append(image)
             if len(filter_images) == len(manual_images):
                 break
+
         self.assertEqual(len(manual_images), len(filter_images))
         self.assertGreater(len(manual_images), 0)
         for a, b in zip(manual_images, filter_images):
@@ -141,7 +142,7 @@ class FunctionalTests(unittest.TestCase):
             self.assertEqual(a.field_of_view, b.field_of_view)
             self.assertEqual(a.channel, b.channel)
 
-    def test_filter_order_all(self):
+    def test_select_order_all(self):
         # If we select every possible image using select(), we should just get every image in order
         n = 0
         for image in self.nd2.select(channels=['', 'GFP'], z_levels=[0, 1, 2], fields_of_view=list(range(8))):
@@ -155,7 +156,7 @@ class FunctionalTests(unittest.TestCase):
             if n > 100:
                 break
 
-    def test_filter_order_subset(self):
+    def test_select_order_subset(self):
         # Test that images are always yielded in increasing order. This guarantees that no matter what subset of images
         # we're filtering, we still get them in the chronological order they were acquired
         n = -1
