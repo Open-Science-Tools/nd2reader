@@ -143,7 +143,7 @@ Camera information can be accessed programmatically:
 
 ### Contributing
 
-If you'd like to help with the development of nd2reader or just have an idea for improvement, please see the [contributing](https://github.com/jimrybarski/nd2reader/issues) page
+If you'd like to help with the development of nd2reader or just have an idea for improvement, please see the [contributing](https://github.com/jimrybarski/nd2reader/blob/master/CONTRIBUTING.md) page
 for more information.
 
 ### Bug Reports and Features
