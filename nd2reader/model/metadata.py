@@ -3,7 +3,7 @@ import six
 
 class Metadata(object):
     """ A simple container for ND2 metadata. """
-    def __init__(self, height, width, channels, date, fields_of_view, frames, z_levels, total_images_per_channel):
+    def __init__(self, height, width, channels, date, fields_of_view, frames, z_levels, total_images_per_channel, pixel_microns):
         self._height = height
         self._width = width
         self._channels = channels
@@ -12,6 +12,7 @@ class Metadata(object):
         self._frames = frames
         self._z_levels = z_levels
         self._total_images_per_channel = total_images_per_channel
+        self._pixel_microns = pixel_microns
 
     @property
     def height(self):
@@ -96,6 +97,16 @@ class Metadata(object):
 
         """
         return self._total_images_per_channel
+
+    @property
+    def pixel_microns(self):
+        """
+        The width of a pixel in microns.
+
+        :rtype:     float
+
+        """
+        return self._pixel_microns
 
 
 class CameraSettings(object):

@@ -39,6 +39,9 @@ class FYLM141111Tests(unittest.TestCase):
     def test_z_levels(self):
         self.assertTupleEqual(tuple(self.nd2.z_levels), (0, 1, 2))
 
+    def test_pixel_size(self):
+        self.assertGreater(self.nd2.pixel_microns, 0.0)
+
     def test_image(self):
         image = self.nd2[14]
         self.assertEqual(image.field_of_view, 2)
