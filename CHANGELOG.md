@@ -1,3 +1,8 @@
+## [2.0.1] - 2016-01-06
+### FIXED
+- Channel name parsing issue
+- `select` method works for files with a single frame
+
 ## [2.0.0] - 2015-12-20
 ### ADDED
 - `select()` method to rapidly iterate over a subset of images matching certain criteria
