@@ -173,7 +173,7 @@ class Nd2(object):
     @property
     def pixel_microns(self):
         """
-        The width of a pixel in microns.
+        The width of a pixel in microns. Note that the user can override this in NIS Elements so it may not reflect reality.
 
         :rtype:     float
 
