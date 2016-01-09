@@ -4,11 +4,6 @@ We welcome feature proposals and improvements to the library from anyone. If you
 discussion, or get in touch with Jim Rybarski via email at jim@rybarski.com, or on Twitter at [@jimrybarski](https://twitter.com/jimrybarski). If you already wrote some code or made changes, simply open a pull
 request.
 
-## Easy Tasks for Beginners
-
-There are issues labeled `easy` which are small but useful tasks that are designed for people who are new to open source projects. If you'd like to work on one, feel free to just
-take one on, or get in touch if you need help.
-
 ## Running and Writing Tests
 
 Unit tests can be run with the commands `python3.4 test.py` and `python2.7 test.py`. The test finder will automatically locate any tests in the `tests` directory. Test classes
