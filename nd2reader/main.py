@@ -61,7 +61,7 @@ class Nd2(object):
             return self._slice(item.start, item.stop, item.step)
         raise IndexError
 
-    def select(self, fields_of_view=None, channels=None, z_levels=None):
+    def select(self, fields_of_view=None, channels=None, z_levels=None, start=0, stop=None):
         """
         Iterates over images matching the given criteria. This can be 2-10 times faster than manually iterating over
         the Nd2 and checking the attributes of each image, as this method skips disk reads for any images that don't
@@ -70,13 +70,17 @@ class Nd2(object):
         :type fields_of_view:   int or tuple or list
         :type channels:     str or tuple or list
         :type z_levels:     int or tuple or list
+        :type start:        int
+        :type stop:         int
 
         """
         fields_of_view = self._to_tuple(fields_of_view, self.fields_of_view)
         channels = self._to_tuple(channels, self.channels)
         z_levels = self._to_tuple(z_levels, self.z_levels)
 
-        for frame in range(len(self)):
+        # By default, we stop after the last image. Otherwise we make sure the user-provided value is valid
+        stop = len(self) if stop is None else max(0, min(stop, len(self)))
+        for frame in range(start, stop):
             field_of_view, channel, z_level = self._parser.driver.calculate_image_properties(frame)
             if field_of_view in fields_of_view and channel in channels and z_level in z_levels:
                 image = self._parser.driver.get_image(frame)

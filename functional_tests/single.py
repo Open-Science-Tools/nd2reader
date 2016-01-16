@@ -62,3 +62,7 @@ class SingleTests(unittest.TestCase):
     def test_iteration_backwards(self):
         images = [image for image in self.nd2[::-1]]
         self.assertEqual(len(images), 1)
+
+    def test_select_bounds_wrong(self):
+        images = [i for i in self.nd2.select(start=0, stop=12481247)]
+        self.assertEqual(len(images), 1)

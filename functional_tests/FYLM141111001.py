@@ -7,6 +7,7 @@ from nd2reader import Nd2
 import numpy as np
 from datetime import datetime
 import unittest
+import time
 
 
 class FYLM141111Tests(unittest.TestCase):
@@ -171,3 +172,44 @@ class FYLM141111Tests(unittest.TestCase):
             n = image.index
             if n > 100:
                 break
+
+    def test_select_start(self):
+        count = 0
+        for _ in self.nd2.select(channels='GFP', start=29000):
+            count += 1
+        self.assertEqual(127, count)
+
+    def test_select_stop(self):
+        count = 0
+        for _ in self.nd2.select(channels='GFP', stop=20):
+            count += 1
+        self.assertEqual(count, 3)
+
+    def test_select_start_stop(self):
+        count = 0
+        for _ in self.nd2.select(channels='GFP', start=10, stop=20):
+            count += 1
+        self.assertEqual(count, 1)
+
+    def test_select_start_stop_brightfield(self):
+        count = 0
+        for _ in self.nd2.select(channels='', start=10, stop=20):
+            count += 1
+        self.assertEqual(count, 5)
+
+    def test_select_faster(self):
+        select_count = 0
+        select_start = time.time()
+        for i in self.nd2.select(channels='GFP', start=10, stop=50):
+            if i is not None and i.channel == 'GFP':
+                select_count += 1
+        select_duration = time.time() - select_start
+
+        direct_count = 0
+        direct_start = time.time()
+        for i in self.nd2[10:50]:
+            if i is not None and i.channel == 'GFP':
+                direct_count += 1
+        direct_duration = time.time() - direct_start
+        self.assertEqual(select_count, direct_count)
+        self.assertGreater(direct_duration, select_duration)
