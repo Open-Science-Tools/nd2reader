@@ -1,3 +1,7 @@
+## [2.1.0] - 2016-01-16
+### ADDED
+- `select` now supports `start` and `stop` keyword arguments to put bounds on images
+
 ## [2.0.2] - 2016-01-06
 ### ADDED
 - `Nd2.pixel_microns` gives the width of a pixel

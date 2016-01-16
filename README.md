@@ -70,10 +70,16 @@ array([[1894, 1949, 1941, ..., 2104, 2135, 2114],
 
 If you only want to view images that meet certain criteria, you can use `select()`. It's much faster than iterating
 and checking attributes of images manually. You can specify scalars or lists of values. Criteria that aren't specified
-default to every possible value. Currently, slicing and selecting can't be done at the same time:
+default to every possible value. Currently, slicing and selecting can't be done at the same time, but you can
+set a range with the `start` and `stop` arguments:
 
 ```python
 for image in nd2.select(channels="GFP", fields_of_view=(1, 2, 7)):
+    # gets all GFP images in fields of view 1, 2 and 7, regardless of z-level or frame
+    do_something(image)
+
+for image in nd2.select(z_levels=(0, 1), start=12, stop=3000):
+    # gets images of any channel or field of view, with z-level 0 or 1, between images 12 and 3000
     do_something(image)
 ```
 
@@ -102,12 +108,14 @@ my_important_image = nd2[17]
 The `Nd2` object has some programmatically-accessible metadata: 
 
 ```python
->>> nd2.height
+>>> nd2.height  # in pixels
 1280
->>> nd2.width
+>>> nd2.width  # in pixels
 800
->>> len(nd2)
+>>> len(nd2)  # the number of images
 30528
+>>> nd2.pixel_microns  # the width of a pixel in microns
+0.22
 ```
 
 Each camera has its own settings. If you image multiple wavelengths with one camera, each channel will appear as its

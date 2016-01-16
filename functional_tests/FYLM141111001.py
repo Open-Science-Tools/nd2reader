@@ -213,3 +213,6 @@ class FYLM141111Tests(unittest.TestCase):
         direct_duration = time.time() - direct_start
         self.assertEqual(select_count, direct_count)
         self.assertGreater(direct_duration, select_duration)
+
+    def test_pixel_microns(self):
+        self.assertEqual(round(self.nd2.pixel_microns, 2), 0.22)
