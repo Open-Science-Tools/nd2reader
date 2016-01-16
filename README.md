@@ -32,6 +32,7 @@ Image cycles: 636
 Channels: 'brightfield', 'GFP'
 Fields of View: 8
 Z-Levels: 3
+
 ```
 
 You can iterate over each image in the order they were acquired:
