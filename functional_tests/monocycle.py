@@ -81,9 +81,11 @@ class Monocycle2Tests(unittest.TestCase):
     def tearDown(self):
         self.nd2.close()
 
+    @unittest.skip('missing file')
     def test_pixel_size(self):
         self.assertGreater(self.nd2.pixel_microns, 0.0)
 
+    @unittest.skip('missing file')
     def test_select(self):
         manual_images = []
         for _, image in zip(range(20), self.nd2):
@@ -104,6 +106,7 @@ class Monocycle2Tests(unittest.TestCase):
             self.assertEqual(a.field_of_view, b.field_of_view)
             self.assertEqual(a.channel, b.channel)
 
+    @unittest.skip('missing file')
     def test_select_order_all(self):
         # If we select every possible image using select(), we should just get every image in order
         n = 0
@@ -122,6 +125,7 @@ class Monocycle2Tests(unittest.TestCase):
                 # If there's a problem, we'll have seen it by now.
                 break
 
+    @unittest.skip('missing file')
     def test_select_order_subset(self):
         # Test that images are always yielded in increasing order. This guarantees that no matter what subset of images
         # we're filtering, we still get them in the chronological order they were acquired
