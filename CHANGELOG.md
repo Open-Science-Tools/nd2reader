@@ -1,3 +1,7 @@
+## [2.1.1] - 2016-02-15
+### FIXED
+- `Image` objects behave properly when passed to numpy functions. Things like `np.mean` will now return scalar values as expected, instead of `Image` objects
+
 ## [2.1.0] - 2016-01-16
 ### ADDED
 - `select` now supports `start` and `stop` keyword arguments to put bounds on images
