@@ -216,3 +216,14 @@ class FYLM141111Tests(unittest.TestCase):
 
     def test_pixel_microns(self):
         self.assertEqual(round(self.nd2.pixel_microns, 2), 0.22)
+
+    def test_numpy_operations(self):
+        # just to make sure we can do this kind of thing and get scalars
+        self.assertTrue(0 < np.mean(self.nd2[0]) < np.sum(self.nd2[0]))
+
+    def test_numpy_mean(self):
+        # make sure we get the right value and type
+        expected_mean = 17513.053581054686
+        mean = np.mean(self.nd2[0])
+        self.assertEqual(type(mean), np.float64)
+        self.assertAlmostEqual(expected_mean, mean)
