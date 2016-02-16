@@ -75,5 +75,5 @@
 - Refactored some poorly-named things
 
 ## [1.0.0] - 2015-05-23
-### Added
+### ADDED
 - First stable release!
