@@ -4,6 +4,7 @@ run them unless you're Jim Rybarski.
 
 """
 from nd2reader import Nd2
+from skimage import io
 import numpy as np
 from datetime import datetime
 import unittest
@@ -227,3 +228,13 @@ class FYLM141111Tests(unittest.TestCase):
         mean = np.mean(self.nd2[0])
         self.assertEqual(type(mean), np.float64)
         self.assertAlmostEqual(expected_mean, mean)
+
+    def test_subtract_images(self):
+        # just to prove we can really treat Image like an array
+        diff = self.nd2[0] - self.nd2[2]
+        self.assertTrue(np.any(diff))
+
+    def test_show(self):
+        io.imshow(self.nd2[0])
+        io.show()
+        self.assertTrue(True)
