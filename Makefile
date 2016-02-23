@@ -31,7 +31,7 @@ test:	build
 
 ftest:	build
 	xhost local:root; docker run --rm -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$(DISPLAY) -v $(CURDIR):/opt/nd2reader -v ~/nd2s:/var/nd2s -it jimrybarski/nd2reader python3.4 /opt/nd2reader/ftest.py
-	docker run --rm -v $(CURDIR):/opt/nd2reader -v ~/nd2s:/var/nd2s -it jimrybarski/nd2reader python2.7 /opt/nd2reader/ftest.py
+	xhost local:root; docker run --rm -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$(DISPLAY) -v $(CURDIR):/opt/nd2reader -v ~/nd2s:/var/nd2s -it jimrybarski/nd2reader python2.7 /opt/nd2reader/ftest.py
 	
 publish:
 	python setup.py sdist upload -r pypi

@@ -19,11 +19,11 @@ class Image(np.ndarray):
         self._channel = None
         self._z_level = None
 
-    def __array_wrap__(self, obj):
+    def __array_wrap__(self, obj, *args):
         if len(obj.shape) == 0:
             return obj[()]
         else:
-            return np.ndarray.__array_wrap__(obj)
+            return obj
 
     def add_params(self, index, timestamp, frame_number, field_of_view, channel, z_level):
         """
