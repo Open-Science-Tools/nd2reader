@@ -155,16 +155,6 @@ class Nd2(object):
         return self._metadata.frames
 
     @property
-    def camera_settings(self):
-        """
-        Basic information about the physical cameras used.
-
-        :return:    dict of {channel_name: model.metadata.CameraSettings}
-
-        """
-        return self._parser.camera_metadata
-    
-    @property
     def date(self):
         """
         The date and time that the acquisition began. Not guaranteed to have been recorded.

@@ -136,3 +136,11 @@ class Monocycle2Tests(unittest.TestCase):
             n = image.index
             if n > 100:
                 break
+
+
+class OneTests(unittest.TestCase):
+    def test_opens(self):
+        # just testing that this doesn't throw an exception
+        nd2 = Nd2("/var/nd2s/001.nd2")
+        self.assertIsNotNone(nd2)
+        nd2.close()

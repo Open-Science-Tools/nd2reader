@@ -141,7 +141,6 @@ class V3Parser(BaseParser):
             super(V3Parser, self).__init__(fh)
         self._label_map = self._build_label_map()
         self.raw_metadata = V3RawMetadata(self._fh, self._label_map)
-        self._parse_camera_metadata()
         self._parse_metadata()
 
     @property
@@ -152,15 +151,6 @@ class V3Parser(BaseParser):
         """
         return V3Driver(self.metadata, self._label_map, self._fh)
 
-    def _parse_camera_metadata(self):
-        """
-        Gets parsed data about the physical cameras used to produce images and throws them in a dictionary.
-
-        """
-        self.camera_metadata = {}
-        for camera_setting in self._parse_camera_settings():
-            self.camera_metadata[camera_setting.channel_name] = camera_setting
-            
     def _parse_metadata(self):
         """
         Reads all metadata and instantiates the Metadata object.
@@ -176,30 +166,6 @@ class V3Parser(BaseParser):
         channels = self._parse_channels(self.raw_metadata)
         pixel_microns = self.raw_metadata.image_calibration.get(six.b('SLxCalibration'), {}).get(six.b('dCalibration'))
         self.metadata = Metadata(height, width, channels, date, fields_of_view, frames, z_levels, total_images_per_channel, pixel_microns)
-
-    def _parse_camera_settings(self):
-        """
-        Looks up information in the raw metadata about the camera(s) and puts it into a CameraSettings object.
-        Duplicate cameras can be returned if the same one was used for multiple channels.
-
-        """
-        for n, camera in enumerate(self.raw_metadata.image_metadata_sequence[six.b('SLxPictureMetadata')][six.b('sPicturePlanes')][six.b('sSampleSetting')].values()):
-            name = camera[six.b('pCameraSetting')][six.b('CameraUserName')]
-            id = camera[six.b('pCameraSetting')][six.b('CameraUniqueName')]
-            exposure = camera[six.b('dExposureTime')]
-            x_binning = camera[six.b('pCameraSetting')][six.b('FormatFast')][six.b('fmtDesc')][six.b('dBinningX')]
-            y_binning = camera[six.b('pCameraSetting')][six.b('FormatFast')][six.b('fmtDesc')][six.b('dBinningY')]
-            optical_configs = camera[six.b('sOpticalConfigs')]
-
-            # This definitely is not working right. It seems to be totally inconsistent in each of the sample ND2s that I have.
-            # Fixing one breaks another.
-            if six.b('') in optical_configs.keys():
-                channel_name = optical_configs[six.b('')][six.b('sOpticalConfigName')]
-                yield CameraSettings(name, id, exposure, x_binning, y_binning, channel_name)
-            else:
-                channel_names = [channel[six.b('Name')] for key, channel in camera[six.b('pCameraSetting')][six.b('Metadata')][six.b('Channels')].items()]
-                for channel_name in channel_names:
-                    yield CameraSettings(name, id, exposure, x_binning, y_binning, channel_name)
 
     def _parse_date(self, raw_metadata):
         """
