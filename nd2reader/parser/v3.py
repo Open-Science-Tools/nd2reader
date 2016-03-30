@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-from nd2reader.model.metadata import Metadata, CameraSettings
+from nd2reader.model.metadata import Metadata
 from nd2reader.model.label import LabelMap
 from nd2reader.parser.base import BaseParser
 from nd2reader.driver.v3 import V3Driver
