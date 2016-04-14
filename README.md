@@ -2,7 +2,7 @@
 
 ### Don't use this library, use Micro-Manager
 
-I am no longer supporting this library, as my lab has discovered [Micro-Manager](https://micro-manager.org/) and found it to be a far superior application for acquiring microscope data.
+I am no longer supporting this library, as my lab has discovered [Micro-Manager](https://micro-manager.org/) and found it to be a far superior application for acquiring microscope data. I would highly recommend switching if it works for what you're doing.
 
 I will not be accepting pull requests any longer. If you find a bug, you can fork the repo and fix it yourself, or look for someone else's fork which may already contain a fix.
 If you would like to take control of the nd2reader namespace on PyPI, please shoot me an email. I'm not going to just give it away but I will consider it for someone who produces a high-quality fork that's widely-used.
