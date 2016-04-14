@@ -1,5 +1,13 @@
 # nd2reader
 
+### Don't use this library, use Micro-Manager
+
+I am no longer supporting this library, as my lab has discovered [Micro-Manager](https://micro-manager.org/) and found it to be a far superior application for acquiring microscope data.
+It provides all of the features of NIS Elements that my lab cares about and has none of the bugs/drawbacks.
+
+I will not be accepting pull requests at this time. If you find a bug, you can fork the repo and fix it yourself, or look for someone else's fork which may already contain a fix.
+If you would like to take control of the nd2reader namespace on PyPI, please shoot me an email. I'm not going to just give it away but I will consider it for someone who produces a high-quality fork that's widely-used.
+
 ### About
 
 `nd2reader` is a pure-Python package that reads images produced by NIS Elements 4.0+. It has only been definitively tested on NIS Elements 4.30.02 Build 1053. Support for older versions is being actively worked on.
