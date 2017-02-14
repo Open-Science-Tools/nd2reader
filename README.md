@@ -1,12 +1,5 @@
 # nd2reader
 
-### Don't use this library, use Micro-Manager
-
-I am no longer supporting this library, as my lab has discovered [Micro-Manager](https://micro-manager.org/) and found it to be a far superior application for acquiring microscope data. I would highly recommend switching if it works for what you're doing.
-
-I will not be accepting pull requests any longer. If you find a bug, you can fork the repo and fix it yourself, or look for someone else's fork which may already contain a fix.
-If you would like to take control of the nd2reader namespace on PyPI, please shoot me an email. I'm not going to just give it away but I will consider it for someone who produces a high-quality fork that's widely-used.
-
 ### About
 
 `nd2reader` is a pure-Python package that reads images produced by NIS Elements 4.0+. It has only been definitively tested on NIS Elements 4.30.02 Build 1053. Support for older versions is being actively worked on.
@@ -128,12 +121,12 @@ The `Nd2` object has some programmatically-accessible metadata:
 
 ### Contributing
 
-If you'd like to help with the development of nd2reader or just have an idea for improvement, please see the [contributing](https://github.com/jimrybarski/nd2reader/blob/master/CONTRIBUTING.md) page
+If you'd like to help with the development of nd2reader or just have an idea for improvement, please see the [contributing](https://github.com/rbnvrw/nd2reader/blob/master/CONTRIBUTING.md) page
 for more information.
 
 ### Bug Reports and Features
 
-If this fails to work exactly as expected, please open an [issue](https://github.com/jimrybarski/nd2reader/issues).
+If this fails to work exactly as expected, please open an [issue](https://github.com/rbnvrw/nd2reader/issues).
 If you get an unhandled exception, please paste the entire stack trace into the issue as well.
 
 ### Citation
@@ -147,4 +140,4 @@ http://dx.doi.org/10.6084/m9.figshare.1619960
 
 ### Acknowledgments
 
-Support for the development of this package was provided by the [Finkelstein Laboratory](http://finkelsteinlab.org/).
+Original version by Jim Rybarski. Support for the development of this package was provided by the [Finkelstein Laboratory](http://finkelsteinlab.org/).

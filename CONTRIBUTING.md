@@ -1,7 +1,7 @@
 # Contributing to nd2reader
 
-We welcome feature proposals and improvements to the library from anyone. If you just have an idea, you can open an [issue](https://github.com/jimrybarski/nd2reader/issues) for
-discussion, or get in touch with Jim Rybarski via email at jim@rybarski.com, or on Twitter at [@jimrybarski](https://twitter.com/jimrybarski). If you already wrote some code or made changes, simply open a pull
+We welcome feature proposals and improvements to the library from anyone. If you just have an idea, you can open an [issue](https://github.com/rbnvrw/nd2reader/issues) for
+discussion, or get in touch with Ruben Verweij. If you already wrote some code or made changes, simply open a pull
 request.
 
 ## Running and Writing Tests
