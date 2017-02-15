@@ -324,7 +324,7 @@ class V3Parser(BaseParser):
         roi_objects = []
         for i in range(number_of_rois):
             current_roi = raw_roi_data[six.b('m_vectGlobal_%d' % i)]
-            roi_objects.append(Roi(current_roi))
+            roi_objects.append(Roi(current_roi, self.metadata))
 
         self.roi_metadata = roi_objects
 
