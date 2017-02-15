@@ -16,19 +16,3 @@ system so everyone can benefit, but for now, they will just be manually run by t
 ## Contributing Your ND2 files
 
 We always appreciate more ND2s, as they help us find corner cases. Please get in touch using any of the means listed at the top of this page if you'd like to send one in.
-
-## Docker and Makefile Commands
-
-A Dockerfile is included to allow testing in a consistent environment. `make build` will build the image for you. Due to the large number of packages that it installs, it often
-fails due to a problem with the Debian servers - just try again if this happens. Once that's complete, you can run `make py2` or `make py3` to enter into a Python interpreter in
-the container to test things out manually. This assumes you have the directory `~/nd2s` - any ND2 files placed there will be available in the container at `/var/nds2`. You can
-view images with scikit-image with something like the code below:
-
-```
-from nd2reader import Nd2
-from skimage import io
-
-n = Nd2("/var/nd2s/my.nd2")
-io.imshow(n[37])
-io.show()
-```

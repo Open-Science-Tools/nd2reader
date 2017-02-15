@@ -9,7 +9,8 @@ if __name__ == '__main__':
         install_requires=[
             'numpy>=1.6.2, <2.0',
             'six>=1.4, <2.0',
-            'xmltodict>=0.9.2, <1.0'
+            'xmltodict>=0.9.2, <1.0',
+            'pims>=0.3.0'
         ],
         version=VERSION,
         description='A tool for reading ND2 files produced by NIS Elements',
