@@ -27,8 +27,8 @@ class Roi(object):
         self.shape = self.SHAPE_CIRCLE
         self.type = self.TYPE_BACKGROUND
 
-        self._width_micron = metadata.width * metadata.pixel_microns
-        self._height_micron = metadata.height * metadata.pixel_microns
+        self._img_width_micron = metadata.width * metadata.pixel_microns
+        self._img_height_micron = metadata.height * metadata.pixel_microns
         self._pixel_microns = metadata.pixel_microns
 
         self._extract_vect_anims(raw_roi_dict)
@@ -61,15 +61,17 @@ class Roi(object):
         """
         self.timepoints.append(animation_dict[six.b('m_dTimeMs')])
 
-        position = np.array((self._width_micron / 2.0 + animation_dict[six.b('m_dCenterX')],
-                             self._height_micron / 2.0 + animation_dict[six.b('m_dCenterY')],
+        # positions are taken from the center of the image as a fraction of the half width/height of the image
+        position = np.array((0.5 * self._img_width_micron * (1 + animation_dict[six.b('m_dCenterX')]),
+                             0.5 * self._img_height_micron * (1 + animation_dict[six.b('m_dCenterY')]),
                              animation_dict[six.b('m_dCenterZ')]))
         self.positions.append(position)
 
         size_dict = animation_dict[six.b('m_sBoxShape')]
 
-        self.sizes.append((size_dict[six.b('m_dSizeX')],
-                           size_dict[six.b('m_dSizeY')],
+        # sizes are fractions of the half width/height of the image
+        self.sizes.append((size_dict[six.b('m_dSizeX')] * 0.25 * self._img_width_micron,
+                           size_dict[six.b('m_dSizeY')] * 0.25 * self._img_height_micron,
                            size_dict[six.b('m_dSizeZ')]))
 
     def is_circle(self):
