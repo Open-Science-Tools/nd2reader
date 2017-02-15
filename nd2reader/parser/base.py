@@ -6,6 +6,7 @@ class BaseParser(object):
         self._fh = fh
         self.camera_metadata = None
         self.metadata = None
+        self.roi_metadata = None
 
     @abstractproperty
     def driver(self):

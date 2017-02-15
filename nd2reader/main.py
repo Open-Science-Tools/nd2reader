@@ -14,6 +14,7 @@ class Nd2(object):
         major_version, minor_version = get_version(self._fh)
         self._parser = get_parser(self._fh, major_version, minor_version)
         self._metadata = self._parser.metadata
+        self._roi_metadata = self._parser.roi_metadata
         
     def __repr__(self):
         return "\n".join(["<ND2 %s>" % self._filename,

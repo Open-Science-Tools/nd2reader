@@ -3,6 +3,7 @@
 from datetime import datetime
 from nd2reader.model.metadata import Metadata
 from nd2reader.model.label import LabelMap
+from nd2reader.model.roi import Roi
 from nd2reader.parser.base import BaseParser
 from nd2reader.driver.v3 import V3Driver
 from nd2reader.common.v3 import read_chunk, read_array, read_metadata
@@ -18,6 +19,7 @@ def ignore_missing(func):
             return func(*args, **kwargs)
         except:
             return None
+
     return wrapper
 
 
@@ -142,6 +144,7 @@ class V3Parser(BaseParser):
         self._label_map = self._build_label_map()
         self.raw_metadata = V3RawMetadata(self._fh, self._label_map)
         self._parse_metadata()
+        self._parse_roi_metadata()
 
     @property
     def driver(self):
@@ -165,7 +168,8 @@ class V3Parser(BaseParser):
         total_images_per_channel = self._parse_total_images_per_channel(self.raw_metadata)
         channels = self._parse_channels(self.raw_metadata)
         pixel_microns = self.raw_metadata.image_calibration.get(six.b('SLxCalibration'), {}).get(six.b('dCalibration'))
-        self.metadata = Metadata(height, width, channels, date, fields_of_view, frames, z_levels, total_images_per_channel, pixel_microns)
+        self.metadata = Metadata(height, width, channels, date, fields_of_view, frames, z_levels,
+                                 total_images_per_channel, pixel_microns)
 
     def _parse_date(self, raw_metadata):
         """
@@ -205,7 +209,8 @@ class V3Parser(BaseParser):
         channels = []
         metadata = raw_metadata.image_metadata_sequence[six.b('SLxPictureMetadata')][six.b('sPicturePlanes')]
         try:
-            validity = raw_metadata.image_metadata[six.b('SLxExperiment')][six.b('ppNextLevelEx')][six.b('')][0][six.b('ppNextLevelEx')][six.b('')][0][six.b('pItemValid')]
+            validity = raw_metadata.image_metadata[six.b('SLxExperiment')][six.b('ppNextLevelEx')][six.b('')][0][
+                six.b('ppNextLevelEx')][six.b('')][0][six.b('pItemValid')]
         except (KeyError, TypeError):
             # If none of the channels have been deleted, there is no validity list, so we just make one
             validity = [True for _ in metadata]
@@ -302,6 +307,26 @@ class V3Parser(BaseParser):
 
         """
         return raw_metadata.image_attributes[six.b('SLxImageAttributes')][six.b('uiSequenceCount')]
+
+    def _parse_roi_metadata(self):
+        """
+        Parse the raw ROI metadata.
+        :return:
+        """
+        if not six.b('RoiMetadata_v1') in self.raw_metadata.roi_metadata:
+            self.roi_metadata = None
+            return
+
+        raw_roi_data = self.raw_metadata.roi_metadata[six.b('RoiMetadata_v1')]
+
+        number_of_rois = raw_roi_data[six.b('m_vectGlobal_Size')]
+
+        roi_objects = []
+        for i in range(number_of_rois):
+            current_roi = raw_roi_data[six.b('m_vectGlobal_%d' % i)]
+            roi_objects.append(Roi(current_roi))
+
+        self.roi_metadata = roi_objects
 
     def _build_label_map(self):
         """
