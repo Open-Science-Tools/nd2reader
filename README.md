@@ -1,5 +1,7 @@
 # nd2reader
 
+[![Build Status](https://travis-ci.org/rbnvrw/nd2reader.svg?branch=master)](https://travis-ci.org/rbnvrw/nd2reader)
+
 ### About
 
 `nd2reader` is a pure-Python package that reads images produced by NIS Elements 4.0+. It has only been definitively tested on NIS Elements 4.30.02 Build 1053. Support for older versions is being actively worked on.
