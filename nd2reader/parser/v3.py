@@ -181,23 +181,32 @@ class V3Parser(BaseParser):
         """
         for line in raw_metadata.image_text_info[six.b('SLxImageTextInfo')].values():
             line = line.decode("utf8")
-            absolute_start_12 = None
-            absolute_start_24 = None
             # ND2s seem to randomly switch between 12- and 24-hour representations.
-            try:
-                absolute_start_24 = datetime.strptime(line, "%m/%d/%Y  %H:%M:%S")
-            except (TypeError, ValueError):
-                pass
-            try:
-                absolute_start_12 = datetime.strptime(line, "%m/%d/%Y  %I:%M:%S %p")
-            except (TypeError, ValueError):
-                pass
+            absolute_start_24 = self._parse_date_24h(line)
+            absolute_start_12 = self._parse_date_12h(line)
             if not absolute_start_12 and not absolute_start_24:
                 continue
             return absolute_start_12 if absolute_start_12 else absolute_start_24
         return None
 
-    def _parse_channels(self, raw_metadata):
+    @staticmethod
+    def _parse_date_12h(line):
+        try:
+            absolute_start_12 = datetime.strptime(line, "%m/%d/%Y  %I:%M:%S %p")
+            return absolute_start_12
+        except (TypeError, ValueError):
+            return None
+
+    @staticmethod
+    def _parse_date_24h(line):
+        try:
+            absolute_start_24 = datetime.strptime(line, "%m/%d/%Y  %H:%M:%S")
+            return absolute_start_24
+        except (TypeError, ValueError):
+            return None
+
+    @staticmethod
+    def _parse_channels(raw_metadata):
         """
         These are labels created by the NIS Elements user. Typically they may a short description of the filter cube
         used (e.g. "bright field", "GFP", etc.)
@@ -256,7 +265,8 @@ class V3Parser(BaseParser):
         """
         return self._parse_dimension(r""".*?Z\((\d+)\).*?""", raw_metadata)
 
-    def _parse_dimension_text(self, raw_metadata):
+    @staticmethod
+    def _parse_dimension_text(raw_metadata):
         """
         While there are metadata values that represent a lot of what we want to capture, they seem to be unreliable.
         Sometimes certain elements don't exist, or change their data type randomly. However, the human-readable text
@@ -266,18 +276,16 @@ class V3Parser(BaseParser):
         :rtype:    str
 
         """
-        for line in raw_metadata.image_text_info[six.b('SLxImageTextInfo')].values():
+        dimension_text = six.b("")
+        textinfo = raw_metadata.image_text_info[six.b('SLxImageTextInfo')].values()
+
+        for line in textinfo:
             if six.b("Dimensions:") in line:
-                metadata = line
-                break
-        else:
-            return six.b("")
-        for line in metadata.split(six.b("\r\n")):
-            if line.startswith(six.b("Dimensions:")):
-                dimension_text = line
-                break
-        else:
-            return six.b("")
+                entries = line.split(six.b("\r\n"))
+                for entry in entries:
+                    if entry.startswith(six.b("Dimensions:")):
+                        return entry
+
         return dimension_text
 
     def _parse_dimension(self, pattern, raw_metadata):
@@ -298,7 +306,8 @@ class V3Parser(BaseParser):
         count = int(match.group(1))
         return list(range(count))
 
-    def _parse_total_images_per_channel(self, raw_metadata):
+    @staticmethod
+    def _parse_total_images_per_channel(raw_metadata):
         """
         The total number of images per channel. Warning: this may be inaccurate as it includes "gap" images.
 
