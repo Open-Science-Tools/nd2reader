@@ -3,7 +3,6 @@ import numpy as np
 
 from nd2reader.exc import NoImageError
 from nd2reader.parser import get_parser
-from nd2reader.version import get_version
 import six
 
 
@@ -17,12 +16,28 @@ class ND2Reader(FramesSequenceND):
 
         # first use the parser to parse the file
         self._fh = open(filename, "rb")
-        major_version, minor_version = get_version(self._fh)
-        self._parser = get_parser(self._fh, major_version, minor_version)
+        self._parser = get_parser(self._fh)
         self._metadata = self._parser.metadata
         self._roi_metadata = self._parser.roi_metadata
 
         # Set data type
+        self._dtype = self._get_dtype_from_metadata()
+
+        # Setup the axes
+        self._init_axis('x', self._metadata.width)
+        self._init_axis('y', self._metadata.height)
+        self._init_axis('c', len(self._metadata.channels))
+        self._init_axis('t', len(self._metadata.frames))
+        self._init_axis('z', len(self._metadata.z_levels))
+
+        # provide the default
+        self.iter_axes = 't'
+
+    def _get_dtype_from_metadata(self):
+        """
+        Determine the data type from the metadata.
+        :return:
+        """
         bit_depth = self._parser.raw_metadata.image_attributes[six.b('SLxImageAttributes')][six.b('uiBpcInMemory')]
         if bit_depth <= 16:
             self._dtype = np.float16
@@ -31,12 +46,11 @@ class ND2Reader(FramesSequenceND):
         else:
             self._dtype = np.float64
 
-        # Setup the axes
-        self._init_axis('x', self._metadata.width)
-        self._init_axis('y', self._metadata.height)
-        self._init_axis('c', len(self._metadata.channels))
-        self._init_axis('t', len(self._metadata.frames))
-        self._init_axis('z', len(self._metadata.z_levels))
+        return self._dtype
+
+    @classmethod
+    def class_exts(cls):
+        return {'nd2'} | super(ND2Reader, cls).class_exts()
 
     def close(self):
         if self._fh is not None:
@@ -57,7 +71,22 @@ class ND2Reader(FramesSequenceND):
         except (TypeError, NoImageError):
             return Frame([])
         else:
-            return Frame(image, frame_no=image.frame_number)
+            return Frame(image, frame_no=image.frame_number, metadata=self._get_frame_metadata())
+
+    def _get_frame_metadata(self):
+        """
+        Get the metadata for one frame
+        :return:
+        """
+        frame_metadata = {
+            "height": self._metadata.height,
+            "width": self._metadata.width,
+            "date": self._metadata.date,
+            "pixel_microns": self._metadata.pixel_microns,
+            "rois": self._roi_metadata
+        }
+
+        return frame_metadata
 
     @property
     def pixel_type(self):

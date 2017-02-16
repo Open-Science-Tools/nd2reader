@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from nd2reader.parser import get_parser
-from nd2reader.version import get_version
+from nd2reader.parser import get_parser, get_version
 import six
 
 

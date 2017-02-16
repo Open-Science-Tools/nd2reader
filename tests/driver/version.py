@@ -1,5 +1,5 @@
 import unittest
-from nd2reader.version import parse_version
+from nd2reader.parser import parse_version
 
 
 class VersionTests(unittest.TestCase):
