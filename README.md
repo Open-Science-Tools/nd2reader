@@ -1,6 +1,8 @@
 # nd2reader
 
 [![Build Status](https://travis-ci.org/rbnvrw/nd2reader.svg?branch=master)](https://travis-ci.org/rbnvrw/nd2reader)
+[![Test Coverage](https://codeclimate.com/github/rbnvrw/nd2reader/badges/coverage.svg)](https://codeclimate.com/github/rbnvrw/nd2reader/coverage)
+[![Code Climate](https://codeclimate.com/github/rbnvrw/nd2reader/badges/gpa.svg)](https://codeclimate.com/github/rbnvrw/nd2reader)
 
 ### About
 
