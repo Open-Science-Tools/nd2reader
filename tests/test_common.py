@@ -1,6 +1,7 @@
 import unittest
 
-from nd2reader.common import parse_version
+import six
+from nd2reader.common import parse_version, parse_date
 
 
 class TestCommon(unittest.TestCase):
@@ -15,3 +16,19 @@ class TestCommon(unittest.TestCase):
         actual = parse_version(data)
         expected = (3, 0)
         self.assertTupleEqual(actual, expected)
+
+    def test_parse_date_24(self):
+        date_format = "%m/%d/%Y  %H:%M:%S"
+        date = '02/13/2016  23:43:37'
+        textinfo = {six.b('TextInfoItem9'): six.b(date)}
+        result = parse_date(textinfo)
+        self.assertEqual(result.strftime(date_format), date)
+
+    def test_parse_date_12(self):
+        date_format = "%m/%d/%Y  %I:%M:%S %p"
+        date = '02/13/2016  11:43:37 PM'
+        textinfo = {six.b('TextInfoItem9'): six.b(date)}
+        result = parse_date(textinfo)
+        self.assertEqual(result.strftime(date_format), date)
+
+
