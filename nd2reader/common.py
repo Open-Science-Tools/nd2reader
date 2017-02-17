@@ -3,7 +3,7 @@ import array
 from datetime import datetime
 import six
 import re
-from nd2reader.exc import InvalidVersionError
+from nd2reader.exceptions import InvalidVersionError
 
 
 def get_version(fh):

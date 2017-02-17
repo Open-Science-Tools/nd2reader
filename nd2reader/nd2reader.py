@@ -1,5 +1,5 @@
 from pims import FramesSequenceND, Frame
-from nd2reader.exc import NoImageError
+from nd2reader.exceptions import NoImageError
 from nd2reader.nd2parser import ND2Parser
 
 

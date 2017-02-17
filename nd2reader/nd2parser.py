@@ -7,7 +7,7 @@ from pims import Frame
 import numpy as np
 
 from nd2reader.common import get_version, read_chunk
-from nd2reader.exc import InvalidVersionError, NoImageError
+from nd2reader.exceptions import InvalidVersionError, NoImageError
 from nd2reader.label_map import LabelMap
 from nd2reader.raw_metadata import RawMetadata
 
