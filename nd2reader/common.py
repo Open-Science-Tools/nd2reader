@@ -115,28 +115,15 @@ def parse_date(text_info):
     for line in text_info.values():
         line = line.decode("utf8")
         # ND2s seem to randomly switch between 12- and 24-hour representations.
-        absolute_start_24 = _parse_date_24h(line)
-        absolute_start_12 = _parse_date_12h(line)
-        if not absolute_start_12 and not absolute_start_24:
-            continue
-        return absolute_start_12 if absolute_start_12 else absolute_start_24
-    return None
+        try:
+            absolute_start = datetime.strptime(line, "%m/%d/%Y  %H:%M:%S")
+        except (TypeError, ValueError):
+            try:
+                absolute_start = datetime.strptime(line, "%m/%d/%Y  %I:%M:%S %p")
+            except (TypeError, ValueError):
+                absolute_start = None
 
-
-def _parse_date_12h(line):
-    try:
-        absolute_start_12 = datetime.strptime(line, "%m/%d/%Y  %I:%M:%S %p")
-        return absolute_start_12
-    except (TypeError, ValueError):
-        return None
-
-
-def _parse_date_24h(line):
-    try:
-        absolute_start_24 = datetime.strptime(line, "%m/%d/%Y  %H:%M:%S")
-        return absolute_start_24
-    except (TypeError, ValueError):
-        return None
+        return absolute_start
 
 
 def _parse_metadata_item(data, cursor_position):
@@ -176,27 +163,48 @@ def read_metadata(data, count):
     """
     if data is None:
         return None
+
     data = six.BytesIO(data)
     metadata = {}
+
     for _ in range(count):
         cursor_position = data.tell()
         header = data.read(2)
+
         if not header:
             # We've reached the end of some hierarchy of data
             break
+
         if six.PY3:
             header = header.decode("utf8")
+
         data_type, name_length = map(ord, header)
         name = data.read(name_length * 2).decode("utf16")[:-1].encode("utf8")
         value = _get_value(data, data_type, cursor_position)
-        if name not in metadata.keys():
-            metadata[name] = value
-        else:
-            if not isinstance(metadata[name], list):
-                # We have encountered this key exactly once before. Since we're seeing it again, we know we
-                # need to convert it to a list before proceeding.
-                metadata[name] = [metadata[name]]
-            # We've encountered this key before so we're guaranteed to be dealing with a list. Thus we append
-            # the value to the already-existing list.
-            metadata[name].append(value)
+
+        metadata = _add_to_metadata(metadata, name, value)
+
+    return metadata
+
+
+def _add_to_metadata(metadata, name, value):
+    """
+    Add the name value pair to the metadata dict
+    :param metadata:
+    :param name:
+    :param value:
+    :return:
+    """
+    if name not in metadata.keys():
+        metadata[name] = value
+    else:
+        if not isinstance(metadata[name], list):
+            # We have encountered this key exactly once before. Since we're seeing it again, we know we
+            # need to convert it to a list before proceeding.
+            metadata[name] = [metadata[name]]
+
+        # We've encountered this key before so we're guaranteed to be dealing with a list. Thus we append
+        # the value to the already-existing list.
+        metadata[name].append(value)
+
     return metadata
