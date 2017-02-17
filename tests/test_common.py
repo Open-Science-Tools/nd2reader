@@ -1,8 +1,9 @@
 import unittest
-from nd2reader.parser import parse_version
+
+from nd2reader.common import parse_version
 
 
-class VersionTests(unittest.TestCase):
+class TestCommon(unittest.TestCase):
     def test_parse_version_2(self):
         data = 'ND2 FILE SIGNATURE CHUNK NAME01!Ver2.2'
         actual = parse_version(data)

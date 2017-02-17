@@ -1,6 +1,42 @@
 import struct
 import array
+from datetime import datetime
 import six
+import re
+from nd2reader.exc import InvalidVersionError
+
+
+def get_version(fh):
+    """
+    Determines what version the ND2 is.
+
+    :param fh:    an open file handle to the ND2
+    :type fh:     file
+
+    """
+    # the first 16 bytes seem to have no meaning, so we skip them
+    fh.seek(16)
+
+    # the next 38 bytes contain the string that we want to parse. Unlike most of the ND2, this is in UTF-8
+    data = fh.read(38).decode("utf8")
+    return parse_version(data)
+
+
+def parse_version(data):
+    """
+    Parses a string with the version data in it.
+
+    :param data:    the 19th through 54th byte of the ND2, representing the version
+    :type data:     unicode
+
+    """
+    match = re.search(r"""^ND2 FILE SIGNATURE CHUNK NAME01!Ver(?P<major>\d)\.(?P<minor>\d)$""", data)
+
+    if match:
+        # We haven't seen a lot of ND2s but the ones we have seen conform to this
+        return int(match.group('major')), int(match.group('minor'))
+
+    raise InvalidVersionError("The version of the ND2 you specified is not supported.")
 
 
 def read_chunk(fh, chunk_location):
@@ -67,6 +103,40 @@ def _parse_string(data):
 def _parse_char_array(data):
     array_length = struct.unpack("Q", data.read(8))[0]
     return array.array("B", data.read(array_length))
+
+
+def parse_date(text_info):
+    """
+    The date and time when acquisition began.
+
+    :rtype: datetime.datetime() or None
+
+    """
+    for line in text_info.values():
+        line = line.decode("utf8")
+        # ND2s seem to randomly switch between 12- and 24-hour representations.
+        absolute_start_24 = _parse_date_24h(line)
+        absolute_start_12 = _parse_date_12h(line)
+        if not absolute_start_12 and not absolute_start_24:
+            continue
+        return absolute_start_12 if absolute_start_12 else absolute_start_24
+    return None
+
+
+def _parse_date_12h(line):
+    try:
+        absolute_start_12 = datetime.strptime(line, "%m/%d/%Y  %I:%M:%S %p")
+        return absolute_start_12
+    except (TypeError, ValueError):
+        return None
+
+
+def _parse_date_24h(line):
+    try:
+        absolute_start_24 = datetime.strptime(line, "%m/%d/%Y  %H:%M:%S")
+        return absolute_start_24
+    except (TypeError, ValueError):
+        return None
 
 
 def _parse_metadata_item(data, cursor_position):
