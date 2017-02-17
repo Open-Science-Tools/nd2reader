@@ -16,10 +16,11 @@ python:
   - "3.6-dev" # 3.6 development branch
   - "3.7-dev" # 3.7 development branch
   - "nightly" # currently points to 3.7-dev
-install: "pip install -r requirements.txt"
+install:
+  - pip install -r requirements.txt
+  - pip install codeclimate-test-reporter coverage
 
 script: python ./test.py
 
 after_sucess:
-  - pip install codeclimate-test-reporter coverage
   - CODECLIMATE_REPO_TOKEN=8582900c285e4da0f253555b1bac1ba501bd6ff07850b0f227166b3cdac59ecc codeclimate-test-reporter
