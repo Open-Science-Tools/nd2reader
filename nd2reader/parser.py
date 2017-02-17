@@ -67,10 +67,9 @@ class Parser(object):
         try:
             timestamp, image = self._get_raw_image_data(image_group_number, channel_offset, self.metadata["height"],
                                                         self.metadata["width"])
-        except NoImageError:
-            return None
+        except (TypeError, NoImageError):
+            return Frame([], frame_no=frame_number, metadata=self._get_frame_metadata())
         else:
-            image.add_params(index, timestamp, frame_number, field_of_view, channel, z_level)
             return image
 
     def get_image_by_attributes(self, frame_number, field_of_view, channel_name, z_level, height, width):
@@ -90,11 +89,10 @@ class Parser(object):
         try:
             timestamp, raw_image_data = self._get_raw_image_data(image_group_number, self._channel_offset[channel_name],
                                                                  height, width)
-            image = Frame(raw_image_data, frame_no=frame_number, metadata=self._get_frame_metadata())
         except (TypeError, NoImageError):
-            return None
+            return Frame([], frame_no=frame_number, metadata=self._get_frame_metadata())
         else:
-            return image
+            return raw_image_data
 
     def get_dtype_from_metadata(self):
         """
@@ -255,7 +253,8 @@ class Parser(object):
         # other cycle to reduce phototoxicity, but NIS Elements still allocated memory as if we were going to take
         # them every cycle.
         if np.any(image_data):
-            return timestamp, Frame(image_data)
+            return timestamp, Frame(image_data, metadata=self._get_frame_metadata())
+
         raise NoImageError
 
     def _get_frame_metadata(self):

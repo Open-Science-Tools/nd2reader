@@ -1,5 +1,4 @@
-from pims import FramesSequenceND, Frame
-from nd2reader.exceptions import NoImageError
+from pims import FramesSequenceND
 from nd2reader.parser import Parser
 
 
@@ -40,6 +39,14 @@ class ND2Reader(FramesSequenceND):
         if self._fh is not None:
             self._fh.close()
 
+    def get_frame(self, i):
+        """
+        Return one frame
+        :param i:
+        :return:
+        """
+        return self._parser.get_image(i)
+
     def get_frame_2D(self, c, t, z):
         """
         Gets a given frame using the parser
@@ -49,13 +56,8 @@ class ND2Reader(FramesSequenceND):
         :return:
         """
         c_name = self.metadata["channels"][c]
-        try:
-            image = self._parser.get_image_by_attributes(t, 0, c_name, z, self.metadata["width"],
-                                                         self.metadata["height"])
-        except (TypeError, NoImageError):
-            return Frame([])
-        else:
-            return image
+
+        return self._parser.get_image_by_attributes(t, 0, c_name, z, self.metadata["width"], self.metadata["height"])
 
     @property
     def pixel_type(self):
