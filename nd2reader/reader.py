@@ -1,6 +1,6 @@
 from pims import FramesSequenceND, Frame
 from nd2reader.exceptions import NoImageError
-from nd2reader.nd2parser import ND2Parser
+from nd2reader.parser import Parser
 
 
 class ND2Reader(FramesSequenceND):
@@ -13,7 +13,7 @@ class ND2Reader(FramesSequenceND):
 
         # first use the parser to parse the file
         self._fh = open(filename, "rb")
-        self._parser = ND2Parser(self._fh)
+        self._parser = Parser(self._fh)
 
         # Setup metadata
         self.metadata = self._parser.metadata

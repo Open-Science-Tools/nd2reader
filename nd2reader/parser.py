@@ -12,7 +12,7 @@ from nd2reader.label_map import LabelMap
 from nd2reader.raw_metadata import RawMetadata
 
 
-class ND2Parser(object):
+class Parser(object):
     """ Parses ND2 files and creates a Metadata and driver object. """
     CHUNK_HEADER = 0xabeceda
     CHUNK_MAP_START = six.b("ND2 FILEMAP SIGNATURE NAME 0001!")
