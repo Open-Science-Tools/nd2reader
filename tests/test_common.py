@@ -1,7 +1,7 @@
 import unittest
 
 import six
-from nd2reader.common import parse_version, parse_date
+from nd2reader.common import parse_version, parse_date, _add_to_metadata
 
 
 class TestCommon(unittest.TestCase):
@@ -30,5 +30,20 @@ class TestCommon(unittest.TestCase):
         textinfo = {six.b('TextInfoItem9'): six.b(date)}
         result = parse_date(textinfo)
         self.assertEqual(result.strftime(date_format), date)
+
+    def test_add_to_meta_simple(self):
+        metadata = {}
+        _add_to_metadata(metadata, 'test', 'value')
+        self.assertDictEqual(metadata, {'test': 'value'})
+
+    def test_add_to_meta_new_list(self):
+        metadata = {'test': 'value1'}
+        _add_to_metadata(metadata, 'test', 'value2')
+        self.assertDictEqual(metadata, {'test': ['value1', 'value2']})
+
+    def test_add_to_meta_existing_list(self):
+        metadata = {'test': ['value1', 'value2']}
+        _add_to_metadata(metadata, 'test', 'value3')
+        self.assertDictEqual(metadata, {'test': ['value1', 'value2', 'value3']})
 
 
