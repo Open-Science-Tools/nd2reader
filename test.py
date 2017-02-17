@@ -1,5 +1,6 @@
-import unittest
-loader = unittest.TestLoader()
-tests = loader.discover('tests', pattern='test_*.py', top_level_dir='.')
-testRunner = unittest.TextTestRunner()
-testRunner.run(tests)
+import nose
+from os import path
+
+file_path = path.abspath(__file__)
+tests_path = path.join(path.abspath(path.dirname(file_path)), "tests")
+nose.main(argv=[path.abspath(__file__), "--with-coverage", "--cover-erase", "--cover-package=nd2reader", tests_path])
