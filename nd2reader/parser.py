@@ -94,19 +94,15 @@ class Parser(object):
         else:
             return raw_image_data
 
-    def get_dtype_from_metadata(self):
+    @staticmethod
+    def get_dtype_from_metadata():
         """
         Determine the data type from the metadata.
+        For now, always use float64 to prevent unexpected overflow errors when manipulating the data (calculating sums/
+        means/etc.)
         :return:
         """
-        bit_depth = self._raw_metadata.image_attributes[six.b('SLxImageAttributes')][six.b('uiBpcInMemory')]
-        dtype = np.float64
-        if bit_depth <= 16:
-            dtype = np.float16
-        elif bit_depth <= 32:
-            dtype = np.float32
-
-        return dtype
+        return np.float64
 
     def _check_version_supported(self):
         """
