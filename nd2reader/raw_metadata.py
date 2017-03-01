@@ -51,7 +51,10 @@ class RawMetadata(object):
             "pixel_microns": self.image_calibration.get(six.b('SLxCalibration'), {}).get(six.b('dCalibration')),
         }
 
+        self._metadata_parsed['num_frames'] = len(self._metadata_parsed['frames'])
+
         self._parse_roi_metadata()
+        self._parse_experiment_metadata()
 
         return self._metadata_parsed
 
@@ -162,7 +165,7 @@ class RawMetadata(object):
         Parse the raw ROI metadata.
         :return:
         """
-        if not six.b('RoiMetadata_v1') in self.roi_metadata:
+        if self.roi_metadata is None or not six.b('RoiMetadata_v1') in self.roi_metadata:
             return
 
         raw_roi_data = self.roi_metadata[six.b('RoiMetadata_v1')]
@@ -246,6 +249,73 @@ class RawMetadata(object):
                                   size_dict[six.b('m_dSizeY')] * 0.25 * image_height,
                                   size_dict[six.b('m_dSizeZ')]))
         return roi_dict
+
+    def _parse_experiment_metadata(self):
+        """
+        Parse the metadata of the ND experiment
+        :return:
+        """
+        if not six.b('SLxExperiment') in self.image_metadata:
+            return
+
+        raw_data = self.image_metadata[six.b('SLxExperiment')]
+
+        experimental_data = {
+            'description': 'unknown',
+            'loops': []
+        }
+
+        if six.b('wsApplicationDesc') in raw_data:
+            experimental_data['description'] = raw_data[six.b('wsApplicationDesc')].decode('utf8')
+
+        if six.b('uLoopPars') in raw_data:
+            experimental_data['loops'] = self._parse_loop_data(raw_data[six.b('uLoopPars')])
+
+        self._metadata_parsed['experiment'] = experimental_data
+
+    def _parse_loop_data(self, loop_data):
+        """
+        Parse the experimental loop data
+        :param loop_data:
+        :return:
+        """
+        if six.b('uiPeriodCount') not in loop_data or loop_data[six.b('uiPeriodCount')] == 0:
+            return []
+
+        if six.b('pPeriod') not in loop_data:
+            return []
+
+        # take the first dictionary element, it contains all loop data
+        loops = loop_data[six.b('pPeriod')][list(loop_data[six.b('pPeriod')].keys())[0]]
+
+        # take into account the absolute time in ms
+        time_offset = 0
+
+        parsed_loops = []
+
+        for loop in loops:
+            # duration of this loop
+            duration = loop[six.b('dDuration')]
+
+            # uiLoopType == 6 is a stimulation loop
+            is_stimulation = loop[six.b('uiLoopType')] == 6
+
+            # sampling interval in ms
+            interval = loop[six.b('dAvgPeriodDiff')]
+
+            parsed_loop = {
+                'start': time_offset,
+                'duration': duration,
+                'stimulation': is_stimulation,
+                'sampling_interval': interval
+            }
+
+            parsed_loops.append(parsed_loop)
+
+            # increase the time offset
+            time_offset += duration
+
+        return parsed_loops
 
     @property
     @ignore_missing
