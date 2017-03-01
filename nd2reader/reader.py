@@ -6,7 +6,6 @@ class ND2Reader(FramesSequenceND):
     """
     PIMS wrapper for the ND2 parser
     """
-
     def __init__(self, filename):
         self.filename = filename
 
@@ -45,7 +44,8 @@ class ND2Reader(FramesSequenceND):
         :param i:
         :return:
         """
-        return self._parser.get_image(i)
+        c_name = self.metadata["channels"][0]
+        return self._parser.get_image_by_attributes(i, 0, c_name, 0, self.metadata["height"], self.metadata["width"])
 
     def get_frame_2D(self, c, t, z):
         """
@@ -56,8 +56,7 @@ class ND2Reader(FramesSequenceND):
         :return:
         """
         c_name = self.metadata["channels"][c]
-
-        return self._parser.get_image_by_attributes(t, 0, c_name, z, self.metadata["width"], self.metadata["height"])
+        return self._parser.get_image_by_attributes(t, 0, c_name, z, self.metadata["height"], self.metadata["width"])
 
     @property
     def pixel_type(self):
