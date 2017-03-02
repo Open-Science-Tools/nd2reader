@@ -196,7 +196,7 @@ class RawMetadata(object):
             "type": self._parse_roi_type(raw_roi_dict[six.b('m_sInfo')][six.b('m_uiInterpType')])
         }
         for i in range(number_of_timepoints):
-            roi_dict = self._parse_vect_anim(roi_dict, raw_roi_dict[six.b('m_vectAnimParams_%d') % i])
+            roi_dict = self._parse_vect_anim(roi_dict, raw_roi_dict[six.b('m_vectAnimParams_%d' % i)])
 
         # convert to NumPy arrays
         roi_dict["timepoints"] = np.array(roi_dict["timepoints"], dtype=np.float)
