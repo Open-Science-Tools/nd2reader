@@ -1,4 +1,5 @@
 import unittest
+from os import path
 
 from nd2reader.reader import ND2Reader
 
@@ -6,9 +7,10 @@ from nd2reader.reader import ND2Reader
 class TestReader(unittest.TestCase):
 
     def setUp(self):
+        dir_path = path.dirname(path.realpath(__file__))
         self.files = [
-            './test_data/data001.nd2',
-            './test_data/data002.nd2'
+            path.join(dir_path, 'test_data/data001.nd2'),
+            path.join(dir_path, 'test_data/data002.nd2')
         ]
 
     def test_sizes_data_001(self):
