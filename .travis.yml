@@ -17,6 +17,8 @@ python:
   - "3.7-dev" # 3.7 development branch
   - "nightly" # currently points to 3.7-dev
 install:
+  - pip install --upgrade pip setuptools wheel
+  - pip install --only-binary=numpy numpy
   - pip install -r requirements.txt
   - pip install codeclimate-test-reporter coverage
 
