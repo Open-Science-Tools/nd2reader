@@ -1,11 +1,13 @@
-from pims import FramesSequenceND
+from pims import FramesSequenceND, Frame
 from nd2reader.parser import Parser
+import numpy as np
 
 
 class ND2Reader(FramesSequenceND):
     """
     PIMS wrapper for the ND2 parser
     """
+
     def __init__(self, filename):
         self.filename = filename
 
@@ -44,8 +46,26 @@ class ND2Reader(FramesSequenceND):
         :param i:
         :return:
         """
-        c_name = self.metadata["channels"][0]
-        return self._parser.get_image_by_attributes(i, 0, c_name, 0, self.metadata["height"], self.metadata["width"])
+        fetch_all_channels = 'c' in self.bundle_axes
+
+        if fetch_all_channels:
+            return self._get_frame_all_channels(i)
+        else:
+            return self.get_frame_2D(c, i, 0)
+
+    def _get_frame_all_channels(self, i):
+        """
+        Get all color channels for this frame
+        :return:
+        """
+        frames = None
+        for c in range(len(self.metadata["channels"])):
+            frame = self.get_frame_2D(c, i, 0)
+            if frames is None:
+                frames = Frame([frame])
+            else:
+                frames = np.concatenate((frames, [frame]), axis=0)
+        return frames
 
     def get_frame_2D(self, c, t, z):
         """
