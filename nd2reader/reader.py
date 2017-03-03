@@ -51,7 +51,7 @@ class ND2Reader(FramesSequenceND):
         if fetch_all_channels:
             return self._get_frame_all_channels(i)
         else:
-            return self.get_frame_2D(c, i, 0)
+            return self.get_frame_2D(self.default_coords['c'], i, self.default_coords['z'])
 
     def _get_frame_all_channels(self, i):
         """
@@ -60,7 +60,7 @@ class ND2Reader(FramesSequenceND):
         """
         frames = None
         for c in range(len(self.metadata["channels"])):
-            frame = self.get_frame_2D(c, i, 0)
+            frame = self.get_frame_2D(c, i, self.default_coords['z'])
             if frames is None:
                 frames = Frame([frame])
             else:
