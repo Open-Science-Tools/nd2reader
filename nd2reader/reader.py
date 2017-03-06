@@ -99,3 +99,21 @@ class ND2Reader(FramesSequenceND):
 
         # provide the default
         self.iter_axes = 't'
+
+    def get_timesteps(self):
+        """
+        Get the timesteps of the experiment
+        :return:
+        """
+        timesteps = np.array([])
+        current_time = 0.0
+        for loop in self.metadata['experiment']['loops']:
+            if loop['stimulation']:
+                continue
+
+            timesteps = np.concatenate(
+                (timesteps, np.arange(current_time, current_time + loop['duration'], loop['sampling_interval'])))
+            current_time += loop['duration']
+
+        # if experiment did not finish, number of timesteps is wrong. Take correct amount of leading timesteps.
+        return timesteps[:self.metadata['num_frames']]

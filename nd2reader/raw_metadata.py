@@ -279,14 +279,14 @@ class RawMetadata(object):
         :param loop_data:
         :return:
         """
-        if six.b('uiPeriodCount') not in loop_data or loop_data[six.b('uiPeriodCount')] == 0:
-            return []
+        loops = [loop_data]
+        if six.b('uiPeriodCount') in loop_data and loop_data[six.b('uiPeriodCount')] > 0:
+            # special ND experiment
+            if six.b('pPeriod') not in loop_data:
+                return []
 
-        if six.b('pPeriod') not in loop_data:
-            return []
-
-        # take the first dictionary element, it contains all loop data
-        loops = loop_data[six.b('pPeriod')][list(loop_data[six.b('pPeriod')].keys())[0]]
+            # take the first dictionary element, it contains all loop data
+            loops = loop_data[six.b('pPeriod')][list(loop_data[six.b('pPeriod')].keys())[0]]
 
         # take into account the absolute time in ms
         time_offset = 0
@@ -298,7 +298,9 @@ class RawMetadata(object):
             duration = loop[six.b('dDuration')]
 
             # uiLoopType == 6 is a stimulation loop
-            is_stimulation = loop[six.b('uiLoopType')] == 6
+            is_stimulation = False
+            if six.b('uiLoopType') in loop:
+                is_stimulation = loop[six.b('uiLoopType')] == 6
 
             # sampling interval in ms
             interval = loop[six.b('dAvgPeriodDiff')]
