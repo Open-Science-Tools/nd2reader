@@ -54,4 +54,5 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+docs/README.md
 
