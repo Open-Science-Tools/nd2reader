@@ -13,7 +13,9 @@ from nd2reader.raw_metadata import RawMetadata
 
 
 class Parser(object):
-    """ Parses ND2 files and creates a Metadata and driver object. """
+    """Parses ND2 files and creates a Metadata and driver object.
+
+    """
     CHUNK_HEADER = 0xabeceda
     CHUNK_MAP_START = six.b("ND2 FILEMAP SIGNATURE NAME 0001!")
     CHUNK_MAP_END = six.b("ND2 CHUNK MAP SIGNATURE 0000001!")
@@ -21,10 +23,6 @@ class Parser(object):
     supported_file_versions = {(3, None): True}
 
     def __init__(self, fh):
-        """
-        :type fh:    file
-
-        """
         self._fh = fh
         self._label_map = None
         self._raw_metadata = None
@@ -37,10 +35,8 @@ class Parser(object):
         self._parse_metadata()
 
     def calculate_image_properties(self, index):
-        """
-        Calculate FOV, channels and z_levels
-        :param index:
-        :return:
+        """Calculate FOV, channels and z_levels
+
         """
         field_of_view = self._calculate_field_of_view(index)
         channel = self._calculate_channel(index)
@@ -56,9 +52,6 @@ class Parser(object):
         eliminate this possibility in future releases. For now, you'll need to check if your image is None if you're
         doing anything out of the ordinary.
 
-        :type index:    int
-        :rtype:    Image or None
-
         """
         field_of_view, channel, z_level = self.calculate_image_properties(index)
         channel_offset = index % len(self.metadata["channels"])
@@ -73,17 +66,8 @@ class Parser(object):
             return image
 
     def get_image_by_attributes(self, frame_number, field_of_view, channel_name, z_level, height, width):
-        """
-        Attempts to get Image based on attributes alone.
+        """Attempts to get Image based on attributes alone.
 
-        :type frame_number:    int
-        :type field_of_view:    int
-        :type channel_name:    str
-        :type z_level:    int
-        :type height:    int
-        :type width:    int
-
-        :rtype: Image or None
         """
         image_group_number = self._calculate_image_group_number(frame_number, field_of_view, z_level)
         try:
@@ -96,18 +80,17 @@ class Parser(object):
 
     @staticmethod
     def get_dtype_from_metadata():
-        """
-        Determine the data type from the metadata.
+        """Determine the data type from the metadata.
+
         For now, always use float64 to prevent unexpected overflow errors when manipulating the data (calculating sums/
         means/etc.)
-        :return:
+
         """
         return np.float64
 
     def _check_version_supported(self):
-        """
-        Checks if the ND2 file version is supported by this reader.
-        :return:
+        """Checks if the ND2 file version is supported by this reader.
+
         """
         major_version, minor_version = get_version(self._fh)
         supported = self.supported_file_versions.get((major_version, minor_version)) or \
@@ -119,8 +102,7 @@ class Parser(object):
         return supported
 
     def _parse_metadata(self):
-        """
-        Reads all metadata and instantiates the Metadata object.
+        """Reads all metadata and instantiates the Metadata object.
 
         """
         # Retrieve raw metadata from the label mapping
@@ -134,8 +116,6 @@ class Parser(object):
         as some of the bytes contain the value 33, which is the ASCII code for "!". So we iteratively find each label,
         grab the subsequent data (always 16 bytes long), advance to the next label and repeat.
 
-        :rtype: LabelMap
-
         """
         self._fh.seek(-8, 2)
         chunk_map_start_location = struct.unpack("Q", self._fh.read(8))[0]
@@ -144,33 +124,23 @@ class Parser(object):
         return LabelMap(raw_text)
 
     def _calculate_field_of_view(self, index):
-        """
-        Determines what field of view was being imaged for a given image.
-
-        :type index:    int
-        :rtype:    int
+        """Determines what field of view was being imaged for a given image.
 
         """
         images_per_cycle = len(self.metadata["z_levels"]) * len(self.metadata["channels"])
         return int((index - (index % images_per_cycle)) / images_per_cycle) % len(self.metadata["fields_of_view"])
 
     def _calculate_channel(self, index):
-        """
-        Determines what channel a particular image is.
-
-        :type index:    int
-        :rtype:    str
+        """Determines what channel a particular image is.
 
         """
         return self.metadata["channels"][index % len(self.metadata["channels"])]
 
     def _calculate_z_level(self, index):
-        """
-        Determines the plane in the z-axis a given image was taken in. In the future, this will be replaced with the
-        actual offset in micrometers.
+        """Determines the plane in the z-axis a given image was taken in.
 
-        :type index:    int
-        :rtype:    int
+        In the future, this will be replaced with the actual offset in micrometers.
+
         """
         return self.metadata["z_levels"][int(
             ((index - (index % len(self.metadata["channels"]))) / len(self.metadata["channels"])) % len(
@@ -180,12 +150,6 @@ class Parser(object):
         """
         Images are grouped together if they share the same time index, field of view, and z-level.
 
-        :type frame_number: int
-        :type fov: int
-        :type z_level: int
-
-        :rtype: int
-
         """
         return frame_number * len(self.metadata["fields_of_view"]) * len(self.metadata["z_levels"]) + (
             fov * len(self.metadata["z_levels"]) + z_level)
@@ -193,12 +157,6 @@ class Parser(object):
     def _calculate_frame_number(self, image_group_number, field_of_view, z_level):
         """
         Images are in the same frame if they share the same group number and field of view and are taken sequentially.
-
-        :type image_group_number:    int
-        :type field_of_view:    int
-        :type z_level:    int
-
-        :rtype:    int
 
         """
         return (image_group_number - (field_of_view * len(self.metadata["z_levels"]) + z_level)) / (
@@ -210,22 +168,11 @@ class Parser(object):
         Image data is interleaved for each image set. That is, if there are four images in a set, the first image
         will consist of pixels 1, 5, 9, etc, the second will be pixels 2, 6, 10, and so forth.
 
-        :rtype: dict
-
         """
         return {channel: n for n, channel in enumerate(self.metadata["channels"])}
 
     def _get_raw_image_data(self, image_group_number, channel_offset, height, width):
-        """
-        Reads the raw bytes and the timestamp of an image.
-
-        :param image_group_number: groups are made of images with the same time index, field of view and z-level
-        :type image_group_number: int
-        :param channel_offset: the offset in the array where the bytes for this image are found
-        :type channel_offset: int
-
-        :rtype:    (int, Image)
-        :raises:    NoImageError
+        """Reads the raw bytes and the timestamp of an image.
 
         """
         chunk = self._label_map.get_image_data_location(image_group_number)
@@ -254,8 +201,7 @@ class Parser(object):
         raise NoImageError
 
     def _get_frame_metadata(self):
-        """
-        Get the metadata for one frame
-        :return:
+        """Get the metadata for one frame
+
         """
         return self.metadata

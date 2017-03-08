@@ -4,8 +4,8 @@ import numpy as np
 
 
 class ND2Reader(FramesSequenceND):
-    """
-    PIMS wrapper for the ND2 parser
+    """PIMS wrapper for the ND2 parser
+
     """
 
     def __init__(self, filename):
@@ -26,25 +26,21 @@ class ND2Reader(FramesSequenceND):
 
     @classmethod
     def class_exts(cls):
-        """
-        So PIMS open function can use this reader for opening .nd2 files
-        :return:
+        """Let PIMS open function use this reader for opening .nd2 files
+
         """
         return {'nd2'} | super(ND2Reader, cls).class_exts()
 
     def close(self):
-        """
-        Correctly close the file handle
-        :return:
+        """Correctly close the file handle
+
         """
         if self._fh is not None:
             self._fh.close()
 
     def get_frame(self, i):
-        """
-        Return one frame
-        :param i:
-        :return:
+        """Return one frame
+
         """
         fetch_all_channels = 'c' in self.bundle_axes
 
@@ -54,9 +50,8 @@ class ND2Reader(FramesSequenceND):
             return self.get_frame_2D(self.default_coords['c'], i, self.default_coords['z'])
 
     def _get_frame_all_channels(self, i):
-        """
-        Get all color channels for this frame
-        :return:
+        """Get all color channels for this frame
+
         """
         frames = None
         for c in range(len(self.metadata["channels"])):
@@ -68,28 +63,22 @@ class ND2Reader(FramesSequenceND):
         return frames
 
     def get_frame_2D(self, c, t, z):
-        """
-        Gets a given frame using the parser
-        :param c:
-        :param t:
-        :param z:
-        :return:
+        """Gets a given frame using the parser
+
         """
         c_name = self.metadata["channels"][c]
         return self._parser.get_image_by_attributes(t, 0, c_name, z, self.metadata["height"], self.metadata["width"])
 
     @property
     def pixel_type(self):
-        """
-        Return the pixel data type
-        :return:
+        """Return the pixel data type
+
         """
         return self._dtype
 
     def _setup_axes(self):
-        """
-        Setup the xyctz axes, iterate over t axis by default
-        :return:
+        """Setup the xyctz axes, iterate over t axis by default
+
         """
         self._init_axis('x', self.metadata["width"])
         self._init_axis('y', self.metadata["height"])
@@ -101,9 +90,8 @@ class ND2Reader(FramesSequenceND):
         self.iter_axes = 't'
 
     def get_timesteps(self):
-        """
-        Get the timesteps of the experiment
-        :return:
+        """Get the timesteps of the experiment
+
         """
         timesteps = np.array([])
         current_time = 0.0

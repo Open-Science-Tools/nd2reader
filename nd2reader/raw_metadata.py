@@ -24,16 +24,14 @@ class RawMetadata(object):
 
     @property
     def __dict__(self):
-        """
-        Returns the parsed metadata in dictionary form
-        :return: 
+        """Returns the parsed metadata in dictionary form
+
         """
         return self.get_parsed_metadata()
 
     def get_parsed_metadata(self):
-        """
-        Returns the parsed metadata in dictionary form
-        :return: 
+        """ Returns the parsed metadata in dictionary form
+
         """
 
         if self._metadata_parsed is not None:
@@ -63,8 +61,6 @@ class RawMetadata(object):
         These are labels created by the NIS Elements user. Typically they may a short description of the filter cube
         used (e.g. "bright field", "GFP", etc.)
 
-        :rtype: list
-
         """
         channels = []
         metadata = self.image_metadata_sequence[six.b('SLxPictureMetadata')][six.b('sPicturePlanes')]
@@ -90,25 +86,19 @@ class RawMetadata(object):
         in the image data, so we have to calculate it. There probably is something somewhere, since
         NIS Elements can figure it out, but we haven't found it yet.
 
-        :rtype:    list
-
         """
         return self._parse_dimension(r""".*?XY\((\d+)\).*?""")
 
     def _parse_frames(self):
-        """
-        The number of cycles.
-
-        :rtype:     list
+        """The number of cycles.
 
         """
         return self._parse_dimension(r""".*?T'?\((\d+)\).*?""")
 
     def _parse_z_levels(self):
-        """
-        The different levels in the Z-plane. Just a sequence from 0 to n.
+        """The different levels in the Z-plane.
 
-        :rtype:    list
+        Just a sequence from 0 to n.
 
         """
         return self._parse_dimension(r""".*?Z\((\d+)\).*?""")
@@ -118,8 +108,6 @@ class RawMetadata(object):
         While there are metadata values that represent a lot of what we want to capture, they seem to be unreliable.
         Sometimes certain elements don't exist, or change their data type randomly. However, the human-readable text
         is always there and in the same exact format, so we just parse that instead.
-
-        :rtype:    str
 
         """
         dimension_text = six.b("")
@@ -135,13 +123,6 @@ class RawMetadata(object):
         return dimension_text
 
     def _parse_dimension(self, pattern):
-        """
-        :param pattern:    a valid regex pattern
-        :type pattern:    str
-
-        :rtype:    list of int
-
-        """
         dimension_text = self._parse_dimension_text()
         if six.PY3:
             dimension_text = dimension_text.decode("utf8")
@@ -152,18 +133,16 @@ class RawMetadata(object):
         return list(range(count))
 
     def _parse_total_images_per_channel(self):
-        """
-        The total number of images per channel. Warning: this may be inaccurate as it includes "gap" images.
+        """The total number of images per channel.
 
-        :rtype: int
+        Warning: this may be inaccurate as it includes "gap" images.
 
         """
         return self.image_attributes[six.b('SLxImageAttributes')][six.b('uiSequenceCount')]
 
     def _parse_roi_metadata(self):
-        """
-        Parse the raw ROI metadata.
-        :return:
+        """Parse the raw ROI metadata.
+
         """
         if self.roi_metadata is None or not six.b('RoiMetadata_v1') in self.roi_metadata:
             return
@@ -180,11 +159,10 @@ class RawMetadata(object):
         self._metadata_parsed['rois'] = roi_objects
 
     def _parse_roi(self, raw_roi_dict):
-        """
-        Extract the vector animation parameters from the ROI.
+        """Extract the vector animation parameters from the ROI.
+
         This includes the position and size at the given timepoints.
-        :param raw_roi_dict:
-        :return:
+
         """
         number_of_timepoints = raw_roi_dict[six.b('m_vectAnimParams_Size')]
 
@@ -226,10 +204,9 @@ class RawMetadata(object):
         return None
 
     def _parse_vect_anim(self, roi_dict, animation_dict):
-        """
-        Parses a ROI vector animation object and adds it to the global list of timepoints and positions.
-        :param animation_dict:
-        :return:
+        """Parses a ROI vector animation object and adds it to the global list of timepoints and positions.
+
+
         """
         roi_dict["timepoints"].append(animation_dict[six.b('m_dTimeMs')])
 
@@ -251,9 +228,8 @@ class RawMetadata(object):
         return roi_dict
 
     def _parse_experiment_metadata(self):
-        """
-        Parse the metadata of the ND experiment
-        :return:
+        """Parse the metadata of the ND experiment
+
         """
         if not six.b('SLxExperiment') in self.image_metadata:
             return
@@ -274,10 +250,8 @@ class RawMetadata(object):
         self._metadata_parsed['experiment'] = experimental_data
 
     def _parse_loop_data(self, loop_data):
-        """
-        Parse the experimental loop data
-        :param loop_data:
-        :return:
+        """Parse the experimental loop data
+
         """
         loops = [loop_data]
         if six.b('uiPeriodCount') in loop_data and loop_data[six.b('uiPeriodCount')] > 0:

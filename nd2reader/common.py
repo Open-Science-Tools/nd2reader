@@ -7,11 +7,13 @@ from nd2reader.exceptions import InvalidVersionError
 
 
 def get_version(fh):
-    """
-    Determines what version the ND2 is.
+    """Determines what version the ND2 is.
 
-    :param fh:    an open file handle to the ND2
-    :type fh:     file
+    Args:
+        fh: File handle of the .nd2 file
+
+    Returns:
+        tuple: Major and minor version
 
     """
     # the first 16 bytes seem to have no meaning, so we skip them
@@ -23,11 +25,13 @@ def get_version(fh):
 
 
 def parse_version(data):
-    """
-    Parses a string with the version data in it.
+    """Parses a string with the version data in it.
 
-    :param data:    the 19th through 54th byte of the ND2, representing the version
-    :type data:     unicode
+    Args:
+        data (unicode): the 19th through 54th byte of the ND2, representing the version
+
+    Returns:
+        tuple: Major and minor version
 
     """
     match = re.search(r"""^ND2 FILE SIGNATURE CHUNK NAME01!Ver(?P<major>\d)\.(?P<minor>\d)$""", data)
@@ -40,14 +44,14 @@ def parse_version(data):
 
 
 def read_chunk(fh, chunk_location):
-    """
-    Reads a piece of data given the location of its pointer.
+    """Reads a piece of data given the location of its pointer.
 
-    :param fh:    an open file handle to the ND2
-    :param chunk_location:    a pointer
-    :type chunk_location:    int
+    Args:
+        fh: an open file handle to the ND2
+        chunk_location (int): location to read
 
-    :rtype: bytes
+    Returns:
+        bytes: the data at the chunk location
 
     """
     if chunk_location is None:
@@ -106,10 +110,10 @@ def _parse_char_array(data):
 
 
 def parse_date(text_info):
-    """
-    The date and time when acquisition began.
+    """The date and time when acquisition began.
 
-    :rtype: datetime.datetime() or None
+    Returns:
+        datetime: The date and time when acquisition began.
 
     """
     for line in text_info.values():
@@ -127,8 +131,10 @@ def parse_date(text_info):
 
 
 def _parse_metadata_item(data, cursor_position):
-    """
-    Reads hierarchical data, analogous to a Python dict.
+    """Reads hierarchical data, analogous to a Python dict.
+
+    Returns:
+        dict: the metadata item
 
     """
     new_count, length = struct.unpack("<IQ", data.read(12))
@@ -141,8 +147,7 @@ def _parse_metadata_item(data, cursor_position):
 
 
 def _get_value(data, data_type, cursor_position):
-    """
-    ND2s use various codes to indicate different data types, which we translate here.
+    """ND2s use various codes to indicate different data types, which we translate here.
 
     """
     parser = {1: _parse_unsigned_char,
@@ -157,8 +162,7 @@ def _get_value(data, data_type, cursor_position):
 
 
 def read_metadata(data, count):
-    """
-    Iterates over each element some section of the metadata and parses it.
+    """Iterates over each element some section of the metadata and parses it.
 
     """
     if data is None:
@@ -188,12 +192,7 @@ def read_metadata(data, count):
 
 
 def _add_to_metadata(metadata, name, value):
-    """
-    Add the name value pair to the metadata dict
-    :param metadata:
-    :param name:
-    :param value:
-    :return:
+    """Add the name value pair to the metadata dict
     """
     if name not in metadata.keys():
         metadata[name] = value

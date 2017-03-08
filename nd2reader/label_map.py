@@ -4,8 +4,7 @@ import re
 
 
 class LabelMap(object):
-    """
-    Contains pointers to metadata. This might only be valid for V3 files.
+    """Contains pointers to metadata. This might only be valid for V3 files.
 
     """
     def __init__(self, raw_binary_data):
