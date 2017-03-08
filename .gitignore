@@ -52,7 +52,5 @@ coverage.xml
 *.log
 *.pot
 
-# Sphinx documentation
-docs/_build/
-docs/README.md
+.doctrees
 

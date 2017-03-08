@@ -1,0 +1,300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nd2reader.common &#8212; nd2reader  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for nd2reader.common</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">array</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">nd2reader.exceptions</span> <span class="k">import</span> <span class="n">InvalidVersionError</span>
+
+
+<div class="viewcode-block" id="get_version"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.common.get_version">[docs]</a><span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="n">fh</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines what version the ND2 is.</span>
+
+<span class="sd">    :param fh:    an open file handle to the ND2</span>
+<span class="sd">    :type fh:     file</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># the first 16 bytes seem to have no meaning, so we skip them</span>
+    <span class="n">fh</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+
+    <span class="c1"># the next 38 bytes contain the string that we want to parse. Unlike most of the ND2, this is in UTF-8</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">38</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">parse_version</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="parse_version"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.common.parse_version">[docs]</a><span class="k">def</span> <span class="nf">parse_version</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parses a string with the version data in it.</span>
+
+<span class="sd">    :param data:    the 19th through 54th byte of the ND2, representing the version</span>
+<span class="sd">    :type data:     unicode</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">r&quot;&quot;&quot;^ND2 FILE SIGNATURE CHUNK NAME01!Ver(?P&lt;major&gt;\d)\.(?P&lt;minor&gt;\d)$&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+        <span class="c1"># We haven&#39;t seen a lot of ND2s but the ones we have seen conform to this</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;major&#39;</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;minor&#39;</span><span class="p">))</span>
+
+    <span class="k">raise</span> <span class="n">InvalidVersionError</span><span class="p">(</span><span class="s2">&quot;The version of the ND2 you specified is not supported.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="read_chunk"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.common.read_chunk">[docs]</a><span class="k">def</span> <span class="nf">read_chunk</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span> <span class="n">chunk_location</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads a piece of data given the location of its pointer.</span>
+
+<span class="sd">    :param fh:    an open file handle to the ND2</span>
+<span class="sd">    :param chunk_location:    a pointer</span>
+<span class="sd">    :type chunk_location:    int</span>
+
+<span class="sd">    :rtype: bytes</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">chunk_location</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">fh</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">chunk_location</span><span class="p">)</span>
+    <span class="c1"># The chunk metadata is always 16 bytes long</span>
+    <span class="n">chunk_metadata</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">header</span><span class="p">,</span> <span class="n">relative_offset</span><span class="p">,</span> <span class="n">data_length</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;IIQ&quot;</span><span class="p">,</span> <span class="n">chunk_metadata</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">header</span> <span class="o">!=</span> <span class="mh">0xabeceda</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The ND2 file seems to be corrupted.&quot;</span><span class="p">)</span>
+    <span class="c1"># We start at the location of the chunk metadata, skip over the metadata, and then proceed to the</span>
+    <span class="c1"># start of the actual data field, which is at some arbitrary place after the metadata.</span>
+    <span class="n">fh</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">chunk_location</span> <span class="o">+</span> <span class="mi">16</span> <span class="o">+</span> <span class="n">relative_offset</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">data_length</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="read_array"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.common.read_array">[docs]</a><span class="k">def</span> <span class="nf">read_array</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">chunk_location</span><span class="p">):</span>
+    <span class="n">kinds</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;double&#39;</span><span class="p">:</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;int&#39;</span><span class="p">:</span> <span class="s1">&#39;i&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;float&#39;</span><span class="p">:</span> <span class="s1">&#39;f&#39;</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">kind</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kinds</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;You attempted to read an array of an unknown type.&#39;</span><span class="p">)</span>
+    <span class="n">raw_data</span> <span class="o">=</span> <span class="n">read_chunk</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span> <span class="n">chunk_location</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">raw_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">kinds</span><span class="p">[</span><span class="n">kind</span><span class="p">],</span> <span class="n">raw_data</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_parse_unsigned_char</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_parse_unsigned_int</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_parse_unsigned_long</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_parse_double</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_parse_string</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span><span class="p">)):</span>
+        <span class="c1"># the string ends at the first instance of \x00\x00</span>
+        <span class="n">value</span> <span class="o">+=</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf16&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_parse_char_array</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">array_length</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">array_length</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="parse_date"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.common.parse_date">[docs]</a><span class="k">def</span> <span class="nf">parse_date</span><span class="p">(</span><span class="n">text_info</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The date and time when acquisition began.</span>
+
+<span class="sd">    :rtype: datetime.datetime() or None</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">text_info</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+        <span class="c1"># ND2s seem to randomly switch between 12- and 24-hour representations.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">absolute_start</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="s2">&quot;%m/</span><span class="si">%d</span><span class="s2">/%Y  %H:%M:%S&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">absolute_start</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="s2">&quot;%m/</span><span class="si">%d</span><span class="s2">/%Y  %I:%M:%S %p&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+                <span class="n">absolute_start</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">absolute_start</span></div>
+
+
+<span class="k">def</span> <span class="nf">_parse_metadata_item</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cursor_position</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads hierarchical data, analogous to a Python dict.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_count</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;IQ&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">12</span><span class="p">))</span>
+    <span class="n">length</span> <span class="o">-=</span> <span class="n">data</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span> <span class="o">-</span> <span class="n">cursor_position</span>
+    <span class="n">next_data_length</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">next_data_length</span><span class="p">,</span> <span class="n">new_count</span><span class="p">)</span>
+    <span class="c1"># Skip some offsets</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">new_count</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+
+<span class="k">def</span> <span class="nf">_get_value</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data_type</span><span class="p">,</span> <span class="n">cursor_position</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ND2s use various codes to indicate different data types, which we translate here.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="n">_parse_unsigned_char</span><span class="p">,</span>
+              <span class="mi">2</span><span class="p">:</span> <span class="n">_parse_unsigned_int</span><span class="p">,</span>
+              <span class="mi">3</span><span class="p">:</span> <span class="n">_parse_unsigned_int</span><span class="p">,</span>
+              <span class="mi">5</span><span class="p">:</span> <span class="n">_parse_unsigned_long</span><span class="p">,</span>
+              <span class="mi">6</span><span class="p">:</span> <span class="n">_parse_double</span><span class="p">,</span>
+              <span class="mi">8</span><span class="p">:</span> <span class="n">_parse_string</span><span class="p">,</span>
+              <span class="mi">9</span><span class="p">:</span> <span class="n">_parse_char_array</span><span class="p">,</span>
+              <span class="mi">11</span><span class="p">:</span> <span class="n">_parse_metadata_item</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">parser</span><span class="p">[</span><span class="n">data_type</span><span class="p">](</span><span class="n">data</span><span class="p">)</span> <span class="k">if</span> <span class="n">data_type</span> <span class="o">&lt;</span> <span class="mi">11</span> <span class="k">else</span> <span class="n">parser</span><span class="p">[</span><span class="n">data_type</span><span class="p">](</span><span class="n">data</span><span class="p">,</span> <span class="n">cursor_position</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="read_metadata"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.common.read_metadata">[docs]</a><span class="k">def</span> <span class="nf">read_metadata</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Iterates over each element some section of the metadata and parses it.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">):</span>
+        <span class="n">cursor_position</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">header</span><span class="p">:</span>
+            <span class="c1"># We&#39;ve reached the end of some hierarchy of data</span>
+            <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">six</span><span class="o">.</span><span class="n">PY3</span><span class="p">:</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+
+        <span class="n">data_type</span><span class="p">,</span> <span class="n">name_length</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">name_length</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf16&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">_get_value</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data_type</span><span class="p">,</span> <span class="n">cursor_position</span><span class="p">)</span>
+
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">_add_to_metadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">metadata</span></div>
+
+
+<span class="k">def</span> <span class="nf">_add_to_metadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add the name value pair to the metadata dict</span>
+<span class="sd">    :param metadata:</span>
+<span class="sd">    :param name:</span>
+<span class="sd">    :param value:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="c1"># We have encountered this key exactly once before. Since we&#39;re seeing it again, we know we</span>
+            <span class="c1"># need to convert it to a list before proceeding.</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">metadata</span><span class="p">[</span><span class="n">name</span><span class="p">]]</span>
+
+        <span class="c1"># We&#39;ve encountered this key before so we&#39;re guaranteed to be dealing with a list. Thus we append</span>
+        <span class="c1"># the value to the already-existing list.</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">metadata</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Ruben Verweij.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+    </div>
+  </body>
+</html>
