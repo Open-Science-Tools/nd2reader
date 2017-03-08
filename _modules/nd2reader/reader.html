@@ -91,6 +91,12 @@
 <div class="viewcode-block" id="ND2Reader.get_frame"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.reader.ND2Reader.get_frame">[docs]</a>    <span class="k">def</span> <span class="nf">get_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return one frame</span>
 
+<span class="sd">        Args:</span>
+<span class="sd">            i: The frame number</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: The requested frame</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fetch_all_channels</span> <span class="o">=</span> <span class="s1">&#39;c&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bundle_axes</span>
 
@@ -101,6 +107,12 @@
 
     <span class="k">def</span> <span class="nf">_get_frame_all_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get all color channels for this frame</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            i: The frame number</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: The requested frame, with all color channels.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">frames</span> <span class="o">=</span> <span class="kc">None</span>
@@ -115,6 +127,14 @@
 <div class="viewcode-block" id="ND2Reader.get_frame_2D"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.reader.ND2Reader.get_frame_2D">[docs]</a>    <span class="k">def</span> <span class="nf">get_frame_2D</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Gets a given frame using the parser</span>
 
+<span class="sd">        Args:</span>
+<span class="sd">            c: The color channel number</span>
+<span class="sd">            t: The frame number</span>
+<span class="sd">            z: The z stack number</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: The requested frame</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">c_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">][</span><span class="n">c</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">get_image_by_attributes</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">c_name</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">])</span></div>
@@ -122,6 +142,8 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pixel_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the pixel data type</span>
+
+<span class="sd">        Returns: the pixel data type</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dtype</span>
@@ -141,6 +163,9 @@
 
 <div class="viewcode-block" id="ND2Reader.get_timesteps"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.reader.ND2Reader.get_timesteps">[docs]</a>    <span class="k">def</span> <span class="nf">get_timesteps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the timesteps of the experiment</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.ndarray: an array of times in milliseconds.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">timesteps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>

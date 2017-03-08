@@ -87,6 +87,12 @@
 <div class="viewcode-block" id="Parser.calculate_image_properties"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.parser.Parser.calculate_image_properties">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_image_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate FOV, channels and z_levels</span>
 
+<span class="sd">        Args:</span>
+<span class="sd">            index(int): the index (which is simply the order in which the image was acquired)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: tuple of the field of view, the channel and the z level</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">field_of_view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_field_of_view</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
         <span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_channel</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
@@ -102,6 +108,12 @@
 <span class="sd">        eliminate this possibility in future releases. For now, you&#39;ll need to check if your image is None if you&#39;re</span>
 <span class="sd">        doing anything out of the ordinary.</span>
 
+<span class="sd">        Args:</span>
+<span class="sd">            index(int): the index (which is simply the order in which the image was acquired)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Frame: the image</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">field_of_view</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">z_level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_image_properties</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
         <span class="n">channel_offset</span> <span class="o">=</span> <span class="n">index</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">])</span>
@@ -116,7 +128,18 @@
             <span class="k">return</span> <span class="n">image</span></div>
 
 <div class="viewcode-block" id="Parser.get_image_by_attributes"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.parser.Parser.get_image_by_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_image_by_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_number</span><span class="p">,</span> <span class="n">field_of_view</span><span class="p">,</span> <span class="n">channel_name</span><span class="p">,</span> <span class="n">z_level</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Attempts to get Image based on attributes alone.</span>
+        <span class="sd">&quot;&quot;&quot;Gets an image based on its attributes alone</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            frame_number: the frame number</span>
+<span class="sd">            field_of_view: the field of view</span>
+<span class="sd">            channel_name: the color channel name</span>
+<span class="sd">            z_level: the z level</span>
+<span class="sd">            height: the height of the image</span>
+<span class="sd">            width: the width of the image</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Frame: the requested image</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">image_group_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_image_group_number</span><span class="p">(</span><span class="n">frame_number</span><span class="p">,</span> <span class="n">field_of_view</span><span class="p">,</span> <span class="n">z_level</span><span class="p">)</span>
@@ -140,6 +163,12 @@
 
     <span class="k">def</span> <span class="nf">_check_version_supported</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Checks if the ND2 file version is supported by this reader.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True on supported</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            InvalidVersionError: Raises an error if the version is unsupported</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">major_version</span><span class="p">,</span> <span class="n">minor_version</span> <span class="o">=</span> <span class="n">get_version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">)</span>
@@ -166,6 +195,9 @@
 <span class="sd">        as some of the bytes contain the value 33, which is the ASCII code for &quot;!&quot;. So we iteratively find each label,</span>
 <span class="sd">        grab the subsequent data (always 16 bytes long), advance to the next label and repeat.</span>
 
+<span class="sd">        Returns:</span>
+<span class="sd">            LabelMap: the computed label map</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
         <span class="n">chunk_map_start_location</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
@@ -176,12 +208,23 @@
     <span class="k">def</span> <span class="nf">_calculate_field_of_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Determines what field of view was being imaged for a given image.</span>
 
+<span class="sd">        Args:</span>
+<span class="sd">            index(int): the index (which is simply the order in which the image was acquired)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: the field of view</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">images_per_cycle</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;z_levels&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">])</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">((</span><span class="n">index</span> <span class="o">-</span> <span class="p">(</span><span class="n">index</span> <span class="o">%</span> <span class="n">images_per_cycle</span><span class="p">))</span> <span class="o">/</span> <span class="n">images_per_cycle</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;fields_of_view&quot;</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">_calculate_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Determines what channel a particular image is.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            index(int): the index (which is simply the order in which the image was acquired)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            string: the name of the color channel</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">][</span><span class="n">index</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">])]</span>
@@ -190,6 +233,12 @@
         <span class="sd">&quot;&quot;&quot;Determines the plane in the z-axis a given image was taken in.</span>
 
 <span class="sd">        In the future, this will be replaced with the actual offset in micrometers.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            index(int): the index (which is simply the order in which the image was acquired)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The z level</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;z_levels&quot;</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span>
@@ -200,6 +249,14 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Images are grouped together if they share the same time index, field of view, and z-level.</span>
 
+<span class="sd">        Args:</span>
+<span class="sd">            frame_number:</span>
+<span class="sd">            fov:</span>
+<span class="sd">            z_level:</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: the image group number</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">frame_number</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;fields_of_view&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;z_levels&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span>
             <span class="n">fov</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;z_levels&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="n">z_level</span><span class="p">)</span>
@@ -207,6 +264,13 @@
     <span class="k">def</span> <span class="nf">_calculate_frame_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_group_number</span><span class="p">,</span> <span class="n">field_of_view</span><span class="p">,</span> <span class="n">z_level</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Images are in the same frame if they share the same group number and field of view and are taken sequentially.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image_group_number:</span>
+<span class="sd">            field_of_view:</span>
+<span class="sd">            z_level:</span>
+
+<span class="sd">        Returns:</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">image_group_number</span> <span class="o">-</span> <span class="p">(</span><span class="n">field_of_view</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;z_levels&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="n">z_level</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span>
@@ -218,11 +282,22 @@
 <span class="sd">        Image data is interleaved for each image set. That is, if there are four images in a set, the first image</span>
 <span class="sd">        will consist of pixels 1, 5, 9, etc, the second will be pixels 2, 6, 10, and so forth.</span>
 
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: the channel offset for each channel</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">channel</span><span class="p">:</span> <span class="n">n</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">channel</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">])}</span>
 
     <span class="k">def</span> <span class="nf">_get_raw_image_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_group_number</span><span class="p">,</span> <span class="n">channel_offset</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Reads the raw bytes and the timestamp of an image.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image_group_number:</span>
+<span class="sd">            channel_offset:</span>
+<span class="sd">            height:</span>
+<span class="sd">            width:</span>
+
+<span class="sd">        Returns:</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">chunk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">get_image_data_location</span><span class="p">(</span><span class="n">image_group_number</span><span class="p">)</span>

@@ -57,7 +57,25 @@
 
 
 <div class="viewcode-block" id="ignore_missing"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.raw_metadata.ignore_missing">[docs]</a><span class="k">def</span> <span class="nf">ignore_missing</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        func:</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            *args:</span>
+<span class="sd">            **kwargs:</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
@@ -67,6 +85,10 @@
 
 
 <div class="viewcode-block" id="RawMetadata"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.raw_metadata.RawMetadata">[docs]</a><span class="k">class</span> <span class="nc">RawMetadata</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    RawMetadata class parses and stores the raw metadata that is read from the binary file in dict format</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fh</span><span class="p">,</span> <span class="n">label_map</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span> <span class="o">=</span> <span class="n">fh</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span> <span class="o">=</span> <span class="n">label_map</span>
@@ -213,6 +235,11 @@
 
 <span class="sd">        This includes the position and size at the given timepoints.</span>
 
+<span class="sd">        Args:</span>
+<span class="sd">            raw_roi_dict:</span>
+
+<span class="sd">        Returns:</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">number_of_timepoints</span> <span class="o">=</span> <span class="n">raw_roi_dict</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;m_vectAnimParams_Size&#39;</span><span class="p">)]</span>
 
@@ -254,8 +281,14 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_parse_vect_anim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">roi_dict</span><span class="p">,</span> <span class="n">animation_dict</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Parses a ROI vector animation object and adds it to the global list of timepoints and positions.</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parses a ROI vector animation object and adds it to the global list of timepoints and positions.</span>
 
+<span class="sd">        Args:</span>
+<span class="sd">            roi_dict:</span>
+<span class="sd">            animation_dict:</span>
+
+<span class="sd">        Returns:</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">roi_dict</span><span class="p">[</span><span class="s2">&quot;timepoints&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">animation_dict</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;m_dTimeMs&#39;</span><span class="p">)])</span>
@@ -299,8 +332,15 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="s1">&#39;experiment&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">experimental_data</span>
 
-    <span class="k">def</span> <span class="nf">_parse_loop_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loop_data</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Parse the experimental loop data</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_parse_loop_data</span><span class="p">(</span><span class="n">loop_data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse the experimental loop data</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            loop_data:</span>
+
+<span class="sd">        Returns:</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">loops</span> <span class="o">=</span> <span class="p">[</span><span class="n">loop_data</span><span class="p">]</span>
@@ -346,81 +386,160 @@
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">image_text_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">image_text_info</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">image_metadata_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">image_metadata_sequence</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">image_calibration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">image_calibration</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">image_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">image_attributes</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">x_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">x_data</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">y_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">y_data</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">z_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">z_data</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">roi_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">roi_metadata</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">pfs_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="s1">&#39;int&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">pfs_status</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">pfs_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="s1">&#39;int&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">pfs_offset</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">camera_exposure_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">camera_exposure_time</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">lut_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">xmltodict</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">lut_data</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">grabber_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">xmltodict</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">grabber_settings</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">custom_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">xmltodict</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">custom_data</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">app_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">xmltodict</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">app_info</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">camera_temp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Yields:</span>
+<span class="sd">            float: the temperature</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">camera_temp</span> <span class="o">=</span> <span class="n">read_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">camera_temp</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">camera_temp</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">temp</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mf">100.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">camera_temp</span><span class="p">):</span>
@@ -429,6 +548,10 @@
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">acquisition_times</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Yields:</span>
+<span class="sd">            float: the acquisition time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">acquisition_times</span> <span class="o">=</span> <span class="n">read_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">acquisition_times</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">acquisition_times</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">acquisition_time</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="n">acquisition_times</span><span class="p">):</span>
@@ -437,6 +560,11 @@
     <span class="nd">@property</span>
     <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">image_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">image_metadata</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">image_metadata</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span></div>
 </pre></div>
