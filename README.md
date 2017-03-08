@@ -27,7 +27,7 @@ from nd2reader import ND2Reader
 images = ND2Reader('my_directory/example.nd2')
 ```
 
-After opening the file, all `pims` features are supported. Please refer to the [documentation](http://soft-matter.github.io/pims/).
+After opening the file, all `pims` features are supported. Please refer to the [pims documentation](http://soft-matter.github.io/pims/).
 
 ### Contributing
 
