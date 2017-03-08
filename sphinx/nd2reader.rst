@@ -4,26 +4,10 @@ nd2reader package
 Submodules
 ----------
 
-nd2reader.common module
+nd2reader.reader module
 -----------------------
 
-.. automodule:: nd2reader.common
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-nd2reader.exceptions module
----------------------------
-
-.. automodule:: nd2reader.exceptions
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-nd2reader.label_map module
---------------------------
-
-.. automodule:: nd2reader.label_map
+.. automodule:: nd2reader.reader
     :members:
     :undoc-members:
     :show-inheritance:
@@ -44,14 +28,29 @@ nd2reader.raw_metadata module
     :undoc-members:
     :show-inheritance:
 
-nd2reader.reader module
------------------------
+nd2reader.label_map module
+--------------------------
 
-.. automodule:: nd2reader.reader
+.. automodule:: nd2reader.label_map
     :members:
     :undoc-members:
     :show-inheritance:
 
+nd2reader.common module
+-----------------------
+
+.. automodule:: nd2reader.common
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nd2reader.exceptions module
+---------------------------
+
+.. automodule:: nd2reader.exceptions
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 Module contents
 ---------------

@@ -10,8 +10,7 @@
    :maxdepth: 4
    :caption: Contents:
 
-   Introduction to ``nd2reader`` <README.md>
-   ``nd2reader`` API reference <nd2reader>
+   nd2reader API reference <nd2reader>
 
 
 Indices and tables
