@@ -49,7 +49,8 @@
             
   <h1>Source code for nd2reader.exceptions</h1><div class="highlight"><pre>
 <div class="viewcode-block" id="InvalidVersionError"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.exceptions.InvalidVersionError">[docs]</a><span></span><span class="k">class</span> <span class="nc">InvalidVersionError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Unknown version.</span>
+
 <span class="sd">    We don&#39;t know how to parse the version of ND2 that we were given.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -57,7 +58,8 @@
 
 
 <div class="viewcode-block" id="NoImageError"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.exceptions.NoImageError">[docs]</a><span class="k">class</span> <span class="nc">NoImageError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;No image found.</span>
+
 <span class="sd">    Some apparent images in ND2s are just completely blank placeholders. These are used when the number of images per</span>
 <span class="sd">    cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and bright field images every minute).</span>
 

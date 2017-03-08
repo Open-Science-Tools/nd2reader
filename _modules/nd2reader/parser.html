@@ -63,7 +63,9 @@
 
 
 <div class="viewcode-block" id="Parser"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.parser.Parser">[docs]</a><span class="k">class</span> <span class="nc">Parser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Parses ND2 files and creates a Metadata and driver object. &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Parses ND2 files and creates a Metadata and driver object.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">CHUNK_HEADER</span> <span class="o">=</span> <span class="mh">0xabeceda</span>
     <span class="n">CHUNK_MAP_START</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s2">&quot;ND2 FILEMAP SIGNATURE NAME 0001!&quot;</span><span class="p">)</span>
     <span class="n">CHUNK_MAP_END</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s2">&quot;ND2 CHUNK MAP SIGNATURE 0000001!&quot;</span><span class="p">)</span>
@@ -71,10 +73,6 @@
     <span class="n">supported_file_versions</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">3</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span> <span class="kc">True</span><span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fh</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :type fh:    file</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span> <span class="o">=</span> <span class="n">fh</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_raw_metadata</span> <span class="o">=</span> <span class="kc">None</span>
@@ -87,10 +85,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_parse_metadata</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Parser.calculate_image_properties"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.parser.Parser.calculate_image_properties">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_image_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculate FOV, channels and z_levels</span>
-<span class="sd">        :param index:</span>
-<span class="sd">        :return:</span>
+        <span class="sd">&quot;&quot;&quot;Calculate FOV, channels and z_levels</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">field_of_view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_field_of_view</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
         <span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_channel</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
@@ -106,9 +102,6 @@
 <span class="sd">        eliminate this possibility in future releases. For now, you&#39;ll need to check if your image is None if you&#39;re</span>
 <span class="sd">        doing anything out of the ordinary.</span>
 
-<span class="sd">        :type index:    int</span>
-<span class="sd">        :rtype:    Image or None</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">field_of_view</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">z_level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_image_properties</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
         <span class="n">channel_offset</span> <span class="o">=</span> <span class="n">index</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">])</span>
@@ -123,17 +116,8 @@
             <span class="k">return</span> <span class="n">image</span></div>
 
 <div class="viewcode-block" id="Parser.get_image_by_attributes"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.parser.Parser.get_image_by_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_image_by_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_number</span><span class="p">,</span> <span class="n">field_of_view</span><span class="p">,</span> <span class="n">channel_name</span><span class="p">,</span> <span class="n">z_level</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Attempts to get Image based on attributes alone.</span>
+        <span class="sd">&quot;&quot;&quot;Attempts to get Image based on attributes alone.</span>
 
-<span class="sd">        :type frame_number:    int</span>
-<span class="sd">        :type field_of_view:    int</span>
-<span class="sd">        :type channel_name:    str</span>
-<span class="sd">        :type z_level:    int</span>
-<span class="sd">        :type height:    int</span>
-<span class="sd">        :type width:    int</span>
-
-<span class="sd">        :rtype: Image or None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">image_group_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_image_group_number</span><span class="p">(</span><span class="n">frame_number</span><span class="p">,</span> <span class="n">field_of_view</span><span class="p">,</span> <span class="n">z_level</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -146,18 +130,17 @@
 
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="Parser.get_dtype_from_metadata"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.parser.Parser.get_dtype_from_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">get_dtype_from_metadata</span><span class="p">():</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Determine the data type from the metadata.</span>
+        <span class="sd">&quot;&quot;&quot;Determine the data type from the metadata.</span>
+
 <span class="sd">        For now, always use float64 to prevent unexpected overflow errors when manipulating the data (calculating sums/</span>
 <span class="sd">        means/etc.)</span>
-<span class="sd">        :return:</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span></div>
 
     <span class="k">def</span> <span class="nf">_check_version_supported</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Checks if the ND2 file version is supported by this reader.</span>
-<span class="sd">        :return:</span>
+        <span class="sd">&quot;&quot;&quot;Checks if the ND2 file version is supported by this reader.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">major_version</span><span class="p">,</span> <span class="n">minor_version</span> <span class="o">=</span> <span class="n">get_version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">)</span>
         <span class="n">supported</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">supported_file_versions</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">major_version</span><span class="p">,</span> <span class="n">minor_version</span><span class="p">))</span> <span class="ow">or</span> \
@@ -169,8 +152,7 @@
         <span class="k">return</span> <span class="n">supported</span>
 
     <span class="k">def</span> <span class="nf">_parse_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Reads all metadata and instantiates the Metadata object.</span>
+        <span class="sd">&quot;&quot;&quot;Reads all metadata and instantiates the Metadata object.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Retrieve raw metadata from the label mapping</span>
@@ -184,8 +166,6 @@
 <span class="sd">        as some of the bytes contain the value 33, which is the ASCII code for &quot;!&quot;. So we iteratively find each label,</span>
 <span class="sd">        grab the subsequent data (always 16 bytes long), advance to the next label and repeat.</span>
 
-<span class="sd">        :rtype: LabelMap</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
         <span class="n">chunk_map_start_location</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
@@ -194,33 +174,23 @@
         <span class="k">return</span> <span class="n">LabelMap</span><span class="p">(</span><span class="n">raw_text</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_calculate_field_of_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Determines what field of view was being imaged for a given image.</span>
-
-<span class="sd">        :type index:    int</span>
-<span class="sd">        :rtype:    int</span>
+        <span class="sd">&quot;&quot;&quot;Determines what field of view was being imaged for a given image.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">images_per_cycle</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;z_levels&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">])</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">((</span><span class="n">index</span> <span class="o">-</span> <span class="p">(</span><span class="n">index</span> <span class="o">%</span> <span class="n">images_per_cycle</span><span class="p">))</span> <span class="o">/</span> <span class="n">images_per_cycle</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;fields_of_view&quot;</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">_calculate_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Determines what channel a particular image is.</span>
-
-<span class="sd">        :type index:    int</span>
-<span class="sd">        :rtype:    str</span>
+        <span class="sd">&quot;&quot;&quot;Determines what channel a particular image is.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">][</span><span class="n">index</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">])]</span>
 
     <span class="k">def</span> <span class="nf">_calculate_z_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Determines the plane in the z-axis a given image was taken in. In the future, this will be replaced with the</span>
-<span class="sd">        actual offset in micrometers.</span>
+        <span class="sd">&quot;&quot;&quot;Determines the plane in the z-axis a given image was taken in.</span>
 
-<span class="sd">        :type index:    int</span>
-<span class="sd">        :rtype:    int</span>
+<span class="sd">        In the future, this will be replaced with the actual offset in micrometers.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;z_levels&quot;</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span>
             <span class="p">((</span><span class="n">index</span> <span class="o">-</span> <span class="p">(</span><span class="n">index</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">])))</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">]))</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span>
@@ -230,12 +200,6 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Images are grouped together if they share the same time index, field of view, and z-level.</span>
 
-<span class="sd">        :type frame_number: int</span>
-<span class="sd">        :type fov: int</span>
-<span class="sd">        :type z_level: int</span>
-
-<span class="sd">        :rtype: int</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">frame_number</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;fields_of_view&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;z_levels&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span>
             <span class="n">fov</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;z_levels&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="n">z_level</span><span class="p">)</span>
@@ -243,12 +207,6 @@
     <span class="k">def</span> <span class="nf">_calculate_frame_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_group_number</span><span class="p">,</span> <span class="n">field_of_view</span><span class="p">,</span> <span class="n">z_level</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Images are in the same frame if they share the same group number and field of view and are taken sequentially.</span>
-
-<span class="sd">        :type image_group_number:    int</span>
-<span class="sd">        :type field_of_view:    int</span>
-<span class="sd">        :type z_level:    int</span>
-
-<span class="sd">        :rtype:    int</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">image_group_number</span> <span class="o">-</span> <span class="p">(</span><span class="n">field_of_view</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;z_levels&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="n">z_level</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span>
@@ -260,22 +218,11 @@
 <span class="sd">        Image data is interleaved for each image set. That is, if there are four images in a set, the first image</span>
 <span class="sd">        will consist of pixels 1, 5, 9, etc, the second will be pixels 2, 6, 10, and so forth.</span>
 
-<span class="sd">        :rtype: dict</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">channel</span><span class="p">:</span> <span class="n">n</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">channel</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">])}</span>
 
     <span class="k">def</span> <span class="nf">_get_raw_image_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_group_number</span><span class="p">,</span> <span class="n">channel_offset</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Reads the raw bytes and the timestamp of an image.</span>
-
-<span class="sd">        :param image_group_number: groups are made of images with the same time index, field of view and z-level</span>
-<span class="sd">        :type image_group_number: int</span>
-<span class="sd">        :param channel_offset: the offset in the array where the bytes for this image are found</span>
-<span class="sd">        :type channel_offset: int</span>
-
-<span class="sd">        :rtype:    (int, Image)</span>
-<span class="sd">        :raises:    NoImageError</span>
+        <span class="sd">&quot;&quot;&quot;Reads the raw bytes and the timestamp of an image.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">chunk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">get_image_data_location</span><span class="p">(</span><span class="n">image_group_number</span><span class="p">)</span>
@@ -304,9 +251,8 @@
         <span class="k">raise</span> <span class="n">NoImageError</span>
 
     <span class="k">def</span> <span class="nf">_get_frame_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the metadata for one frame</span>
-<span class="sd">        :return:</span>
+        <span class="sd">&quot;&quot;&quot;Get the metadata for one frame</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span></div>
 </pre></div>

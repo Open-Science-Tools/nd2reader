@@ -57,11 +57,13 @@
 
 
 <div class="viewcode-block" id="get_version"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.common.get_version">[docs]</a><span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="n">fh</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Determines what version the ND2 is.</span>
+    <span class="sd">&quot;&quot;&quot;Determines what version the ND2 is.</span>
 
-<span class="sd">    :param fh:    an open file handle to the ND2</span>
-<span class="sd">    :type fh:     file</span>
+<span class="sd">    Args:</span>
+<span class="sd">        fh: File handle of the .nd2 file</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: Major and minor version</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># the first 16 bytes seem to have no meaning, so we skip them</span>
@@ -73,11 +75,13 @@
 
 
 <div class="viewcode-block" id="parse_version"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.common.parse_version">[docs]</a><span class="k">def</span> <span class="nf">parse_version</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Parses a string with the version data in it.</span>
+    <span class="sd">&quot;&quot;&quot;Parses a string with the version data in it.</span>
 
-<span class="sd">    :param data:    the 19th through 54th byte of the ND2, representing the version</span>
-<span class="sd">    :type data:     unicode</span>
+<span class="sd">    Args:</span>
+<span class="sd">        data (unicode): the 19th through 54th byte of the ND2, representing the version</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: Major and minor version</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">r&quot;&quot;&quot;^ND2 FILE SIGNATURE CHUNK NAME01!Ver(?P&lt;major&gt;\d)\.(?P&lt;minor&gt;\d)$&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
@@ -90,14 +94,14 @@
 
 
 <div class="viewcode-block" id="read_chunk"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.common.read_chunk">[docs]</a><span class="k">def</span> <span class="nf">read_chunk</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span> <span class="n">chunk_location</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Reads a piece of data given the location of its pointer.</span>
+    <span class="sd">&quot;&quot;&quot;Reads a piece of data given the location of its pointer.</span>
 
-<span class="sd">    :param fh:    an open file handle to the ND2</span>
-<span class="sd">    :param chunk_location:    a pointer</span>
-<span class="sd">    :type chunk_location:    int</span>
+<span class="sd">    Args:</span>
+<span class="sd">        fh: an open file handle to the ND2</span>
+<span class="sd">        chunk_location (int): location to read</span>
 
-<span class="sd">    :rtype: bytes</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        bytes: the data at the chunk location</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">chunk_location</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -156,10 +160,10 @@
 
 
 <div class="viewcode-block" id="parse_date"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.common.parse_date">[docs]</a><span class="k">def</span> <span class="nf">parse_date</span><span class="p">(</span><span class="n">text_info</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    The date and time when acquisition began.</span>
+    <span class="sd">&quot;&quot;&quot;The date and time when acquisition began.</span>
 
-<span class="sd">    :rtype: datetime.datetime() or None</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        datetime: The date and time when acquisition began.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">text_info</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
@@ -177,8 +181,10 @@
 
 
 <span class="k">def</span> <span class="nf">_parse_metadata_item</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cursor_position</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Reads hierarchical data, analogous to a Python dict.</span>
+    <span class="sd">&quot;&quot;&quot;Reads hierarchical data, analogous to a Python dict.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: the metadata item</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">new_count</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;IQ&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">12</span><span class="p">))</span>
@@ -191,8 +197,7 @@
 
 
 <span class="k">def</span> <span class="nf">_get_value</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data_type</span><span class="p">,</span> <span class="n">cursor_position</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    ND2s use various codes to indicate different data types, which we translate here.</span>
+    <span class="sd">&quot;&quot;&quot;ND2s use various codes to indicate different data types, which we translate here.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="n">_parse_unsigned_char</span><span class="p">,</span>
@@ -207,8 +212,7 @@
 
 
 <div class="viewcode-block" id="read_metadata"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.common.read_metadata">[docs]</a><span class="k">def</span> <span class="nf">read_metadata</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Iterates over each element some section of the metadata and parses it.</span>
+    <span class="sd">&quot;&quot;&quot;Iterates over each element some section of the metadata and parses it.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -238,12 +242,7 @@
 
 
 <span class="k">def</span> <span class="nf">_add_to_metadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Add the name value pair to the metadata dict</span>
-<span class="sd">    :param metadata:</span>
-<span class="sd">    :param name:</span>
-<span class="sd">    :param value:</span>
-<span class="sd">    :return:</span>
+    <span class="sd">&quot;&quot;&quot;Add the name value pair to the metadata dict</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="n">metadata</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
