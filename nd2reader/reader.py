@@ -41,6 +41,12 @@ class ND2Reader(FramesSequenceND):
     def get_frame(self, i):
         """Return one frame
 
+        Args:
+            i: The frame number
+
+        Returns:
+            numpy.ndarray: The requested frame
+
         """
         fetch_all_channels = 'c' in self.bundle_axes
 
@@ -51,6 +57,12 @@ class ND2Reader(FramesSequenceND):
 
     def _get_frame_all_channels(self, i):
         """Get all color channels for this frame
+
+        Args:
+            i: The frame number
+
+        Returns:
+            numpy.ndarray: The requested frame, with all color channels.
 
         """
         frames = None
@@ -65,6 +77,14 @@ class ND2Reader(FramesSequenceND):
     def get_frame_2D(self, c, t, z):
         """Gets a given frame using the parser
 
+        Args:
+            c: The color channel number
+            t: The frame number
+            z: The z stack number
+
+        Returns:
+            numpy.ndarray: The requested frame
+
         """
         c_name = self.metadata["channels"][c]
         return self._parser.get_image_by_attributes(t, 0, c_name, z, self.metadata["height"], self.metadata["width"])
@@ -72,6 +92,8 @@ class ND2Reader(FramesSequenceND):
     @property
     def pixel_type(self):
         """Return the pixel data type
+
+        Returns: the pixel data type
 
         """
         return self._dtype
@@ -91,6 +113,9 @@ class ND2Reader(FramesSequenceND):
 
     def get_timesteps(self):
         """Get the timesteps of the experiment
+
+        Returns:
+            np.ndarray: an array of times in milliseconds.
 
         """
         timesteps = np.array([])

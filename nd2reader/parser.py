@@ -37,6 +37,12 @@ class Parser(object):
     def calculate_image_properties(self, index):
         """Calculate FOV, channels and z_levels
 
+        Args:
+            index(int): the index (which is simply the order in which the image was acquired)
+
+        Returns:
+            tuple: tuple of the field of view, the channel and the z level
+
         """
         field_of_view = self._calculate_field_of_view(index)
         channel = self._calculate_channel(index)
@@ -52,6 +58,12 @@ class Parser(object):
         eliminate this possibility in future releases. For now, you'll need to check if your image is None if you're
         doing anything out of the ordinary.
 
+        Args:
+            index(int): the index (which is simply the order in which the image was acquired)
+
+        Returns:
+            Frame: the image
+
         """
         field_of_view, channel, z_level = self.calculate_image_properties(index)
         channel_offset = index % len(self.metadata["channels"])
@@ -66,7 +78,18 @@ class Parser(object):
             return image
 
     def get_image_by_attributes(self, frame_number, field_of_view, channel_name, z_level, height, width):
-        """Attempts to get Image based on attributes alone.
+        """Gets an image based on its attributes alone
+
+        Args:
+            frame_number: the frame number
+            field_of_view: the field of view
+            channel_name: the color channel name
+            z_level: the z level
+            height: the height of the image
+            width: the width of the image
+
+        Returns:
+            Frame: the requested image
 
         """
         image_group_number = self._calculate_image_group_number(frame_number, field_of_view, z_level)
@@ -90,6 +113,12 @@ class Parser(object):
 
     def _check_version_supported(self):
         """Checks if the ND2 file version is supported by this reader.
+
+        Returns:
+            bool: True on supported
+
+        Raises:
+            InvalidVersionError: Raises an error if the version is unsupported
 
         """
         major_version, minor_version = get_version(self._fh)
@@ -116,6 +145,9 @@ class Parser(object):
         as some of the bytes contain the value 33, which is the ASCII code for "!". So we iteratively find each label,
         grab the subsequent data (always 16 bytes long), advance to the next label and repeat.
 
+        Returns:
+            LabelMap: the computed label map
+
         """
         self._fh.seek(-8, 2)
         chunk_map_start_location = struct.unpack("Q", self._fh.read(8))[0]
@@ -126,12 +158,23 @@ class Parser(object):
     def _calculate_field_of_view(self, index):
         """Determines what field of view was being imaged for a given image.
 
+        Args:
+            index(int): the index (which is simply the order in which the image was acquired)
+
+        Returns:
+            int: the field of view
         """
         images_per_cycle = len(self.metadata["z_levels"]) * len(self.metadata["channels"])
         return int((index - (index % images_per_cycle)) / images_per_cycle) % len(self.metadata["fields_of_view"])
 
     def _calculate_channel(self, index):
         """Determines what channel a particular image is.
+
+        Args:
+            index(int): the index (which is simply the order in which the image was acquired)
+
+        Returns:
+            string: the name of the color channel
 
         """
         return self.metadata["channels"][index % len(self.metadata["channels"])]
@@ -140,6 +183,12 @@ class Parser(object):
         """Determines the plane in the z-axis a given image was taken in.
 
         In the future, this will be replaced with the actual offset in micrometers.
+
+        Args:
+            index(int): the index (which is simply the order in which the image was acquired)
+
+        Returns:
+            The z level
 
         """
         return self.metadata["z_levels"][int(
@@ -150,6 +199,14 @@ class Parser(object):
         """
         Images are grouped together if they share the same time index, field of view, and z-level.
 
+        Args:
+            frame_number:
+            fov:
+            z_level:
+
+        Returns:
+            int: the image group number
+
         """
         return frame_number * len(self.metadata["fields_of_view"]) * len(self.metadata["z_levels"]) + (
             fov * len(self.metadata["z_levels"]) + z_level)
@@ -157,6 +214,13 @@ class Parser(object):
     def _calculate_frame_number(self, image_group_number, field_of_view, z_level):
         """
         Images are in the same frame if they share the same group number and field of view and are taken sequentially.
+
+        Args:
+            image_group_number:
+            field_of_view:
+            z_level:
+
+        Returns:
 
         """
         return (image_group_number - (field_of_view * len(self.metadata["z_levels"]) + z_level)) / (
@@ -168,11 +232,22 @@ class Parser(object):
         Image data is interleaved for each image set. That is, if there are four images in a set, the first image
         will consist of pixels 1, 5, 9, etc, the second will be pixels 2, 6, 10, and so forth.
 
+        Returns:
+            dict: the channel offset for each channel
+
         """
         return {channel: n for n, channel in enumerate(self.metadata["channels"])}
 
     def _get_raw_image_data(self, image_group_number, channel_offset, height, width):
         """Reads the raw bytes and the timestamp of an image.
+
+        Args:
+            image_group_number:
+            channel_offset:
+            height:
+            width:
+
+        Returns:
 
         """
         chunk = self._label_map.get_image_data_location(image_group_number)

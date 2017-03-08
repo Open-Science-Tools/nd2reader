@@ -7,7 +7,25 @@ import numpy as np
 
 
 def ignore_missing(func):
+    """
+
+    Args:
+        func:
+
+    Returns:
+
+    """
+
     def wrapper(*args, **kwargs):
+        """
+
+        Args:
+            *args:
+            **kwargs:
+
+        Returns:
+
+        """
         try:
             return func(*args, **kwargs)
         except:
@@ -17,6 +35,10 @@ def ignore_missing(func):
 
 
 class RawMetadata(object):
+    """
+    RawMetadata class parses and stores the raw metadata that is read from the binary file in dict format
+    """
+
     def __init__(self, fh, label_map):
         self._fh = fh
         self._label_map = label_map
@@ -163,6 +185,11 @@ class RawMetadata(object):
 
         This includes the position and size at the given timepoints.
 
+        Args:
+            raw_roi_dict:
+
+        Returns:
+
         """
         number_of_timepoints = raw_roi_dict[six.b('m_vectAnimParams_Size')]
 
@@ -204,8 +231,14 @@ class RawMetadata(object):
         return None
 
     def _parse_vect_anim(self, roi_dict, animation_dict):
-        """Parses a ROI vector animation object and adds it to the global list of timepoints and positions.
+        """
+        Parses a ROI vector animation object and adds it to the global list of timepoints and positions.
 
+        Args:
+            roi_dict:
+            animation_dict:
+
+        Returns:
 
         """
         roi_dict["timepoints"].append(animation_dict[six.b('m_dTimeMs')])
@@ -249,8 +282,15 @@ class RawMetadata(object):
 
         self._metadata_parsed['experiment'] = experimental_data
 
-    def _parse_loop_data(self, loop_data):
-        """Parse the experimental loop data
+    @staticmethod
+    def _parse_loop_data(loop_data):
+        """
+        Parse the experimental loop data
+
+        Args:
+            loop_data:
+
+        Returns:
 
         """
         loops = [loop_data]
@@ -296,81 +336,160 @@ class RawMetadata(object):
     @property
     @ignore_missing
     def image_text_info(self):
+        """
+
+        Returns:
+
+        """
         return read_metadata(read_chunk(self._fh, self._label_map.image_text_info), 1)
 
     @property
     @ignore_missing
     def image_metadata_sequence(self):
+        """
+
+        Returns:
+
+        """
         return read_metadata(read_chunk(self._fh, self._label_map.image_metadata_sequence), 1)
 
     @property
     @ignore_missing
     def image_calibration(self):
+        """
+
+        Returns:
+
+        """
         return read_metadata(read_chunk(self._fh, self._label_map.image_calibration), 1)
 
     @property
     @ignore_missing
     def image_attributes(self):
+        """
+
+        Returns:
+
+        """
         return read_metadata(read_chunk(self._fh, self._label_map.image_attributes), 1)
 
     @property
     @ignore_missing
     def x_data(self):
+        """
+
+        Returns:
+
+        """
         return read_array(self._fh, 'double', self._label_map.x_data)
 
     @property
     @ignore_missing
     def y_data(self):
+        """
+
+        Returns:
+
+        """
         return read_array(self._fh, 'double', self._label_map.y_data)
 
     @property
     @ignore_missing
     def z_data(self):
+        """
+
+        Returns:
+
+        """
         return read_array(self._fh, 'double', self._label_map.z_data)
 
     @property
     @ignore_missing
     def roi_metadata(self):
+        """
+
+        Returns:
+
+        """
         return read_metadata(read_chunk(self._fh, self._label_map.roi_metadata), 1)
 
     @property
     @ignore_missing
     def pfs_status(self):
+        """
+
+        Returns:
+
+        """
         return read_array(self._fh, 'int', self._label_map.pfs_status)
 
     @property
     @ignore_missing
     def pfs_offset(self):
+        """
+
+        Returns:
+
+        """
         return read_array(self._fh, 'int', self._label_map.pfs_offset)
 
     @property
     @ignore_missing
     def camera_exposure_time(self):
+        """
+
+        Returns:
+
+        """
         return read_array(self._fh, 'double', self._label_map.camera_exposure_time)
 
     @property
     @ignore_missing
     def lut_data(self):
+        """
+
+        Returns:
+
+        """
         return xmltodict.parse(read_chunk(self._fh, self._label_map.lut_data))
 
     @property
     @ignore_missing
     def grabber_settings(self):
+        """
+
+        Returns:
+
+        """
         return xmltodict.parse(read_chunk(self._fh, self._label_map.grabber_settings))
 
     @property
     @ignore_missing
     def custom_data(self):
+        """
+
+        Returns:
+
+        """
         return xmltodict.parse(read_chunk(self._fh, self._label_map.custom_data))
 
     @property
     @ignore_missing
     def app_info(self):
+        """
+
+        Returns:
+
+        """
         return xmltodict.parse(read_chunk(self._fh, self._label_map.app_info))
 
     @property
     @ignore_missing
     def camera_temp(self):
+        """
+        Yields:
+            float: the temperature
+        """
         camera_temp = read_array(self._fh, 'double', self._label_map.camera_temp)
         if camera_temp:
             for temp in map(lambda x: round(x * 100.0, 2), camera_temp):
@@ -379,6 +498,10 @@ class RawMetadata(object):
     @property
     @ignore_missing
     def acquisition_times(self):
+        """
+        Yields:
+            float: the acquisition time
+        """
         acquisition_times = read_array(self._fh, 'double', self._label_map.acquisition_times)
         if acquisition_times:
             for acquisition_time in map(lambda x: x / 1000.0, acquisition_times):
@@ -387,5 +510,10 @@ class RawMetadata(object):
     @property
     @ignore_missing
     def image_metadata(self):
+        """
+
+        Returns:
+
+        """
         if self._label_map.image_metadata:
             return read_metadata(read_chunk(self._fh, self._label_map.image_metadata), 1)

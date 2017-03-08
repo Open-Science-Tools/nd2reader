@@ -69,6 +69,16 @@ def read_chunk(fh, chunk_location):
 
 
 def read_array(fh, kind, chunk_location):
+    """
+
+    Args:
+        fh:
+        kind:
+        chunk_location:
+
+    Returns:
+
+    """
     kinds = {'double': 'd',
              'int': 'i',
              'float': 'f'}
@@ -110,10 +120,13 @@ def _parse_char_array(data):
 
 
 def parse_date(text_info):
-    """The date and time when acquisition began.
+    """
+    The date and time when acquisition began.
+
+    Args:
+        text_info:
 
     Returns:
-        datetime: The date and time when acquisition began.
 
     """
     for line in text_info.values():
@@ -133,8 +146,11 @@ def parse_date(text_info):
 def _parse_metadata_item(data, cursor_position):
     """Reads hierarchical data, analogous to a Python dict.
 
+    Args:
+        data:
+        cursor_position:
+
     Returns:
-        dict: the metadata item
 
     """
     new_count, length = struct.unpack("<IQ", data.read(12))
@@ -149,6 +165,13 @@ def _parse_metadata_item(data, cursor_position):
 def _get_value(data, data_type, cursor_position):
     """ND2s use various codes to indicate different data types, which we translate here.
 
+    Args:
+        data:
+        data_type:
+        cursor_position:
+
+    Returns:
+
     """
     parser = {1: _parse_unsigned_char,
               2: _parse_unsigned_int,
@@ -162,7 +185,14 @@ def _get_value(data, data_type, cursor_position):
 
 
 def read_metadata(data, count):
-    """Iterates over each element some section of the metadata and parses it.
+    """
+    Iterates over each element some section of the metadata and parses it.
+
+    Args:
+        data:
+        count:
+
+    Returns:
 
     """
     if data is None:
@@ -192,7 +222,16 @@ def read_metadata(data, count):
 
 
 def _add_to_metadata(metadata, name, value):
-    """Add the name value pair to the metadata dict
+    """
+    Add the name value pair to the metadata dict
+
+    Args:
+        metadata:
+        name:
+        value:
+
+    Returns:
+
     """
     if name not in metadata.keys():
         metadata[name] = value
