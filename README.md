@@ -24,7 +24,8 @@ If you don't already have the packages `numpy`, `pims`, `six` and `xmltodict`, t
 
 ```python
 from nd2reader import ND2Reader
-images = ND2Reader('my_directory/example.nd2')
+with ND2Reader('my_directory/example.nd2') as images:
+  plt.imshow(images[0])
 ```
 
 After opening the file, all `pims` features are supported. Please refer to the [pims documentation](http://soft-matter.github.io/pims/).
