@@ -20,11 +20,14 @@ If you don't already have the packages `numpy`, `pims`, `six` and `xmltodict`, t
 
 ### ND2s
 
-`nd2reader` follows the [pims](https://github.com/soft-matter/pims) framework. To open a file:
+`nd2reader` follows the [pims](https://github.com/soft-matter/pims) framework. To open a file and show the first frame:
 
 ```python
 from nd2reader import ND2Reader
-images = ND2Reader('my_directory/example.nd2')
+import matplotlib.pyplot as plt
+
+with ND2Reader('my_directory/example.nd2') as images:
+  plt.imshow(images[0])
 ```
 
 After opening the file, all `pims` features are supported. Please refer to the [pims documentation](http://soft-matter.github.io/pims/).
