@@ -1,43 +1,12 @@
 import re
-
 from nd2reader.common import read_chunk, read_array, read_metadata, parse_date
 import xmltodict
 import six
 import numpy as np
 
 
-def ignore_missing(func):
-    """
-    Ignore missing properties
-    Args:
-        func: function to decorate
-
-    Returns:
-        function: a wrapper function
-
-    """
-
-    def wrapper(*args, **kwargs):
-        """
-        Wrapper function to ignore missing class properties
-        Args:
-            *args:
-            **kwargs:
-
-        Returns:
-
-        """
-        try:
-            return func(*args, **kwargs)
-        except:
-            return None
-
-    return wrapper
-
-
 class RawMetadata(object):
-    """
-    RawMetadata class parses and stores the raw metadata that is read from the binary file in dict format
+    """RawMetadata class parses and stores the raw metadata that is read from the binary file in dict format.
     """
 
     def __init__(self, fh, label_map):
@@ -47,7 +16,7 @@ class RawMetadata(object):
 
     @property
     def __dict__(self):
-        """Returns the parsed metadata in dictionary form
+        """Returns the parsed metadata in dictionary form.
 
         Returns:
             dict: the parsed metadata
@@ -55,7 +24,7 @@ class RawMetadata(object):
         return self.get_parsed_metadata()
 
     def get_parsed_metadata(self):
-        """ Returns the parsed metadata in dictionary form
+        """Returns the parsed metadata in dictionary form.
 
         Returns:
             dict: the parsed metadata
@@ -84,9 +53,9 @@ class RawMetadata(object):
         return self._metadata_parsed
 
     def _parse_channels(self):
-        """
-        These are labels created by the NIS Elements user. Typically they may a short description of the filter cube
-        used (e.g. "bright field", "GFP", etc.)
+        """These are labels created by the NIS Elements user. Typically they may a short description of the filter cube
+        used (e.g. 'bright field', 'GFP', etc.)
+
         Returns:
             list: the color channels
         """
@@ -108,8 +77,7 @@ class RawMetadata(object):
         return channels
 
     def _parse_fields_of_view(self):
-        """
-        The metadata contains information about fields of view, but it contains it even if some fields
+        """The metadata contains information about fields of view, but it contains it even if some fields
         of view were cropped. We can't find anything that states which fields of view are actually
         in the image data, so we have to calculate it. There probably is something somewhere, since
         NIS Elements can figure it out, but we haven't found it yet.
@@ -134,8 +102,7 @@ class RawMetadata(object):
         return self._parse_dimension(r""".*?Z\((\d+)\).*?""")
 
     def _parse_dimension_text(self):
-        """
-        While there are metadata values that represent a lot of what we want to capture, they seem to be unreliable.
+        """While there are metadata values that represent a lot of what we want to capture, they seem to be unreliable.
         Sometimes certain elements don't exist, or change their data type randomly. However, the human-readable text
         is always there and in the same exact format, so we just parse that instead.
 
@@ -165,7 +132,7 @@ class RawMetadata(object):
     def _parse_total_images_per_channel(self):
         """The total number of images per channel.
 
-        Warning: this may be inaccurate as it includes "gap" images.
+        Warning: this may be inaccurate as it includes 'gap' images.
 
         """
         return self.image_attributes[six.b('SLxImageAttributes')][six.b('uiSequenceCount')]
@@ -194,9 +161,10 @@ class RawMetadata(object):
         This includes the position and size at the given timepoints.
 
         Args:
-            raw_roi_dict:
+            raw_roi_dict: dictionary of raw roi metadata
 
         Returns:
+            dict: the parsed ROI metadata
 
         """
         number_of_timepoints = raw_roi_dict[six.b('m_vectAnimParams_Size')]
@@ -243,10 +211,11 @@ class RawMetadata(object):
         Parses a ROI vector animation object and adds it to the global list of timepoints and positions.
 
         Args:
-            roi_dict:
-            animation_dict:
+            roi_dict: the raw roi dictionary
+            animation_dict: the raw animation dictionary
 
         Returns:
+            dict: the parsed metadata
 
         """
         roi_dict["timepoints"].append(animation_dict[six.b('m_dTimeMs')])
@@ -292,13 +261,13 @@ class RawMetadata(object):
 
     @staticmethod
     def _parse_loop_data(loop_data):
-        """
-        Parse the experimental loop data
+        """Parse the experimental loop data
 
         Args:
-            loop_data:
+            loop_data: dictionary of experiment loops
 
         Returns:
+            list: list of the parsed loops
 
         """
         loops = [loop_data]
@@ -342,161 +311,156 @@ class RawMetadata(object):
         return parsed_loops
 
     @property
-    @ignore_missing
     def image_text_info(self):
-        """
+        """Textual image information
 
         Returns:
+            dict: containing the textual image info
 
         """
         return read_metadata(read_chunk(self._fh, self._label_map.image_text_info), 1)
 
     @property
-    @ignore_missing
     def image_metadata_sequence(self):
-        """
+        """Image metadata of the sequence
 
         Returns:
+            dict: containing the metadata
 
         """
         return read_metadata(read_chunk(self._fh, self._label_map.image_metadata_sequence), 1)
 
     @property
-    @ignore_missing
     def image_calibration(self):
-        """
-        The amount of pixels per micron.
+        """The amount of pixels per micron.
+
         Returns:
-            float: pixels per micron
+            dict: pixels per micron
         """
         return read_metadata(read_chunk(self._fh, self._label_map.image_calibration), 1)
 
     @property
-    @ignore_missing
     def image_attributes(self):
-        """
+        """Image attributes
 
         Returns:
-
+            dict: containing the image attributes
         """
         return read_metadata(read_chunk(self._fh, self._label_map.image_attributes), 1)
 
     @property
-    @ignore_missing
     def x_data(self):
-        """
+        """X data
 
         Returns:
-
+            dict: x_data
         """
         return read_array(self._fh, 'double', self._label_map.x_data)
 
     @property
-    @ignore_missing
     def y_data(self):
-        """
+        """Y data
 
         Returns:
-
+            dict: y_data
         """
         return read_array(self._fh, 'double', self._label_map.y_data)
 
     @property
-    @ignore_missing
     def z_data(self):
-        """
+        """Z data
 
         Returns:
-
+            dict: z_data
         """
         return read_array(self._fh, 'double', self._label_map.z_data)
 
     @property
-    @ignore_missing
     def roi_metadata(self):
-        """
-        Contains information about the defined ROIs: shape, position and type (reference/background/stimulation).
+        """Contains information about the defined ROIs: shape, position and type (reference/background/stimulation).
+
         Returns:
             dict: ROI metadata dictionary
         """
         return read_metadata(read_chunk(self._fh, self._label_map.roi_metadata), 1)
 
     @property
-    @ignore_missing
     def pfs_status(self):
-        """
+        """Perfect focus system (PFS) status
 
         Returns:
+            dict: Perfect focus system (PFS) status
 
         """
         return read_array(self._fh, 'int', self._label_map.pfs_status)
 
     @property
-    @ignore_missing
     def pfs_offset(self):
-        """
+        """Perfect focus system (PFS) offset
 
         Returns:
+            dict: Perfect focus system (PFS) offset
 
         """
         return read_array(self._fh, 'int', self._label_map.pfs_offset)
 
     @property
-    @ignore_missing
     def camera_exposure_time(self):
-        """
+        """Exposure time information
 
         Returns:
+            dict: Camera exposure time
 
         """
         return read_array(self._fh, 'double', self._label_map.camera_exposure_time)
 
     @property
-    @ignore_missing
     def lut_data(self):
-        """
+        """LUT information
 
         Returns:
+            dict: LUT information
 
         """
         return xmltodict.parse(read_chunk(self._fh, self._label_map.lut_data))
 
     @property
-    @ignore_missing
     def grabber_settings(self):
-        """
+        """Grabber settings
 
         Returns:
+            dict: Acquisition settings
 
         """
         return xmltodict.parse(read_chunk(self._fh, self._label_map.grabber_settings))
 
     @property
-    @ignore_missing
     def custom_data(self):
-        """
+        """Custom user data
 
         Returns:
+            dict: custom user data
 
         """
         return xmltodict.parse(read_chunk(self._fh, self._label_map.custom_data))
 
     @property
-    @ignore_missing
     def app_info(self):
-        """
+        """NIS elements application info
 
         Returns:
+            dict: (Version) information of the NIS Elements application
 
         """
         return xmltodict.parse(read_chunk(self._fh, self._label_map.app_info))
 
     @property
-    @ignore_missing
     def camera_temp(self):
-        """
+        """Camera temperature
+
         Yields:
             float: the temperature
+
         """
         camera_temp = read_array(self._fh, 'double', self._label_map.camera_temp)
         if camera_temp:
@@ -504,11 +468,12 @@ class RawMetadata(object):
                 yield temp
 
     @property
-    @ignore_missing
     def acquisition_times(self):
-        """
+        """Acquisition times
+
         Yields:
             float: the acquisition time
+
         """
         acquisition_times = read_array(self._fh, 'double', self._label_map.acquisition_times)
         if acquisition_times:
@@ -516,11 +481,11 @@ class RawMetadata(object):
                 yield acquisition_time
 
     @property
-    @ignore_missing
     def image_metadata(self):
-        """
+        """Image metadata
 
         Returns:
+            dict: Extra image metadata
 
         """
         if self._label_map.image_metadata:

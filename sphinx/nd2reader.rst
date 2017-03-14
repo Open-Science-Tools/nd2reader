@@ -1,6 +1,9 @@
 nd2reader package
 =================
 
+In general, you should only have to use the ``nd2reader.reader`` module. The rest of the submodules are for internal
+use only.
+
 Submodules
 ----------
 
@@ -48,14 +51,6 @@ nd2reader.exceptions module
 ---------------------------
 
 .. automodule:: nd2reader.exceptions
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: nd2reader
     :members:
     :undoc-members:
     :show-inheritance:
