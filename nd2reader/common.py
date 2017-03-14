@@ -72,11 +72,12 @@ def read_array(fh, kind, chunk_location):
     """
 
     Args:
-        fh:
-        kind:
-        chunk_location:
+        fh: File handle of the nd2 file
+        kind: data type, can be one of 'double', 'int' or 'float'
+        chunk_location: the location of the array chunk in the binary nd2 file
 
     Returns:
+        array.array: an array of the data
 
     """
     kinds = {'double': 'd',
@@ -91,22 +92,67 @@ def read_array(fh, kind, chunk_location):
 
 
 def _parse_unsigned_char(data):
+    """
+
+    Args:
+        data: binary data
+
+    Returns:
+        char: the data converted to unsigned char
+
+    """
     return struct.unpack("B", data.read(1))[0]
 
 
 def _parse_unsigned_int(data):
+    """
+
+        Args:
+            data: binary data
+
+        Returns:
+            int: the data converted to unsigned int
+
+        """
     return struct.unpack("I", data.read(4))[0]
 
 
 def _parse_unsigned_long(data):
+    """
+
+        Args:
+            data: binary data
+
+        Returns:
+            long: the data converted to unsigned long
+
+        """
     return struct.unpack("Q", data.read(8))[0]
 
 
 def _parse_double(data):
+    """
+
+        Args:
+            data: binary data
+
+        Returns:
+            double: the data converted to double
+
+        """
     return struct.unpack("d", data.read(8))[0]
 
 
 def _parse_string(data):
+    """
+
+        Args:
+            data: binary data
+
+        Returns:
+            string: the data converted to string
+
+        """
     value = data.read(2)
     while not value.endswith(six.b("\x00\x00")):
         # the string ends at the first instance of \x00\x00
@@ -115,6 +161,15 @@ def _parse_string(data):
 
 
 def _parse_char_array(data):
+    """
+
+        Args:
+            data: binary data
+
+        Returns:
+            array.array: the data converted to an array
+
+        """
     array_length = struct.unpack("Q", data.read(8))[0]
     return array.array("B", data.read(array_length))
 
@@ -124,9 +179,10 @@ def parse_date(text_info):
     The date and time when acquisition began.
 
     Args:
-        text_info:
+        text_info: the text that contains the date and time information
 
     Returns:
+        datetime: the date and time of the acquisition
 
     """
     for line in text_info.values():
@@ -147,18 +203,21 @@ def _parse_metadata_item(data, cursor_position):
     """Reads hierarchical data, analogous to a Python dict.
 
     Args:
-        data:
-        cursor_position:
+        data: the binary data that needs to be parsed
+        cursor_position: the position in the binary nd2 file
 
     Returns:
+        dict: a dictionary containing the metadata item
 
     """
     new_count, length = struct.unpack("<IQ", data.read(12))
     length -= data.tell() - cursor_position
     next_data_length = data.read(length)
     value = read_metadata(next_data_length, new_count)
+
     # Skip some offsets
     data.read(new_count * 8)
+
     return value
 
 
@@ -166,11 +225,13 @@ def _get_value(data, data_type, cursor_position):
     """ND2s use various codes to indicate different data types, which we translate here.
 
     Args:
-        data:
-        data_type:
-        cursor_position:
+        data: the binary data
+        data_type: the data type (unsigned char = 1, unsigned int = 2 or 3, unsigned long = 5, double = 6, string = 8,
+         char array = 9, metadata item = 11)
+        cursor_position: the cursor position in the binary nd2 file
 
     Returns:
+        mixed: the parsed value
 
     """
     parser = {1: _parse_unsigned_char,
@@ -186,13 +247,14 @@ def _get_value(data, data_type, cursor_position):
 
 def read_metadata(data, count):
     """
-    Iterates over each element some section of the metadata and parses it.
+    Iterates over each element of some section of the metadata and parses it.
 
     Args:
-        data:
-        count:
+        data: the metadata in binary form
+        count: the number of metadata elements
 
     Returns:
+        dict: a dictionary containing the parsed metadata
 
     """
     if data is None:
@@ -226,11 +288,12 @@ def _add_to_metadata(metadata, name, value):
     Add the name value pair to the metadata dict
 
     Args:
-        metadata:
-        name:
-        value:
+        metadata (dict): a dictionary containing the metadata
+        name (string): the dictionary key
+        value: the value to add
 
     Returns:
+        dict: the new metadata dictionary
 
     """
     if name not in metadata.keys():

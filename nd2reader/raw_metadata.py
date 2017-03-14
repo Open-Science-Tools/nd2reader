@@ -8,17 +8,18 @@ import numpy as np
 
 def ignore_missing(func):
     """
-
+    Ignore missing properties
     Args:
-        func:
+        func: function to decorate
 
     Returns:
+        function: a wrapper function
 
     """
 
     def wrapper(*args, **kwargs):
         """
-
+        Wrapper function to ignore missing class properties
         Args:
             *args:
             **kwargs:
@@ -48,12 +49,16 @@ class RawMetadata(object):
     def __dict__(self):
         """Returns the parsed metadata in dictionary form
 
+        Returns:
+            dict: the parsed metadata
         """
         return self.get_parsed_metadata()
 
     def get_parsed_metadata(self):
         """ Returns the parsed metadata in dictionary form
 
+        Returns:
+            dict: the parsed metadata
         """
 
         if self._metadata_parsed is not None:
@@ -82,7 +87,8 @@ class RawMetadata(object):
         """
         These are labels created by the NIS Elements user. Typically they may a short description of the filter cube
         used (e.g. "bright field", "GFP", etc.)
-
+        Returns:
+            list: the color channels
         """
         channels = []
         metadata = self.image_metadata_sequence[six.b('SLxPictureMetadata')][six.b('sPicturePlanes')]
@@ -114,14 +120,16 @@ class RawMetadata(object):
     def _parse_frames(self):
         """The number of cycles.
 
+        Returns:
+            list: list of all the frame numbers
         """
         return self._parse_dimension(r""".*?T'?\((\d+)\).*?""")
 
     def _parse_z_levels(self):
         """The different levels in the Z-plane.
 
-        Just a sequence from 0 to n.
-
+        Returns:
+            list: the z levels, just a sequence from 0 to n.
         """
         return self._parse_dimension(r""".*?Z\((\d+)\).*?""")
 
@@ -357,9 +365,9 @@ class RawMetadata(object):
     @ignore_missing
     def image_calibration(self):
         """
-
+        The amount of pixels per micron.
         Returns:
-
+            float: pixels per micron
         """
         return read_metadata(read_chunk(self._fh, self._label_map.image_calibration), 1)
 
@@ -407,9 +415,9 @@ class RawMetadata(object):
     @ignore_missing
     def roi_metadata(self):
         """
-
+        Contains information about the defined ROIs: shape, position and type (reference/background/stimulation).
         Returns:
-
+            dict: ROI metadata dictionary
         """
         return read_metadata(read_chunk(self._fh, self._label_map.roi_metadata), 1)
 

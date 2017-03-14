@@ -93,7 +93,8 @@ class ND2Reader(FramesSequenceND):
     def pixel_type(self):
         """Return the pixel data type
 
-        Returns: the pixel data type
+        Returns:
+            dtype: the pixel data type
 
         """
         return self._dtype

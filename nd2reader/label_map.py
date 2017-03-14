@@ -123,7 +123,7 @@ class LabelMap(object):
     @property
     def roi_metadata(self):
         """
-
+        Information about any regions of interest (ROIs) defined in the nd2 file
         Returns:
 
         """

@@ -200,9 +200,9 @@ class Parser(object):
         Images are grouped together if they share the same time index, field of view, and z-level.
 
         Args:
-            frame_number:
-            fov:
-            z_level:
+            frame_number: the time index
+            fov: the field of view number
+            z_level: the z level number
 
         Returns:
             int: the image group number
@@ -216,9 +216,9 @@ class Parser(object):
         Images are in the same frame if they share the same group number and field of view and are taken sequentially.
 
         Args:
-            image_group_number:
-            field_of_view:
-            z_level:
+            image_group_number: the image group number (see _calculate_image_group_number)
+            field_of_view: the field of view number
+            z_level: the z level number
 
         Returns:
 
@@ -242,17 +242,17 @@ class Parser(object):
         """Reads the raw bytes and the timestamp of an image.
 
         Args:
-            image_group_number:
-            channel_offset:
-            height:
-            width:
+            image_group_number: the image group number (see _calculate_image_group_number)
+            channel_offset: the number of the color channel
+            height: the height of the image
+            width: the width of the image
 
         Returns:
 
         """
         chunk = self._label_map.get_image_data_location(image_group_number)
         data = read_chunk(self._fh, chunk)
-        # print("data", data, "that was data")
+
         # All images in the same image group share the same timestamp! So if you have complicated image data,
         # your timestamps may not be entirely accurate. Practically speaking though, they'll only be off by a few
         # seconds unless you're doing something super weird.
@@ -277,6 +277,9 @@ class Parser(object):
 
     def _get_frame_metadata(self):
         """Get the metadata for one frame
+
+        Returns:
+            dict: a dictionary containing the parsed metadata
 
         """
         return self.metadata
