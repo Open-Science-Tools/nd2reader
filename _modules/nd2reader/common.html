@@ -122,11 +122,12 @@
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        fh:</span>
-<span class="sd">        kind:</span>
-<span class="sd">        chunk_location:</span>
+<span class="sd">        fh: File handle of the nd2 file</span>
+<span class="sd">        kind: data type, can be one of &#39;double&#39;, &#39;int&#39; or &#39;float&#39;</span>
+<span class="sd">        chunk_location: the location of the array chunk in the binary nd2 file</span>
 
 <span class="sd">    Returns:</span>
+<span class="sd">        array.array: an array of the data</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">kinds</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;double&#39;</span><span class="p">:</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span>
@@ -141,22 +142,67 @@
 
 
 <span class="k">def</span> <span class="nf">_parse_unsigned_char</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data: binary data</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        char: the data converted to unsigned char</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">_parse_unsigned_int</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: binary data</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: the data converted to unsigned int</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">_parse_unsigned_long</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: binary data</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            long: the data converted to unsigned long</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">_parse_double</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: binary data</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            double: the data converted to double</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">_parse_string</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: binary data</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            string: the data converted to string</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
     <span class="n">value</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">while</span> <span class="ow">not</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span><span class="p">)):</span>
         <span class="c1"># the string ends at the first instance of \x00\x00</span>
@@ -165,6 +211,15 @@
 
 
 <span class="k">def</span> <span class="nf">_parse_char_array</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: binary data</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            array.array: the data converted to an array</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
     <span class="n">array_length</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">array_length</span><span class="p">))</span>
 
@@ -174,9 +229,10 @@
 <span class="sd">    The date and time when acquisition began.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        text_info:</span>
+<span class="sd">        text_info: the text that contains the date and time information</span>
 
 <span class="sd">    Returns:</span>
+<span class="sd">        datetime: the date and time of the acquisition</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">text_info</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
@@ -197,18 +253,21 @@
     <span class="sd">&quot;&quot;&quot;Reads hierarchical data, analogous to a Python dict.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        data:</span>
-<span class="sd">        cursor_position:</span>
+<span class="sd">        data: the binary data that needs to be parsed</span>
+<span class="sd">        cursor_position: the position in the binary nd2 file</span>
 
 <span class="sd">    Returns:</span>
+<span class="sd">        dict: a dictionary containing the metadata item</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">new_count</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;IQ&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">12</span><span class="p">))</span>
     <span class="n">length</span> <span class="o">-=</span> <span class="n">data</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span> <span class="o">-</span> <span class="n">cursor_position</span>
     <span class="n">next_data_length</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
     <span class="n">value</span> <span class="o">=</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">next_data_length</span><span class="p">,</span> <span class="n">new_count</span><span class="p">)</span>
+
     <span class="c1"># Skip some offsets</span>
     <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">new_count</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">value</span>
 
 
@@ -216,11 +275,13 @@
     <span class="sd">&quot;&quot;&quot;ND2s use various codes to indicate different data types, which we translate here.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        data:</span>
-<span class="sd">        data_type:</span>
-<span class="sd">        cursor_position:</span>
+<span class="sd">        data: the binary data</span>
+<span class="sd">        data_type: the data type (unsigned char = 1, unsigned int = 2 or 3, unsigned long = 5, double = 6, string = 8,</span>
+<span class="sd">         char array = 9, metadata item = 11)</span>
+<span class="sd">        cursor_position: the cursor position in the binary nd2 file</span>
 
 <span class="sd">    Returns:</span>
+<span class="sd">        mixed: the parsed value</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="n">_parse_unsigned_char</span><span class="p">,</span>
@@ -236,13 +297,14 @@
 
 <div class="viewcode-block" id="read_metadata"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.common.read_metadata">[docs]</a><span class="k">def</span> <span class="nf">read_metadata</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Iterates over each element some section of the metadata and parses it.</span>
+<span class="sd">    Iterates over each element of some section of the metadata and parses it.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        data:</span>
-<span class="sd">        count:</span>
+<span class="sd">        data: the metadata in binary form</span>
+<span class="sd">        count: the number of metadata elements</span>
 
 <span class="sd">    Returns:</span>
+<span class="sd">        dict: a dictionary containing the parsed metadata</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -276,11 +338,12 @@
 <span class="sd">    Add the name value pair to the metadata dict</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        metadata:</span>
-<span class="sd">        name:</span>
-<span class="sd">        value:</span>
+<span class="sd">        metadata (dict): a dictionary containing the metadata</span>
+<span class="sd">        name (string): the dictionary key</span>
+<span class="sd">        value: the value to add</span>
 
 <span class="sd">    Returns:</span>
+<span class="sd">        dict: the new metadata dictionary</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>

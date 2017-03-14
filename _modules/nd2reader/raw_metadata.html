@@ -49,44 +49,14 @@
             
   <h1>Source code for nd2reader.raw_metadata</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">re</span>
-
 <span class="kn">from</span> <span class="nn">nd2reader.common</span> <span class="k">import</span> <span class="n">read_chunk</span><span class="p">,</span> <span class="n">read_array</span><span class="p">,</span> <span class="n">read_metadata</span><span class="p">,</span> <span class="n">parse_date</span>
 <span class="kn">import</span> <span class="nn">xmltodict</span>
 <span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="ignore_missing"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.raw_metadata.ignore_missing">[docs]</a><span class="k">def</span> <span class="nf">ignore_missing</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        func:</span>
-
-<span class="sd">    Returns:</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            *args:</span>
-<span class="sd">            **kwargs:</span>
-
-<span class="sd">        Returns:</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-
-    <span class="k">return</span> <span class="n">wrapper</span></div>
-
-
 <div class="viewcode-block" id="RawMetadata"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.raw_metadata.RawMetadata">[docs]</a><span class="k">class</span> <span class="nc">RawMetadata</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    RawMetadata class parses and stores the raw metadata that is read from the binary file in dict format</span>
+    <span class="sd">&quot;&quot;&quot;RawMetadata class parses and stores the raw metadata that is read from the binary file in dict format.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fh</span><span class="p">,</span> <span class="n">label_map</span><span class="p">):</span>
@@ -96,14 +66,18 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">__dict__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns the parsed metadata in dictionary form</span>
+        <span class="sd">&quot;&quot;&quot;Returns the parsed metadata in dictionary form.</span>
 
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: the parsed metadata</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parsed_metadata</span><span class="p">()</span>
 
 <div class="viewcode-block" id="RawMetadata.get_parsed_metadata"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.raw_metadata.RawMetadata.get_parsed_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">get_parsed_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Returns the parsed metadata in dictionary form</span>
+        <span class="sd">&quot;&quot;&quot;Returns the parsed metadata in dictionary form.</span>
 
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: the parsed metadata</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -129,10 +103,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span></div>
 
     <span class="k">def</span> <span class="nf">_parse_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        These are labels created by the NIS Elements user. Typically they may a short description of the filter cube</span>
-<span class="sd">        used (e.g. &quot;bright field&quot;, &quot;GFP&quot;, etc.)</span>
+        <span class="sd">&quot;&quot;&quot;These are labels created by the NIS Elements user. Typically they may a short description of the filter cube</span>
+<span class="sd">        used (e.g. &#39;bright field&#39;, &#39;GFP&#39;, etc.)</span>
 
+<span class="sd">        Returns:</span>
+<span class="sd">            list: the color channels</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">channels</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_metadata_sequence</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxPictureMetadata&#39;</span><span class="p">)][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;sPicturePlanes&#39;</span><span class="p">)]</span>
@@ -152,8 +127,7 @@
         <span class="k">return</span> <span class="n">channels</span>
 
     <span class="k">def</span> <span class="nf">_parse_fields_of_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The metadata contains information about fields of view, but it contains it even if some fields</span>
+        <span class="sd">&quot;&quot;&quot;The metadata contains information about fields of view, but it contains it even if some fields</span>
 <span class="sd">        of view were cropped. We can&#39;t find anything that states which fields of view are actually</span>
 <span class="sd">        in the image data, so we have to calculate it. There probably is something somewhere, since</span>
 <span class="sd">        NIS Elements can figure it out, but we haven&#39;t found it yet.</span>
@@ -164,20 +138,21 @@
     <span class="k">def</span> <span class="nf">_parse_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The number of cycles.</span>
 
+<span class="sd">        Returns:</span>
+<span class="sd">            list: list of all the frame numbers</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="s2">r&quot;&quot;&quot;.*?T&#39;?\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_parse_z_levels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The different levels in the Z-plane.</span>
 
-<span class="sd">        Just a sequence from 0 to n.</span>
-
+<span class="sd">        Returns:</span>
+<span class="sd">            list: the z levels, just a sequence from 0 to n.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="s2">r&quot;&quot;&quot;.*?Z\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_parse_dimension_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        While there are metadata values that represent a lot of what we want to capture, they seem to be unreliable.</span>
+        <span class="sd">&quot;&quot;&quot;While there are metadata values that represent a lot of what we want to capture, they seem to be unreliable.</span>
 <span class="sd">        Sometimes certain elements don&#39;t exist, or change their data type randomly. However, the human-readable text</span>
 <span class="sd">        is always there and in the same exact format, so we just parse that instead.</span>
 
@@ -207,7 +182,7 @@
     <span class="k">def</span> <span class="nf">_parse_total_images_per_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The total number of images per channel.</span>
 
-<span class="sd">        Warning: this may be inaccurate as it includes &quot;gap&quot; images.</span>
+<span class="sd">        Warning: this may be inaccurate as it includes &#39;gap&#39; images.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_attributes</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxImageAttributes&#39;</span><span class="p">)][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;uiSequenceCount&#39;</span><span class="p">)]</span>
@@ -236,9 +211,10 @@
 <span class="sd">        This includes the position and size at the given timepoints.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            raw_roi_dict:</span>
+<span class="sd">            raw_roi_dict: dictionary of raw roi metadata</span>
 
 <span class="sd">        Returns:</span>
+<span class="sd">            dict: the parsed ROI metadata</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">number_of_timepoints</span> <span class="o">=</span> <span class="n">raw_roi_dict</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;m_vectAnimParams_Size&#39;</span><span class="p">)]</span>
@@ -285,10 +261,11 @@
 <span class="sd">        Parses a ROI vector animation object and adds it to the global list of timepoints and positions.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            roi_dict:</span>
-<span class="sd">            animation_dict:</span>
+<span class="sd">            roi_dict: the raw roi dictionary</span>
+<span class="sd">            animation_dict: the raw animation dictionary</span>
 
 <span class="sd">        Returns:</span>
+<span class="sd">            dict: the parsed metadata</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">roi_dict</span><span class="p">[</span><span class="s2">&quot;timepoints&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">animation_dict</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;m_dTimeMs&#39;</span><span class="p">)])</span>
@@ -334,13 +311,13 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_parse_loop_data</span><span class="p">(</span><span class="n">loop_data</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Parse the experimental loop data</span>
+        <span class="sd">&quot;&quot;&quot;Parse the experimental loop data</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            loop_data:</span>
+<span class="sd">            loop_data: dictionary of experiment loops</span>
 
 <span class="sd">        Returns:</span>
+<span class="sd">            list: list of the parsed loops</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">loops</span> <span class="o">=</span> <span class="p">[</span><span class="n">loop_data</span><span class="p">]</span>
@@ -384,161 +361,156 @@
         <span class="k">return</span> <span class="n">parsed_loops</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">image_text_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Textual image information</span>
 
 <span class="sd">        Returns:</span>
+<span class="sd">            dict: containing the textual image info</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">image_text_info</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">image_metadata_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Image metadata of the sequence</span>
 
 <span class="sd">        Returns:</span>
+<span class="sd">            dict: containing the metadata</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">image_metadata_sequence</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">image_calibration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;The amount of pixels per micron.</span>
 
 <span class="sd">        Returns:</span>
-
+<span class="sd">            dict: pixels per micron</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">image_calibration</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">image_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Image attributes</span>
 
 <span class="sd">        Returns:</span>
-
+<span class="sd">            dict: containing the image attributes</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">image_attributes</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">x_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;X data</span>
 
 <span class="sd">        Returns:</span>
-
+<span class="sd">            dict: x_data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">x_data</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">y_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Y data</span>
 
 <span class="sd">        Returns:</span>
-
+<span class="sd">            dict: y_data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">y_data</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">z_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Z data</span>
 
 <span class="sd">        Returns:</span>
-
+<span class="sd">            dict: z_data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">z_data</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">roi_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Contains information about the defined ROIs: shape, position and type (reference/background/stimulation).</span>
 
 <span class="sd">        Returns:</span>
-
+<span class="sd">            dict: ROI metadata dictionary</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">roi_metadata</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">pfs_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Perfect focus system (PFS) status</span>
 
 <span class="sd">        Returns:</span>
+<span class="sd">            dict: Perfect focus system (PFS) status</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="s1">&#39;int&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">pfs_status</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">pfs_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Perfect focus system (PFS) offset</span>
 
 <span class="sd">        Returns:</span>
+<span class="sd">            dict: Perfect focus system (PFS) offset</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="s1">&#39;int&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">pfs_offset</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">camera_exposure_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Exposure time information</span>
 
 <span class="sd">        Returns:</span>
+<span class="sd">            dict: Camera exposure time</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">read_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">camera_exposure_time</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">lut_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;LUT information</span>
 
 <span class="sd">        Returns:</span>
+<span class="sd">            dict: LUT information</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">xmltodict</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">lut_data</span><span class="p">))</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">grabber_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Grabber settings</span>
 
 <span class="sd">        Returns:</span>
+<span class="sd">            dict: Acquisition settings</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">xmltodict</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">grabber_settings</span><span class="p">))</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">custom_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Custom user data</span>
 
 <span class="sd">        Returns:</span>
+<span class="sd">            dict: custom user data</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">xmltodict</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">custom_data</span><span class="p">))</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">app_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;NIS elements application info</span>
 
 <span class="sd">        Returns:</span>
+<span class="sd">            dict: (Version) information of the NIS Elements application</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">xmltodict</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">app_info</span><span class="p">))</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">camera_temp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Camera temperature</span>
+
 <span class="sd">        Yields:</span>
 <span class="sd">            float: the temperature</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">camera_temp</span> <span class="o">=</span> <span class="n">read_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">camera_temp</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">camera_temp</span><span class="p">:</span>
@@ -546,11 +518,12 @@
                 <span class="k">yield</span> <span class="n">temp</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">acquisition_times</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Acquisition times</span>
+
 <span class="sd">        Yields:</span>
 <span class="sd">            float: the acquisition time</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">acquisition_times</span> <span class="o">=</span> <span class="n">read_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">acquisition_times</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">acquisition_times</span><span class="p">:</span>
@@ -558,11 +531,11 @@
                 <span class="k">yield</span> <span class="n">acquisition_time</span>
 
     <span class="nd">@property</span>
-    <span class="nd">@ignore_missing</span>
     <span class="k">def</span> <span class="nf">image_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Image metadata</span>
 
 <span class="sd">        Returns:</span>
+<span class="sd">            dict: Extra image metadata</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">image_metadata</span><span class="p">:</span>
