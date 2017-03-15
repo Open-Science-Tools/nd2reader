@@ -1,10 +1,16 @@
 import unittest
-
+from os import path
 import six
-from nd2reader.common import parse_version, parse_date, _add_to_metadata
+
+from nd2reader.artificial import ArtificialND2
+from nd2reader.common import get_version, parse_version, parse_date, _add_to_metadata
 
 
 class TestCommon(unittest.TestCase):
+    def setUp(self):
+        dir_path = path.dirname(path.realpath(__file__))
+        self.test_file = path.join(dir_path, 'test_data/test.nd2')
+
     def test_parse_version_2(self):
         data = 'ND2 FILE SIGNATURE CHUNK NAME01!Ver2.2'
         actual = parse_version(data)
@@ -16,6 +22,14 @@ class TestCommon(unittest.TestCase):
         actual = parse_version(data)
         expected = (3, 0)
         self.assertTupleEqual(actual, expected)
+
+    def test_get_version_from_file(self):
+        with ArtificialND2(self.test_file) as artificial:
+            artificial.close()
+
+        with open(self.test_file, 'rb') as fh:
+            version_tuple = get_version(fh)
+            self.assertTupleEqual(version_tuple, (3, 0))
 
     def test_parse_date_24(self):
         date_format = "%m/%d/%Y  %H:%M:%S"
@@ -45,5 +59,3 @@ class TestCommon(unittest.TestCase):
         metadata = {'test': ['value1', 'value2']}
         _add_to_metadata(metadata, 'test', 'value3')
         self.assertDictEqual(metadata, {'test': ['value1', 'value2', 'value3']})
-
-
