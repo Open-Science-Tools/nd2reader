@@ -108,15 +108,27 @@ class ND2Reader(FramesSequenceND):
         """
         return self._dtype
 
+    def _get_metadata_property(self, key, default=None):
+        if self.metadata is None:
+            return default
+
+        if key not in self.metadata:
+            return default
+
+        if self.metadata[key] is None:
+            return default
+
+        return self.metadata[key]
+
     def _setup_axes(self):
         """Setup the xyctz axes, iterate over t axis by default
 
         """
-        self._init_axis('x', self.metadata["width"])
-        self._init_axis('y', self.metadata["height"])
-        self._init_axis('c', len(self.metadata["channels"]))
-        self._init_axis('t', len(self.metadata["frames"]))
-        self._init_axis('z', len(self.metadata["z_levels"]))
+        self._init_axis('x', self._get_metadata_property("width", default=0))
+        self._init_axis('y', self._get_metadata_property("height", default=0))
+        self._init_axis('c', len(self._get_metadata_property("channels", default=[])))
+        self._init_axis('t', len(self._get_metadata_property("frames", default=[])))
+        self._init_axis('z', len(self._get_metadata_property("z_levels", default=[])))
 
         # provide the default
         self.iter_axes = 't'
