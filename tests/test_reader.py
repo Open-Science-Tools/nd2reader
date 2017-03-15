@@ -13,6 +13,9 @@ class TestReader(unittest.TestCase):
             path.join(dir_path, 'test_data/data002.nd2')
         ]
 
+    def test_extension(self):
+        self.assertTrue('nd2' in ND2Reader.class_exts())
+
     def test_sizes_data_001(self):
         with ND2Reader(self.files[0]) as reader:
             self.assertEqual(reader.sizes['x'], 128)
