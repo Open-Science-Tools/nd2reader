@@ -34,15 +34,15 @@ class RawMetadata(object):
             return self._metadata_parsed
 
         self._metadata_parsed = {
-            "height": self.image_attributes[six.b('SLxImageAttributes')][six.b('uiHeight')],
-            "width": self.image_attributes[six.b('SLxImageAttributes')][six.b('uiWidth')],
-            "date": parse_date(self.image_text_info[six.b('SLxImageTextInfo')]),
+            "height": self._parse_height(),
+            "width": self._parse_width(),
+            "date": self._parse_date(),
             "fields_of_view": self._parse_fields_of_view(),
             "frames": self._parse_frames(),
             "z_levels": self._parse_z_levels(),
             "total_images_per_channel": self._parse_total_images_per_channel(),
             "channels": self._parse_channels(),
-            "pixel_microns": self.image_calibration.get(six.b('SLxCalibration'), {}).get(six.b('dCalibration')),
+            "pixel_microns": self._parse_calibration(),
         }
 
         self._metadata_parsed['num_frames'] = len(self._metadata_parsed['frames'])
@@ -52,6 +52,26 @@ class RawMetadata(object):
 
         return self._metadata_parsed
 
+    def _parse_height(self):
+        if self.image_attributes is not None:
+            return self.image_attributes[six.b('SLxImageAttributes')][six.b('uiHeight')]
+        return None
+
+    def _parse_width(self):
+        if self.image_attributes is not None:
+            return self.image_attributes[six.b('SLxImageAttributes')][six.b('uiWidth')]
+        return None
+
+    def _parse_date(self):
+        if self.image_text_info is not None:
+            return parse_date(self.image_text_info[six.b('SLxImageTextInfo')])
+        return None
+
+    def _parse_calibration(self):
+        if self.image_calibration is not None:
+            return self.image_calibration.get(six.b('SLxCalibration'), {}).get(six.b('dCalibration'))
+        return None
+
     def _parse_channels(self):
         """These are labels created by the NIS Elements user. Typically they may a short description of the filter cube
         used (e.g. 'bright field', 'GFP', etc.)
@@ -60,6 +80,9 @@ class RawMetadata(object):
             list: the color channels
         """
         channels = []
+        if self.image_metadata_sequence is None:
+            return channels
+
         metadata = self.image_metadata_sequence[six.b('SLxPictureMetadata')][six.b('sPicturePlanes')]
         try:
             validity = self.image_metadata[six.b('SLxExperiment')][six.b('ppNextLevelEx')][six.b('')][0][
@@ -108,6 +131,9 @@ class RawMetadata(object):
 
         """
         dimension_text = six.b("")
+        if self.image_text_info is None:
+            return dimension_text
+
         textinfo = self.image_text_info[six.b('SLxImageTextInfo')].values()
 
         for line in textinfo:
@@ -121,6 +147,8 @@ class RawMetadata(object):
 
     def _parse_dimension(self, pattern):
         dimension_text = self._parse_dimension_text()
+        if dimension_text is None:
+            return [0]
         if six.PY3:
             dimension_text = dimension_text.decode("utf8")
         match = re.match(pattern, dimension_text)
@@ -135,6 +163,8 @@ class RawMetadata(object):
         Warning: this may be inaccurate as it includes 'gap' images.
 
         """
+        if self.image_attributes is None:
+            return None
         return self.image_attributes[six.b('SLxImageAttributes')][six.b('uiSequenceCount')]
 
     def _parse_roi_metadata(self):
@@ -241,7 +271,7 @@ class RawMetadata(object):
         """Parse the metadata of the ND experiment
 
         """
-        if not six.b('SLxExperiment') in self.image_metadata:
+        if self.image_metadata is None or six.b('SLxExperiment') not in self.image_metadata:
             return
 
         raw_data = self.image_metadata[six.b('SLxExperiment')]

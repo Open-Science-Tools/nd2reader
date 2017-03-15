@@ -29,7 +29,7 @@ class Parser(object):
         self.metadata = None
 
         # First check the file version
-        self._check_version_supported()
+        self.supported = self._check_version_supported()
 
         # Parse the metadata
         self._parse_metadata()

@@ -11,6 +11,10 @@ class TestCommon(unittest.TestCase):
         dir_path = path.dirname(path.realpath(__file__))
         self.test_file = path.join(dir_path, 'test_data/test.nd2')
 
+    def create_test_nd2(self):
+        with ArtificialND2(self.test_file) as artificial:
+            artificial.close()
+
     def test_parse_version_2(self):
         data = 'ND2 FILE SIGNATURE CHUNK NAME01!Ver2.2'
         actual = parse_version(data)
@@ -24,8 +28,7 @@ class TestCommon(unittest.TestCase):
         self.assertTupleEqual(actual, expected)
 
     def test_get_version_from_file(self):
-        with ArtificialND2(self.test_file) as artificial:
-            artificial.close()
+        self.create_test_nd2()
 
         with open(self.test_file, 'rb') as fh:
             version_tuple = get_version(fh)
