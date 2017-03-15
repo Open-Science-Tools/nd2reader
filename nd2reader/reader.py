@@ -90,6 +90,15 @@ class ND2Reader(FramesSequenceND):
         return self._parser.get_image_by_attributes(t, 0, c_name, z, self.metadata["height"], self.metadata["width"])
 
     @property
+    def parser(self):
+        """
+        Returns the parser object.
+        Returns:
+            Parser: the parser object
+        """
+        return self._parser
+
+    @property
     def pixel_type(self):
         """Return the pixel data type
 
