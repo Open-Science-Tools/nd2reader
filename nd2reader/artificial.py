@@ -78,7 +78,8 @@ class ArtificialND2(object):
             'lut_data': "CustomDataVar|LUTDataV1_0!",
             'grabber_settings': "CustomDataVar|GrabberCameraSettingsV1_0!",
             'custom_data': "CustomDataVar|CustomDataV2_0!",
-            'app_info': "CustomDataVar|AppInfo_V1_0!"
+            'app_info': "CustomDataVar|AppInfo_V1_0!",
+            'image_frame_0': "ImageDataSeq|0!"
         }
         data = {}
 

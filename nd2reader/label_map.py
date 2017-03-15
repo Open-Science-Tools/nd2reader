@@ -12,15 +12,6 @@ class LabelMap(object):
         self._data = raw_binary_data
         self._image_data = {}
 
-    def image_attributes(self):
-        """Get the location of the image attributes
-
-        Returns:
-            int: The location of the image attributes
-
-        """
-        return self._get_location(six.b("ImageAttributesLV!"))
-
     def _get_location(self, label):
         try:
             label_location = self._data.index(label) + len(label)

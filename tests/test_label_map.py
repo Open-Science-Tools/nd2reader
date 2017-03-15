@@ -8,6 +8,9 @@ class TestLabelMap(unittest.TestCase):
         self.raw_text, self.locations = ArtificialND2.create_label_map_bytes()
         self.label_map = LabelMap(self.raw_text)
 
+    def test_image_data_location(self):
+        self.assertEqual(self.locations['image_frame_0'][0], self.label_map.get_image_data_location(0))
+
     def test_image_text_info(self):
         self.assertEqual(self.locations['image_text_info'][0], self.label_map.image_text_info)
 
