@@ -34,15 +34,15 @@ class RawMetadata(object):
             return self._metadata_parsed
 
         self._metadata_parsed = {
-            "height": self._parse_height(),
-            "width": self._parse_width(),
-            "date": self._parse_date(),
+            "height": self._parse_if_not_none(self.image_attributes, self._parse_height),
+            "width": self._parse_if_not_none(self.image_attributes, self._parse_width),
+            "date": self._parse_if_not_none(self.image_text_info, self._parse_date),
             "fields_of_view": self._parse_fields_of_view(),
             "frames": self._parse_frames(),
             "z_levels": self._parse_z_levels(),
             "total_images_per_channel": self._parse_total_images_per_channel(),
             "channels": self._parse_channels(),
-            "pixel_microns": self._parse_calibration(),
+            "pixel_microns": self._parse_if_not_none(self.image_calibration, self._parse_calibration),
         }
 
         self._metadata_parsed['num_frames'] = len(self._metadata_parsed['frames'])
@@ -52,25 +52,23 @@ class RawMetadata(object):
 
         return self._metadata_parsed
 
-    def _parse_height(self):
-        if self.image_attributes is not None:
-            return self.image_attributes[six.b('SLxImageAttributes')][six.b('uiHeight')]
+    @staticmethod
+    def _parse_if_not_none(to_check, callback):
+        if to_check is not None:
+            return callback()
         return None
+
+    def _parse_height(self):
+        return self.image_attributes[six.b('SLxImageAttributes')][six.b('uiHeight')]
 
     def _parse_width(self):
-        if self.image_attributes is not None:
-            return self.image_attributes[six.b('SLxImageAttributes')][six.b('uiWidth')]
-        return None
+        return self.image_attributes[six.b('SLxImageAttributes')][six.b('uiWidth')]
 
     def _parse_date(self):
-        if self.image_text_info is not None:
-            return parse_date(self.image_text_info[six.b('SLxImageTextInfo')])
-        return None
+        return parse_date(self.image_text_info[six.b('SLxImageTextInfo')])
 
     def _parse_calibration(self):
-        if self.image_calibration is not None:
-            return self.image_calibration.get(six.b('SLxCalibration'), {}).get(six.b('dCalibration'))
-        return None
+        return self.image_calibration.get(six.b('SLxCalibration'), {}).get(six.b('dCalibration'))
 
     def _parse_channels(self):
         """These are labels created by the NIS Elements user. Typically they may a short description of the filter cube
@@ -79,11 +77,15 @@ class RawMetadata(object):
         Returns:
             list: the color channels
         """
-        channels = []
         if self.image_metadata_sequence is None:
-            return channels
+            return []
 
         metadata = self.image_metadata_sequence[six.b('SLxPictureMetadata')][six.b('sPicturePlanes')]
+        channels = self._process_channels_metadata(metadata)
+
+        return channels
+
+    def _process_channels_metadata(self, metadata):
         try:
             validity = self.image_metadata[six.b('SLxExperiment')][six.b('ppNextLevelEx')][six.b('')][0][
                 six.b('ppNextLevelEx')][six.b('')][0][six.b('pItemValid')]
@@ -93,6 +95,7 @@ class RawMetadata(object):
         # Channel information is contained in dictionaries with the keys a0, a1...an where the number
         # indicates the order in which the channel is stored. So by sorting the dicts alphabetically
         # we get the correct order.
+        channels = []
         for (label, chan), valid in zip(sorted(metadata[six.b('sPlaneNew')].items()), validity):
             if not valid:
                 continue
@@ -290,7 +293,18 @@ class RawMetadata(object):
         self._metadata_parsed['experiment'] = experimental_data
 
     @staticmethod
-    def _parse_loop_data(loop_data):
+    def _get_loops_from_data(loop_data):
+        loops = [loop_data]
+        if six.b('uiPeriodCount') in loop_data and loop_data[six.b('uiPeriodCount')] > 0:
+            # special ND experiment
+            if six.b('pPeriod') not in loop_data:
+                return []
+
+            # take the first dictionary element, it contains all loop data
+            loops = loop_data[six.b('pPeriod')][list(loop_data[six.b('pPeriod')].keys())[0]]
+        return loops
+
+    def _parse_loop_data(self, loop_data):
         """Parse the experimental loop data
 
         Args:
@@ -300,14 +314,7 @@ class RawMetadata(object):
             list: list of the parsed loops
 
         """
-        loops = [loop_data]
-        if six.b('uiPeriodCount') in loop_data and loop_data[six.b('uiPeriodCount')] > 0:
-            # special ND experiment
-            if six.b('pPeriod') not in loop_data:
-                return []
-
-            # take the first dictionary element, it contains all loop data
-            loops = loop_data[six.b('pPeriod')][list(loop_data[six.b('pPeriod')].keys())[0]]
+        loops = self._get_loops_from_data(loop_data)
 
         # take into account the absolute time in ms
         time_offset = 0
