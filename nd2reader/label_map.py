@@ -100,30 +100,30 @@ class LabelMap(object):
 
     @property
     def x_data(self):
-        """Get the location of the x data
+        """Get the location of the custom x data
 
         Returns:
-            int: The location of the x data
+            int: The location of the custom x data
 
         """
         return self._get_location(six.b("CustomData|X!"))
 
     @property
     def y_data(self):
-        """Get the location of the y data
+        """Get the location of the custom y data
 
         Returns:
-            int: The location of the y data
+            int: The location of the custom y data
 
         """
         return self._get_location(six.b("CustomData|Y!"))
 
     @property
     def z_data(self):
-        """Get the location of the z data
+        """Get the location of the custom z data
 
         Returns:
-            int: The location of the z data
+            int: The location of the custom z data
 
         """
         return self._get_location(six.b("CustomData|Z!"))
