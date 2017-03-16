@@ -54,3 +54,19 @@ nd2reader.exceptions module
     :members:
     :undoc-members:
     :show-inheritance:
+
+nd2reader.exceptions artificial
+-------------------------------
+
+.. automodule:: nd2reader.artificial
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nd2reader.legacy module
+-----------------------
+
+.. automodule:: nd2reader.legacy
+    :members:
+    :undoc-members:
+    :show-inheritance:

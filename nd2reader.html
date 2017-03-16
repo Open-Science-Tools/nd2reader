@@ -63,7 +63,8 @@ use only.</p>
 <dt id="nd2reader.reader.ND2Reader">
 <em class="property">class </em><code class="descclassname">nd2reader.reader.</code><code class="descname">ND2Reader</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pims.base_frames.FramesSequenceND</span></code></p>
-<p>PIMS wrapper for the ND2 parser</p>
+<p>PIMS wrapper for the ND2 parser.
+This is the main class: use this to process your .nd2 files.</p>
 <dl class="classmethod">
 <dt id="nd2reader.reader.ND2Reader.class_exts">
 <em class="property">classmethod </em><code class="descname">class_exts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.class_exts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.class_exts" title="Permalink to this definition">¶</a></dt>
@@ -133,6 +134,14 @@ use only.</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nd2reader.reader.ND2Reader.parser">
+<code class="descname">parser</code><a class="headerlink" href="#nd2reader.reader.ND2Reader.parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the parser object.
+:returns: the parser object
+:rtype: Parser</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -904,12 +913,12 @@ doing anything out of the ordinary.</p>
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.x_data">
 <code class="descname">x_data</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.x_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the location of the x data</p>
+<dd><p>Get the location of the custom x data</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the x data</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the custom x data</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
@@ -920,12 +929,12 @@ doing anything out of the ordinary.</p>
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.y_data">
 <code class="descname">y_data</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.y_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the location of the y data</p>
+<dd><p>Get the location of the custom y data</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the y data</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the custom y data</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
@@ -936,12 +945,12 @@ doing anything out of the ordinary.</p>
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.z_data">
 <code class="descname">z_data</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.z_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the location of the z data</p>
+<dd><p>Get the location of the custom z data</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the z data</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the custom z data</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
@@ -1101,6 +1110,260 @@ cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and brig
 </dd></dl>
 
 </div>
+<div class="section" id="module-nd2reader.artificial">
+<span id="nd2reader-exceptions-artificial"></span><h2>nd2reader.exceptions artificial<a class="headerlink" href="#module-nd2reader.artificial" title="Permalink to this headline">¶</a></h2>
+<p>Functions to create artificial nd2 data for testing purposes</p>
+<dl class="class">
+<dt id="nd2reader.artificial.ArtificialND2">
+<em class="property">class </em><code class="descclassname">nd2reader.artificial.</code><code class="descname">ArtificialND2</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Artificial ND2 class (for testing purposes)</p>
+<dl class="method">
+<dt id="nd2reader.artificial.ArtificialND2.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correctly close the file handle</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="nd2reader.artificial.ArtificialND2.create_label_map_bytes">
+<em class="property">static </em><code class="descname">create_label_map_bytes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.create_label_map_bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.create_label_map_bytes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a binary label map</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">(binary data, dictionary data)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nd2reader.artificial.ArtificialND2.file_handle">
+<code class="descname">file_handle</code><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.file_handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>The file handle to the binary file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the file handle</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">file</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nd2reader.artificial.ArtificialND2.write_version">
+<code class="descname">write_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.write_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.write_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write file header</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nd2reader.legacy">
+<span id="nd2reader-legacy-module"></span><h2>nd2reader.legacy module<a class="headerlink" href="#module-nd2reader.legacy" title="Permalink to this headline">¶</a></h2>
+<p>Legacy class for backwards compatibility</p>
+<dl class="class">
+<dt id="nd2reader.legacy.Nd2">
+<em class="property">class </em><code class="descclassname">nd2reader.legacy.</code><code class="descname">Nd2</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/legacy.html#Nd2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.legacy.Nd2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Warning: this module is deprecated and only maintained for backwards compatibility with the non-PIMS version of
+nd2reader.</p>
+<dl class="attribute">
+<dt id="nd2reader.legacy.Nd2.channels">
+<code class="descname">channels</code><a class="headerlink" href="#nd2reader.legacy.Nd2.channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated. Fetches all color channels.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the color channels.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nd2reader.legacy.Nd2.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/legacy.html#Nd2.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.legacy.Nd2.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Closes the ND2Reader</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nd2reader.legacy.Nd2.date">
+<code class="descname">date</code><a class="headerlink" href="#nd2reader.legacy.Nd2.date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated. Fetches the acquisition date.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the date</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nd2reader.legacy.Nd2.fields_of_view">
+<code class="descname">fields_of_view</code><a class="headerlink" href="#nd2reader.legacy.Nd2.fields_of_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated. Fetches the fields of view.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">fields of view.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nd2reader.legacy.Nd2.frames">
+<code class="descname">frames</code><a class="headerlink" href="#nd2reader.legacy.Nd2.frames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated. Fetches all frames.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of frames</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nd2reader.legacy.Nd2.get_image">
+<code class="descname">get_image</code><span class="sig-paren">(</span><em>frame_number</em>, <em>field_of_view</em>, <em>channel_name</em>, <em>z_level</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/legacy.html#Nd2.get_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.legacy.Nd2.get_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated. Returns the specified image from the ND2Reader class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>frame_number</strong> &#8211; the frame number</li>
+<li><strong>field_of_view</strong> &#8211; the field of view number</li>
+<li><strong>channel_name</strong> &#8211; the name of the color channel</li>
+<li><strong>z_level</strong> &#8211; the z level number</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the specified image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Frame</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nd2reader.legacy.Nd2.height">
+<code class="descname">height</code><a class="headerlink" href="#nd2reader.legacy.Nd2.height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated. Fetches the height of the image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the pixel height of the image</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nd2reader.legacy.Nd2.pixel_microns">
+<code class="descname">pixel_microns</code><a class="headerlink" href="#nd2reader.legacy.Nd2.pixel_microns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated. Fetches the amount of microns per pixel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">microns per pixel</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nd2reader.legacy.Nd2.select">
+<code class="descname">select</code><span class="sig-paren">(</span><em>fields_of_view=None</em>, <em>channels=None</em>, <em>z_levels=None</em>, <em>start=0</em>, <em>stop=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/legacy.html#Nd2.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.legacy.Nd2.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select images based on criteria.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fields_of_view</strong> &#8211; the fields of view</li>
+<li><strong>channels</strong> &#8211; the color channels</li>
+<li><strong>z_levels</strong> &#8211; the z levels</li>
+<li><strong>start</strong> &#8211; the starting frame</li>
+<li><strong>stop</strong> &#8211; the last frame</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Sliced ND2Reader which contains the frames</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#nd2reader.reader.ND2Reader" title="nd2reader.reader.ND2Reader">ND2Reader</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nd2reader.legacy.Nd2.width">
+<code class="descname">width</code><a class="headerlink" href="#nd2reader.legacy.Nd2.width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated. Fetches the width of the image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the pixel width of the image</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nd2reader.legacy.Nd2.z_levels">
+<code class="descname">z_levels</code><a class="headerlink" href="#nd2reader.legacy.Nd2.z_levels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated. Fetches the available z levels.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">z levels.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -1119,6 +1382,8 @@ cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and brig
 <li><a class="reference internal" href="#module-nd2reader.label_map">nd2reader.label_map module</a></li>
 <li><a class="reference internal" href="#module-nd2reader.common">nd2reader.common module</a></li>
 <li><a class="reference internal" href="#module-nd2reader.exceptions">nd2reader.exceptions module</a></li>
+<li><a class="reference internal" href="#module-nd2reader.artificial">nd2reader.exceptions artificial</a></li>
+<li><a class="reference internal" href="#module-nd2reader.legacy">nd2reader.legacy module</a></li>
 </ul>
 </li>
 </ul>

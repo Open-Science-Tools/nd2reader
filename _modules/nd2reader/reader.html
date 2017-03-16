@@ -54,8 +54,8 @@
 
 
 <div class="viewcode-block" id="ND2Reader"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.reader.ND2Reader">[docs]</a><span class="k">class</span> <span class="nc">ND2Reader</span><span class="p">(</span><span class="n">FramesSequenceND</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;PIMS wrapper for the ND2 parser</span>
-
+    <span class="sd">&quot;&quot;&quot;PIMS wrapper for the ND2 parser.</span>
+<span class="sd">    This is the main class: use this to process your .nd2 files.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
@@ -140,6 +140,15 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">get_image_by_attributes</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">c_name</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">])</span></div>
 
     <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parser</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the parser object.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Parser: the parser object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pixel_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the pixel data type</span>
 
@@ -149,15 +158,27 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dtype</span>
 
+    <span class="k">def</span> <span class="nf">_get_metadata_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">default</span>
+
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">default</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">default</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
     <span class="k">def</span> <span class="nf">_setup_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Setup the xyctz axes, iterate over t axis by default</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;frames&quot;</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;z_levels&quot;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;channels&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[])))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;frames&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[])))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;z_levels&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[])))</span>
 
         <span class="c1"># provide the default</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">iter_axes</span> <span class="o">=</span> <span class="s1">&#39;t&#39;</span>

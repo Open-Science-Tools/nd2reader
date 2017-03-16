@@ -79,7 +79,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># First check the file version</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_check_version_supported</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supported</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_version_supported</span><span class="p">()</span>
 
         <span class="c1"># Parse the metadata</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_parse_metadata</span><span class="p">()</span>

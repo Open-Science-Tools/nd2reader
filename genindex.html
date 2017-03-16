@@ -54,13 +54,16 @@
  <a href="#A"><strong>A</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
+ | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
+ | <a href="#W"><strong>W</strong></a>
  | <a href="#X"><strong>X</strong></a>
  | <a href="#Y"><strong>Y</strong></a>
  | <a href="#Z"><strong>Z</strong></a>
@@ -87,6 +90,8 @@
         <li><a href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.app_info">(nd2reader.raw_metadata.RawMetadata attribute)</a>
 </li>
       </ul></li>
+      <li><a href="nd2reader.html#nd2reader.artificial.ArtificialND2">ArtificialND2 (class in nd2reader.artificial)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -107,17 +112,27 @@
         <li><a href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.camera_temp">(nd2reader.raw_metadata.RawMetadata attribute)</a>
 </li>
       </ul></li>
+      <li><a href="nd2reader.html#nd2reader.legacy.Nd2.channels">channels (nd2reader.legacy.Nd2 attribute)</a>
+</li>
       <li><a href="nd2reader.html#nd2reader.parser.Parser.CHUNK_HEADER">CHUNK_HEADER (nd2reader.parser.Parser attribute)</a>
+</li>
+      <li><a href="nd2reader.html#nd2reader.parser.Parser.CHUNK_MAP_END">CHUNK_MAP_END (nd2reader.parser.Parser attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="nd2reader.html#nd2reader.parser.Parser.CHUNK_MAP_END">CHUNK_MAP_END (nd2reader.parser.Parser attribute)</a>
-</li>
       <li><a href="nd2reader.html#nd2reader.parser.Parser.CHUNK_MAP_START">CHUNK_MAP_START (nd2reader.parser.Parser attribute)</a>
 </li>
       <li><a href="nd2reader.html#nd2reader.reader.ND2Reader.class_exts">class_exts() (nd2reader.reader.ND2Reader class method)</a>
 </li>
-      <li><a href="nd2reader.html#nd2reader.reader.ND2Reader.close">close() (nd2reader.reader.ND2Reader method)</a>
+      <li><a href="nd2reader.html#nd2reader.artificial.ArtificialND2.close">close() (nd2reader.artificial.ArtificialND2 method)</a>
+
+      <ul>
+        <li><a href="nd2reader.html#nd2reader.legacy.Nd2.close">(nd2reader.legacy.Nd2 method)</a>
+</li>
+        <li><a href="nd2reader.html#nd2reader.reader.ND2Reader.close">(nd2reader.reader.ND2Reader method)</a>
+</li>
+      </ul></li>
+      <li><a href="nd2reader.html#nd2reader.artificial.ArtificialND2.create_label_map_bytes">create_label_map_bytes() (nd2reader.artificial.ArtificialND2 static method)</a>
 </li>
       <li><a href="nd2reader.html#nd2reader.label_map.LabelMap.custom_data">custom_data (nd2reader.label_map.LabelMap attribute)</a>
 
@@ -131,7 +146,25 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nd2reader.html#nd2reader.legacy.Nd2.date">date (nd2reader.legacy.Nd2 attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nd2reader.html#nd2reader.label_map.LabelMap.description">description (nd2reader.label_map.LabelMap attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nd2reader.html#nd2reader.legacy.Nd2.fields_of_view">fields_of_view (nd2reader.legacy.Nd2 attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nd2reader.html#nd2reader.artificial.ArtificialND2.file_handle">file_handle (nd2reader.artificial.ArtificialND2 attribute)</a>
+</li>
+      <li><a href="nd2reader.html#nd2reader.legacy.Nd2.frames">frames (nd2reader.legacy.Nd2 attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -145,14 +178,18 @@
 </li>
       <li><a href="nd2reader.html#nd2reader.reader.ND2Reader.get_frame_2D">get_frame_2D() (nd2reader.reader.ND2Reader method)</a>
 </li>
-      <li><a href="nd2reader.html#nd2reader.parser.Parser.get_image">get_image() (nd2reader.parser.Parser method)</a>
+      <li><a href="nd2reader.html#nd2reader.legacy.Nd2.get_image">get_image() (nd2reader.legacy.Nd2 method)</a>
+
+      <ul>
+        <li><a href="nd2reader.html#nd2reader.parser.Parser.get_image">(nd2reader.parser.Parser method)</a>
 </li>
+      </ul></li>
       <li><a href="nd2reader.html#nd2reader.parser.Parser.get_image_by_attributes">get_image_by_attributes() (nd2reader.parser.Parser method)</a>
-</li>
-      <li><a href="nd2reader.html#nd2reader.label_map.LabelMap.get_image_data_location">get_image_data_location() (nd2reader.label_map.LabelMap method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nd2reader.html#nd2reader.label_map.LabelMap.get_image_data_location">get_image_data_location() (nd2reader.label_map.LabelMap method)</a>
+</li>
       <li><a href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.get_parsed_metadata">get_parsed_metadata() (nd2reader.raw_metadata.RawMetadata method)</a>
 </li>
       <li><a href="nd2reader.html#nd2reader.reader.ND2Reader.get_timesteps">get_timesteps() (nd2reader.reader.ND2Reader method)</a>
@@ -166,6 +203,14 @@
 </li>
       </ul></li>
       <li><a href="nd2reader.html#nd2reader.label_map.LabelMap.guid">guid (nd2reader.label_map.LabelMap attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nd2reader.html#nd2reader.legacy.Nd2.height">height (nd2reader.legacy.Nd2 attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -229,16 +274,22 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nd2reader.html#nd2reader.legacy.Nd2">Nd2 (class in nd2reader.legacy)</a>
+</li>
       <li><a href="nd2reader.html#nd2reader.reader.ND2Reader">ND2Reader (class in nd2reader.reader)</a>
+</li>
+      <li><a href="nd2reader.html#module-nd2reader.artificial">nd2reader.artificial (module)</a>
 </li>
       <li><a href="nd2reader.html#module-nd2reader.common">nd2reader.common (module)</a>
 </li>
       <li><a href="nd2reader.html#module-nd2reader.exceptions">nd2reader.exceptions (module)</a>
 </li>
-      <li><a href="nd2reader.html#module-nd2reader.label_map">nd2reader.label_map (module)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nd2reader.html#module-nd2reader.label_map">nd2reader.label_map (module)</a>
+</li>
+      <li><a href="nd2reader.html#module-nd2reader.legacy">nd2reader.legacy (module)</a>
+</li>
       <li><a href="nd2reader.html#module-nd2reader.parser">nd2reader.parser (module)</a>
 </li>
       <li><a href="nd2reader.html#module-nd2reader.raw_metadata">nd2reader.raw_metadata (module)</a>
@@ -259,6 +310,8 @@
 </li>
       <li><a href="nd2reader.html#nd2reader.parser.Parser">Parser (class in nd2reader.parser)</a>
 </li>
+      <li><a href="nd2reader.html#nd2reader.reader.ND2Reader.parser">parser (nd2reader.reader.ND2Reader attribute)</a>
+</li>
       <li><a href="nd2reader.html#nd2reader.label_map.LabelMap.pfs_offset">pfs_offset (nd2reader.label_map.LabelMap attribute)</a>
 
       <ul>
@@ -273,6 +326,8 @@
         <li><a href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.pfs_status">(nd2reader.raw_metadata.RawMetadata attribute)</a>
 </li>
       </ul></li>
+      <li><a href="nd2reader.html#nd2reader.legacy.Nd2.pixel_microns">pixel_microns (nd2reader.legacy.Nd2 attribute)</a>
+</li>
       <li><a href="nd2reader.html#nd2reader.reader.ND2Reader.pixel_type">pixel_type (nd2reader.reader.ND2Reader attribute)</a>
 </li>
   </ul></td>
@@ -303,7 +358,23 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nd2reader.html#nd2reader.legacy.Nd2.select">select() (nd2reader.legacy.Nd2 method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nd2reader.html#nd2reader.parser.Parser.supported_file_versions">supported_file_versions (nd2reader.parser.Parser attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nd2reader.html#nd2reader.legacy.Nd2.width">width (nd2reader.legacy.Nd2 attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nd2reader.html#nd2reader.artificial.ArtificialND2.write_version">write_version() (nd2reader.artificial.ArtificialND2 method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -341,6 +412,10 @@
         <li><a href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.z_data">(nd2reader.raw_metadata.RawMetadata attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nd2reader.html#nd2reader.legacy.Nd2.z_levels">z_levels (nd2reader.legacy.Nd2 attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
