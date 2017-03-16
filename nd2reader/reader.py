@@ -4,8 +4,8 @@ import numpy as np
 
 
 class ND2Reader(FramesSequenceND):
-    """PIMS wrapper for the ND2 parser
-
+    """PIMS wrapper for the ND2 parser.
+    This is the main class: use this to process your .nd2 files.
     """
 
     def __init__(self, filename):

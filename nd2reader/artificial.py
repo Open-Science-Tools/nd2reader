@@ -1,5 +1,4 @@
-"""
-Functions to create artificial nd2 data for testing purposes
+"""Functions to create artificial nd2 data for testing purposes
 """
 import six
 import numpy as np
@@ -7,8 +6,7 @@ import struct
 
 
 class ArtificialND2(object):
-    """
-    Artificial ND2 class (for testing purposes)
+    """Artificial ND2 class (for testing purposes)
     """
 
     def __init__(self, file):
@@ -23,23 +21,22 @@ class ArtificialND2(object):
 
     @property
     def file_handle(self):
-        """
-        The file handle to the binary file
+        """The file handle to the binary file
+
         Returns:
             file: the file handle
+
         """
         return self._fh
 
     def close(self):
-        """
-        Correctly close the file handle
+        """Correctly close the file handle
         """
         if self._fh is not None:
             self._fh.close()
 
     def write_version(self):
-        """
-        Write file header
+        """Write file header
         """
         # write 16 empty bytes
         self._fh.write(bytearray(16))
@@ -50,10 +47,11 @@ class ArtificialND2(object):
 
     @staticmethod
     def create_label_map_bytes():
-        """
-        Construct a binary label map
+        """Construct a binary label map
+
         Returns:
             tuple: (binary data, dictionary data)
+
         """
         raw_text = six.b('')
         labels = {

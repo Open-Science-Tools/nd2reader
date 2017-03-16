@@ -8,7 +8,9 @@ from nd2reader import ND2Reader
 
 
 class Nd2(object):
-    """ Legacy Nd2 object for backwards compatibility. """
+    """ Warning: this module is deprecated and only maintained for backwards compatibility with the non-PIMS version of
+    nd2reader.
+    """
 
     def __init__(self, filename):
         warnings.warn(
@@ -41,8 +43,8 @@ class Nd2(object):
         return self.reader[item]
 
     def select(self, fields_of_view=None, channels=None, z_levels=None, start=0, stop=None):
-        """
-        Select images based on criteria.
+        """Select images based on criteria.
+
         Args:
             fields_of_view: the fields of view
             channels: the color channels
@@ -52,6 +54,7 @@ class Nd2(object):
 
         Returns:
             ND2Reader: Sliced ND2Reader which contains the frames
+
         """
         if stop is None:
             stop = len(self.frames)
@@ -59,13 +62,17 @@ class Nd2(object):
         return self.reader[start:stop]
 
     def get_image(self, frame_number, field_of_view, channel_name, z_level):
-        """
-        Deprecated. Returns the specified image from the ND2Reader class.
+        """Deprecated. Returns the specified image from the ND2Reader class.
+
         Args:
             frame_number: the frame number
             field_of_view: the field of view number
             channel_name: the name of the color channel
             z_level: the z level number
+
+        Returns:
+            Frame: the specified image
+
         """
         return self.reader.parser.get_image_by_attributes(frame_number, field_of_view, channel_name, z_level,
                                                           self.height, self.width)
@@ -78,72 +85,80 @@ class Nd2(object):
 
     @property
     def height(self):
-        """
-        Deprecated. Fetches the height of the image.
+        """Deprecated. Fetches the height of the image.
+
         Returns:
             int: the pixel height of the image
+
         """
         return self.reader.metadata["height"]
 
     @property
     def width(self):
-        """
-        Deprecated. Fetches the width of the image.
+        """Deprecated. Fetches the width of the image.
+
         Returns:
             int: the pixel width of the image
+
         """
         return self.reader.metadata["width"]
 
     @property
     def z_levels(self):
-        """
-        Deprecated. Fetches the available z levels.
+        """Deprecated. Fetches the available z levels.
+
         Returns:
             list: z levels.
+
         """
         return self.reader.metadata["z_levels"]
 
     @property
     def fields_of_view(self):
-        """
-        Deprecated. Fetches the fields of view.
+        """Deprecated. Fetches the fields of view.
+
         Returns:
             list: fields of view.
+
         """
         return self.reader.metadata["fields_of_view"]
 
     @property
     def channels(self):
-        """
-        Deprecated. Fetches all color channels.
+        """Deprecated. Fetches all color channels.
+
         Returns:
             list: the color channels.
+
         """
         return self.reader.metadata["channels"]
 
     @property
     def frames(self):
-        """
-        Deprecated. Fetches all frames.
+        """Deprecated. Fetches all frames.
+
         Returns:
             list: list of frames
+
         """
         return self.reader.metadata["frames"]
 
     @property
     def date(self):
-        """
-        Deprecated. Fetches the acquisition date.
+        """Deprecated. Fetches the acquisition date.
+
         Returns:
             string: the date
+
         """
         return self.reader.metadata["date"]
 
     @property
     def pixel_microns(self):
-        """
-        Deprecated. Fetches the amount of microns per pixel.
+        """Deprecated. Fetches the amount of microns per pixel.
+
         Returns:
             float: microns per pixel
+
         """
         return self.reader.metadata["pixel_microns"]

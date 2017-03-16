@@ -38,6 +38,10 @@ with ND2Reader('my_directory/example.nd2') as images:
 
 After opening the file, all `pims` features are supported. Please refer to the [pims documentation](http://soft-matter.github.io/pims/).
 
+#### Backwards compatibility
+
+Older versions of `nd2reader` do not use the `pims` framework. To provide backwards compatibility, a legacy [Nd2](http://www.lighthacking.nl/nd2reader/docs/nd2reader.html#module-nd2reader.legacy) class is provided.
+
 ### Contributing
 
 If you'd like to help with the development of nd2reader or just have an idea for improvement, please see the [contributing](https://github.com/rbnvrw/nd2reader/blob/master/CONTRIBUTING.md) page
