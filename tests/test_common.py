@@ -1,9 +1,13 @@
+import io
 import unittest
 from os import path
 import six
+import struct
 
 from nd2reader.artificial import ArtificialND2
-from nd2reader.common import get_version, parse_version, parse_date, _add_to_metadata
+from nd2reader.common import get_version, parse_version, parse_date, _add_to_metadata, _parse_unsigned_char, \
+    _parse_unsigned_int, _parse_unsigned_long, _parse_double, _parse_string
+from nd2reader.exceptions import InvalidVersionError
 
 
 class TestCommon(unittest.TestCase):
@@ -26,6 +30,10 @@ class TestCommon(unittest.TestCase):
         actual = parse_version(data)
         expected = (3, 0)
         self.assertTupleEqual(actual, expected)
+
+    def test_parse_version_invalid(self):
+        data = 'ND2 FILE SIGNATURE CHUNK NAME!Version2.2.3'
+        self.assertRaises(InvalidVersionError, parse_version, data)
 
     def test_get_version_from_file(self):
         self.create_test_nd2()
@@ -62,3 +70,24 @@ class TestCommon(unittest.TestCase):
         metadata = {'test': ['value1', 'value2']}
         _add_to_metadata(metadata, 'test', 'value3')
         self.assertDictEqual(metadata, {'test': ['value1', 'value2', 'value3']})
+
+    @staticmethod
+    def _prepare_bin_stream(format, value):
+        file = io.BytesIO()
+        data = struct.pack(format, value)
+        file.write(data)
+        file.seek(0)
+        return file
+
+    def test_parse_functions(self):
+        file = self._prepare_bin_stream("B", 9)
+        self.assertEqual(_parse_unsigned_char(file), 9)
+
+        file = self._prepare_bin_stream("I", 333)
+        self.assertEqual(_parse_unsigned_int(file), 333)
+
+        file = self._prepare_bin_stream("Q", 7564332)
+        self.assertEqual(_parse_unsigned_long(file), 7564332)
+
+        file = self._prepare_bin_stream("d", 47.9)
+        self.assertEqual(_parse_double(file), 47.9)

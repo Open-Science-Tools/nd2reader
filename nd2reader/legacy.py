@@ -91,7 +91,7 @@ class Nd2(object):
             int: the pixel height of the image
 
         """
-        return self.reader.metadata["height"]
+        return self.reader.metadata["height"] if self.reader.metadata["height"] is not None else 0
 
     @property
     def width(self):
@@ -101,7 +101,7 @@ class Nd2(object):
             int: the pixel width of the image
 
         """
-        return self.reader.metadata["width"]
+        return self.reader.metadata["width"] if self.reader.metadata["width"] is not None else 0
 
     @property
     def z_levels(self):
