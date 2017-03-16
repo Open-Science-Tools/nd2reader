@@ -40,7 +40,7 @@ After opening the file, all `pims` features are supported. Please refer to the [
 
 #### Backwards compatibility
 
-Older versions of `nd2reader` do not use the `pims` framework. To provide backwards compatibility, a legacy [Nd2](http://www.lighthacking.nl/nd2reader/docs/nd2reader.html#module-nd2reader.legacy) class is provided.
+Older versions of `nd2reader` do not use the `pims` framework. To provide backwards compatibility, a legacy [Nd2](http://www.lighthacking.nl/nd2reader/nd2reader.html#module-nd2reader.legacy) class is provided.
 
 ### Contributing
 
