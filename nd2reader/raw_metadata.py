@@ -58,11 +58,14 @@ class RawMetadata(object):
             return callback()
         return None
 
+    def _parse_width_or_height(self, key):
+        return self.image_attributes[six.b('SLxImageAttributes')][six.b(key)]
+
     def _parse_height(self):
-        return self.image_attributes[six.b('SLxImageAttributes')][six.b('uiHeight')]
+        return self._parse_width_or_height('uiHeight')
 
     def _parse_width(self):
-        return self.image_attributes[six.b('SLxImageAttributes')][six.b('uiWidth')]
+        return self._parse_width_or_height('uiWidth')
 
     def _parse_date(self):
         return parse_date(self.image_text_info[six.b('SLxImageTextInfo')])
