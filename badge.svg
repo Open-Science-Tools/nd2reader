@@ -7,14 +7,14 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="30"
-   height="20"
-   id="svg2"
    version="1.1"
+   width="107"
+   height="16"
+   id="svg2"
    inkscape:version="0.91 r13725"
    sodipodi:docname="badge.svg">
   <metadata
-     id="metadata31">
+     id="metadata12">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -25,7 +25,7 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs29" />
+     id="defs10" />
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -37,72 +37,23 @@
      inkscape:pageshadow="2"
      inkscape:window-width="1920"
      inkscape:window-height="1018"
-     id="namedview27"
+     id="namedview8"
      showgrid="false"
-     inkscape:zoom="2.6181818"
-     inkscape:cx="-121.07639"
-     inkscape:cy="10"
+     inkscape:zoom="1"
+     inkscape:cx="50"
+     inkscape:cy="25"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
-  <linearGradient
-     id="a"
-     x2="0"
-     y2="46.904158"
-     gradientTransform="matrix(2.3452079,0,0,0.42640143,-146.66667,28.263889)"
-     x1="0"
-     y1="0"
-     gradientUnits="userSpaceOnUse">
-    <stop
-       offset="0"
-       stop-color="#bbb"
-       stop-opacity=".1"
-       id="stop5" />
-    <stop
-       offset="1"
-       stop-opacity=".1"
-       id="stop7" />
-  </linearGradient>
-  <g
-     id="g3441"
-     transform="translate(-111.14583,0)">
-    <rect
-       id="rect11-7"
-       height="20"
-       width="28"
-       x="112.55554"
-       rx="3"
-       style="fill:#44cc11"
-       y="0.069446981" />
-    <path
-       id="path13-0"
-       d="m 112.55556,0.06944412 4,0 0,20.00000088 -4,0 z"
-       style="fill:#44cc11"
-       inkscape:connector-curvature="0" />
-    <text
-       sodipodi:linespacing="125%"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.00000095px;line-height:125%;font-family:'DejaVu Sans', Verdana, Geneva, sans-serif;-inkscape-font-specification:'DejaVu Sans, Verdana, Geneva, sans-serif, Normal';text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#010101;fill-opacity:0.3"
-       x="127.08334"
-       y="14.305554"
-       id="text23-7">
-      <tspan
-         y="14.305554"
-         x="127.08334"
-         id="tspan3437"
-         sodipodi:role="line">/4.0</tspan>
-    </text>
-    <text
-       sodipodi:linespacing="125%"
-       x="127.08334"
-       y="13.305553"
-       id="text25-4"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.00000095px;line-height:125%;font-family:'DejaVu Sans', Verdana, Geneva, sans-serif;-inkscape-font-specification:'DejaVu Sans, Verdana, Geneva, sans-serif, Normal';text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff">
-      <tspan
-         y="13.305553"
-         x="127.08334"
-         id="tspan3439"
-         sodipodi:role="line">/4.0</tspan>
-    </text>
-  </g>
+  <text
+     font-size="12"
+     x="0.34722221"
+     y="11.666667"
+     id="text4"
+     style="font-size:12px">
+    <tspan
+       id="tspan6"
+       style="fill:#a9a9a9">(score out of 4.0)</tspan>
+  </text>
 </svg>
