@@ -140,13 +140,20 @@ class RawMetadata(object):
         textinfo = self.image_text_info[six.b('SLxImageTextInfo')].values()
 
         for line in textinfo:
-            if six.b("Dimensions:") in line:
-                entries = line.split(six.b("\r\n"))
-                for entry in entries:
-                    if entry.startswith(six.b("Dimensions:")):
-                        return entry
+            entry = self._parse_dimension_text_line(line)
+            if entry is not None:
+                return entry
 
         return dimension_text
+
+    @staticmethod
+    def _parse_dimension_text_line(line):
+        if six.b("Dimensions:") in line:
+            entries = line.split(six.b("\r\n"))
+            for entry in entries:
+                if entry.startswith(six.b("Dimensions:")):
+                    return entry
+        return None
 
     def _parse_dimension(self, pattern):
         dimension_text = self._parse_dimension_text()

@@ -1,4 +1,3 @@
-import io
 import unittest
 from os import path
 import six
@@ -6,7 +5,7 @@ import struct
 
 from nd2reader.artificial import ArtificialND2
 from nd2reader.common import get_version, parse_version, parse_date, _add_to_metadata, _parse_unsigned_char, \
-    _parse_unsigned_int, _parse_unsigned_long, _parse_double, _parse_string
+    _parse_unsigned_int, _parse_unsigned_long, _parse_double
 from nd2reader.exceptions import InvalidVersionError
 
 
@@ -56,6 +55,12 @@ class TestCommon(unittest.TestCase):
         result = parse_date(textinfo)
         self.assertEqual(result.strftime(date_format), date)
 
+    def test_parse_date_exception(self):
+        date = 'i am no date'
+        textinfo = {six.b('TextInfoItem9'): six.b(date)}
+        result = parse_date(textinfo)
+        self.assertIsNone(result)
+
     def test_add_to_meta_simple(self):
         metadata = {}
         _add_to_metadata(metadata, 'test', 'value')
@@ -72,9 +77,9 @@ class TestCommon(unittest.TestCase):
         self.assertDictEqual(metadata, {'test': ['value1', 'value2', 'value3']})
 
     @staticmethod
-    def _prepare_bin_stream(format, value):
-        file = io.BytesIO()
-        data = struct.pack(format, value)
+    def _prepare_bin_stream(binary_format, value):
+        file = six.BytesIO()
+        data = struct.pack(binary_format, value)
         file.write(data)
         file.seek(0)
         return file

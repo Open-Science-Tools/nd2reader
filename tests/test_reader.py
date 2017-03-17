@@ -3,6 +3,7 @@ from os import path
 import numpy as np
 
 from nd2reader.artificial import ArtificialND2
+from nd2reader.parser import Parser
 from nd2reader.reader import ND2Reader
 
 
@@ -28,3 +29,15 @@ class TestReader(unittest.TestCase):
 
     def test_extension(self):
         self.assertTrue('nd2' in ND2Reader.class_exts())
+
+    def test_get_metadata_property(self):
+        self.create_test_nd2()
+        with ND2Reader(self.test_file) as reader:
+            self.assertIsNone(reader._get_metadata_property('kljdf'))
+            self.assertEqual(reader._get_metadata_property('kljdf', 'default'), 'default')
+
+    def test_get_parser(self):
+        self.create_test_nd2()
+        with ND2Reader(self.test_file) as reader:
+            self.assertTrue(type(reader.parser) is Parser)
+

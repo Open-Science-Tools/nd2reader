@@ -9,9 +9,9 @@ class ArtificialND2(object):
     """Artificial ND2 class (for testing purposes)
     """
 
-    def __init__(self, file):
+    def __init__(self, file, version=(3, 0)):
         self._fh = open(file, 'wb')
-        self.write_version()
+        self.write_version(version)
 
     def __enter__(self):
         return self
@@ -35,14 +35,14 @@ class ArtificialND2(object):
         if self._fh is not None:
             self._fh.close()
 
-    def write_version(self):
+    def write_version(self, version=(3, 0)):
         """Write file header
         """
         # write 16 empty bytes
         self._fh.write(bytearray(16))
 
         # write version info
-        version_info = six.b('ND2 FILE SIGNATURE CHUNK NAME01!Ver3.0')
+        version_info = six.b('ND2 FILE SIGNATURE CHUNK NAME01!Ver%s.%s' % version)
         self._fh.write(version_info)
 
     @staticmethod

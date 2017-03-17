@@ -54,7 +54,7 @@ def read_chunk(fh, chunk_location):
         bytes: the data at the chunk location
 
     """
-    if chunk_location is None:
+    if chunk_location is None or fh is None:
         return None
     fh.seek(chunk_location)
     # The chunk metadata is always 16 bytes long
