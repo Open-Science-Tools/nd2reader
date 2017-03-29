@@ -9,6 +9,7 @@ class ND2Reader(FramesSequenceND):
     """
 
     def __init__(self, filename):
+        super(self.__class__, self).__init__()
         self.filename = filename
 
         # first use the parser to parse the file
