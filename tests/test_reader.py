@@ -3,6 +3,7 @@ from os import path
 import numpy as np
 
 from nd2reader.artificial import ArtificialND2
+from nd2reader.common import check_or_make_dir
 from nd2reader.parser import Parser
 from nd2reader.reader import ND2Reader
 
@@ -14,6 +15,7 @@ class TestReader(unittest.TestCase):
 
     def setUp(self):
         dir_path = path.dirname(path.realpath(__file__))
+        check_or_make_dir(path.join(dir_path, 'test_data/'))
         self.test_file = path.join(dir_path, 'test_data/test.nd2')
 
     def test_can_open_test_file(self):

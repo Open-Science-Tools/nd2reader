@@ -1,3 +1,4 @@
+import os
 import struct
 import array
 from datetime import datetime
@@ -329,6 +330,16 @@ def get_from_dict_if_exists(key, dictionary, convert_key_to_binary=True):
     if convert_key_to_binary:
         key = six.b(key)
 
-    if not key in dictionary:
+    if key not in dictionary:
         return None
     return dictionary[key]
+
+
+def check_or_make_dir(directory):
+    """
+    Check if a directory exists, if not, create it
+    Args:
+        directory: the path to the directory
+    """
+    if not os.path.exists(directory):
+        os.makedirs(directory)
