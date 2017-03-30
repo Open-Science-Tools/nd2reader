@@ -155,10 +155,19 @@ def _parse_string(data):
 
         """
     value = data.read(2)
+    # the string ends at the first instance of \x00\x00
     while not value.endswith(six.b("\x00\x00")):
-        # the string ends at the first instance of \x00\x00
-        value += data.read(2)
-    return value.decode("utf16")[:-1].encode("utf8")
+        next_data = data.read(2)
+        if len(next_data) == 0:
+            break
+        value += next_data
+
+    try:
+        decoded = value.decode("utf16")[:-1].encode("utf8")
+    except UnicodeDecodeError:
+        decoded = value.decode('utf8')
+
+    return decoded
 
 
 def _parse_char_array(data):

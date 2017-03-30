@@ -1,11 +1,14 @@
 import unittest
 from os import path
+
+import array
 import six
 import struct
 
 from nd2reader.artificial import ArtificialND2
 from nd2reader.common import get_version, parse_version, parse_date, _add_to_metadata, _parse_unsigned_char, \
-    _parse_unsigned_int, _parse_unsigned_long, _parse_double, check_or_make_dir
+    _parse_unsigned_int, _parse_unsigned_long, _parse_double, check_or_make_dir, _parse_string, _parse_char_array, \
+    get_from_dict_if_exists
 from nd2reader.exceptions import InvalidVersionError
 
 
@@ -78,9 +81,9 @@ class TestCommon(unittest.TestCase):
         self.assertDictEqual(metadata, {'test': ['value1', 'value2', 'value3']})
 
     @staticmethod
-    def _prepare_bin_stream(binary_format, value):
+    def _prepare_bin_stream(binary_format, *value):
         file = six.BytesIO()
-        data = struct.pack(binary_format, value)
+        data = struct.pack(binary_format, *value)
         file.write(data)
         file.seek(0)
         return file
@@ -97,3 +100,23 @@ class TestCommon(unittest.TestCase):
 
         file = self._prepare_bin_stream("d", 47.9)
         self.assertEqual(_parse_double(file), 47.9)
+
+        test_string = 'colloid'
+        file = self._prepare_bin_stream("%ds" % len(test_string), six.b(test_string))
+        parsed = _parse_string(file)
+        self.assertEqual(parsed, test_string)
+
+        test_data = [1, 2, 3, 4, 5]
+        file = self._prepare_bin_stream("Q" + ''.join(['B'] * len(test_data)), len(test_data), *test_data)
+        parsed = _parse_char_array(file)
+        self.assertEqual(parsed, array.array('B', test_data))
+
+    def test_get_from_dict_if_exists(self):
+        test_dict = {
+            six.b('existing'): 'test',
+            'string': 'test2'
+        }
+
+        self.assertIsNone(get_from_dict_if_exists('nowhere', test_dict))
+        self.assertEqual(get_from_dict_if_exists('existing', test_dict), 'test')
+        self.assertEqual(get_from_dict_if_exists('string', test_dict, convert_key_to_binary=False), 'test2')
