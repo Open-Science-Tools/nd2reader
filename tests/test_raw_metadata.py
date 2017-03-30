@@ -6,6 +6,7 @@ from nd2reader.raw_metadata import RawMetadata
 
 
 class TestRawMetadata(unittest.TestCase):
+
     def setUp(self):
         self.raw_text, self.locations = ArtificialND2.create_label_map_bytes()
         self.label_map = LabelMap(self.raw_text)
@@ -32,3 +33,9 @@ class TestRawMetadata(unittest.TestCase):
                          "channels", "pixel_microns"]
         for required in required_keys:
             self.assertTrue(required in metadata)
+
+        # it should now be stored, see if that dict is returned
+        metadata['height'] = 1
+        self.metadata._metadata_parsed['height'] = 1
+        second_metadata = self.metadata.get_parsed_metadata()
+        self.assertDictEqual(metadata, second_metadata)
