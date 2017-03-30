@@ -196,7 +196,10 @@ def parse_date(text_info):
             except (TypeError, ValueError):
                 absolute_start = None
 
-        return absolute_start
+        if absolute_start is not None:
+            return absolute_start
+
+    return None
 
 
 def _parse_metadata_item(data, cursor_position):
@@ -309,3 +312,23 @@ def _add_to_metadata(metadata, name, value):
         metadata[name].append(value)
 
     return metadata
+
+
+def get_from_dict_if_exists(key, dictionary, convert_key_to_binary=True):
+    """
+    Get the entry from the dictionary if it exists
+    Args:
+        key: key to lookup
+        dictionary: dictionary to look in
+        convert_key_to_binary: convert the key from string to binary if true
+
+    Returns:
+        the value of dictionary[key] or None
+
+    """
+    if convert_key_to_binary:
+        key = six.b(key)
+
+    if not key in dictionary:
+        return None
+    return dictionary[key]

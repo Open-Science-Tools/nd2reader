@@ -1,5 +1,5 @@
 import re
-from nd2reader.common import read_chunk, read_array, read_metadata, parse_date
+from nd2reader.common import read_chunk, read_array, read_metadata, parse_date, get_from_dict_if_exists
 import xmltodict
 import six
 import numpy as np
@@ -189,6 +189,9 @@ class RawMetadata(object):
 
         raw_roi_data = self.roi_metadata[six.b('RoiMetadata_v1')]
 
+        if not six.b('m_vectGlobal_Size') in raw_roi_data:
+            return
+
         number_of_rois = raw_roi_data[six.b('m_vectGlobal_Size')]
 
         roi_objects = []
@@ -333,15 +336,13 @@ class RawMetadata(object):
 
         for loop in loops:
             # duration of this loop
-            duration = loop[six.b('dDuration')]
+            duration = get_from_dict_if_exists('dDuration', loop) or 0
 
             # uiLoopType == 6 is a stimulation loop
-            is_stimulation = False
-            if six.b('uiLoopType') in loop:
-                is_stimulation = loop[six.b('uiLoopType')] == 6
+            is_stimulation = get_from_dict_if_exists('uiLoopType', loop) == 6
 
             # sampling interval in ms
-            interval = loop[six.b('dAvgPeriodDiff')]
+            interval = get_from_dict_if_exists('dAvgPeriodDiff', loop)
 
             parsed_loop = {
                 'start': time_offset,
