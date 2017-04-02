@@ -24,3 +24,34 @@ with ND2Reader('my_directory/example.nd2') as images:
 ```
 
 After opening the file, all `pims` features are supported. Please refer to the [pims documentation](http://soft-matter.github.io/pims/).
+
+### ND2 metadata
+
+The ND2 file contains various metadata, such as acquisition information,
+regions of interest and custom user comments. Most of this metadata is parsed
+and available in dictionary form. For example:
+
+```python
+from nd2reader import ND2Reader
+
+with ND2Reader('my_directory/example.nd2') as images:
+    # width and height of the image
+    print('%d x %d px' % (images.metadata['width'], images.metadata['height']))
+
+```
+
+All metadata properties are:
+
+* `width`: the width of the image in pixels
+* `height`: the height of the image in pixels
+* `date`: the date the image was taken 
+* `fields_of_view`: the fields of view in the image
+* `frames`: a list of all frame numbers
+* `z_levels`: the z levels in the image
+* `total_images_per_channel`: the number of images per color channel
+* `channels`: the color channels
+* `pixel_microns`: the amount of microns per pixel
+* `rois`: the regions of interest (ROIs) defined by the user
+* `experiment`: information about the nature and timings of the ND experiment
+
+

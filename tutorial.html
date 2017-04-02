@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Tutorial &#8212; nd2reader  documentation</title>
+    <title>Tutorial &#8212; nd2reader 3.0.0 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '',
+        VERSION:     '3.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="index.html" title="nd2reader: a pure-Python package for reading Nikon .nd2 files"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">nd2reader  documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">nd2reader 3.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -77,6 +77,34 @@
 </div>
 <p>After opening the file, all <code class="docutils literal"><span class="pre">pims</span></code> features are supported. Please refer to the <a class="reference external" href="http://soft-matter.github.io/pims/">pims documentation</a>.</p>
 </div>
+<div class="section" id="nd2-metadata">
+<span id="nd2-metadata"></span><h2>ND2 metadata<a class="headerlink" href="#nd2-metadata" title="Permalink to this headline">¶</a></h2>
+<p>The ND2 file contains various metadata, such as acquisition information,
+regions of interest and custom user comments. Most of this metadata is parsed
+and available in dictionary form. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nd2reader</span> <span class="kn">import</span> <span class="n">ND2Reader</span>
+
+<span class="k">with</span> <span class="n">ND2Reader</span><span class="p">(</span><span class="s1">&#39;my_directory/example.nd2&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">images</span><span class="p">:</span>
+    <span class="c1"># width and height of the image</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1"> x </span><span class="si">%d</span><span class="s1"> px&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">images</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">],</span> <span class="n">images</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]))</span>
+
+</pre></div>
+</div>
+<p>All metadata properties are:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">width</span></code>: the width of the image in pixels</li>
+<li><code class="docutils literal"><span class="pre">height</span></code>: the height of the image in pixels</li>
+<li><code class="docutils literal"><span class="pre">date</span></code>: the date the image was taken</li>
+<li><code class="docutils literal"><span class="pre">fields_of_view</span></code>: the fields of view in the image</li>
+<li><code class="docutils literal"><span class="pre">frames</span></code>: a list of all frame numbers</li>
+<li><code class="docutils literal"><span class="pre">z_levels</span></code>: the z levels in the image</li>
+<li><code class="docutils literal"><span class="pre">total_images_per_channel</span></code>: the number of images per color channel</li>
+<li><code class="docutils literal"><span class="pre">channels</span></code>: the color channels</li>
+<li><code class="docutils literal"><span class="pre">pixel_microns</span></code>: the amount of microns per pixel</li>
+<li><code class="docutils literal"><span class="pre">rois</span></code>: the regions of interest (ROIs) defined by the user</li>
+<li><code class="docutils literal"><span class="pre">experiment</span></code>: information about the nature and timings of the ND experiment</li>
+</ul>
+</div>
 </div>
 
 
@@ -90,6 +118,7 @@
 <li><a class="reference internal" href="#">Tutorial</a><ul>
 <li><a class="reference internal" href="#installation">Installation</a></li>
 <li><a class="reference internal" href="#opening-nd2s">Opening ND2s</a></li>
+<li><a class="reference internal" href="#nd2-metadata">ND2 metadata</a></li>
 </ul>
 </li>
 </ul>
@@ -136,12 +165,12 @@
         <li class="right" >
           <a href="index.html" title="nd2reader: a pure-Python package for reading Nikon .nd2 files"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">nd2reader  documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">nd2reader 3.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Ruben Verweij.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.
     </div>
   </body>
 </html>

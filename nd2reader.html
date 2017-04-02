@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader package &#8212; nd2reader  documentation</title>
+    <title>nd2reader package &#8212; nd2reader 3.0.0 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '',
+        VERSION:     '3.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="tutorial.html" title="Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">nd2reader  documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">nd2reader 3.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -964,6 +964,30 @@ doing anything out of the ordinary.</p>
 <div class="section" id="module-nd2reader.common">
 <span id="nd2reader-common-module"></span><h2>nd2reader.common module<a class="headerlink" href="#module-nd2reader.common" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
+<dt id="nd2reader.common.check_or_make_dir">
+<code class="descclassname">nd2reader.common.</code><code class="descname">check_or_make_dir</code><span class="sig-paren">(</span><em>directory</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#check_or_make_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.common.check_or_make_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a directory exists, if not, create it
+:param directory: the path to the directory</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nd2reader.common.get_from_dict_if_exists">
+<code class="descclassname">nd2reader.common.</code><code class="descname">get_from_dict_if_exists</code><span class="sig-paren">(</span><em>key</em>, <em>dictionary</em>, <em>convert_key_to_binary=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#get_from_dict_if_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.common.get_from_dict_if_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the entry from the dictionary if it exists
+:param key: key to lookup
+:param dictionary: dictionary to look in
+:param convert_key_to_binary: convert the key from string to binary if true</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the value of dictionary[key] or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="nd2reader.common.get_version">
 <code class="descclassname">nd2reader.common.</code><code class="descname">get_version</code><span class="sig-paren">(</span><em>fh</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#get_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.common.get_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines what version the ND2 is.</p>
@@ -1111,11 +1135,11 @@ cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and brig
 
 </div>
 <div class="section" id="module-nd2reader.artificial">
-<span id="nd2reader-exceptions-artificial"></span><h2>nd2reader.exceptions artificial<a class="headerlink" href="#module-nd2reader.artificial" title="Permalink to this headline">¶</a></h2>
+<span id="nd2reader-artificial-module"></span><h2>nd2reader.artificial module<a class="headerlink" href="#module-nd2reader.artificial" title="Permalink to this headline">¶</a></h2>
 <p>Functions to create artificial nd2 data for testing purposes</p>
 <dl class="class">
 <dt id="nd2reader.artificial.ArtificialND2">
-<em class="property">class </em><code class="descclassname">nd2reader.artificial.</code><code class="descname">ArtificialND2</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">nd2reader.artificial.</code><code class="descname">ArtificialND2</code><span class="sig-paren">(</span><em>file</em>, <em>version=(3</em>, <em>0)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Artificial ND2 class (for testing purposes)</p>
 <dl class="method">
@@ -1158,7 +1182,7 @@ cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and brig
 
 <dl class="method">
 <dt id="nd2reader.artificial.ArtificialND2.write_version">
-<code class="descname">write_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.write_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.write_version" title="Permalink to this definition">¶</a></dt>
+<code class="descname">write_version</code><span class="sig-paren">(</span><em>version=(3</em>, <em>0)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.write_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.write_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write file header</p>
 </dd></dl>
 
@@ -1382,7 +1406,7 @@ nd2reader.</p>
 <li><a class="reference internal" href="#module-nd2reader.label_map">nd2reader.label_map module</a></li>
 <li><a class="reference internal" href="#module-nd2reader.common">nd2reader.common module</a></li>
 <li><a class="reference internal" href="#module-nd2reader.exceptions">nd2reader.exceptions module</a></li>
-<li><a class="reference internal" href="#module-nd2reader.artificial">nd2reader.exceptions artificial</a></li>
+<li><a class="reference internal" href="#module-nd2reader.artificial">nd2reader.artificial module</a></li>
 <li><a class="reference internal" href="#module-nd2reader.legacy">nd2reader.legacy module</a></li>
 </ul>
 </li>
@@ -1424,12 +1448,12 @@ nd2reader.</p>
         <li class="right" >
           <a href="tutorial.html" title="Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">nd2reader  documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">nd2reader 3.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Ruben Verweij.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.
     </div>
   </body>
 </html>

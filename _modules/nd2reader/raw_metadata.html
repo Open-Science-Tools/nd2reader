@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader.raw_metadata &#8212; nd2reader  documentation</title>
+    <title>nd2reader.raw_metadata &#8212; nd2reader 3.0.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '',
+        VERSION:     '3.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -49,7 +49,7 @@
             
   <h1>Source code for nd2reader.raw_metadata</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">nd2reader.common</span> <span class="k">import</span> <span class="n">read_chunk</span><span class="p">,</span> <span class="n">read_array</span><span class="p">,</span> <span class="n">read_metadata</span><span class="p">,</span> <span class="n">parse_date</span>
+<span class="kn">from</span> <span class="nn">nd2reader.common</span> <span class="k">import</span> <span class="n">read_chunk</span><span class="p">,</span> <span class="n">read_array</span><span class="p">,</span> <span class="n">read_metadata</span><span class="p">,</span> <span class="n">parse_date</span><span class="p">,</span> <span class="n">get_from_dict_if_exists</span>
 <span class="kn">import</span> <span class="nn">xmltodict</span>
 <span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -108,11 +108,14 @@
             <span class="k">return</span> <span class="n">callback</span><span class="p">()</span>
         <span class="k">return</span> <span class="kc">None</span>
 
+    <span class="k">def</span> <span class="nf">_parse_width_or_height</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_attributes</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxImageAttributes&#39;</span><span class="p">)][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span>
+
     <span class="k">def</span> <span class="nf">_parse_height</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_attributes</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxImageAttributes&#39;</span><span class="p">)][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;uiHeight&#39;</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_width_or_height</span><span class="p">(</span><span class="s1">&#39;uiHeight&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_parse_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_attributes</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxImageAttributes&#39;</span><span class="p">)][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;uiWidth&#39;</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_width_or_height</span><span class="p">(</span><span class="s1">&#39;uiWidth&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_parse_date</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">parse_date</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_text_info</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxImageTextInfo&#39;</span><span class="p">)])</span>
@@ -190,13 +193,20 @@
         <span class="n">textinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_text_info</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxImageTextInfo&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">textinfo</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s2">&quot;Dimensions:&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
-                <span class="n">entries</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">))</span>
-                <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s2">&quot;Dimensions:&quot;</span><span class="p">)):</span>
-                        <span class="k">return</span> <span class="n">entry</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension_text_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">entry</span>
 
         <span class="k">return</span> <span class="n">dimension_text</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_parse_dimension_text_line</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s2">&quot;Dimensions:&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">entries</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s2">&quot;Dimensions:&quot;</span><span class="p">)):</span>
+                    <span class="k">return</span> <span class="n">entry</span>
+        <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_parse_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
         <span class="n">dimension_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension_text</span><span class="p">()</span>
@@ -228,6 +238,9 @@
             <span class="k">return</span>
 
         <span class="n">raw_roi_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">roi_metadata</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;RoiMetadata_v1&#39;</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;m_vectGlobal_Size&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">raw_roi_data</span><span class="p">:</span>
+            <span class="k">return</span>
 
         <span class="n">number_of_rois</span> <span class="o">=</span> <span class="n">raw_roi_data</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;m_vectGlobal_Size&#39;</span><span class="p">)]</span>
 
@@ -373,15 +386,13 @@
 
         <span class="k">for</span> <span class="n">loop</span> <span class="ow">in</span> <span class="n">loops</span><span class="p">:</span>
             <span class="c1"># duration of this loop</span>
-            <span class="n">duration</span> <span class="o">=</span> <span class="n">loop</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;dDuration&#39;</span><span class="p">)]</span>
+            <span class="n">duration</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;dDuration&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span>
 
             <span class="c1"># uiLoopType == 6 is a stimulation loop</span>
-            <span class="n">is_stimulation</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">if</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;uiLoopType&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">loop</span><span class="p">:</span>
-                <span class="n">is_stimulation</span> <span class="o">=</span> <span class="n">loop</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;uiLoopType&#39;</span><span class="p">)]</span> <span class="o">==</span> <span class="mi">6</span>
+            <span class="n">is_stimulation</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;uiLoopType&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span> <span class="o">==</span> <span class="mi">6</span>
 
             <span class="c1"># sampling interval in ms</span>
-            <span class="n">interval</span> <span class="o">=</span> <span class="n">loop</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;dAvgPeriodDiff&#39;</span><span class="p">)]</span>
+            <span class="n">interval</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;dAvgPeriodDiff&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
 
             <span class="n">parsed_loop</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="n">time_offset</span><span class="p">,</span>
@@ -607,13 +618,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Ruben Verweij.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.
     </div>
   </body>
 </html>
