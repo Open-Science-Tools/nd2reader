@@ -7,9 +7,9 @@ if __name__ == '__main__':
         name='nd2reader',
         packages=['nd2reader'],
         install_requires=[
-            'numpy>=1.6.2, <2.0',
-            'six>=1.4, <2.0',
-            'xmltodict>=0.9.2, <1.0',
+            'numpy>=1.6.2',
+            'six>=1.4',
+            'xmltodict>=0.9.2',
             'pims>=0.3.0'
         ],
         version=VERSION,
