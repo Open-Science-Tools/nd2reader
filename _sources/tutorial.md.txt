@@ -2,10 +2,10 @@
 
 ### Installation
 
-For now, the package is only available via GitHub. Install it using:
+The package is available on PyPi. Install it using:
 
 ```
-pip install --upgrade https://github.com/rbnvrw/nd2reader/tarball/master
+pip install nd2reader
 ```
 
 If you don't already have the packages `numpy`, `pims`, `six` and `xmltodict`, they will be installed automatically if you use the `setup.py` script.
