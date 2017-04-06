@@ -147,6 +147,11 @@ class ND2Reader(FramesSequenceND):
             if loop['stimulation']:
                 continue
 
+            if loop['sampling_interval'] == 0:
+                # This is a loop were no data is acquired
+                current_time += loop['duration']
+                continue
+
             timesteps = np.concatenate(
                 (timesteps, np.arange(current_time, current_time + loop['duration'], loop['sampling_interval'])))
             current_time += loop['duration']

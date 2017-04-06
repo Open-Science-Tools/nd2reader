@@ -33,14 +33,15 @@ class RawMetadata(object):
         if self._metadata_parsed is not None:
             return self._metadata_parsed
 
+        frames_per_channel = self._parse_total_images_per_channel()
         self._metadata_parsed = {
             "height": self._parse_if_not_none(self.image_attributes, self._parse_height),
             "width": self._parse_if_not_none(self.image_attributes, self._parse_width),
             "date": self._parse_if_not_none(self.image_text_info, self._parse_date),
             "fields_of_view": self._parse_fields_of_view(),
-            "frames": self._parse_frames(),
+            "frames": np.arange(0, frames_per_channel, 1),
             "z_levels": self._parse_z_levels(),
-            "total_images_per_channel": self._parse_total_images_per_channel(),
+            "total_images_per_channel": frames_per_channel,
             "channels": self._parse_channels(),
             "pixel_microns": self._parse_if_not_none(self.image_calibration, self._parse_calibration),
         }
@@ -113,14 +114,6 @@ class RawMetadata(object):
 
         """
         return self._parse_dimension(r""".*?XY\((\d+)\).*?""")
-
-    def _parse_frames(self):
-        """The number of cycles.
-
-        Returns:
-            list: list of all the frame numbers
-        """
-        return self._parse_dimension(r""".*?T'?\((\d+)\).*?""")
 
     def _parse_z_levels(self):
         """The different levels in the Z-plane.
