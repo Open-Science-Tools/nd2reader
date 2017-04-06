@@ -23,5 +23,5 @@ class TestLegacy(unittest.TestCase):
             self.assertEqual(reader.height, 0)
             self.assertEqual(len(reader.z_levels), 1)
             self.assertEqual(len(reader.channels), 0)
-            self.assertEqual(len(reader.frames), 1)
+            self.assertEqual(len(reader.frames), 0)
 

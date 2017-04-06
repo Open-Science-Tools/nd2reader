@@ -27,7 +27,7 @@ class TestReader(unittest.TestCase):
             self.assertEqual(reader.sizes['y'], 0)
             self.assertEqual(reader.sizes['z'], 1)
             self.assertEqual(reader.sizes['c'], 0)
-            self.assertEqual(reader.sizes['t'], 1)
+            self.assertEqual(reader.sizes['t'], 0)
 
     def test_extension(self):
         self.assertTrue('nd2' in ND2Reader.class_exts())
