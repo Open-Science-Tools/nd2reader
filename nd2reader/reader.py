@@ -68,7 +68,11 @@ class ND2Reader(FramesSequenceND):
         """
         frames = None
         for c in range(len(self.metadata["channels"])):
-            frame = self.get_frame_2D(c, i, self.default_coords['z'])
+            try:
+                z = self.default_coords['z']
+            except KeyError:
+                z = 0
+            frame = self.get_frame_2D(c, i, z)
             if frames is None:
                 frames = Frame([frame])
             else:
@@ -129,7 +133,10 @@ class ND2Reader(FramesSequenceND):
         self._init_axis('y', self._get_metadata_property("height", default=0))
         self._init_axis('c', len(self._get_metadata_property("channels", default=[])))
         self._init_axis('t', len(self._get_metadata_property("frames", default=[])))
-        self._init_axis('z', len(self._get_metadata_property("z_levels", default=[])))
+
+        z_levels = len(self._get_metadata_property("z_levels", default=[]))
+        if z_levels > 1:
+            self._init_axis('z', z_levels)
 
         # provide the default
         self.iter_axes = 't'

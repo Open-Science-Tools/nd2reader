@@ -25,7 +25,7 @@ class TestReader(unittest.TestCase):
             self.assertEqual(reader.pixel_type, np.float64)
             self.assertEqual(reader.sizes['x'], 0)
             self.assertEqual(reader.sizes['y'], 0)
-            self.assertEqual(reader.sizes['z'], 1)
+            self.assertFalse('z' in reader.sizes)
             self.assertEqual(reader.sizes['c'], 0)
             self.assertEqual(reader.sizes['t'], 0)
 
