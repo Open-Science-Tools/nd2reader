@@ -25,6 +25,26 @@ pip install nd2reader
 If you don't already have the packages `numpy`, `pims`, `six` and `xmltodict`, they will be installed automatically if you use the `setup.py` script.
 `nd2reader` is an order of magnitude faster in Python 3. I recommend using it unless you have no other choice. Python 2.7 and Python >= 3.4 are supported.
 
+#### Installation via Conda Forge
+
+Installing `nd2reader` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
+
+```
+conda config --add channels conda-forge
+```
+
+Once the `conda-forge` channel has been enabled, `nd2reader` can be installed with:
+
+```
+conda install nd2reader
+```
+
+It is possible to list all of the versions of `nd2reader` available on your platform with:
+
+```
+conda search nd2reader --channel conda-forge
+```
+
 ### ND2s
 
 `nd2reader` follows the [pims](https://github.com/soft-matter/pims) framework. To open a file and show the first frame:
