@@ -39,50 +39,18 @@ class ND2Reader(FramesSequenceND):
         if self._fh is not None:
             self._fh.close()
 
-    def get_frame(self, i):
-        """Return one frame
+    def _get_default(self, coord):
+        try:
+            return self.default_coords[coord]
+        except KeyError:
+            return 0
 
-        Args:
-            i: The frame number
-
-        Returns:
-            numpy.ndarray: The requested frame
-
-        """
-        fetch_all_channels = 'c' in self.bundle_axes
-
-        if fetch_all_channels:
-            return self._get_frame_all_channels(i)
-        else:
-            return self.get_frame_2D(self.default_coords['c'], i, self.default_coords['z'])
-
-    def _get_frame_all_channels(self, i):
-        """Get all color channels for this frame
-
-        Args:
-            i: The frame number
-
-        Returns:
-            numpy.ndarray: The requested frame, with all color channels.
-
-        """
-        frames = None
-        for c in range(len(self.metadata["channels"])):
-            try:
-                z = self.default_coords['z']
-            except KeyError:
-                z = 0
-            frame = self.get_frame_2D(c, i, z)
-            if frames is None:
-                frames = Frame([frame])
-            else:
-                frames = np.concatenate((frames, [frame]), axis=0)
-        return frames
-
-    def get_frame_2D(self, c, t, z):
+    def get_frame_2D(self, c=0, t=0, z=0, x=0, y=0):
         """Gets a given frame using the parser
 
         Args:
+            x: The x-index (pims expects this)
+            y: The y-index (pims expects this)
             c: The color channel number
             t: The frame number
             z: The z stack number
@@ -92,7 +60,9 @@ class ND2Reader(FramesSequenceND):
 
         """
         c_name = self.metadata["channels"][c]
-        return self._parser.get_image_by_attributes(t, 0, c_name, z, self.metadata["height"], self.metadata["width"])
+        x = self.metadata["width"] if x <= 0 else x
+        y = self.metadata["height"] if y <= 0 else y
+        return self._parser.get_image_by_attributes(t, 0, c_name, z, y, x)
 
     @property
     def parser(self):
