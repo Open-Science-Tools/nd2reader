@@ -208,8 +208,12 @@ class Parser(object):
             int: the image group number
 
         """
-        return frame_number * len(self.metadata["fields_of_view"]) * len(self.metadata["z_levels"]) + (
-            fov * len(self.metadata["z_levels"]) + z_level)
+        z_length = len(self.metadata['z_levels'])
+        z_length = z_length if z_length > 0 else 1
+        fields_of_view = len(self.metadata["fields_of_view"])
+        fields_of_view = fields_of_view if fields_of_view > 0 else 1
+
+        return frame_number * fields_of_view * z_length + (fov * z_length + z_level)
 
     def _calculate_frame_number(self, image_group_number, field_of_view, z_level):
         """
