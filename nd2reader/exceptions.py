@@ -15,3 +15,10 @@ class NoImageError(Exception):
 
     """
     pass
+
+
+class EmptyFileError(Exception):
+    """This .nd2 file seems to be empty.
+
+    Raised if no axes are found in the file.
+    """

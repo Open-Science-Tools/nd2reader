@@ -39,19 +39,26 @@ class RawMetadata(object):
             "width": self._parse_if_not_none(self.image_attributes, self._parse_width),
             "date": self._parse_if_not_none(self.image_text_info, self._parse_date),
             "fields_of_view": self._parse_fields_of_view(),
-            "frames": np.arange(0, frames_per_channel, 1),
+            "frames": self._parse_frames(),
             "z_levels": self._parse_z_levels(),
             "total_images_per_channel": frames_per_channel,
             "channels": self._parse_channels(),
             "pixel_microns": self._parse_if_not_none(self.image_calibration, self._parse_calibration),
         }
 
+        self._set_default_if_not_empty('fields_of_view')
+        self._set_default_if_not_empty('frames')
         self._metadata_parsed['num_frames'] = len(self._metadata_parsed['frames'])
 
         self._parse_roi_metadata()
         self._parse_experiment_metadata()
 
         return self._metadata_parsed
+
+    def _set_default_if_not_empty(self, entry):
+        if len(self._metadata_parsed[entry]) == 0 and self._metadata_parsed['total_images_per_channel'] > 0:
+            # if the file is not empty, we always have one of this entry
+            self._metadata_parsed[entry] = [0]
 
     @staticmethod
     def _parse_if_not_none(to_check, callback):
@@ -73,6 +80,14 @@ class RawMetadata(object):
 
     def _parse_calibration(self):
         return self.image_calibration.get(six.b('SLxCalibration'), {}).get(six.b('dCalibration'))
+
+    def _parse_frames(self):
+        """The number of cycles.
+
+        Returns:
+            list: list of all the frame numbers
+        """
+        return self._parse_dimension(r""".*?T'?\((\d+)\).*?""")
 
     def _parse_channels(self):
         """These are labels created by the NIS Elements user. Typically they may a short description of the filter cube
@@ -154,12 +169,12 @@ class RawMetadata(object):
     def _parse_dimension(self, pattern):
         dimension_text = self._parse_dimension_text()
         if dimension_text is None:
-            return [0]
+            return []
         if six.PY3:
             dimension_text = dimension_text.decode("utf8")
         match = re.match(pattern, dimension_text)
         if not match:
-            return [0]
+            return []
         count = int(match.group(1))
         return list(range(count))
 
@@ -170,7 +185,7 @@ class RawMetadata(object):
 
         """
         if self.image_attributes is None:
-            return None
+            return 0
         return self.image_attributes[six.b('SLxImageAttributes')][six.b('uiSequenceCount')]
 
     def _parse_roi_metadata(self):

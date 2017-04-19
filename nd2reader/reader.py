@@ -1,4 +1,6 @@
 from pims import FramesSequenceND, Frame
+
+from nd2reader.exceptions import EmptyFileError
 from nd2reader.parser import Parser
 import numpy as np
 
@@ -99,17 +101,42 @@ class ND2Reader(FramesSequenceND):
         """Setup the xyctz axes, iterate over t axis by default
 
         """
-        self._init_axis('x', self._get_metadata_property("width", default=0))
-        self._init_axis('y', self._get_metadata_property("height", default=0))
-        self._init_axis('c', len(self._get_metadata_property("channels", default=[])))
-        self._init_axis('t', len(self._get_metadata_property("frames", default=[])))
+        self._init_axis_if_exists('x', self._get_metadata_property("width", default=0))
+        self._init_axis_if_exists('y', self._get_metadata_property("height", default=0))
+        self._init_axis_if_exists('c', len(self._get_metadata_property("channels", default=[])))
+        self._init_axis_if_exists('t', len(self._get_metadata_property("frames", default=[])))
+        self._init_axis_if_exists('z', len(self._get_metadata_property("z_levels", default=[])))
 
-        z_levels = len(self._get_metadata_property("z_levels", default=[]))
-        if z_levels > 1:
-            self._init_axis('z', z_levels)
+        if len(self.sizes) == 0:
+            raise EmptyFileError("No axes were found for this .nd2 file.")
 
         # provide the default
-        self.iter_axes = 't'
+        self.iter_axes = self._guess_default_iter_axis()
+
+    def _init_axis_if_exists(self, axis, size):
+        if size > 0:
+            self._init_axis(axis, size)
+
+    def _guess_default_iter_axis(self):
+        """
+        Guesses the default axis to iterate over based on axis sizes.
+        Returns:
+            the axis to iterate over
+        """
+        priority = ['t', 'z', 'c']
+        found_axes = []
+        for axis in priority:
+            try:
+                current_size = self.sizes[axis]
+            except KeyError:
+                continue
+
+            if current_size > 1:
+                return axis
+
+            found_axes.append(axis)
+
+        return found_axes[0]
 
     def get_timesteps(self):
         """Get the timesteps of the experiment
