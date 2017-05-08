@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader package &#8212; nd2reader 3.0.0 documentation</title>
+    <title>nd2reader package &#8212; nd2reader 3.0.2 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.0.0',
+        VERSION:     '3.0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="tutorial.html" title="Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">nd2reader 3.0.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">nd2reader 3.0.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -78,32 +78,16 @@ This is the main class: use this to process your .nd2 files.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="nd2reader.reader.ND2Reader.get_frame">
-<code class="descname">get_frame</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.get_frame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.get_frame" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return one frame</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>i</strong> &#8211; The frame number</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The requested frame</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">numpy.ndarray</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
 <dt id="nd2reader.reader.ND2Reader.get_frame_2D">
-<code class="descname">get_frame_2D</code><span class="sig-paren">(</span><em>c</em>, <em>t</em>, <em>z</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.get_frame_2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.get_frame_2D" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_frame_2D</code><span class="sig-paren">(</span><em>c=0</em>, <em>t=0</em>, <em>z=0</em>, <em>x=0</em>, <em>y=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.get_frame_2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.get_frame_2D" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a given frame using the parser</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> &#8211; The x-index (pims expects this)</li>
+<li><strong>y</strong> &#8211; The y-index (pims expects this)</li>
 <li><strong>c</strong> &#8211; The color channel number</li>
 <li><strong>t</strong> &#8211; The frame number</li>
 <li><strong>z</strong> &#8211; The z stack number</li>
@@ -177,12 +161,12 @@ This is the main class: use this to process your .nd2 files.</p>
 
 <dl class="attribute">
 <dt id="nd2reader.parser.Parser.CHUNK_MAP_END">
-<code class="descname">CHUNK_MAP_END</code><em class="property"> = b'ND2 CHUNK MAP SIGNATURE 0000001!'</em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_MAP_END" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CHUNK_MAP_END</code><em class="property"> = 'ND2 CHUNK MAP SIGNATURE 0000001!'</em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_MAP_END" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.parser.Parser.CHUNK_MAP_START">
-<code class="descname">CHUNK_MAP_START</code><em class="property"> = b'ND2 FILEMAP SIGNATURE NAME 0001!'</em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_MAP_START" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CHUNK_MAP_START</code><em class="property"> = 'ND2 FILEMAP SIGNATURE NAME 0001!'</em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_MAP_START" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1117,9 +1101,17 @@ doing anything out of the ordinary.</p>
 <div class="section" id="module-nd2reader.exceptions">
 <span id="nd2reader-exceptions-module"></span><h2>nd2reader.exceptions module<a class="headerlink" href="#module-nd2reader.exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="exception">
+<dt id="nd2reader.exceptions.EmptyFileError">
+<em class="property">exception </em><code class="descclassname">nd2reader.exceptions.</code><code class="descname">EmptyFileError</code><a class="reference internal" href="_modules/nd2reader/exceptions.html#EmptyFileError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.exceptions.EmptyFileError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
+<p>This .nd2 file seems to be empty.</p>
+<p>Raised if no axes are found in the file.</p>
+</dd></dl>
+
+<dl class="exception">
 <dt id="nd2reader.exceptions.InvalidVersionError">
 <em class="property">exception </em><code class="descclassname">nd2reader.exceptions.</code><code class="descname">InvalidVersionError</code><a class="reference internal" href="_modules/nd2reader/exceptions.html#InvalidVersionError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.exceptions.InvalidVersionError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
 <p>Unknown version.</p>
 <p>We don&#8217;t know how to parse the version of ND2 that we were given.</p>
 </dd></dl>
@@ -1127,7 +1119,7 @@ doing anything out of the ordinary.</p>
 <dl class="exception">
 <dt id="nd2reader.exceptions.NoImageError">
 <em class="property">exception </em><code class="descclassname">nd2reader.exceptions.</code><code class="descname">NoImageError</code><a class="reference internal" href="_modules/nd2reader/exceptions.html#NoImageError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.exceptions.NoImageError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
 <p>No image found.</p>
 <p>Some apparent images in ND2s are just completely blank placeholders. These are used when the number of images per
 cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and bright field images every minute).</p>
@@ -1448,12 +1440,12 @@ nd2reader.</p>
         <li class="right" >
           <a href="tutorial.html" title="Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">nd2reader 3.0.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">nd2reader 3.0.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Ruben Verweij.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>

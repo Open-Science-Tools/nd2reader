@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader.raw_metadata &#8212; nd2reader 3.0.0 documentation</title>
+    <title>nd2reader.raw_metadata &#8212; nd2reader 3.0.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.0.0',
+        VERSION:     '3.0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -83,6 +83,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span>
 
+        <span class="n">frames_per_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_total_images_per_channel</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_if_not_none</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_attributes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_height</span><span class="p">),</span>
             <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_if_not_none</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_attributes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_width</span><span class="p">),</span>
@@ -90,17 +91,24 @@
             <span class="s2">&quot;fields_of_view&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_fields_of_view</span><span class="p">(),</span>
             <span class="s2">&quot;frames&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_frames</span><span class="p">(),</span>
             <span class="s2">&quot;z_levels&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_z_levels</span><span class="p">(),</span>
-            <span class="s2">&quot;total_images_per_channel&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_total_images_per_channel</span><span class="p">(),</span>
+            <span class="s2">&quot;total_images_per_channel&quot;</span><span class="p">:</span> <span class="n">frames_per_channel</span><span class="p">,</span>
             <span class="s2">&quot;channels&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_channels</span><span class="p">(),</span>
             <span class="s2">&quot;pixel_microns&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_if_not_none</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_calibration</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_calibration</span><span class="p">),</span>
         <span class="p">}</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_default_if_not_empty</span><span class="p">(</span><span class="s1">&#39;fields_of_view&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_default_if_not_empty</span><span class="p">(</span><span class="s1">&#39;frames&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="s1">&#39;num_frames&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="s1">&#39;frames&#39;</span><span class="p">])</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_parse_roi_metadata</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_parse_experiment_metadata</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span></div>
+
+    <span class="k">def</span> <span class="nf">_set_default_if_not_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="n">entry</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="s1">&#39;total_images_per_channel&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># if the file is not empty, we always have one of this entry</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="n">entry</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_parse_if_not_none</span><span class="p">(</span><span class="n">to_check</span><span class="p">,</span> <span class="n">callback</span><span class="p">):</span>
@@ -122,6 +130,14 @@
 
     <span class="k">def</span> <span class="nf">_parse_calibration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_calibration</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxCalibration&#39;</span><span class="p">),</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;dCalibration&#39;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_parse_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The number of cycles.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: list of all the frame numbers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&quot;&quot;.*?T&#39;?\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_parse_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;These are labels created by the NIS Elements user. Typically they may a short description of the filter cube</span>
@@ -162,15 +178,7 @@
 <span class="sd">        NIS Elements can figure it out, but we haven&#39;t found it yet.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="s2">r&quot;&quot;&quot;.*?XY\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_parse_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The number of cycles.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            list: list of all the frame numbers</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="s2">r&quot;&quot;&quot;.*?T&#39;?\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&quot;&quot;.*?XY\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_parse_z_levels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The different levels in the Z-plane.</span>
@@ -178,7 +186,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            list: the z levels, just a sequence from 0 to n.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="s2">r&quot;&quot;&quot;.*?Z\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&quot;&quot;.*?Z\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_parse_dimension_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;While there are metadata values that represent a lot of what we want to capture, they seem to be unreliable.</span>
@@ -211,12 +219,12 @@
     <span class="k">def</span> <span class="nf">_parse_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
         <span class="n">dimension_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension_text</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">dimension_text</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">six</span><span class="o">.</span><span class="n">PY3</span><span class="p">:</span>
             <span class="n">dimension_text</span> <span class="o">=</span> <span class="n">dimension_text</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
         <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">dimension_text</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">[]</span>
         <span class="n">count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">))</span>
 
@@ -227,7 +235,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_attributes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_attributes</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxImageAttributes&#39;</span><span class="p">)][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;uiSequenceCount&#39;</span><span class="p">)]</span>
 
     <span class="k">def</span> <span class="nf">_parse_roi_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -618,13 +626,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Ruben Verweij.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>

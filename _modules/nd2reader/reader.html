@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader.reader &#8212; nd2reader 3.0.0 documentation</title>
+    <title>nd2reader.reader &#8212; nd2reader 3.0.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.0.0',
+        VERSION:     '3.0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -49,6 +49,8 @@
             
   <h1>Source code for nd2reader.reader</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">pims</span> <span class="k">import</span> <span class="n">FramesSequenceND</span><span class="p">,</span> <span class="n">Frame</span>
+
+<span class="kn">from</span> <span class="nn">nd2reader.exceptions</span> <span class="k">import</span> <span class="n">EmptyFileError</span>
 <span class="kn">from</span> <span class="nn">nd2reader.parser</span> <span class="k">import</span> <span class="n">Parser</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -59,7 +61,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
 
         <span class="c1"># first use the parser to parse the file</span>
@@ -76,11 +78,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_axes</span><span class="p">()</span>
 
     <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="ND2Reader.class_exts"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.reader.ND2Reader.class_exts">[docs]</a>    <span class="k">def</span> <span class="nf">class_exts</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+<div class="viewcode-block" id="ND2Reader.class_exts"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.reader.ND2Reader.class_exts">[docs]</a>    <span class="k">def</span> <span class="nf">class_exts</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Let PIMS open function use this reader for opening .nd2 files</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;nd2&#39;</span><span class="p">}</span> <span class="o">|</span> <span class="nb">super</span><span class="p">(</span><span class="n">ND2Reader</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span><span class="o">.</span><span class="n">class_exts</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;nd2&#39;</span><span class="p">}</span> <span class="o">|</span> <span class="nb">super</span><span class="p">(</span><span class="n">ND2Reader</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">class_exts</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ND2Reader.close"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.reader.ND2Reader.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Correctly close the file handle</span>
@@ -89,46 +91,18 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ND2Reader.get_frame"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.reader.ND2Reader.get_frame">[docs]</a>    <span class="k">def</span> <span class="nf">get_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return one frame</span>
+    <span class="k">def</span> <span class="nf">_get_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_coords</span><span class="p">[</span><span class="n">coord</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            i: The frame number</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            numpy.ndarray: The requested frame</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">fetch_all_channels</span> <span class="o">=</span> <span class="s1">&#39;c&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bundle_axes</span>
-
-        <span class="k">if</span> <span class="n">fetch_all_channels</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_frame_all_channels</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_frame_2D</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_coords</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_coords</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">])</span></div>
-
-    <span class="k">def</span> <span class="nf">_get_frame_all_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get all color channels for this frame</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            i: The frame number</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            numpy.ndarray: The requested frame, with all color channels.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">frames</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">])):</span>
-            <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_frame_2D</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_coords</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">])</span>
-            <span class="k">if</span> <span class="n">frames</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">frames</span> <span class="o">=</span> <span class="n">Frame</span><span class="p">([</span><span class="n">frame</span><span class="p">])</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">frames</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">frames</span><span class="p">,</span> <span class="p">[</span><span class="n">frame</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">frames</span>
-
-<div class="viewcode-block" id="ND2Reader.get_frame_2D"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.reader.ND2Reader.get_frame_2D">[docs]</a>    <span class="k">def</span> <span class="nf">get_frame_2D</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+<div class="viewcode-block" id="ND2Reader.get_frame_2D"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.reader.ND2Reader.get_frame_2D">[docs]</a>    <span class="k">def</span> <span class="nf">get_frame_2D</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Gets a given frame using the parser</span>
 
 <span class="sd">        Args:</span>
+<span class="sd">            x: The x-index (pims expects this)</span>
+<span class="sd">            y: The y-index (pims expects this)</span>
 <span class="sd">            c: The color channel number</span>
 <span class="sd">            t: The frame number</span>
 <span class="sd">            z: The z stack number</span>
@@ -138,7 +112,9 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">c_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">][</span><span class="n">c</span><span class="p">]</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">get_image_by_attributes</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">c_name</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">])</span></div>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">x</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">y</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">get_image_by_attributes</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">c_name</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">parser</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -175,14 +151,42 @@
         <span class="sd">&quot;&quot;&quot;Setup the xyctz axes, iterate over t axis by default</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;channels&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[])))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;frames&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[])))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;z_levels&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[])))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis_if_exists</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis_if_exists</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis_if_exists</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;channels&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[])))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis_if_exists</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;frames&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[])))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis_if_exists</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;z_levels&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[])))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">EmptyFileError</span><span class="p">(</span><span class="s2">&quot;No axes were found for this .nd2 file.&quot;</span><span class="p">)</span>
 
         <span class="c1"># provide the default</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">iter_axes</span> <span class="o">=</span> <span class="s1">&#39;t&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iter_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_guess_default_iter_axis</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_init_axis_if_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_guess_default_iter_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Guesses the default axis to iterate over based on axis sizes.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            the axis to iterate over</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">priority</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]</span>
+        <span class="n">found_axes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="n">priority</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">current_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">current_size</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">axis</span>
+
+            <span class="n">found_axes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">found_axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <div class="viewcode-block" id="ND2Reader.get_timesteps"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.reader.ND2Reader.get_timesteps">[docs]</a>    <span class="k">def</span> <span class="nf">get_timesteps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the timesteps of the experiment</span>
@@ -195,6 +199,11 @@
         <span class="n">current_time</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="k">for</span> <span class="n">loop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;experiment&#39;</span><span class="p">][</span><span class="s1">&#39;loops&#39;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">loop</span><span class="p">[</span><span class="s1">&#39;stimulation&#39;</span><span class="p">]:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">loop</span><span class="p">[</span><span class="s1">&#39;sampling_interval&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># This is a loop were no data is acquired</span>
+                <span class="n">current_time</span> <span class="o">+=</span> <span class="n">loop</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">]</span>
                 <span class="k">continue</span>
 
             <span class="n">timesteps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
@@ -233,13 +242,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Ruben Verweij.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>

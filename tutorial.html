@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Tutorial &#8212; nd2reader 3.0.0 documentation</title>
+    <title>Tutorial &#8212; nd2reader 3.0.2 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.0.0',
+        VERSION:     '3.0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="index.html" title="nd2reader: a pure-Python package for reading Nikon .nd2 files"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">nd2reader 3.0.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">nd2reader 3.0.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -64,6 +64,21 @@
 </div>
 <p>If you don&#8217;t already have the packages <code class="docutils literal"><span class="pre">numpy</span></code>, <code class="docutils literal"><span class="pre">pims</span></code>, <code class="docutils literal"><span class="pre">six</span></code> and <code class="docutils literal"><span class="pre">xmltodict</span></code>, they will be installed automatically if you use the <code class="docutils literal"><span class="pre">setup.py</span></code> script.
 <code class="docutils literal"><span class="pre">nd2reader</span></code> is an order of magnitude faster in Python 3. I recommend using it unless you have no other choice. Python 2.7 and Python &gt;= 3.4 are supported.</p>
+<div class="section" id="installation-via-conda-forge">
+<span id="installation-via-conda-forge"></span><h3>Installation via Conda Forge<a class="headerlink" href="#installation-via-conda-forge" title="Permalink to this headline">¶</a></h3>
+<p>Installing <code class="docutils literal"><span class="pre">nd2reader</span></code> from the <code class="docutils literal"><span class="pre">conda-forge</span></code> channel can be achieved by adding <code class="docutils literal"><span class="pre">conda-forge</span></code> to your channels with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">config</span> <span class="o">--</span><span class="n">add</span> <span class="n">channels</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
+</pre></div>
+</div>
+<p>Once the <code class="docutils literal"><span class="pre">conda-forge</span></code> channel has been enabled, <code class="docutils literal"><span class="pre">nd2reader</span></code> can be installed with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">nd2reader</span>
+</pre></div>
+</div>
+<p>It is possible to list all of the versions of <code class="docutils literal"><span class="pre">nd2reader</span></code> available on your platform with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">search</span> <span class="n">nd2reader</span> <span class="o">--</span><span class="n">channel</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="opening-nd2s">
 <span id="opening-nd2s"></span><h2>Opening ND2s<a class="headerlink" href="#opening-nd2s" title="Permalink to this headline">¶</a></h2>
@@ -116,7 +131,10 @@ and available in dictionary form. For example:</p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Tutorial</a><ul>
-<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#installation-via-conda-forge">Installation via Conda Forge</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#opening-nd2s">Opening ND2s</a></li>
 <li><a class="reference internal" href="#nd2-metadata">ND2 metadata</a></li>
 </ul>
@@ -165,12 +183,12 @@ and available in dictionary form. For example:</p>
         <li class="right" >
           <a href="index.html" title="nd2reader: a pure-Python package for reading Nikon .nd2 files"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">nd2reader 3.0.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">nd2reader 3.0.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Ruben Verweij.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>
