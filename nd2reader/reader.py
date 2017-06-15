@@ -61,7 +61,11 @@ class ND2Reader(FramesSequenceND):
             numpy.ndarray: The requested frame
 
         """
-        c_name = self.metadata["channels"][c]
+        try:
+            c_name = self.metadata["channels"][c]
+        except KeyError:
+            c_name = self.metadata["channels"][0]
+
         x = self.metadata["width"] if x <= 0 else x
         y = self.metadata["height"] if y <= 0 else y
         return self._parser.get_image_by_attributes(t, 0, c_name, z, y, x)
@@ -103,9 +107,9 @@ class ND2Reader(FramesSequenceND):
         """
         self._init_axis_if_exists('x', self._get_metadata_property("width", default=0))
         self._init_axis_if_exists('y', self._get_metadata_property("height", default=0))
-        self._init_axis_if_exists('c', len(self._get_metadata_property("channels", default=[])))
-        self._init_axis_if_exists('t', len(self._get_metadata_property("frames", default=[])))
-        self._init_axis_if_exists('z', len(self._get_metadata_property("z_levels", default=[])))
+        self._init_axis_if_exists('c', len(self._get_metadata_property("channels", default=[])), min_size=2)
+        self._init_axis_if_exists('t', len(self._get_metadata_property("frames", default=[])), min_size=2)
+        self._init_axis_if_exists('z', len(self._get_metadata_property("z_levels", default=[])), min_size=2)
 
         if len(self.sizes) == 0:
             raise EmptyFileError("No axes were found for this .nd2 file.")
@@ -113,8 +117,8 @@ class ND2Reader(FramesSequenceND):
         # provide the default
         self.iter_axes = self._guess_default_iter_axis()
 
-    def _init_axis_if_exists(self, axis, size):
-        if size > 0:
+    def _init_axis_if_exists(self, axis, size, min_size=1):
+        if size >= min_size:
             self._init_axis(axis, size)
 
     def _guess_default_iter_axis(self):
