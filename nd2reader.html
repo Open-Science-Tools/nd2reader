@@ -161,12 +161,12 @@ This is the main class: use this to process your .nd2 files.</p>
 
 <dl class="attribute">
 <dt id="nd2reader.parser.Parser.CHUNK_MAP_END">
-<code class="descname">CHUNK_MAP_END</code><em class="property"> = 'ND2 CHUNK MAP SIGNATURE 0000001!'</em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_MAP_END" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CHUNK_MAP_END</code><em class="property"> = b'ND2 CHUNK MAP SIGNATURE 0000001!'</em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_MAP_END" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.parser.Parser.CHUNK_MAP_START">
-<code class="descname">CHUNK_MAP_START</code><em class="property"> = 'ND2 FILEMAP SIGNATURE NAME 0001!'</em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_MAP_START" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CHUNK_MAP_START</code><em class="property"> = b'ND2 FILEMAP SIGNATURE NAME 0001!'</em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_MAP_START" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1103,7 +1103,7 @@ doing anything out of the ordinary.</p>
 <dl class="exception">
 <dt id="nd2reader.exceptions.EmptyFileError">
 <em class="property">exception </em><code class="descclassname">nd2reader.exceptions.</code><code class="descname">EmptyFileError</code><a class="reference internal" href="_modules/nd2reader/exceptions.html#EmptyFileError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.exceptions.EmptyFileError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
 <p>This .nd2 file seems to be empty.</p>
 <p>Raised if no axes are found in the file.</p>
 </dd></dl>
@@ -1111,7 +1111,7 @@ doing anything out of the ordinary.</p>
 <dl class="exception">
 <dt id="nd2reader.exceptions.InvalidVersionError">
 <em class="property">exception </em><code class="descclassname">nd2reader.exceptions.</code><code class="descname">InvalidVersionError</code><a class="reference internal" href="_modules/nd2reader/exceptions.html#InvalidVersionError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.exceptions.InvalidVersionError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
 <p>Unknown version.</p>
 <p>We don&#8217;t know how to parse the version of ND2 that we were given.</p>
 </dd></dl>
@@ -1119,7 +1119,7 @@ doing anything out of the ordinary.</p>
 <dl class="exception">
 <dt id="nd2reader.exceptions.NoImageError">
 <em class="property">exception </em><code class="descclassname">nd2reader.exceptions.</code><code class="descname">NoImageError</code><a class="reference internal" href="_modules/nd2reader/exceptions.html#NoImageError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.exceptions.NoImageError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
 <p>No image found.</p>
 <p>Some apparent images in ND2s are just completely blank placeholders. These are used when the number of images per
 cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and bright field images every minute).</p>
@@ -1445,7 +1445,7 @@ nd2reader.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Ruben Verweij.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
     </div>
   </body>
 </html>
