@@ -350,7 +350,10 @@ class RawMetadata(object):
             is_stimulation = get_from_dict_if_exists('uiLoopType', loop) == 6
 
             # sampling interval in ms
-            interval = get_from_dict_if_exists('dAvgPeriodDiff', loop)
+            interval = get_from_dict_if_exists('dPeriod', loop)
+
+            if interval is None or interval <= 0:
+                interval = get_from_dict_if_exists('dAvgPeriodDiff', loop)
 
             parsed_loop = {
                 'start': time_offset,
