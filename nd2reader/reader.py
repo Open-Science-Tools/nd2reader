@@ -108,7 +108,7 @@ class ND2Reader(FramesSequenceND):
         self._init_axis_if_exists('x', self._get_metadata_property("width", default=0))
         self._init_axis_if_exists('y', self._get_metadata_property("height", default=0))
         self._init_axis_if_exists('c', len(self._get_metadata_property("channels", default=[])), min_size=2)
-        self._init_axis_if_exists('t', len(self._get_metadata_property("frames", default=[])), min_size=2)
+        self._init_axis_if_exists('t', len(self._get_metadata_property("frames", default=[])))
         self._init_axis_if_exists('z', len(self._get_metadata_property("z_levels", default=[])), min_size=2)
 
         if len(self.sizes) == 0:
