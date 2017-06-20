@@ -349,11 +349,7 @@ class RawMetadata(object):
             # uiLoopType == 6 is a stimulation loop
             is_stimulation = get_from_dict_if_exists('uiLoopType', loop) == 6
 
-            # sampling interval in ms
-            interval = get_from_dict_if_exists('dPeriod', loop)
-
-            if interval is None or interval <= 0:
-                interval = get_from_dict_if_exists('dAvgPeriodDiff', loop)
+            interval = self._determine_sampling_interval(duration, loop)
 
             parsed_loop = {
                 'start': time_offset,
@@ -368,6 +364,29 @@ class RawMetadata(object):
             time_offset += duration
 
         return parsed_loops
+
+    @staticmethod
+    def _determine_sampling_interval(duration, loop):
+        """Determines the loop sampling interval in milliseconds
+
+        Args:
+            duration: loop duration in milliseconds
+            loop: loop dictionary
+
+        Returns:
+            float: the sampling interval in milliseconds
+
+        """
+        interval = get_from_dict_if_exists('dPeriod', loop)
+        if interval is None or interval <= 0:
+            # Use a fallback if it is still not found
+            interval = get_from_dict_if_exists('dAvgPeriodDiff', loop)
+        if interval is None or interval <= 0:
+            # In some cases, both keys are not saved. Then try to calculate it.
+            number_of_loops = get_from_dict_if_exists('uiCount', loop)
+            number_of_loops = number_of_loops if number_of_loops > 0 else 1
+            interval = duration / number_of_loops
+        return interval
 
     @property
     def image_text_info(self):
