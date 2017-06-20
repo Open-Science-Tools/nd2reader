@@ -27,6 +27,9 @@ class ND2Reader(FramesSequenceND):
         # Setup the axes
         self._setup_axes()
 
+        # Other properties
+        self._timesteps = None
+
     @classmethod
     def class_exts(cls):
         """Let PIMS open function use this reader for opening .nd2 files
@@ -89,6 +92,27 @@ class ND2Reader(FramesSequenceND):
         """
         return self._dtype
 
+    @property
+    def timesteps(self):
+        """Get the timesteps of the experiment
+
+        Returns:
+            np.ndarray: an array of times in milliseconds.
+
+        """
+        if self._timesteps is None:
+            return self.get_timesteps()
+        return self._timesteps
+
+    @property
+    def frame_rate(self):
+        """The (average) frame rate
+        
+        Returns:
+            float: the (average) frame rate in frames per second
+        """
+        return 1000. / np.mean(np.diff(self.timesteps))
+
     def _get_metadata_property(self, key, default=None):
         if self.metadata is None:
             return default
@@ -149,6 +173,9 @@ class ND2Reader(FramesSequenceND):
             np.ndarray: an array of times in milliseconds.
 
         """
+        if self._timesteps is not None:
+            return self._timesteps
+
         timesteps = np.array([])
         current_time = 0.0
         for loop in self.metadata['experiment']['loops']:
@@ -165,4 +192,5 @@ class ND2Reader(FramesSequenceND):
             current_time += loop['duration']
 
         # if experiment did not finish, number of timesteps is wrong. Take correct amount of leading timesteps.
-        return timesteps[:self.metadata['num_frames']]
+        self._timesteps = timesteps[:self.metadata['num_frames']]
+        return self._timesteps
