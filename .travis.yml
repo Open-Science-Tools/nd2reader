@@ -20,6 +20,7 @@ install:
   - pip install --upgrade pip setuptools wheel
   - pip install --only-binary=numpy numpy
   - pip install -r requirements.txt
-  - pip install codeclimate-test-reporter coverage
+  - pip install 'coverage>=4.0,<4.4' --force-reinstall # Upstream bug: https://bitbucket.org/ned/coveragepy/issues/578/incomplete-file-path-in-xml-report
+  - pip install codeclimate-test-reporter
 
 script: python ./test.py && CODECLIMATE_REPO_TOKEN=8582900c285e4da0f253555b1bac1ba501bd6ff07850b0f227166b3cdac59ecc codeclimate-test-reporter
