@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader.reader &#8212; nd2reader 3.0.2 documentation</title>
+    <title>nd2reader.reader &#8212; nd2reader 3.0.3 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.0.2',
+        VERSION:     '3.0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -76,6 +76,9 @@
 
         <span class="c1"># Setup the axes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_axes</span><span class="p">()</span>
+
+        <span class="c1"># Other properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timesteps</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="ND2Reader.class_exts"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.reader.ND2Reader.class_exts">[docs]</a>    <span class="k">def</span> <span class="nf">class_exts</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
@@ -139,6 +142,27 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dtype</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">timesteps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the timesteps of the experiment</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.ndarray: an array of times in milliseconds.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timesteps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_timesteps</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timesteps</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">frame_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The (average) frame rate</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: the (average) frame rate in frames per second</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mf">1000.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timesteps</span><span class="p">))</span>
+
     <span class="k">def</span> <span class="nf">_get_metadata_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">default</span>
@@ -158,7 +182,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis_if_exists</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis_if_exists</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis_if_exists</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;channels&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[])),</span> <span class="n">min_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis_if_exists</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;frames&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[])),</span> <span class="n">min_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis_if_exists</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;frames&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[])))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_axis_if_exists</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_metadata_property</span><span class="p">(</span><span class="s2">&quot;z_levels&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[])),</span> <span class="n">min_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -199,6 +223,9 @@
 <span class="sd">            np.ndarray: an array of times in milliseconds.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timesteps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timesteps</span>
+
         <span class="n">timesteps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
         <span class="n">current_time</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="k">for</span> <span class="n">loop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;experiment&#39;</span><span class="p">][</span><span class="s1">&#39;loops&#39;</span><span class="p">]:</span>
@@ -215,7 +242,8 @@
             <span class="n">current_time</span> <span class="o">+=</span> <span class="n">loop</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">]</span>
 
         <span class="c1"># if experiment did not finish, number of timesteps is wrong. Take correct amount of leading timesteps.</span>
-        <span class="k">return</span> <span class="n">timesteps</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;num_frames&#39;</span><span class="p">]]</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timesteps</span> <span class="o">=</span> <span class="n">timesteps</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;num_frames&#39;</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timesteps</span></div></div>
 </pre></div>
 
           </div>
@@ -246,7 +274,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

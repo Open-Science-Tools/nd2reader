@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader.raw_metadata &#8212; nd2reader 3.0.2 documentation</title>
+    <title>nd2reader.raw_metadata &#8212; nd2reader 3.0.3 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.0.2',
+        VERSION:     '3.0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -399,8 +399,7 @@
             <span class="c1"># uiLoopType == 6 is a stimulation loop</span>
             <span class="n">is_stimulation</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;uiLoopType&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span> <span class="o">==</span> <span class="mi">6</span>
 
-            <span class="c1"># sampling interval in ms</span>
-            <span class="n">interval</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;dAvgPeriodDiff&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
+            <span class="n">interval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_sampling_interval</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
 
             <span class="n">parsed_loop</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="n">time_offset</span><span class="p">,</span>
@@ -415,6 +414,29 @@
             <span class="n">time_offset</span> <span class="o">+=</span> <span class="n">duration</span>
 
         <span class="k">return</span> <span class="n">parsed_loops</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_determine_sampling_interval</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">loop</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Determines the loop sampling interval in milliseconds</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            duration: loop duration in milliseconds</span>
+<span class="sd">            loop: loop dictionary</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: the sampling interval in milliseconds</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">interval</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;dPeriod&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">interval</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">interval</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Use a fallback if it is still not found</span>
+            <span class="n">interval</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;dAvgPeriodDiff&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">interval</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">interval</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># In some cases, both keys are not saved. Then try to calculate it.</span>
+            <span class="n">number_of_loops</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;uiCount&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
+            <span class="n">number_of_loops</span> <span class="o">=</span> <span class="n">number_of_loops</span> <span class="k">if</span> <span class="n">number_of_loops</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span>
+            <span class="n">interval</span> <span class="o">=</span> <span class="n">duration</span> <span class="o">/</span> <span class="n">number_of_loops</span>
+        <span class="k">return</span> <span class="n">interval</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">image_text_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -626,7 +648,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
