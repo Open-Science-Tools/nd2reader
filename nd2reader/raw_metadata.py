@@ -384,7 +384,7 @@ class RawMetadata(object):
         if interval is None or interval <= 0:
             # In some cases, both keys are not saved. Then try to calculate it.
             number_of_loops = get_from_dict_if_exists('uiCount', loop)
-            number_of_loops = number_of_loops if number_of_loops > 0 else 1
+            number_of_loops = number_of_loops if number_of_loops is not None and number_of_loops > 0 else 1
             interval = duration / number_of_loops
         return interval
 
