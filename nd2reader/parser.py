@@ -3,7 +3,7 @@ import struct
 
 import array
 import six
-from pims import Frame
+from pims.base_frames import Frame
 import numpy as np
 
 from nd2reader.common import get_version, read_chunk

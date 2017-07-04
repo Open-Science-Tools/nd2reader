@@ -1,4 +1,4 @@
-from pims import FramesSequenceND, Frame
+from pims.base_frames import FramesSequenceND, Frame
 
 from nd2reader.exceptions import EmptyFileError
 from nd2reader.parser import Parser
