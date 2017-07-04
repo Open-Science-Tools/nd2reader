@@ -1,12 +1,12 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader.reader &#8212; nd2reader 3.0.3 documentation</title>
+    <title>nd2reader.reader &#8212; nd2reader 3.0.4 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.0.3',
+        VERSION:     '3.0.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -48,7 +48,7 @@
           <div class="body" role="main">
             
   <h1>Source code for nd2reader.reader</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pims</span> <span class="k">import</span> <span class="n">FramesSequenceND</span><span class="p">,</span> <span class="n">Frame</span>
+<span></span><span class="kn">from</span> <span class="nn">pims.base_frames</span> <span class="k">import</span> <span class="n">FramesSequenceND</span><span class="p">,</span> <span class="n">Frame</span>
 
 <span class="kn">from</span> <span class="nn">nd2reader.exceptions</span> <span class="k">import</span> <span class="n">EmptyFileError</span>
 <span class="kn">from</span> <span class="nn">nd2reader.parser</span> <span class="k">import</span> <span class="n">Parser</span>
@@ -80,8 +80,8 @@
         <span class="c1"># Other properties</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timesteps</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="ND2Reader.class_exts"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.reader.ND2Reader.class_exts">[docs]</a>    <span class="k">def</span> <span class="nf">class_exts</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<div class="viewcode-block" id="ND2Reader.class_exts"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.reader.ND2Reader.class_exts">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">class_exts</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Let PIMS open function use this reader for opening .nd2 files</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -274,13 +274,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Ruben Verweij.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.
     </div>
   </body>
 </html>
