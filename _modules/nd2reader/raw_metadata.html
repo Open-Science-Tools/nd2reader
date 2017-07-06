@@ -1,20 +1,19 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader.raw_metadata &#8212; nd2reader 3.0.0 documentation</title>
+    <title>nd2reader.raw_metadata &#8212; nd2reader 3.0.4 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.0.0',
+        VERSION:     '3.0.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,29 +23,98 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
+    <link rel="search" title="Search" href="../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
   </head>
   <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
-      </ul>
-    </div>  
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          nd2reader</a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
             
+                <li><a href="http://lighthacking.nl">Lighthacking Blog</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">    nd2reader quick start tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nd2reader.html">    nd2reader API reference</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
   <h1>Source code for nd2reader.raw_metadata</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">nd2reader.common</span> <span class="k">import</span> <span class="n">read_chunk</span><span class="p">,</span> <span class="n">read_array</span><span class="p">,</span> <span class="n">read_metadata</span><span class="p">,</span> <span class="n">parse_date</span><span class="p">,</span> <span class="n">get_from_dict_if_exists</span>
@@ -83,6 +151,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span>
 
+        <span class="n">frames_per_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_total_images_per_channel</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_if_not_none</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_attributes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_height</span><span class="p">),</span>
             <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_if_not_none</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_attributes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_width</span><span class="p">),</span>
@@ -90,17 +159,24 @@
             <span class="s2">&quot;fields_of_view&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_fields_of_view</span><span class="p">(),</span>
             <span class="s2">&quot;frames&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_frames</span><span class="p">(),</span>
             <span class="s2">&quot;z_levels&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_z_levels</span><span class="p">(),</span>
-            <span class="s2">&quot;total_images_per_channel&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_total_images_per_channel</span><span class="p">(),</span>
+            <span class="s2">&quot;total_images_per_channel&quot;</span><span class="p">:</span> <span class="n">frames_per_channel</span><span class="p">,</span>
             <span class="s2">&quot;channels&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_channels</span><span class="p">(),</span>
             <span class="s2">&quot;pixel_microns&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_if_not_none</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_calibration</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_calibration</span><span class="p">),</span>
         <span class="p">}</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_default_if_not_empty</span><span class="p">(</span><span class="s1">&#39;fields_of_view&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_default_if_not_empty</span><span class="p">(</span><span class="s1">&#39;frames&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="s1">&#39;num_frames&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="s1">&#39;frames&#39;</span><span class="p">])</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_parse_roi_metadata</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_parse_experiment_metadata</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span></div>
+
+    <span class="k">def</span> <span class="nf">_set_default_if_not_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="n">entry</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="s1">&#39;total_images_per_channel&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># if the file is not empty, we always have one of this entry</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="n">entry</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_parse_if_not_none</span><span class="p">(</span><span class="n">to_check</span><span class="p">,</span> <span class="n">callback</span><span class="p">):</span>
@@ -122,6 +198,14 @@
 
     <span class="k">def</span> <span class="nf">_parse_calibration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_calibration</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxCalibration&#39;</span><span class="p">),</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;dCalibration&#39;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_parse_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The number of cycles.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: list of all the frame numbers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="s2">r&quot;&quot;&quot;.*?T&#39;?\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_parse_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;These are labels created by the NIS Elements user. Typically they may a short description of the filter cube</span>
@@ -164,14 +248,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="s2">r&quot;&quot;&quot;.*?XY\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_parse_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The number of cycles.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            list: list of all the frame numbers</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="s2">r&quot;&quot;&quot;.*?T&#39;?\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
-
     <span class="k">def</span> <span class="nf">_parse_z_levels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The different levels in the Z-plane.</span>
 
@@ -211,12 +287,12 @@
     <span class="k">def</span> <span class="nf">_parse_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
         <span class="n">dimension_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension_text</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">dimension_text</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">six</span><span class="o">.</span><span class="n">PY3</span><span class="p">:</span>
             <span class="n">dimension_text</span> <span class="o">=</span> <span class="n">dimension_text</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
         <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">dimension_text</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">[]</span>
         <span class="n">count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">))</span>
 
@@ -227,7 +303,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_attributes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_attributes</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxImageAttributes&#39;</span><span class="p">)][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;uiSequenceCount&#39;</span><span class="p">)]</span>
 
     <span class="k">def</span> <span class="nf">_parse_roi_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -391,8 +467,7 @@
             <span class="c1"># uiLoopType == 6 is a stimulation loop</span>
             <span class="n">is_stimulation</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;uiLoopType&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span> <span class="o">==</span> <span class="mi">6</span>
 
-            <span class="c1"># sampling interval in ms</span>
-            <span class="n">interval</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;dAvgPeriodDiff&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
+            <span class="n">interval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_sampling_interval</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
 
             <span class="n">parsed_loop</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="n">time_offset</span><span class="p">,</span>
@@ -407,6 +482,29 @@
             <span class="n">time_offset</span> <span class="o">+=</span> <span class="n">duration</span>
 
         <span class="k">return</span> <span class="n">parsed_loops</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_determine_sampling_interval</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">loop</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Determines the loop sampling interval in milliseconds</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            duration: loop duration in milliseconds</span>
+<span class="sd">            loop: loop dictionary</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: the sampling interval in milliseconds</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">interval</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;dPeriod&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">interval</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">interval</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Use a fallback if it is still not found</span>
+            <span class="n">interval</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;dAvgPeriodDiff&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">interval</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">interval</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># In some cases, both keys are not saved. Then try to calculate it.</span>
+            <span class="n">number_of_loops</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;uiCount&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
+            <span class="n">number_of_loops</span> <span class="o">=</span> <span class="n">number_of_loops</span> <span class="k">if</span> <span class="n">number_of_loops</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">number_of_loops</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span>
+            <span class="n">interval</span> <span class="o">=</span> <span class="n">duration</span> <span class="o">/</span> <span class="n">number_of_loops</span>
+        <span class="k">return</span> <span class="n">interval</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">image_text_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -590,41 +688,34 @@
             <span class="k">return</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">image_metadata</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span></div>
 </pre></div>
 
-          </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
+    </div>
+      
+  </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">nd2reader 3.0.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Ruben Verweij.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.
-    </div>
+
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, Ruben Verweij.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
+    </p>
+  </div>
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56141646-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
   </body>
 </html>
