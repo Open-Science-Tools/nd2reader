@@ -255,7 +255,12 @@ def _get_value(data, data_type, cursor_position):
               8: _parse_string,
               9: _parse_char_array,
               11: _parse_metadata_item}
-    return parser[data_type](data) if data_type < 11 else parser[data_type](data, cursor_position)
+    try:
+        value = parser[data_type](data) if data_type < 11 else parser[data_type](data, cursor_position)
+    except KeyError:
+        value = None
+
+    return value
 
 
 def read_metadata(data, count):

@@ -56,7 +56,10 @@ class RawMetadata(object):
         return self._metadata_parsed
 
     def _set_default_if_not_empty(self, entry):
-        if len(self._metadata_parsed[entry]) == 0 and self._metadata_parsed['total_images_per_channel'] > 0:
+        total_images = self._metadata_parsed['total_images_per_channel'] \
+            if self._metadata_parsed['total_images_per_channel'] is not None else 0
+
+        if len(self._metadata_parsed[entry]) == 0 and total_images > 0:
             # if the file is not empty, we always have one of this entry
             self._metadata_parsed[entry] = [0]
 
@@ -67,7 +70,12 @@ class RawMetadata(object):
         return None
 
     def _parse_width_or_height(self, key):
-        return self.image_attributes[six.b('SLxImageAttributes')][six.b(key)]
+        try:
+            length = self.image_attributes[six.b('SLxImageAttributes')][six.b(key)]
+        except KeyError:
+            length = None
+
+        return length
 
     def _parse_height(self):
         return self._parse_width_or_height('uiHeight')
@@ -76,10 +84,16 @@ class RawMetadata(object):
         return self._parse_width_or_height('uiWidth')
 
     def _parse_date(self):
-        return parse_date(self.image_text_info[six.b('SLxImageTextInfo')])
+        try:
+            return parse_date(self.image_text_info[six.b('SLxImageTextInfo')])
+        except KeyError:
+            return None
 
     def _parse_calibration(self):
-        return self.image_calibration.get(six.b('SLxCalibration'), {}).get(six.b('dCalibration'))
+        try:
+            return self.image_calibration.get(six.b('SLxCalibration'), {}).get(six.b('dCalibration'))
+        except KeyError:
+            return None
 
     def _parse_frames(self):
         """The number of cycles.
@@ -99,7 +113,11 @@ class RawMetadata(object):
         if self.image_metadata_sequence is None:
             return []
 
-        metadata = self.image_metadata_sequence[six.b('SLxPictureMetadata')][six.b('sPicturePlanes')]
+        try:
+            metadata = self.image_metadata_sequence[six.b('SLxPictureMetadata')][six.b('sPicturePlanes')]
+        except KeyError:
+            return []
+
         channels = self._process_channels_metadata(metadata)
 
         return channels
@@ -148,7 +166,10 @@ class RawMetadata(object):
         if self.image_text_info is None:
             return dimension_text
 
-        textinfo = self.image_text_info[six.b('SLxImageTextInfo')].values()
+        try:
+            textinfo = self.image_text_info[six.b('SLxImageTextInfo')].values()
+        except KeyError:
+            return dimension_text
 
         for line in textinfo:
             entry = self._parse_dimension_text_line(line)
@@ -186,7 +207,12 @@ class RawMetadata(object):
         """
         if self.image_attributes is None:
             return 0
-        return self.image_attributes[six.b('SLxImageAttributes')][six.b('uiSequenceCount')]
+        try:
+            total_images = self.image_attributes[six.b('SLxImageAttributes')][six.b('uiSequenceCount')]
+        except KeyError:
+            total_images = None
+
+        return total_images
 
     def _parse_roi_metadata(self):
         """Parse the raw ROI metadata.
