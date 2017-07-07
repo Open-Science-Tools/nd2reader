@@ -383,9 +383,24 @@ class RawMetadata(object):
             interval = get_from_dict_if_exists('dAvgPeriodDiff', loop)
         if interval is None or interval <= 0:
             # In some cases, both keys are not saved. Then try to calculate it.
-            number_of_loops = get_from_dict_if_exists('uiCount', loop)
-            number_of_loops = number_of_loops if number_of_loops is not None and number_of_loops > 0 else 1
-            interval = duration / number_of_loops
+            interval = RawMetadata._guess_sampling_from_loops(duration, loop)
+        return interval
+
+    @staticmethod
+    def _guess_sampling_from_loops(duration, loop):
+        """ In some cases, both keys are not saved. Then try to calculate it.
+        
+        Args:
+            duration: the total duration of the loop
+            loop: the raw loop data
+
+        Returns:
+            float: the guessed sampling interval in milliseconds
+
+        """
+        number_of_loops = get_from_dict_if_exists('uiCount', loop)
+        number_of_loops = number_of_loops if number_of_loops is not None and number_of_loops > 0 else 1
+        interval = duration / number_of_loops
         return interval
 
     @property

@@ -5,7 +5,8 @@ from nd2reader.artificial import ArtificialND2
 
 class TestLabelMap(unittest.TestCase):
     def setUp(self):
-        self.raw_text, self.locations = ArtificialND2.create_label_map_bytes()
+        self.nd2 = ArtificialND2('test_data/test_nd2_label_map001.nd2')
+        self.raw_text, self.locations = self.nd2.raw_text, self.nd2.locations
         self.label_map = LabelMap(self.raw_text)
 
     def test_image_data_location(self):
