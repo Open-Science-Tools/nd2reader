@@ -10,6 +10,8 @@ class ND2Reader(FramesSequenceND):
     This is the main class: use this to process your .nd2 files.
     """
 
+    class_priority = 12
+
     def __init__(self, filename):
         super(self.__class__, self).__init__()
         self.filename = filename
