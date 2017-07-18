@@ -1,4 +1,5 @@
 import unittest
+import six
 
 from nd2reader.artificial import ArtificialND2
 from nd2reader.label_map import LabelMap
@@ -39,7 +40,7 @@ class TestRawMetadata(unittest.TestCase):
 
     def _assert_dicts_equal(self, parsed_dict, original_dict):
         for attribute in original_dict.keys():
-            parsed_key = bytes(attribute, 'utf-8')
+            parsed_key = six.b(attribute)
             self.assertIn(parsed_key, parsed_dict.keys())
 
             if isinstance(parsed_dict[parsed_key], dict):

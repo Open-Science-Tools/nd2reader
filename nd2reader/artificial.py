@@ -177,7 +177,7 @@ class ArtificialND2(object):
         elif isinstance(data, float):
             raw_data = struct.pack('d', data)
         elif isinstance(data, str):
-            raw_data = bytes(data, 'utf-8')
+            raw_data = six.b(data)
 
         return raw_data
 
@@ -198,7 +198,7 @@ class ArtificialND2(object):
 
         for data_key in data.keys():
             # names have always one character extra and are padded in zero bytes???
-            b_data_key = b''.join([struct.pack('cx', bytes(s, 'utf-8')) for s in data_key]) + struct.pack('xx')
+            b_data_key = six.b('').join([struct.pack('cx', six.b(s)) for s in data_key]) + struct.pack('xx')
 
             # header consists of data type and length of key name, it is represented by 2 unsigned chars
             raw_data += struct.pack('BB', self._get_data_type(data[data_key]), len(data_key) + 1)
