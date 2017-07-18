@@ -257,7 +257,7 @@ def _get_value(data, data_type, cursor_position):
               11: _parse_metadata_item}
     try:
         value = parser[data_type](data) if data_type < 11 else parser[data_type](data, cursor_position)
-    except KeyError:
+    except (KeyError, struct.error):
         value = None
 
     return value
@@ -289,10 +289,7 @@ def read_metadata(data, count):
             # We've reached the end of some hierarchy of data
             break
 
-        if six.PY3:
-            header = header.decode("utf8")
-
-        data_type, name_length = map(ord, header)
+        data_type, name_length = struct.unpack('BB', header)
         name = data.read(name_length * 2).decode("utf16")[:-1].encode("utf8")
         value = _get_value(data, data_type, cursor_position)
 

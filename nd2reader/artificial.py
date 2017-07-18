@@ -12,6 +12,15 @@ class ArtificialND2(object):
     """
     header = 0xabeceda
     relative_offset = 0
+    data_types = {'unsigned_char': 1,
+                  'unsigned_int': 2,
+                  'unsigned_int_2': 3,
+                  'unsigned_long': 5,
+                  'double': 6,
+                  'string': 8,
+                  'char_array': 9,
+                  'metadata_item': 11,
+                  }
 
     def __init__(self, file, version=(3, 0)):
         self.version = version
@@ -151,14 +160,85 @@ class ArtificialND2(object):
         return raw_text, locations, file_data_dict
 
     def _pack_data_with_metadata(self, data):
-        data = struct.pack('I', data)
-        raw_data = struct.pack("IIQ", self.header, self.relative_offset, len(data))
-        raw_data += data
+        packed_data = self._pack_raw_data_with_metadata(data)
+
+        raw_data = struct.pack("IIQ", self.header, self.relative_offset, len(packed_data))
+        raw_data += packed_data
+
+        return raw_data
+
+    def _pack_raw_data_with_metadata(self, data):
+        raw_data = b''
+
+        if isinstance(data, dict):
+            raw_data = self._pack_dict_with_metadata(data)
+        elif isinstance(data, int):
+            raw_data = struct.pack('I', data)
+        elif isinstance(data, float):
+            raw_data = struct.pack('d', data)
+        elif isinstance(data, str):
+            raw_data = bytes(data, 'utf-8')
+
+        return raw_data
+
+    def _get_data_type(self, data):
+        if isinstance(data, dict):
+            return self.data_types['metadata_item']
+        elif isinstance(data, int):
+            return self.data_types['unsigned_int']
+        elif isinstance(data, float):
+            return self.data_types['double']
+        elif isinstance(data, str):
+            return self.data_types['string']
+
+        return np.max(self.data_types.values()) + 1
+
+    def _pack_dict_with_metadata(self, data):
+        raw_data = b''
+
+        for data_key in data.keys():
+            # names have always one character extra and are padded in zero bytes???
+            b_data_key = b''.join([struct.pack('cx', bytes(s, 'utf-8')) for s in data_key]) + struct.pack('xx')
+
+            # header consists of data type and length of key name, it is represented by 2 unsigned chars
+            raw_data += struct.pack('BB', self._get_data_type(data[data_key]), len(data_key) + 1)
+            raw_data += b_data_key
+
+            sub_data = self._pack_raw_data_with_metadata(data[data_key])
+
+            if isinstance(data[data_key], dict):
+                # Pack: the number of keys and the length of raw data until now, sub data
+                # and the 12 bytes that we add now
+                raw_data += struct.pack("<IQ", len(data[data_key].keys()), len(sub_data) + len(raw_data) + 12)
+
+            raw_data += sub_data
+
+            if isinstance(data[data_key], dict):
+                # apparently there is also a huge empty space
+                raw_data += b''.join([struct.pack('x')] * len(data[data_key].keys()) * 8)
+
         return raw_data
 
     def _get_file_data(self, labels):
         file_data = [
-            7,  # ImageAttributesLV!",
+            {
+                'SLxImageAttributes':
+                    {
+                        'uiWidth': 128,
+                        'uiWidthBytes': 256,
+                        'uiHeight': 128,
+                        'uiComp': 1,
+                        'uiBpcInMemory': 16,
+                        'uiBpcSignificant': 12,
+                        'uiSequenceCount': 70,
+                        'uiTileWidth': 128,
+                        'uiTileHeight': 128,
+                        'eCompression': 2,
+                        'dCompressionParam': -1.0,
+                        'ePixelType': 1,
+                        'uiVirtualComponents': 1
+                    }
+            },  # ImageAttributesLV!",
             7,  # ImageTextInfoLV!",
             7,  # ImageMetadataLV!",
             7,  # ImageMetadataSeqLV|0!",

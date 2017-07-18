@@ -36,3 +36,18 @@ class TestRawMetadata(unittest.TestCase):
 
     def test_pfs_status(self):
         self.assertEqual(self.file_data['pfs_status'], self.metadata.pfs_status[0])
+
+    def _assert_dicts_equal(self, parsed_dict, original_dict):
+        for attribute in original_dict.keys():
+            parsed_key = bytes(attribute, 'utf-8')
+            self.assertIn(parsed_key, parsed_dict.keys())
+
+            if isinstance(parsed_dict[parsed_key], dict):
+                self._assert_dicts_equal(parsed_dict[parsed_key], original_dict[attribute])
+            else:
+                self.assertEqual(parsed_dict[parsed_key], original_dict[attribute])
+
+    def test_image_attributes(self):
+        parsed_dict = self.metadata.image_attributes
+
+        self._assert_dicts_equal(parsed_dict, self.file_data['image_attributes'])
