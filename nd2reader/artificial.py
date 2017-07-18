@@ -176,8 +176,6 @@ class ArtificialND2(object):
             raw_data = struct.pack('I', data)
         elif isinstance(data, float):
             raw_data = struct.pack('d', data)
-        elif isinstance(data, str):
-            raw_data = six.b(data)
 
         return raw_data
 
@@ -186,12 +184,8 @@ class ArtificialND2(object):
             return self.data_types['metadata_item']
         elif isinstance(data, int):
             return self.data_types['unsigned_int']
-        elif isinstance(data, float):
+        else:
             return self.data_types['double']
-        elif isinstance(data, str):
-            return self.data_types['string']
-
-        return np.max(self.data_types.values()) + 1
 
     def _pack_dict_with_metadata(self, data):
         raw_data = b''
