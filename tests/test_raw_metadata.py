@@ -35,6 +35,11 @@ class TestRawMetadata(unittest.TestCase):
         for required in required_keys:
             self.assertTrue(required in metadata)
 
+    def test_cached_metadata(self):
+        metadata_one = self.metadata.get_parsed_metadata()
+        metadata_two = self.metadata.get_parsed_metadata()
+        self.assertEqual(metadata_one, metadata_two)
+
     def test_pfs_status(self):
         self.assertEqual(self.file_data['pfs_status'], self.metadata.pfs_status[0])
 

@@ -8,7 +8,7 @@ import struct
 from nd2reader.artificial import ArtificialND2
 from nd2reader.common import get_version, parse_version, parse_date, _add_to_metadata, _parse_unsigned_char, \
     _parse_unsigned_int, _parse_unsigned_long, _parse_double, check_or_make_dir, _parse_string, _parse_char_array, \
-    get_from_dict_if_exists
+    get_from_dict_if_exists, read_chunk
 from nd2reader.exceptions import InvalidVersionError
 
 
@@ -120,3 +120,36 @@ class TestCommon(unittest.TestCase):
         self.assertIsNone(get_from_dict_if_exists('nowhere', test_dict))
         self.assertEqual(get_from_dict_if_exists('existing', test_dict), 'test')
         self.assertEqual(get_from_dict_if_exists('string', test_dict, convert_key_to_binary=False), 'test2')
+
+    def test_read_chunk(self):
+        with ArtificialND2(self.test_file) as artificial:
+            fh = artificial.file_handle
+            chunk_location = artificial.locations['image_attributes'][0]
+
+            chunk_read = read_chunk(fh, chunk_location)
+            real_data = six.BytesIO(artificial.raw_text)
+
+            real_data.seek(chunk_location)
+
+            # The chunk metadata is always 16 bytes long
+            chunk_metadata = real_data.read(16)
+            header, relative_offset, data_length = struct.unpack("IIQ", chunk_metadata)
+            self.assertEquals(header, 0xabeceda)
+
+            # We start at the location of the chunk metadata, skip over the metadata, and then proceed to the
+            # start of the actual data field, which is at some arbitrary place after the metadata.
+            real_data.seek(chunk_location + 16 + relative_offset)
+
+            real_chunk = real_data.read(data_length)
+
+            self.assertEqual(real_chunk, chunk_read)
+
+    def test_read_chunk_fail_bad_header(self):
+        with ArtificialND2(self.test_file) as artificial:
+            fh = artificial.file_handle
+            chunk_location = artificial.locations['image_attributes'][0]
+
+            with self.assertRaises(ValueError) as context:
+                read_chunk(fh, chunk_location + 1)
+
+            self.assertEquals(str(context.exception), "The ND2 file seems to be corrupted.")

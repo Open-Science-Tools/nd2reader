@@ -24,7 +24,7 @@ class ArtificialND2(object):
 
     def __init__(self, file, version=(3, 0)):
         self.version = version
-        self.raw_text, self.locations, self.data = None, None, None
+        self.raw_text, self.locations, self.data = b'', None, None
         check_or_make_dir(path.dirname(file))
         self._fh = open(file, 'w+b', 0)
         self.write_file()
@@ -53,16 +53,17 @@ class ArtificialND2(object):
 
     def write_file(self):
         self.write_version()
-        self.raw_text, self.locations, self.data = self.write_label_map()
+        self.locations, self.data = self.write_label_map()
+        self._fh.write(self.raw_text)
 
     def write_version(self):
         """Write file header
         """
         # write 16 empty bytes
-        self._fh.write(bytearray(16))
+        self.raw_text += bytearray(16)
 
         # write version info
-        self._fh.write(self._get_version_string())
+        self.raw_text += self._get_version_string()
 
     def _get_version_string(self):
         return six.b('ND2 FILE SIGNATURE CHUNK NAME01!Ver%s.%s' % self.version)
@@ -72,9 +73,9 @@ class ArtificialND2(object):
 
     def write_label_map(self):
         raw_text, locations, data = self.create_label_map_bytes()
-        self._fh.write(raw_text)
+        self.raw_text += raw_text
 
-        return raw_text, locations, data
+        return locations, data
 
     def create_label_map_bytes(self):
         """Construct a binary label map
