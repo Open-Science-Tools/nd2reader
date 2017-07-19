@@ -321,23 +321,21 @@ class RawMetadata(object):
         """Parse the metadata of the ND experiment
 
         """
+        self._metadata_parsed['experiment'] = {
+            'description': 'unknown',
+            'loops': []
+        }
+
         if self.image_metadata is None or six.b('SLxExperiment') not in self.image_metadata:
             return
 
         raw_data = self.image_metadata[six.b('SLxExperiment')]
 
-        experimental_data = {
-            'description': 'unknown',
-            'loops': []
-        }
-
         if six.b('wsApplicationDesc') in raw_data:
-            experimental_data['description'] = raw_data[six.b('wsApplicationDesc')].decode('utf8')
+            self._metadata_parsed['experiment']['description'] = raw_data[six.b('wsApplicationDesc')].decode('utf8')
 
         if six.b('uLoopPars') in raw_data:
-            experimental_data['loops'] = self._parse_loop_data(raw_data[six.b('uLoopPars')])
-
-        self._metadata_parsed['experiment'] = experimental_data
+            self._metadata_parsed['experiment']['loops'] = self._parse_loop_data(raw_data[six.b('uLoopPars')])
 
     @staticmethod
     def _get_loops_from_data(loop_data):

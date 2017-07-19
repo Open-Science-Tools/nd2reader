@@ -180,6 +180,7 @@ class ND2Reader(FramesSequenceND):
 
         timesteps = np.array([])
         current_time = 0.0
+
         for loop in self.metadata['experiment']['loops']:
             if loop['stimulation']:
                 continue
