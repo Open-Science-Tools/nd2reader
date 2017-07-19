@@ -122,8 +122,8 @@ class Parser(object):
 
         """
         major_version, minor_version = get_version(self._fh)
-        supported = self.supported_file_versions.get((major_version, minor_version)) or \
-                    self.supported_file_versions.get((major_version, None))
+        supported = self.supported_file_versions.get(
+            (major_version, minor_version)) or self.supported_file_versions.get((major_version, None))
 
         if not supported:
             raise InvalidVersionError("No parser is available for that version.")
@@ -149,6 +149,7 @@ class Parser(object):
             LabelMap: the computed label map
 
         """
+        # go 8 bytes back from file end
         self._fh.seek(-8, 2)
         chunk_map_start_location = struct.unpack("Q", self._fh.read(8))[0]
         self._fh.seek(chunk_map_start_location)

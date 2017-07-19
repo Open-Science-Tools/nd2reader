@@ -22,12 +22,12 @@ class ArtificialND2(object):
                   'metadata_item': 11,
                   }
 
-    def __init__(self, file, version=(3, 0)):
+    def __init__(self, file, version=(3, 0), skip_blocks=None):
         self.version = version
         self.raw_text, self.locations, self.data = b'', None, None
         check_or_make_dir(path.dirname(file))
         self._fh = open(file, 'w+b', 0)
-        self.write_file()
+        self.write_file(skip_blocks)
 
     def __enter__(self):
         return self
@@ -51,9 +51,23 @@ class ArtificialND2(object):
         if self._fh is not None:
             self._fh.close()
 
-    def write_file(self):
-        self.write_version()
-        self.locations, self.data = self.write_label_map()
+    def write_file(self, skip_blocks=None):
+        if skip_blocks is None:
+            skip_blocks = []
+
+        if 'version' not in skip_blocks:
+            # write version header at start of the file
+            self.write_version()
+
+        if 'label_map' not in skip_blocks:
+            # write label map + data in the center
+            self.locations, self.data = self.write_label_map()
+
+        if 'label_map_marker' not in skip_blocks:
+            # write start position of label map at the end of the file
+            self.write_label_map_info()
+
+        # write all to file
         self._fh.write(self.raw_text)
 
     def write_version(self):
@@ -64,6 +78,12 @@ class ArtificialND2(object):
 
         # write version info
         self.raw_text += self._get_version_string()
+
+    def write_label_map_info(self):
+        """Write the location of the start of the label map at the end of the file
+        """
+        location = self._get_version_byte_length()
+        self.raw_text += struct.pack("Q", location)
 
     def _get_version_string(self):
         return six.b('ND2 FILE SIGNATURE CHUNK NAME01!Ver%s.%s' % self.version)
