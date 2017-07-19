@@ -197,6 +197,8 @@ class ArtificialND2(object):
             raw_data = struct.pack('I', data)
         elif isinstance(data, float):
             raw_data = struct.pack('d', data)
+        elif isinstance(data, str):
+            raw_data = self._str_to_padded_bytes(data)
 
         return raw_data
 
@@ -205,15 +207,21 @@ class ArtificialND2(object):
             return self.data_types['metadata_item']
         elif isinstance(data, int):
             return self.data_types['unsigned_int']
+        elif isinstance(data, str):
+            return self.data_types['string']
         else:
             return self.data_types['double']
+
+    @staticmethod
+    def _str_to_padded_bytes(data):
+        return six.b('').join([struct.pack('cx', six.b(s)) for s in data]) + struct.pack('xx')
 
     def _pack_dict_with_metadata(self, data):
         raw_data = b''
 
         for data_key in data.keys():
             # names have always one character extra and are padded in zero bytes???
-            b_data_key = six.b('').join([struct.pack('cx', six.b(s)) for s in data_key]) + struct.pack('xx')
+            b_data_key = self._str_to_padded_bytes(data_key)
 
             # header consists of data type and length of key name, it is represented by 2 unsigned chars
             raw_data += struct.pack('BB', self._get_data_type(data[data_key]), len(data_key) + 1)
@@ -256,7 +264,20 @@ class ArtificialND2(object):
             },  # ImageAttributesLV!",
             7,  # ImageTextInfoLV!",
             7,  # ImageMetadataLV!",
-            7,  # ImageMetadataSeqLV|0!",
+            {
+                'SLxPictureMetadata':
+                    {
+                        'sPicturePlanes':
+                            {
+                                'sPlaneNew': {
+                                    # channels are numbered a0, a1, ..., aN
+                                    'a0': {
+                                        'sDescription': 'TRITC'
+                                    }
+                                }
+                            }
+                    }
+            },  # ImageMetadataSeqLV|0!",
             7,  # ImageCalibrationLV|0!",
             7,  # CustomData|X!",
             7,  # CustomData|Y!",

@@ -57,3 +57,8 @@ class TestRawMetadata(unittest.TestCase):
         parsed_dict = self.metadata.image_attributes
 
         self._assert_dicts_equal(parsed_dict, self.file_data['image_attributes'])
+
+    def test_color_channels(self):
+        parsed_channels = self.metadata.get_parsed_metadata()['channels']
+
+        self.assertEquals(parsed_channels, ['TRITC'])

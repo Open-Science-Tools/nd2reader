@@ -136,7 +136,10 @@ class RawMetadata(object):
         for (label, chan), valid in zip(sorted(metadata[six.b('sPlaneNew')].items()), validity):
             if not valid:
                 continue
-            channels.append(chan[six.b('sDescription')].decode("utf8"))
+            if chan[six.b('sDescription')] is not None:
+                channels.append(chan[six.b('sDescription')].decode("utf8"))
+            else:
+                channels.append('Unknown')
         return channels
 
     def _parse_fields_of_view(self):

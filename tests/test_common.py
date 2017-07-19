@@ -104,7 +104,7 @@ class TestCommon(unittest.TestCase):
         test_string = 'colloid'
         file = self._prepare_bin_stream("%ds" % len(test_string), six.b(test_string))
         parsed = _parse_string(file)
-        self.assertEqual(parsed, test_string)
+        self.assertEqual(parsed, six.b(test_string))
 
         test_data = [1, 2, 3, 4, 5]
         file = self._prepare_bin_stream("Q" + ''.join(['B'] * len(test_data)), len(test_data), *test_data)

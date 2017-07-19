@@ -165,7 +165,7 @@ def _parse_string(data):
     try:
         decoded = value.decode("utf16")[:-1].encode("utf8")
     except UnicodeDecodeError:
-        decoded = value.decode('utf8')
+        decoded = value.decode('utf8').encode("utf8")
 
     return decoded
 
