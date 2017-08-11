@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader.artificial &#8212; nd2reader 3.0.4 documentation</title>
+    <title>nd2reader.artificial &#8212; nd2reader 3.0.5 documentation</title>
     
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -13,7 +12,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.0.4',
+        VERSION:     '3.0.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -25,7 +24,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -35,7 +34,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -48,7 +47,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.5</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -121,15 +120,31 @@
 <span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">from</span> <span class="nn">nd2reader.common</span> <span class="k">import</span> <span class="n">check_or_make_dir</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">path</span>
 
 
 <div class="viewcode-block" id="ArtificialND2"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.artificial.ArtificialND2">[docs]</a><span class="k">class</span> <span class="nc">ArtificialND2</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Artificial ND2 class (for testing purposes)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="mh">0xabeceda</span>
+    <span class="n">relative_offset</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">data_types</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;unsigned_char&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                  <span class="s1">&#39;unsigned_int&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                  <span class="s1">&#39;unsigned_int_2&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                  <span class="s1">&#39;unsigned_long&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                  <span class="s1">&#39;double&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                  <span class="s1">&#39;string&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                  <span class="s1">&#39;char_array&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+                  <span class="s1">&#39;metadata_item&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
+                  <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_version</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">skip_blocks</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">version</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw_text</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">locations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="n">check_or_make_dir</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;w+b&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="n">skip_blocks</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span>
@@ -153,18 +168,53 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ArtificialND2.write_version"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.artificial.ArtificialND2.write_version">[docs]</a>    <span class="k">def</span> <span class="nf">write_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+<div class="viewcode-block" id="ArtificialND2.write_file"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.artificial.ArtificialND2.write_file">[docs]</a>    <span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skip_blocks</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">skip_blocks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">skip_blocks</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="s1">&#39;version&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">skip_blocks</span><span class="p">:</span>
+            <span class="c1"># write version header at start of the file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_version</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="s1">&#39;label_map&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">skip_blocks</span><span class="p">:</span>
+            <span class="c1"># write label map + data in the center</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">locations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_label_map</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="s1">&#39;label_map_marker&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">skip_blocks</span><span class="p">:</span>
+            <span class="c1"># write start position of label map at the end of the file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_label_map_info</span><span class="p">()</span>
+
+        <span class="c1"># write all to file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_text</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ArtificialND2.write_version"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.artificial.ArtificialND2.write_version">[docs]</a>    <span class="k">def</span> <span class="nf">write_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write file header</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># write 16 empty bytes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="mi">16</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw_text</span> <span class="o">+=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
 
         <span class="c1"># write version info</span>
-        <span class="n">version_info</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;ND2 FILE SIGNATURE CHUNK NAME01!Ver</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">version</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">version_info</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw_text</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_version_string</span><span class="p">()</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="ArtificialND2.create_label_map_bytes"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.artificial.ArtificialND2.create_label_map_bytes">[docs]</a>    <span class="k">def</span> <span class="nf">create_label_map_bytes</span><span class="p">():</span>
+<div class="viewcode-block" id="ArtificialND2.write_label_map_info"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.artificial.ArtificialND2.write_label_map_info">[docs]</a>    <span class="k">def</span> <span class="nf">write_label_map_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write the location of the start of the label map at the end of the file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_version_byte_length</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw_text</span> <span class="o">+=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="n">location</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_version_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;ND2 FILE SIGNATURE CHUNK NAME01!Ver</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_version_byte_length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">16</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_version_string</span><span class="p">())</span>
+
+<div class="viewcode-block" id="ArtificialND2.write_label_map"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.artificial.ArtificialND2.write_label_map">[docs]</a>    <span class="k">def</span> <span class="nf">write_label_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">raw_text</span><span class="p">,</span> <span class="n">locations</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_label_map_bytes</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw_text</span> <span class="o">+=</span> <span class="n">raw_text</span>
+
+        <span class="k">return</span> <span class="n">locations</span><span class="p">,</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="ArtificialND2.create_label_map_bytes"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.artificial.ArtificialND2.create_label_map_bytes">[docs]</a>    <span class="k">def</span> <span class="nf">create_label_map_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Construct a binary label map</span>
 
 <span class="sd">        Returns:</span>
@@ -172,43 +222,206 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">raw_text</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="n">labels</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;image_attributes&#39;</span><span class="p">:</span> <span class="s2">&quot;ImageAttributesLV!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;image_text_info&#39;</span><span class="p">:</span> <span class="s2">&quot;ImageTextInfoLV!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;image_metadata&#39;</span><span class="p">:</span> <span class="s2">&quot;ImageMetadataLV!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;image_metadata_sequence&#39;</span><span class="p">:</span> <span class="s2">&quot;ImageMetadataSeqLV|0!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;image_calibration&#39;</span><span class="p">:</span> <span class="s2">&quot;ImageCalibrationLV|0!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;x_data&#39;</span><span class="p">:</span> <span class="s2">&quot;CustomData|X!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;y_data&#39;</span><span class="p">:</span> <span class="s2">&quot;CustomData|Y!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;z_data&#39;</span><span class="p">:</span> <span class="s2">&quot;CustomData|Z!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;roi_metadata&#39;</span><span class="p">:</span> <span class="s2">&quot;CustomData|RoiMetadata_v1!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;pfs_status&#39;</span><span class="p">:</span> <span class="s2">&quot;CustomData|PFS_STATUS!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;pfs_offset&#39;</span><span class="p">:</span> <span class="s2">&quot;CustomData|PFS_OFFSET!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;guid&#39;</span><span class="p">:</span> <span class="s2">&quot;CustomData|GUIDStore!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s2">&quot;CustomData|CustomDescriptionV1_0!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;camera_exposure_time&#39;</span><span class="p">:</span> <span class="s2">&quot;CustomData|Camera_ExposureTime1!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;camera_temp&#39;</span><span class="p">:</span> <span class="s2">&quot;CustomData|CameraTemp1!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;acquisition_times&#39;</span><span class="p">:</span> <span class="s2">&quot;CustomData|AcqTimesCache!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;acquisition_times_2&#39;</span><span class="p">:</span> <span class="s2">&quot;CustomData|AcqTimes2Cache!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;acquisition_frames&#39;</span><span class="p">:</span> <span class="s2">&quot;CustomData|AcqFramesCache!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;lut_data&#39;</span><span class="p">:</span> <span class="s2">&quot;CustomDataVar|LUTDataV1_0!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;grabber_settings&#39;</span><span class="p">:</span> <span class="s2">&quot;CustomDataVar|GrabberCameraSettingsV1_0!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;custom_data&#39;</span><span class="p">:</span> <span class="s2">&quot;CustomDataVar|CustomDataV2_0!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;app_info&#39;</span><span class="p">:</span> <span class="s2">&quot;CustomDataVar|AppInfo_V1_0!&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;image_frame_0&#39;</span><span class="p">:</span> <span class="s2">&quot;ImageDataSeq|0!&quot;</span>
-        <span class="p">}</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;image_attributes&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;image_text_info&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;image_metadata&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;image_metadata_sequence&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;image_calibration&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;x_data&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;y_data&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;z_data&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;roi_metadata&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;pfs_status&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;pfs_offset&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;guid&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;description&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;camera_exposure_time&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;camera_temp&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;acquisition_times&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;acquisition_times_2&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;acquisition_frames&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;lut_data&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;grabber_settings&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;custom_data&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;app_info&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;image_frame_0&#39;</span>
+        <span class="p">]</span>
+        <span class="n">file_labels</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;ImageAttributesLV!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ImageTextInfoLV!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ImageMetadataLV!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ImageMetadataSeqLV|0!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ImageCalibrationLV|0!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CustomData|X!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CustomData|Y!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CustomData|Z!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CustomData|RoiMetadata_v1!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CustomData|PFS_STATUS!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CustomData|PFS_OFFSET!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CustomData|GUIDStore!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CustomData|CustomDescriptionV1_0!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CustomData|Camera_ExposureTime1!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CustomData|CameraTemp1!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CustomData|AcqTimesCache!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CustomData|AcqTimes2Cache!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CustomData|AcqFramesCache!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CustomDataVar|LUTDataV1_0!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CustomDataVar|GrabberCameraSettingsV1_0!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CustomDataVar|CustomDataV2_0!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CustomDataVar|AppInfo_V1_0!&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ImageDataSeq|0!&quot;</span>
+        <span class="p">]</span>
+
+        <span class="n">file_data</span><span class="p">,</span> <span class="n">file_data_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_file_data</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+        <span class="n">locations</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1"># generate random positions and lengths</span>
-        <span class="n">lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_integers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">999</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
-        <span class="n">positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">lengths</span><span class="p">),</span> <span class="n">lengths</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">version_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_version_byte_length</span><span class="p">()</span>
 
-        <span class="k">for</span> <span class="n">length</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">lengths</span><span class="p">,</span> <span class="n">positions</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
-            <span class="n">raw_text</span> <span class="o">+=</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">label</span><span class="p">])</span>
-            <span class="n">raw_text</span> <span class="o">+=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;QQ&#39;</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+        <span class="c1"># calculate data length</span>
+        <span class="n">label_length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="n">l</span><span class="p">))</span> <span class="o">+</span> <span class="mi">16</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">file_labels</span><span class="p">])</span>
 
-        <span class="k">return</span> <span class="n">raw_text</span><span class="p">,</span> <span class="n">data</span></div></div>
+        <span class="c1"># write label map</span>
+        <span class="n">cur_pos</span> <span class="o">=</span> <span class="n">version_length</span> <span class="o">+</span> <span class="n">label_length</span>
+        <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">file_label</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">file_labels</span><span class="p">,</span> <span class="n">file_data</span><span class="p">):</span>
+            <span class="n">raw_text</span> <span class="o">+=</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="n">file_label</span><span class="p">)</span>
+            <span class="n">data_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">raw_text</span> <span class="o">+=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;QQ&#39;</span><span class="p">,</span> <span class="n">cur_pos</span><span class="p">,</span> <span class="n">data_length</span><span class="p">)</span>
+            <span class="n">locations</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">cur_pos</span><span class="p">,</span> <span class="n">data_length</span><span class="p">)</span>
+            <span class="n">cur_pos</span> <span class="o">+=</span> <span class="n">data_length</span>
+
+        <span class="c1"># write data</span>
+        <span class="n">raw_text</span> <span class="o">+=</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">file_data</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">raw_text</span><span class="p">,</span> <span class="n">locations</span><span class="p">,</span> <span class="n">file_data_dict</span></div>
+
+    <span class="k">def</span> <span class="nf">_pack_data_with_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">packed_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pack_raw_data_with_metadata</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">raw_data</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;IIQ&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">relative_offset</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">packed_data</span><span class="p">))</span>
+        <span class="n">raw_data</span> <span class="o">+=</span> <span class="n">packed_data</span>
+
+        <span class="k">return</span> <span class="n">raw_data</span>
+
+    <span class="k">def</span> <span class="nf">_pack_raw_data_with_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">raw_data</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">raw_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pack_dict_with_metadata</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">raw_data</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="n">raw_data</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">raw_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_str_to_padded_bytes</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">raw_data</span>
+
+    <span class="k">def</span> <span class="nf">_get_data_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_types</span><span class="p">[</span><span class="s1">&#39;metadata_item&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_types</span><span class="p">[</span><span class="s1">&#39;unsigned_int&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_types</span><span class="p">[</span><span class="s1">&#39;string&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_types</span><span class="p">[</span><span class="s1">&#39;double&#39;</span><span class="p">]</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_str_to_padded_bytes</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;cx&#39;</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="n">s</span><span class="p">))</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">data</span><span class="p">])</span> <span class="o">+</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;xx&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_pack_dict_with_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">raw_data</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+
+        <span class="k">for</span> <span class="n">data_key</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="c1"># names have always one character extra and are padded in zero bytes???</span>
+            <span class="n">b_data_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_str_to_padded_bytes</span><span class="p">(</span><span class="n">data_key</span><span class="p">)</span>
+
+            <span class="c1"># header consists of data type and length of key name, it is represented by 2 unsigned chars</span>
+            <span class="n">raw_data</span> <span class="o">+=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;BB&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_data_type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">data_key</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_key</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">raw_data</span> <span class="o">+=</span> <span class="n">b_data_key</span>
+
+            <span class="n">sub_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pack_raw_data_with_metadata</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">data_key</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">data_key</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="c1"># Pack: the number of keys and the length of raw data until now, sub data</span>
+                <span class="c1"># and the 12 bytes that we add now</span>
+                <span class="n">raw_data</span> <span class="o">+=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;IQ&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">data_key</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">len</span><span class="p">(</span><span class="n">sub_data</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span> <span class="o">+</span> <span class="mi">12</span><span class="p">)</span>
+
+            <span class="n">raw_data</span> <span class="o">+=</span> <span class="n">sub_data</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">data_key</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="c1"># apparently there is also a huge empty space</span>
+                <span class="n">raw_data</span> <span class="o">+=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">data_key</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">raw_data</span>
+
+    <span class="k">def</span> <span class="nf">_get_file_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+        <span class="n">file_data</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;SLxImageAttributes&#39;</span><span class="p">:</span>
+                    <span class="p">{</span>
+                        <span class="s1">&#39;uiWidth&#39;</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span>
+                        <span class="s1">&#39;uiWidthBytes&#39;</span><span class="p">:</span> <span class="mi">256</span><span class="p">,</span>
+                        <span class="s1">&#39;uiHeight&#39;</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span>
+                        <span class="s1">&#39;uiComp&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="s1">&#39;uiBpcInMemory&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+                        <span class="s1">&#39;uiBpcSignificant&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+                        <span class="s1">&#39;uiSequenceCount&#39;</span><span class="p">:</span> <span class="mi">70</span><span class="p">,</span>
+                        <span class="s1">&#39;uiTileWidth&#39;</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span>
+                        <span class="s1">&#39;uiTileHeight&#39;</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span>
+                        <span class="s1">&#39;eCompression&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                        <span class="s1">&#39;dCompressionParam&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span>
+                        <span class="s1">&#39;ePixelType&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="s1">&#39;uiVirtualComponents&#39;</span><span class="p">:</span> <span class="mi">1</span>
+                    <span class="p">}</span>
+            <span class="p">},</span>  <span class="c1"># ImageAttributesLV!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># ImageTextInfoLV!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># ImageMetadataLV!&quot;,</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;SLxPictureMetadata&#39;</span><span class="p">:</span>
+                    <span class="p">{</span>
+                        <span class="s1">&#39;sPicturePlanes&#39;</span><span class="p">:</span>
+                            <span class="p">{</span>
+                                <span class="s1">&#39;sPlaneNew&#39;</span><span class="p">:</span> <span class="p">{</span>
+                                    <span class="c1"># channels are numbered a0, a1, ..., aN</span>
+                                    <span class="s1">&#39;a0&#39;</span><span class="p">:</span> <span class="p">{</span>
+                                        <span class="s1">&#39;sDescription&#39;</span><span class="p">:</span> <span class="s1">&#39;TRITC&#39;</span>
+                                    <span class="p">}</span>
+                                <span class="p">}</span>
+                            <span class="p">}</span>
+                    <span class="p">}</span>
+            <span class="p">},</span>  <span class="c1"># ImageMetadataSeqLV|0!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># ImageCalibrationLV|0!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># CustomData|X!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># CustomData|Y!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># CustomData|Z!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># CustomData|RoiMetadata_v1!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># CustomData|PFS_STATUS!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># CustomData|PFS_OFFSET!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># CustomData|GUIDStore!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># CustomData|CustomDescriptionV1_0!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># CustomData|Camera_ExposureTime1!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># CustomData|CameraTemp1!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># CustomData|AcqTimesCache!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># CustomData|AcqTimes2Cache!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># CustomData|AcqFramesCache!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># CustomDataVar|LUTDataV1_0!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># CustomDataVar|GrabberCameraSettingsV1_0!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># CustomDataVar|CustomDataV2_0!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># CustomDataVar|AppInfo_V1_0!&quot;,</span>
+            <span class="mi">7</span><span class="p">,</span>  <span class="c1"># ImageDataSeq|0!&quot;</span>
+        <span class="p">]</span>
+
+        <span class="n">file_data_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">l</span><span class="p">:</span> <span class="n">d</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">file_data</span><span class="p">)}</span>
+
+        <span class="c1"># convert to bytes</span>
+        <span class="n">file_data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_pack_data_with_metadata</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">file_data</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">file_data</span><span class="p">,</span> <span class="n">file_data_dict</span></div>
 </pre></div>
 
     </div>
@@ -224,7 +437,7 @@
     </p>
     <p>
         &copy; Copyright 2017, Ruben Verweij.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.<br/>
     </p>
   </div>
 </footer>

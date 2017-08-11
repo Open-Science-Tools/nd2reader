@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader.common &#8212; nd2reader 3.0.4 documentation</title>
+    <title>nd2reader.common &#8212; nd2reader 3.0.5 documentation</title>
     
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -13,7 +12,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.0.4',
+        VERSION:     '3.0.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -25,7 +24,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -35,7 +34,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -48,7 +47,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.5</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -153,7 +152,7 @@
 <span class="sd">        tuple: Major and minor version</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">r&quot;&quot;&quot;^ND2 FILE SIGNATURE CHUNK NAME01!Ver(?P&lt;major&gt;\d)\.(?P&lt;minor&gt;\d)$&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&quot;&quot;^ND2 FILE SIGNATURE CHUNK NAME01!Ver(?P&lt;major&gt;\d)\.(?P&lt;minor&gt;\d)$&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
         <span class="c1"># We haven&#39;t seen a lot of ND2s but the ones we have seen conform to this</span>
@@ -283,7 +282,7 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">decoded</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf16&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">UnicodeDecodeError</span><span class="p">:</span>
-        <span class="n">decoded</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+        <span class="n">decoded</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">decoded</span>
 
@@ -373,7 +372,12 @@
               <span class="mi">8</span><span class="p">:</span> <span class="n">_parse_string</span><span class="p">,</span>
               <span class="mi">9</span><span class="p">:</span> <span class="n">_parse_char_array</span><span class="p">,</span>
               <span class="mi">11</span><span class="p">:</span> <span class="n">_parse_metadata_item</span><span class="p">}</span>
-    <span class="k">return</span> <span class="n">parser</span><span class="p">[</span><span class="n">data_type</span><span class="p">](</span><span class="n">data</span><span class="p">)</span> <span class="k">if</span> <span class="n">data_type</span> <span class="o">&lt;</span> <span class="mi">11</span> <span class="k">else</span> <span class="n">parser</span><span class="p">[</span><span class="n">data_type</span><span class="p">](</span><span class="n">data</span><span class="p">,</span> <span class="n">cursor_position</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">parser</span><span class="p">[</span><span class="n">data_type</span><span class="p">](</span><span class="n">data</span><span class="p">)</span> <span class="k">if</span> <span class="n">data_type</span> <span class="o">&lt;</span> <span class="mi">11</span> <span class="k">else</span> <span class="n">parser</span><span class="p">[</span><span class="n">data_type</span><span class="p">](</span><span class="n">data</span><span class="p">,</span> <span class="n">cursor_position</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="n">struct</span><span class="o">.</span><span class="n">error</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">value</span>
 
 
 <div class="viewcode-block" id="read_metadata"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.common.read_metadata">[docs]</a><span class="k">def</span> <span class="nf">read_metadata</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
@@ -402,10 +406,7 @@
             <span class="c1"># We&#39;ve reached the end of some hierarchy of data</span>
             <span class="k">break</span>
 
-        <span class="k">if</span> <span class="n">six</span><span class="o">.</span><span class="n">PY3</span><span class="p">:</span>
-            <span class="n">header</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
-
-        <span class="n">data_type</span><span class="p">,</span> <span class="n">name_length</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span>
+        <span class="n">data_type</span><span class="p">,</span> <span class="n">name_length</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;BB&#39;</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">name_length</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf16&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">_get_value</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data_type</span><span class="p">,</span> <span class="n">cursor_position</span><span class="p">)</span>
 
@@ -485,7 +486,7 @@
     </p>
     <p>
         &copy; Copyright 2017, Ruben Verweij.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.<br/>
     </p>
   </div>
 </footer>

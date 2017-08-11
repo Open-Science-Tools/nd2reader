@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader.raw_metadata &#8212; nd2reader 3.0.4 documentation</title>
+    <title>nd2reader.raw_metadata &#8212; nd2reader 3.0.5 documentation</title>
     
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -13,7 +12,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.0.4',
+        VERSION:     '3.0.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -25,7 +24,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -35,7 +34,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -48,7 +47,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.5</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -174,7 +173,10 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span></div>
 
     <span class="k">def</span> <span class="nf">_set_default_if_not_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="n">entry</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="s1">&#39;total_images_per_channel&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">total_images</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="s1">&#39;total_images_per_channel&#39;</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="s1">&#39;total_images_per_channel&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="n">entry</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">total_images</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># if the file is not empty, we always have one of this entry</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="n">entry</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -185,7 +187,12 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_parse_width_or_height</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_attributes</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxImageAttributes&#39;</span><span class="p">)][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_attributes</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxImageAttributes&#39;</span><span class="p">)][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">length</span>
 
     <span class="k">def</span> <span class="nf">_parse_height</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_width_or_height</span><span class="p">(</span><span class="s1">&#39;uiHeight&#39;</span><span class="p">)</span>
@@ -194,10 +201,16 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_width_or_height</span><span class="p">(</span><span class="s1">&#39;uiWidth&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_parse_date</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">parse_date</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_text_info</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxImageTextInfo&#39;</span><span class="p">)])</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">parse_date</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_text_info</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxImageTextInfo&#39;</span><span class="p">)])</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_parse_calibration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_calibration</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxCalibration&#39;</span><span class="p">),</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;dCalibration&#39;</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_calibration</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxCalibration&#39;</span><span class="p">),</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;dCalibration&#39;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_parse_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The number of cycles.</span>
@@ -205,7 +218,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            list: list of all the frame numbers</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="s2">r&quot;&quot;&quot;.*?T&#39;?\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&quot;&quot;.*?T&#39;?\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_parse_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;These are labels created by the NIS Elements user. Typically they may a short description of the filter cube</span>
@@ -217,27 +230,39 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_metadata_sequence</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
 
-        <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_metadata_sequence</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxPictureMetadata&#39;</span><span class="p">)][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;sPicturePlanes&#39;</span><span class="p">)]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_metadata_sequence</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxPictureMetadata&#39;</span><span class="p">)][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;sPicturePlanes&#39;</span><span class="p">)]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
         <span class="n">channels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_channels_metadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">channels</span>
 
     <span class="k">def</span> <span class="nf">_process_channels_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">):</span>
+        <span class="n">validity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_channel_validity_list</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+
+        <span class="c1"># Channel information is contained in dictionaries with the keys a0, a1...an where the number</span>
+        <span class="c1"># indicates the order in which the channel is stored. So by sorting the dicts alphabetically</span>
+        <span class="c1"># we get the correct order.</span>
+        <span class="n">channels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">valid</span><span class="p">,</span> <span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">chan</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">validity</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;sPlaneNew&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">items</span><span class="p">())):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">valid</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">chan</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;sDescription&#39;</span><span class="p">)]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">channels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chan</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;sDescription&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">channels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;Unknown&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">channels</span>
+
+    <span class="k">def</span> <span class="nf">_get_channel_validity_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">validity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_metadata</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxExperiment&#39;</span><span class="p">)][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;ppNextLevelEx&#39;</span><span class="p">)][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)][</span><span class="mi">0</span><span class="p">][</span>
                 <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;ppNextLevelEx&#39;</span><span class="p">)][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)][</span><span class="mi">0</span><span class="p">][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;pItemValid&#39;</span><span class="p">)]</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
             <span class="c1"># If none of the channels have been deleted, there is no validity list, so we just make one</span>
             <span class="n">validity</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">]</span>
-        <span class="c1"># Channel information is contained in dictionaries with the keys a0, a1...an where the number</span>
-        <span class="c1"># indicates the order in which the channel is stored. So by sorting the dicts alphabetically</span>
-        <span class="c1"># we get the correct order.</span>
-        <span class="n">channels</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">chan</span><span class="p">),</span> <span class="n">valid</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;sPlaneNew&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="n">validity</span><span class="p">):</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">valid</span><span class="p">:</span>
-                <span class="k">continue</span>
-            <span class="n">channels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chan</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;sDescription&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">channels</span>
+        <span class="k">return</span> <span class="n">validity</span>
 
     <span class="k">def</span> <span class="nf">_parse_fields_of_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The metadata contains information about fields of view, but it contains it even if some fields</span>
@@ -246,7 +271,7 @@
 <span class="sd">        NIS Elements can figure it out, but we haven&#39;t found it yet.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="s2">r&quot;&quot;&quot;.*?XY\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&quot;&quot;.*?XY\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_parse_z_levels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The different levels in the Z-plane.</span>
@@ -254,7 +279,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            list: the z levels, just a sequence from 0 to n.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="s2">r&quot;&quot;&quot;.*?Z\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&quot;&quot;.*?Z\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_parse_dimension_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;While there are metadata values that represent a lot of what we want to capture, they seem to be unreliable.</span>
@@ -266,7 +291,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_text_info</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">dimension_text</span>
 
-        <span class="n">textinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_text_info</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxImageTextInfo&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">textinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_text_info</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxImageTextInfo&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">dimension_text</span>
 
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">textinfo</span><span class="p">:</span>
             <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension_text_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -304,7 +332,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_attributes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_attributes</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxImageAttributes&#39;</span><span class="p">)][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;uiSequenceCount&#39;</span><span class="p">)]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">total_images</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_attributes</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxImageAttributes&#39;</span><span class="p">)][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;uiSequenceCount&#39;</span><span class="p">)]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">total_images</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">total_images</span>
 
     <span class="k">def</span> <span class="nf">_parse_roi_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Parse the raw ROI metadata.</span>
@@ -413,23 +446,21 @@
         <span class="sd">&quot;&quot;&quot;Parse the metadata of the ND experiment</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="s1">&#39;experiment&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;unknown&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;loops&#39;</span><span class="p">:</span> <span class="p">[]</span>
+        <span class="p">}</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_metadata</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxExperiment&#39;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_metadata</span><span class="p">:</span>
             <span class="k">return</span>
 
         <span class="n">raw_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_metadata</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;SLxExperiment&#39;</span><span class="p">)]</span>
 
-        <span class="n">experimental_data</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;unknown&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;loops&#39;</span><span class="p">:</span> <span class="p">[]</span>
-        <span class="p">}</span>
-
         <span class="k">if</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;wsApplicationDesc&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">raw_data</span><span class="p">:</span>
-            <span class="n">experimental_data</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw_data</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;wsApplicationDesc&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="s1">&#39;experiment&#39;</span><span class="p">][</span><span class="s1">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw_data</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;wsApplicationDesc&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;uLoopPars&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">raw_data</span><span class="p">:</span>
-            <span class="n">experimental_data</span><span class="p">[</span><span class="s1">&#39;loops&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_loop_data</span><span class="p">(</span><span class="n">raw_data</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;uLoopPars&#39;</span><span class="p">)])</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="s1">&#39;experiment&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">experimental_data</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="s1">&#39;experiment&#39;</span><span class="p">][</span><span class="s1">&#39;loops&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_loop_data</span><span class="p">(</span><span class="n">raw_data</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;uLoopPars&#39;</span><span class="p">)])</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_get_loops_from_data</span><span class="p">(</span><span class="n">loop_data</span><span class="p">):</span>
@@ -501,9 +532,24 @@
             <span class="n">interval</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;dAvgPeriodDiff&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">interval</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">interval</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># In some cases, both keys are not saved. Then try to calculate it.</span>
-            <span class="n">number_of_loops</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;uiCount&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
-            <span class="n">number_of_loops</span> <span class="o">=</span> <span class="n">number_of_loops</span> <span class="k">if</span> <span class="n">number_of_loops</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">number_of_loops</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span>
-            <span class="n">interval</span> <span class="o">=</span> <span class="n">duration</span> <span class="o">/</span> <span class="n">number_of_loops</span>
+            <span class="n">interval</span> <span class="o">=</span> <span class="n">RawMetadata</span><span class="o">.</span><span class="n">_guess_sampling_from_loops</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">interval</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_guess_sampling_from_loops</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">loop</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; In some cases, both keys are not saved. Then try to calculate it.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            duration: the total duration of the loop</span>
+<span class="sd">            loop: the raw loop data</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: the guessed sampling interval in milliseconds</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">number_of_loops</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;uiCount&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
+        <span class="n">number_of_loops</span> <span class="o">=</span> <span class="n">number_of_loops</span> <span class="k">if</span> <span class="n">number_of_loops</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">number_of_loops</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="n">interval</span> <span class="o">=</span> <span class="n">duration</span> <span class="o">/</span> <span class="n">number_of_loops</span>
         <span class="k">return</span> <span class="n">interval</span>
 
     <span class="nd">@property</span>
@@ -701,7 +747,7 @@
     </p>
     <p>
         &copy; Copyright 2017, Ruben Verweij.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.<br/>
     </p>
   </div>
 </footer>

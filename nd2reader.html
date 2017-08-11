@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader package &#8212; nd2reader 3.0.4 documentation</title>
+    <title>nd2reader package &#8212; nd2reader 3.0.5 documentation</title>
     
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,7 +12,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.0.4',
+        VERSION:     '3.0.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -25,7 +24,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,7 +35,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -49,7 +48,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.5</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -159,6 +158,11 @@ This is the main class: use this to process your .nd2 files.</p>
 <dd><p>Let PIMS open function use this reader for opening .nd2 files</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="nd2reader.reader.ND2Reader.class_priority">
+<code class="descname">class_priority</code><em class="property"> = 12</em><a class="headerlink" href="#nd2reader.reader.ND2Reader.class_priority" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="nd2reader.reader.ND2Reader.close">
 <code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.close" title="Permalink to this definition">¶</a></dt>
@@ -190,11 +194,11 @@ This is the main class: use this to process your .nd2 files.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> &#8211; The x-index (pims expects this)</li>
-<li><strong>y</strong> &#8211; The y-index (pims expects this)</li>
-<li><strong>c</strong> &#8211; The color channel number</li>
-<li><strong>t</strong> &#8211; The frame number</li>
-<li><strong>z</strong> &#8211; The z stack number</li>
+<li><strong>x</strong> – The x-index (pims expects this)</li>
+<li><strong>y</strong> – The y-index (pims expects this)</li>
+<li><strong>c</strong> – The color channel number</li>
+<li><strong>t</strong> – The frame number</li>
+<li><strong>z</strong> – The z stack number</li>
 </ul>
 </td>
 </tr>
@@ -281,12 +285,12 @@ This is the main class: use this to process your .nd2 files.</p>
 
 <dl class="attribute">
 <dt id="nd2reader.parser.Parser.CHUNK_MAP_END">
-<code class="descname">CHUNK_MAP_END</code><em class="property"> = b'ND2 CHUNK MAP SIGNATURE 0000001!'</em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_MAP_END" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CHUNK_MAP_END</code><em class="property"> = b’ND2 CHUNK MAP SIGNATURE 0000001!’</em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_MAP_END" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.parser.Parser.CHUNK_MAP_START">
-<code class="descname">CHUNK_MAP_START</code><em class="property"> = b'ND2 FILEMAP SIGNATURE NAME 0001!'</em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_MAP_START" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CHUNK_MAP_START</code><em class="property"> = b’ND2 FILEMAP SIGNATURE NAME 0001!’</em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_MAP_START" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -297,7 +301,7 @@ This is the main class: use this to process your .nd2 files.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; the index (which is simply the order in which the image was acquired)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) – the index (which is simply the order in which the image was acquired)</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">tuple of the field of view, the channel and the z level</td>
 </tr>
@@ -322,13 +326,13 @@ means/etc.)</p>
 was acquired). May return None if the ND2 contains multiple channels and not all were taken in each cycle (for
 example, if you take bright field images every minute, and GFP images every five minutes, there will be some
 indexes that do not contain an image. The reason for this is complicated, but suffice it to say that we hope to
-eliminate this possibility in future releases. For now, you&#8217;ll need to check if your image is None if you&#8217;re
+eliminate this possibility in future releases. For now, you’ll need to check if your image is None if you’re
 doing anything out of the ordinary.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; the index (which is simply the order in which the image was acquired)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) – the index (which is simply the order in which the image was acquired)</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the image</td>
 </tr>
@@ -347,12 +351,12 @@ doing anything out of the ordinary.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>frame_number</strong> &#8211; the frame number</li>
-<li><strong>field_of_view</strong> &#8211; the field of view</li>
-<li><strong>channel_name</strong> &#8211; the color channel name</li>
-<li><strong>z_level</strong> &#8211; the z level</li>
-<li><strong>height</strong> &#8211; the height of the image</li>
-<li><strong>width</strong> &#8211; the width of the image</li>
+<li><strong>frame_number</strong> – the frame number</li>
+<li><strong>field_of_view</strong> – the field of view</li>
+<li><strong>channel_name</strong> – the color channel name</li>
+<li><strong>z_level</strong> – the z level</li>
+<li><strong>height</strong> – the height of the image</li>
+<li><strong>width</strong> – the width of the image</li>
 </ul>
 </td>
 </tr>
@@ -389,7 +393,7 @@ doing anything out of the ordinary.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Yields:</th><td class="field-body"><em>float</em> &#8211; the acquisition time</td>
+<tr class="field-odd field"><th class="field-name">Yields:</th><td class="field-body"><em>float</em> – the acquisition time</td>
 </tr>
 </tbody>
 </table>
@@ -435,7 +439,7 @@ doing anything out of the ordinary.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Yields:</th><td class="field-body"><em>float</em> &#8211; the temperature</td>
+<tr class="field-odd field"><th class="field-name">Yields:</th><td class="field-body"><em>float</em> – the temperature</td>
 </tr>
 </tbody>
 </table>
@@ -620,7 +624,7 @@ doing anything out of the ordinary.</p>
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.roi_metadata">
 <code class="descname">roi_metadata</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.roi_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>Contains information about the defined ROIs</em> &#8211; shape, position and type (reference/background/stimulation).</p>
+<dd><p><em>Contains information about the defined ROIs</em> – shape, position and type (reference/background/stimulation).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1099,7 +1103,7 @@ doing anything out of the ordinary.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fh</strong> &#8211; File handle of the .nd2 file</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fh</strong> – File handle of the .nd2 file</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Major and minor version</td>
 </tr>
@@ -1117,7 +1121,7 @@ doing anything out of the ordinary.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text_info</strong> &#8211; the text that contains the date and time information</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text_info</strong> – the text that contains the date and time information</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the date and time of the acquisition</td>
 </tr>
@@ -1135,7 +1139,7 @@ doing anything out of the ordinary.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>unicode</em>) &#8211; the 19th through 54th byte of the ND2, representing the version</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>unicode</em>) – the 19th through 54th byte of the ND2, representing the version</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Major and minor version</td>
 </tr>
@@ -1153,9 +1157,9 @@ doing anything out of the ordinary.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fh</strong> &#8211; File handle of the nd2 file</li>
-<li><strong>kind</strong> &#8211; data type, can be one of &#8216;double&#8217;, &#8216;int&#8217; or &#8216;float&#8217;</li>
-<li><strong>chunk_location</strong> &#8211; the location of the array chunk in the binary nd2 file</li>
+<li><strong>fh</strong> – File handle of the nd2 file</li>
+<li><strong>kind</strong> – data type, can be one of ‘double’, ‘int’ or ‘float’</li>
+<li><strong>chunk_location</strong> – the location of the array chunk in the binary nd2 file</li>
 </ul>
 </td>
 </tr>
@@ -1178,8 +1182,8 @@ doing anything out of the ordinary.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fh</strong> &#8211; an open file handle to the ND2</li>
-<li><strong>chunk_location</strong> (<em>int</em>) &#8211; location to read</li>
+<li><strong>fh</strong> – an open file handle to the ND2</li>
+<li><strong>chunk_location</strong> (<em>int</em>) – location to read</li>
 </ul>
 </td>
 </tr>
@@ -1202,8 +1206,8 @@ doing anything out of the ordinary.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>data</strong> &#8211; the metadata in binary form</li>
-<li><strong>count</strong> &#8211; the number of metadata elements</li>
+<li><strong>data</strong> – the metadata in binary form</li>
+<li><strong>count</strong> – the number of metadata elements</li>
 </ul>
 </td>
 </tr>
@@ -1233,7 +1237,7 @@ doing anything out of the ordinary.</p>
 <em class="property">exception </em><code class="descclassname">nd2reader.exceptions.</code><code class="descname">InvalidVersionError</code><a class="reference internal" href="_modules/nd2reader/exceptions.html#InvalidVersionError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.exceptions.InvalidVersionError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
 <p>Unknown version.</p>
-<p>We don&#8217;t know how to parse the version of ND2 that we were given.</p>
+<p>We don’t know how to parse the version of ND2 that we were given.</p>
 </dd></dl>
 
 <dl class="exception">
@@ -1251,7 +1255,7 @@ cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and brig
 <p>Functions to create artificial nd2 data for testing purposes</p>
 <dl class="class">
 <dt id="nd2reader.artificial.ArtificialND2">
-<em class="property">class </em><code class="descclassname">nd2reader.artificial.</code><code class="descname">ArtificialND2</code><span class="sig-paren">(</span><em>file</em>, <em>version=(3</em>, <em>0)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">nd2reader.artificial.</code><code class="descname">ArtificialND2</code><span class="sig-paren">(</span><em>file</em>, <em>version=(3</em>, <em>0)</em>, <em>skip_blocks=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Artificial ND2 class (for testing purposes)</p>
 <dl class="method">
@@ -1260,9 +1264,9 @@ cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and brig
 <dd><p>Correctly close the file handle</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="nd2reader.artificial.ArtificialND2.create_label_map_bytes">
-<em class="property">static </em><code class="descname">create_label_map_bytes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.create_label_map_bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.create_label_map_bytes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create_label_map_bytes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.create_label_map_bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.create_label_map_bytes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct a binary label map</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1275,6 +1279,11 @@ cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and brig
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="nd2reader.artificial.ArtificialND2.data_types">
+<code class="descname">data_types</code><em class="property"> = {‘unsigned_char’: 1, ‘unsigned_int’: 2, ‘unsigned_int_2’: 3, ‘unsigned_long’: 5, ‘double’: 6, ‘string’: 8, ‘char_array’: 9, ‘metadata_item’: 11}</em><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.data_types" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.artificial.ArtificialND2.file_handle">
@@ -1292,9 +1301,35 @@ cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and brig
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="nd2reader.artificial.ArtificialND2.header">
+<code class="descname">header</code><em class="property"> = 180276954</em><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="nd2reader.artificial.ArtificialND2.relative_offset">
+<code class="descname">relative_offset</code><em class="property"> = 0</em><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.relative_offset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nd2reader.artificial.ArtificialND2.write_file">
+<code class="descname">write_file</code><span class="sig-paren">(</span><em>skip_blocks=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.write_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.write_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nd2reader.artificial.ArtificialND2.write_label_map">
+<code class="descname">write_label_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.write_label_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.write_label_map" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nd2reader.artificial.ArtificialND2.write_label_map_info">
+<code class="descname">write_label_map_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.write_label_map_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.write_label_map_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the location of the start of the label map at the end of the file</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="nd2reader.artificial.ArtificialND2.write_version">
-<code class="descname">write_version</code><span class="sig-paren">(</span><em>version=(3</em>, <em>0)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.write_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.write_version" title="Permalink to this definition">¶</a></dt>
+<code class="descname">write_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.write_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.write_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write file header</p>
 </dd></dl>
 
@@ -1389,10 +1424,10 @@ nd2reader.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>frame_number</strong> &#8211; the frame number</li>
-<li><strong>field_of_view</strong> &#8211; the field of view number</li>
-<li><strong>channel_name</strong> &#8211; the name of the color channel</li>
-<li><strong>z_level</strong> &#8211; the z level number</li>
+<li><strong>frame_number</strong> – the frame number</li>
+<li><strong>field_of_view</strong> – the field of view number</li>
+<li><strong>channel_name</strong> – the name of the color channel</li>
+<li><strong>z_level</strong> – the z level number</li>
 </ul>
 </td>
 </tr>
@@ -1447,11 +1482,11 @@ nd2reader.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fields_of_view</strong> &#8211; the fields of view</li>
-<li><strong>channels</strong> &#8211; the color channels</li>
-<li><strong>z_levels</strong> &#8211; the z levels</li>
-<li><strong>start</strong> &#8211; the starting frame</li>
-<li><strong>stop</strong> &#8211; the last frame</li>
+<li><strong>fields_of_view</strong> – the fields of view</li>
+<li><strong>channels</strong> – the color channels</li>
+<li><strong>z_levels</strong> – the z levels</li>
+<li><strong>start</strong> – the starting frame</li>
+<li><strong>stop</strong> – the last frame</li>
 </ul>
 </td>
 </tr>
@@ -1516,7 +1551,7 @@ nd2reader.</p>
     </p>
     <p>
         &copy; Copyright 2017, Ruben Verweij.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.<br/>
     </p>
   </div>
 </footer>

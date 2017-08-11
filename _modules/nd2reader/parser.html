@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader.parser &#8212; nd2reader 3.0.4 documentation</title>
+    <title>nd2reader.parser &#8212; nd2reader 3.0.5 documentation</title>
     
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -13,7 +12,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.0.4',
+        VERSION:     '3.0.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -25,7 +24,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -35,7 +34,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -48,7 +47,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.5</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -219,8 +218,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">raw_image_data</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="Parser.get_dtype_from_metadata"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.parser.Parser.get_dtype_from_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">get_dtype_from_metadata</span><span class="p">():</span>
+<div class="viewcode-block" id="Parser.get_dtype_from_metadata"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.parser.Parser.get_dtype_from_metadata">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_dtype_from_metadata</span><span class="p">():</span>
         <span class="sd">&quot;&quot;&quot;Determine the data type from the metadata.</span>
 
 <span class="sd">        For now, always use float64 to prevent unexpected overflow errors when manipulating the data (calculating sums/</span>
@@ -240,8 +239,8 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">major_version</span><span class="p">,</span> <span class="n">minor_version</span> <span class="o">=</span> <span class="n">get_version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">)</span>
-        <span class="n">supported</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">supported_file_versions</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">major_version</span><span class="p">,</span> <span class="n">minor_version</span><span class="p">))</span> <span class="ow">or</span> \
-                    <span class="bp">self</span><span class="o">.</span><span class="n">supported_file_versions</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">major_version</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="n">supported</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">supported_file_versions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">major_version</span><span class="p">,</span> <span class="n">minor_version</span><span class="p">))</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">supported_file_versions</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">major_version</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">supported</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">InvalidVersionError</span><span class="p">(</span><span class="s2">&quot;No parser is available for that version.&quot;</span><span class="p">)</span>
@@ -255,7 +254,7 @@
         <span class="c1"># Retrieve raw metadata from the label mapping</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_label_map</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_raw_metadata</span> <span class="o">=</span> <span class="n">RawMetadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_metadata</span><span class="o">.</span><span class="n">__dict__</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_metadata</span><span class="o">.</span><span class="vm">__dict__</span>
 
     <span class="k">def</span> <span class="nf">_build_label_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -267,6 +266,7 @@
 <span class="sd">            LabelMap: the computed label map</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># go 8 bytes back from file end</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
         <span class="n">chunk_map_start_location</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">chunk_map_start_location</span><span class="p">)</span>
@@ -420,7 +420,7 @@
     </p>
     <p>
         &copy; Copyright 2017, Ruben Verweij.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.<br/>
     </p>
   </div>
 </footer>
