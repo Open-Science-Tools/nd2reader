@@ -198,15 +198,12 @@ def parse_date(text_info):
     for line in text_info.values():
         line = line.decode("utf8")
         # ND2s seem to randomly switch between 12- and 24-hour representations.
-        try:
-            absolute_start = datetime.strptime(line, "%m/%d/%Y  %H:%M:%S")
-        except (TypeError, ValueError):
+        possible_formats = ["%m/%d/%Y  %H:%M:%S", "%m/%d/%Y  %I:%M:%S %p", "%d/%m/%Y %H:%M:%S"]
+        for date_format in possible_formats:
             try:
-                absolute_start = datetime.strptime(line, "%m/%d/%Y  %I:%M:%S %p")
+                absolute_start = datetime.strptime(line, date_format)
             except (TypeError, ValueError):
-                absolute_start = None
-
-        if absolute_start is not None:
+                continue
             return absolute_start
 
     return None
