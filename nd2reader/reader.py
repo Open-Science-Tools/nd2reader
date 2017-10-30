@@ -1,4 +1,4 @@
-from pims.base_frames import FramesSequenceND, Frame
+from pims.base_frames import FramesSequenceND
 
 from nd2reader.exceptions import EmptyFileError
 from nd2reader.parser import Parser
@@ -52,7 +52,7 @@ class ND2Reader(FramesSequenceND):
         except KeyError:
             return 0
 
-    def get_frame_2D(self, c=0, t=0, z=0, x=0, y=0):
+    def get_frame_2D(self, c=0, t=0, z=0, x=0, y=0, v=0):
         """Gets a given frame using the parser
 
         Args:
@@ -61,6 +61,7 @@ class ND2Reader(FramesSequenceND):
             c: The color channel number
             t: The frame number
             z: The z stack number
+            v: The field of view index
 
         Returns:
             numpy.ndarray: The requested frame
@@ -73,7 +74,7 @@ class ND2Reader(FramesSequenceND):
 
         x = self.metadata["width"] if x <= 0 else x
         y = self.metadata["height"] if y <= 0 else y
-        return self._parser.get_image_by_attributes(t, 0, c_name, z, y, x)
+        return self._parser.get_image_by_attributes(t, v, c_name, z, y, x)
 
     @property
     def parser(self):
@@ -136,6 +137,7 @@ class ND2Reader(FramesSequenceND):
         self._init_axis_if_exists('c', len(self._get_metadata_property("channels", default=[])), min_size=2)
         self._init_axis_if_exists('t', len(self._get_metadata_property("frames", default=[])))
         self._init_axis_if_exists('z', len(self._get_metadata_property("z_levels", default=[])), min_size=2)
+        self._init_axis_if_exists('v', len(self._get_metadata_property("fields_of_view", default=[])), min_size=2)
 
         if len(self.sizes) == 0:
             raise EmptyFileError("No axes were found for this .nd2 file.")
@@ -153,7 +155,7 @@ class ND2Reader(FramesSequenceND):
         Returns:
             the axis to iterate over
         """
-        priority = ['t', 'z', 'c']
+        priority = ['t', 'z', 'c', 'v']
         found_axes = []
         for axis in priority:
             try:
