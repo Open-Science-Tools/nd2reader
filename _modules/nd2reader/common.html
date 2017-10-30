@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader.common &#8212; nd2reader 3.0.5 documentation</title>
+    <title>nd2reader.common &#8212; nd2reader 3.0.6 documentation</title>
     
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -12,7 +12,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.0.5',
+        VERSION:     '3.0.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -47,7 +47,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.5</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.6</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -315,15 +315,12 @@
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">text_info</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
         <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
         <span class="c1"># ND2s seem to randomly switch between 12- and 24-hour representations.</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">absolute_start</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="s2">&quot;%m/</span><span class="si">%d</span><span class="s2">/%Y  %H:%M:%S&quot;</span><span class="p">)</span>
-        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+        <span class="n">possible_formats</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;%m/</span><span class="si">%d</span><span class="s2">/%Y  %H:%M:%S&quot;</span><span class="p">,</span> <span class="s2">&quot;%m/</span><span class="si">%d</span><span class="s2">/%Y  %I:%M:%S %p&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%Y %H:%M:%S&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">date_format</span> <span class="ow">in</span> <span class="n">possible_formats</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">absolute_start</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="s2">&quot;%m/</span><span class="si">%d</span><span class="s2">/%Y  %I:%M:%S %p&quot;</span><span class="p">)</span>
+                <span class="n">absolute_start</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">date_format</span><span class="p">)</span>
             <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
-                <span class="n">absolute_start</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="k">if</span> <span class="n">absolute_start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
             <span class="k">return</span> <span class="n">absolute_start</span>
 
     <span class="k">return</span> <span class="kc">None</span></div>

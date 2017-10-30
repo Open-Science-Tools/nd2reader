@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader package &#8212; nd2reader 3.0.5 documentation</title>
+    <title>nd2reader package &#8212; nd2reader 3.0.6 documentation</title>
     
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -12,7 +12,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.0.5',
+        VERSION:     '3.0.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -48,7 +48,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.5</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.6</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -187,7 +187,7 @@ This is the main class: use this to process your .nd2 files.</p>
 
 <dl class="method">
 <dt id="nd2reader.reader.ND2Reader.get_frame_2D">
-<code class="descname">get_frame_2D</code><span class="sig-paren">(</span><em>c=0</em>, <em>t=0</em>, <em>z=0</em>, <em>x=0</em>, <em>y=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.get_frame_2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.get_frame_2D" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_frame_2D</code><span class="sig-paren">(</span><em>c=0</em>, <em>t=0</em>, <em>z=0</em>, <em>x=0</em>, <em>y=0</em>, <em>v=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.get_frame_2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.get_frame_2D" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a given frame using the parser</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -199,6 +199,7 @@ This is the main class: use this to process your .nd2 files.</p>
 <li><strong>c</strong> – The color channel number</li>
 <li><strong>t</strong> – The frame number</li>
 <li><strong>z</strong> – The z stack number</li>
+<li><strong>v</strong> – The field of view index</li>
 </ul>
 </td>
 </tr>

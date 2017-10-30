@@ -57,7 +57,6 @@ from nd2reader import ND2Reader
 with ND2Reader('my_directory/example.nd2') as images:
     # width and height of the image
     print('%d x %d px' % (images.metadata['width'], images.metadata['height']))
-
 ```
 
 All metadata properties are:
@@ -74,4 +73,47 @@ All metadata properties are:
 * `rois`: the regions of interest (ROIs) defined by the user
 * `experiment`: information about the nature and timings of the ND experiment
 
+### Iterating over fields of view
 
+Using `NDExperiments` in the Nikon software, it is possible to acquire images on different `(x, y)` positions. 
+This is referred to as different fields of view. Using this reader, the fields of view are on the `v` axis. 
+For example:
+```python
+from nd2reader import ND2Reader
+
+with ND2Reader('my_directory/example.nd2') as images:
+    # width and height of the image
+    print(images.metadata)
+```
+will output
+```python
+{'channels': ['BF100xoil-1x-R', 'BF+RITC'],
+ 'date': datetime.datetime(2017, 10, 30, 14, 35, 18),
+ 'experiment': {'description': 'ND Acquisition',
+  'loops': [{'duration': 0,
+    'sampling_interval': 0.0,
+    'start': 0,
+    'stimulation': False}]},
+ 'fields_of_view': [0, 1],
+ 'frames': [0],
+ 'height': 1895,
+ 'num_frames': 1,
+ 'pixel_microns': 0.09214285714285715,
+ 'total_images_per_channel': 6,
+ 'width': 2368,
+ 'z_levels': [0, 1, 2]}
+```
+for our example file. As you can see from the metadata, it has two fields of view. We can also look at the sizes of the axes:
+```python
+    print(images.sizes)
+```
+```python
+{'c': 2, 't': 1, 'v': 2, 'x': 2368, 'y': 1895, 'z': 3}
+```
+As you can see, the fields of view are listed on the `v` axis. It is therefore possible to loop over them like this:
+```python
+    images.iter_axes = 'v'
+    for fov in images:
+        print(fov) # Frame containing one field of view
+```
+For more information on axis bundling and iteration, refer to the [pims documentation](http://soft-matter.github.io/pims/v0.4/multidimensional.html#axes-bundling).

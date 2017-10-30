@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Tutorial &#8212; nd2reader 3.0.5 documentation</title>
+    <title>Tutorial &#8212; nd2reader 3.0.6 documentation</title>
     
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -12,7 +12,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.0.5',
+        VERSION:     '3.0.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -49,7 +49,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.5</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.6</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -90,6 +90,7 @@
 </li>
 <li><a class="reference internal" href="#opening-nd2s">Opening ND2s</a></li>
 <li><a class="reference internal" href="#nd2-metadata">ND2 metadata</a></li>
+<li><a class="reference internal" href="#iterating-over-fields-of-view">Iterating over fields of view</a></li>
 </ul>
 </li>
 </ul>
@@ -187,7 +188,6 @@ and available in dictionary form. For example:</p>
 <span class="k">with</span> <span class="n">ND2Reader</span><span class="p">(</span><span class="s1">&#39;my_directory/example.nd2&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">images</span><span class="p">:</span>
     <span class="c1"># width and height of the image</span>
     <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1"> x </span><span class="si">%d</span><span class="s1"> px&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">images</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">],</span> <span class="n">images</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]))</span>
-
 </pre></div>
 </div>
 <p>All metadata properties are:</p>
@@ -204,6 +204,51 @@ and available in dictionary form. For example:</p>
 <li><code class="docutils literal"><span class="pre">rois</span></code>: the regions of interest (ROIs) defined by the user</li>
 <li><code class="docutils literal"><span class="pre">experiment</span></code>: information about the nature and timings of the ND experiment</li>
 </ul>
+</div>
+<div class="section" id="iterating-over-fields-of-view">
+<span id="iterating-over-fields-of-view"></span><h2>Iterating over fields of view<a class="headerlink" href="#iterating-over-fields-of-view" title="Permalink to this headline">¶</a></h2>
+<p>Using <code class="docutils literal"><span class="pre">NDExperiments</span></code> in the Nikon software, it is possible to acquire images on different <code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y)</span></code> positions.
+This is referred to as different fields of view. Using this reader, the fields of view are on the <code class="docutils literal"><span class="pre">v</span></code> axis.
+For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nd2reader</span> <span class="kn">import</span> <span class="n">ND2Reader</span>
+
+<span class="k">with</span> <span class="n">ND2Reader</span><span class="p">(</span><span class="s1">&#39;my_directory/example.nd2&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">images</span><span class="p">:</span>
+    <span class="c1"># width and height of the image</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">images</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will output</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;channels&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;BF100xoil-1x-R&#39;</span><span class="p">,</span> <span class="s1">&#39;BF+RITC&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">18</span><span class="p">),</span>
+ <span class="s1">&#39;experiment&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;ND Acquisition&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;loops&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;duration&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s1">&#39;sampling_interval&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s1">&#39;stimulation&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}]},</span>
+ <span class="s1">&#39;fields_of_view&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+ <span class="s1">&#39;frames&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+ <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="mi">1895</span><span class="p">,</span>
+ <span class="s1">&#39;num_frames&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s1">&#39;pixel_microns&#39;</span><span class="p">:</span> <span class="mf">0.09214285714285715</span><span class="p">,</span>
+ <span class="s1">&#39;total_images_per_channel&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+ <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="mi">2368</span><span class="p">,</span>
+ <span class="s1">&#39;z_levels&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]}</span>
+</pre></div>
+</div>
+<p>for our example file. As you can see from the metadata, it has two fields of view. We can also look at the sizes of the axes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>    <span class="k">print</span><span class="p">(</span><span class="n">images</span><span class="o">.</span><span class="n">sizes</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2368</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">1895</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>As you can see, the fields of view are listed on the <code class="docutils literal"><span class="pre">v</span></code> axis. It is therefore possible to loop over them like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>    <span class="n">images</span><span class="o">.</span><span class="n">iter_axes</span> <span class="o">=</span> <span class="s1">&#39;v&#39;</span>
+    <span class="k">for</span> <span class="n">fov</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">fov</span><span class="p">)</span> <span class="c1"># Frame containing one field of view</span>
+</pre></div>
+</div>
+<p>For more information on axis bundling and iteration, refer to the <a class="reference external" href="http://soft-matter.github.io/pims/v0.4/multidimensional.html#axes-bundling">pims documentation</a>.</p>
 </div>
 </div>
 
