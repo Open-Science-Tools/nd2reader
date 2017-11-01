@@ -6,9 +6,8 @@ request.
 
 ## Running and Writing Tests
 
-Unit tests can be run with the commands `python3.4 test.py` and `python2.7 test.py`. The test finder will automatically locate any tests in the `tests` directory. Test classes
-must inherit from `unittest.TestCase` and tests will only be run if the function name starts with `test`. If you've built the Docker image, you can also run unit tests with
-`make test` - this will conveniently run tests for all supported versions of Python.
+Unit tests can be run with the command `python test.py`. The test finder will automatically locate any tests in the `tests` directory. Test classes
+must inherit from `unittest.TestCase` and tests will only be run if the function name starts with `test`.
 
 There are also functional tests that work with real ND2s to make sure the code actually works with a wide variety of files. We hope to someday put these into a continuous integration
 system so everyone can benefit, but for now, they will just be manually run by the maintainer of this library before merging in any contributions.
