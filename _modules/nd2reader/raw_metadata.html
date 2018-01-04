@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader.raw_metadata &#8212; nd2reader 3.0.6 documentation</title>
+    <title>nd2reader.raw_metadata &#8212; nd2reader 3.0.7 documentation</title>
     
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -12,7 +12,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.0.6',
+        VERSION:     '3.0.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -47,7 +47,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.6</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.7</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -494,11 +494,13 @@
         <span class="k">for</span> <span class="n">loop</span> <span class="ow">in</span> <span class="n">loops</span><span class="p">:</span>
             <span class="c1"># duration of this loop</span>
             <span class="n">duration</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;dDuration&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span>
+            <span class="n">interval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_sampling_interval</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
+
+            <span class="c1"># if duration is not saved, infer it</span>
+            <span class="n">duration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_duration_from_interval_and_loops</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
 
             <span class="c1"># uiLoopType == 6 is a stimulation loop</span>
             <span class="n">is_stimulation</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;uiLoopType&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span> <span class="o">==</span> <span class="mi">6</span>
-
-            <span class="n">interval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_sampling_interval</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
 
             <span class="n">parsed_loop</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="n">time_offset</span><span class="p">,</span>
@@ -513,6 +515,25 @@
             <span class="n">time_offset</span> <span class="o">+=</span> <span class="n">duration</span>
 
         <span class="k">return</span> <span class="n">parsed_loops</span>
+
+<div class="viewcode-block" id="RawMetadata.get_duration_from_interval_and_loops"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.raw_metadata.RawMetadata.get_duration_from_interval_and_loops">[docs]</a>    <span class="k">def</span> <span class="nf">get_duration_from_interval_and_loops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">loop</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Infers the duration of the loop from the number of measurements and the interval</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            duration: loop duration in milliseconds</span>
+<span class="sd">            duration: measurement interval in milliseconds</span>
+<span class="sd">            loop: loop dictionary</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: the loop duration in milliseconds</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">duration</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">interval</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">number_of_loops</span> <span class="o">=</span> <span class="n">get_from_dict_if_exists</span><span class="p">(</span><span class="s1">&#39;uiCount&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
+            <span class="n">number_of_loops</span> <span class="o">=</span> <span class="n">number_of_loops</span> <span class="k">if</span> <span class="n">number_of_loops</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">number_of_loops</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span>
+            <span class="n">duration</span> <span class="o">=</span> <span class="n">interval</span> <span class="o">*</span> <span class="n">number_of_loops</span>
+
+        <span class="k">return</span> <span class="n">duration</span></div>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_determine_sampling_interval</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">loop</span><span class="p">):</span>
@@ -746,7 +767,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2017, Ruben Verweij.<br/>
+        &copy; Copyright 2017 - 2018, Ruben Verweij.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.<br/>
     </p>
   </div>
