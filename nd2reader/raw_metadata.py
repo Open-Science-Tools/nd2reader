@@ -377,11 +377,13 @@ class RawMetadata(object):
         for loop in loops:
             # duration of this loop
             duration = get_from_dict_if_exists('dDuration', loop) or 0
+            interval = self._determine_sampling_interval(duration, loop)
+
+            # if duration is not saved, infer it
+            duration = self.get_duration_from_interval_and_loops(duration, interval, loop)
 
             # uiLoopType == 6 is a stimulation loop
             is_stimulation = get_from_dict_if_exists('uiLoopType', loop) == 6
-
-            interval = self._determine_sampling_interval(duration, loop)
 
             parsed_loop = {
                 'start': time_offset,
@@ -396,6 +398,25 @@ class RawMetadata(object):
             time_offset += duration
 
         return parsed_loops
+
+    def get_duration_from_interval_and_loops(self, duration, interval, loop):
+        """Infers the duration of the loop from the number of measurements and the interval
+
+        Args:
+            duration: loop duration in milliseconds
+            duration: measurement interval in milliseconds
+            loop: loop dictionary
+
+        Returns:
+            float: the loop duration in milliseconds
+
+        """
+        if duration == 0 and interval > 0:
+            number_of_loops = get_from_dict_if_exists('uiCount', loop)
+            number_of_loops = number_of_loops if number_of_loops is not None and number_of_loops > 0 else 1
+            duration = interval * number_of_loops
+
+        return duration
 
     @staticmethod
     def _determine_sampling_interval(duration, loop):

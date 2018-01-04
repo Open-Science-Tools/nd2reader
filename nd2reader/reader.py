@@ -196,6 +196,8 @@ class ND2Reader(FramesSequenceND):
                 (timesteps, np.arange(current_time, current_time + loop['duration'], loop['sampling_interval'])))
             current_time += loop['duration']
 
-        # if experiment did not finish, number of timesteps is wrong. Take correct amount of leading timesteps.
-        self._timesteps = timesteps[:self.metadata['num_frames']]
+        if len(timesteps) > 0:
+            # if experiment did not finish, number of timesteps is wrong. Take correct amount of leading timesteps.
+            self._timesteps = timesteps[:self.metadata['num_frames']]
+
         return self._timesteps
