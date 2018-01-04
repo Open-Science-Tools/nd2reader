@@ -177,7 +177,7 @@ class ND2Reader(FramesSequenceND):
             np.ndarray: an array of times in milliseconds.
 
         """
-        if self._timesteps is not None:
+        if self._timesteps is not None and len(timesteps) > 0:
             return self._timesteps
 
         timesteps = np.array([])
@@ -196,8 +196,7 @@ class ND2Reader(FramesSequenceND):
                 (timesteps, np.arange(current_time, current_time + loop['duration'], loop['sampling_interval'])))
             current_time += loop['duration']
 
-        if len(timesteps) > 0:
-            # if experiment did not finish, number of timesteps is wrong. Take correct amount of leading timesteps.
-            self._timesteps = timesteps[:self.metadata['num_frames']]
+        # if experiment did not finish, number of timesteps is wrong. Take correct amount of leading timesteps.
+        self._timesteps = timesteps[:self.metadata['num_frames']]
 
         return self._timesteps
