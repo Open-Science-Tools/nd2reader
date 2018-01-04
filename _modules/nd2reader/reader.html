@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nd2reader.reader &#8212; nd2reader 3.0.7 documentation</title>
+    <title>nd2reader.reader &#8212; nd2reader 3.0.8 documentation</title>
     
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -12,7 +12,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.0.7',
+        VERSION:     '3.0.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -47,7 +47,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.7</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.8</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -294,7 +294,7 @@
 <span class="sd">            np.ndarray: an array of times in milliseconds.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timesteps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timesteps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">timesteps</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timesteps</span>
 
         <span class="n">timesteps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
@@ -313,9 +313,8 @@
                 <span class="p">(</span><span class="n">timesteps</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">current_time</span><span class="p">,</span> <span class="n">current_time</span> <span class="o">+</span> <span class="n">loop</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">],</span> <span class="n">loop</span><span class="p">[</span><span class="s1">&#39;sampling_interval&#39;</span><span class="p">])))</span>
             <span class="n">current_time</span> <span class="o">+=</span> <span class="n">loop</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">timesteps</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="c1"># if experiment did not finish, number of timesteps is wrong. Take correct amount of leading timesteps.</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_timesteps</span> <span class="o">=</span> <span class="n">timesteps</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;num_frames&#39;</span><span class="p">]]</span>
+        <span class="c1"># if experiment did not finish, number of timesteps is wrong. Take correct amount of leading timesteps.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timesteps</span> <span class="o">=</span> <span class="n">timesteps</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;num_frames&#39;</span><span class="p">]]</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timesteps</span></div></div>
 </pre></div>
