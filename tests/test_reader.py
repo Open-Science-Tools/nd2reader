@@ -40,4 +40,4 @@ class TestReader(unittest.TestCase):
         with ArtificialND2('test_data/test_nd2_reader.nd2') as _:
             with ND2Reader('test_data/test_nd2_reader.nd2') as reader:
                 timesteps = reader.timesteps
-                self.assertEquals(timesteps, None)
+                self.assertEquals(len(timesteps), 0)
