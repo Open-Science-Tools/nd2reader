@@ -24,9 +24,4 @@ class TestParser(unittest.TestCase):
             parser = Parser(fh)
             self.assertTrue(parser.supported)
 
-    def test_cannot_open_wrong_version(self):
-        with ArtificialND2(self.test_file, version=('0', '0')) as _:
-            with open(self.test_file, 'rb') as fh:
-                with self.assertRaises(InvalidVersionError) as exception:
-                    Parser(fh)
-            self.assertEqual(str(exception.exception), "No parser is available for that version.")
+

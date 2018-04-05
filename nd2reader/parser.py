@@ -116,17 +116,14 @@ class Parser(object):
 
         Returns:
             bool: True on supported
-
-        Raises:
-            InvalidVersionError: Raises an error if the version is unsupported
-
         """
         major_version, minor_version = get_version(self._fh)
         supported = self.supported_file_versions.get(
             (major_version, minor_version)) or self.supported_file_versions.get((major_version, None))
 
         if not supported:
-            raise InvalidVersionError("No parser is available for that version.")
+            print("Warning: No parser is available for your current ND2 version (%d.%d). " % (
+                    major_version, minor_version) + "This might lead to unexpected behaviour.")
 
         return supported
 
@@ -229,7 +226,7 @@ class Parser(object):
 
         """
         return (image_group_number - (field_of_view * len(self.metadata["z_levels"]) + z_level)) / (
-            len(self.metadata["fields_of_view"]) * len(self.metadata["z_levels"]))
+                len(self.metadata["fields_of_view"]) * len(self.metadata["z_levels"]))
 
     @property
     def _channel_offset(self):
