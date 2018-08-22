@@ -3,6 +3,7 @@ from nd2reader.common import read_chunk, read_array, read_metadata, parse_date, 
 import xmltodict
 import six
 import numpy as np
+import warnings
 
 
 class RawMetadata(object):
@@ -434,6 +435,12 @@ class RawMetadata(object):
         if interval is None or interval <= 0:
             # Use a fallback if it is still not found
             interval = get_from_dict_if_exists('dAvgPeriodDiff', loop)
+        else:
+            avg_interval = get_from_dict_if_exists('dAvgPeriodDiff', loop)
+            if round(avg_interval) != round(interval):
+                warnings.warn("Reported average frame interval (%.1f ms) doesn't match the set interval (%.1f ms). Using the average now." % (avg_interval, interval), RuntimeWarning)
+                interval = avg_interval
+
         if interval is None or interval <= 0:
             # In some cases, both keys are not saved. Then try to calculate it.
             interval = RawMetadata._guess_sampling_from_loops(duration, loop)
