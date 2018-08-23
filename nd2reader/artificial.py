@@ -97,6 +97,58 @@ class ArtificialND2(object):
 
         return locations, data
 
+    @staticmethod
+    def _get_labels():
+        return ['image_attributes',
+                'image_text_info',
+                'image_metadata',
+                'image_metadata_sequence',
+                'image_calibration',
+                'x_data',
+                'y_data',
+                'z_data',
+                'roi_metadata',
+                'pfs_status',
+                'pfs_offset',
+                'guid',
+                'description',
+                'camera_exposure_time',
+                'camera_temp',
+                'acquisition_times',
+                'acquisition_times_2',
+                'acquisition_frames',
+                'lut_data',
+                'grabber_settings',
+                'custom_data',
+                'app_info',
+                'image_frame_0']
+
+    @staticmethod
+    def _get_file_labels():
+        return ["ImageAttributesLV!",
+                "ImageTextInfoLV!",
+                "ImageMetadataLV!",
+                "ImageMetadataSeqLV|0!",
+                "ImageCalibrationLV|0!",
+                "CustomData|X!",
+                "CustomData|Y!",
+                "CustomData|Z!",
+                "CustomData|RoiMetadata_v1!",
+                "CustomData|PFS_STATUS!",
+                "CustomData|PFS_OFFSET!",
+                "CustomData|GUIDStore!",
+                "CustomData|CustomDescriptionV1_0!",
+                "CustomData|Camera_ExposureTime1!",
+                "CustomData|CameraTemp1!",
+                "CustomData|AcqTimesCache!",
+                "CustomData|AcqTimes2Cache!",
+                "CustomData|AcqFramesCache!",
+                "CustomDataVar|LUTDataV1_0!",
+                "CustomDataVar|GrabberCameraSettingsV1_0!",
+                "CustomDataVar|CustomDataV2_0!",
+                "CustomDataVar|AppInfo_V1_0!",
+                "ImageDataSeq|0!"]
+
     def create_label_map_bytes(self):
         """Construct a binary label map
 
@@ -105,56 +157,8 @@ class ArtificialND2(object):
 
         """
         raw_text = six.b('')
-        labels = [
-            'image_attributes',
-            'image_text_info',
-            'image_metadata',
-            'image_metadata_sequence',
-            'image_calibration',
-            'x_data',
-            'y_data',
-            'z_data',
-            'roi_metadata',
-            'pfs_status',
-            'pfs_offset',
-            'guid',
-            'description',
-            'camera_exposure_time',
-            'camera_temp',
-            'acquisition_times',
-            'acquisition_times_2',
-            'acquisition_frames',
-            'lut_data',
-            'grabber_settings',
-            'custom_data',
-            'app_info',
-            'image_frame_0'
-        ]
-        file_labels = [
-            "ImageAttributesLV!",
-            "ImageTextInfoLV!",
-            "ImageMetadataLV!",
-            "ImageMetadataSeqLV|0!",
-            "ImageCalibrationLV|0!",
-            "CustomData|X!",
-            "CustomData|Y!",
-            "CustomData|Z!",
-            "CustomData|RoiMetadata_v1!",
-            "CustomData|PFS_STATUS!",
-            "CustomData|PFS_OFFSET!",
-            "CustomData|GUIDStore!",
-            "CustomData|CustomDescriptionV1_0!",
-            "CustomData|Camera_ExposureTime1!",
-            "CustomData|CameraTemp1!",
-            "CustomData|AcqTimesCache!",
-            "CustomData|AcqTimes2Cache!",
-            "CustomData|AcqFramesCache!",
-            "CustomDataVar|LUTDataV1_0!",
-            "CustomDataVar|GrabberCameraSettingsV1_0!",
-            "CustomDataVar|CustomDataV2_0!",
-            "CustomDataVar|AppInfo_V1_0!",
-            "ImageDataSeq|0!"
-        ]
+        labels = self._get_labels()
+        file_labels = self._get_file_labels()
 
         file_data, file_data_dict = self._get_file_data(labels)
 
