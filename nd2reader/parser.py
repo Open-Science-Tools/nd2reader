@@ -265,8 +265,11 @@ class Parser(object):
         # The images for the various channels are interleaved within the same array. For example, the second image
         # of a four image group will be composed of bytes 2, 6, 10, etc. If you understand why someone would design
         # a data structure that way, please send the author of this library a message.
-        number_of_true_channels = int((len(image_group_data) - 4) / (height * width))
-        image_data = np.reshape(image_group_data[image_data_start::number_of_true_channels], (height, width))
+        number_of_true_channels = int(len(image_group_data[image_data_start:]) / (height * width))
+        try:
+            image_data = np.reshape(image_group_data[image_data_start::number_of_true_channels], (height, width))
+        except ValueError:
+            image_data = np.reshape(image_group_data[image_data_start::number_of_true_channels], (height, int(len(image_group_data[image_data_start::number_of_true_channels])/height)))
 
         # Skip images that are all zeros! This is important, since NIS Elements creates blank "gap" images if you
         # don't have the same number of images each cycle. We discovered this because we only took GFP images every
