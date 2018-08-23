@@ -4,7 +4,7 @@ import six
 from nd2reader.artificial import ArtificialND2
 from nd2reader.label_map import LabelMap
 from nd2reader.raw_metadata import RawMetadata
-from nd2reader.common_raw_metadata import parse_roi_shape, parse_roi_type
+from nd2reader.common_raw_metadata import parse_roi_shape, parse_roi_type, parse_dimension_text_line
 
 
 class TestRawMetadata(unittest.TestCase):
@@ -24,6 +24,11 @@ class TestRawMetadata(unittest.TestCase):
         self.assertEqual(parse_roi_type(2), 'background')
         self.assertEqual(parse_roi_type(4), 'stimulation')
         self.assertIsNone(parse_roi_type(-1))
+
+    def test_parse_dimension_text(self):
+        line = six.b('Metadata:\r\nDimensions: T(443) x \xce\xbb(1)\r\nCamera Name: Andor Zyla VSC-01537')
+        self.assertEqual(parse_dimension_text_line(line), six.b('Dimensions: T(443) x \xce\xbb(1)'))
+        self.assertIsNone(parse_dimension_text_line(six.b('Dim: nothing')))
 
     def test_dict(self):
         self.assertTrue(type(self.metadata.__dict__) is dict)
