@@ -242,42 +242,42 @@ class ArtificialND2(object):
 
         return raw_data
 
+    @staticmethod
+    def _get_slx_img_attrib():
+        return {'uiWidth': 128,
+                'uiWidthBytes': 256,
+                'uiHeight': 128,
+                'uiComp': 1,
+                'uiBpcInMemory': 16,
+                'uiBpcSignificant': 12,
+                'uiSequenceCount': 70,
+                'uiTileWidth': 128,
+                'uiTileHeight': 128,
+                'eCompression': 2,
+                'dCompressionParam': -1.0,
+                'ePixelType': 1,
+                'uiVirtualComponents': 1
+                }
+
+    @staticmethod
+    def _get_slx_picture_metadata():
+        return {'sPicturePlanes':
+                {
+                    'sPlaneNew': {
+                        # channels are numbered a0, a1, ..., aN
+                        'a0': {
+                            'sDescription': 'TRITC'
+                            }
+                        }
+                    }
+                }
+
     def _get_file_data(self, labels):
         file_data = [
-            {
-                'SLxImageAttributes':
-                    {
-                        'uiWidth': 128,
-                        'uiWidthBytes': 256,
-                        'uiHeight': 128,
-                        'uiComp': 1,
-                        'uiBpcInMemory': 16,
-                        'uiBpcSignificant': 12,
-                        'uiSequenceCount': 70,
-                        'uiTileWidth': 128,
-                        'uiTileHeight': 128,
-                        'eCompression': 2,
-                        'dCompressionParam': -1.0,
-                        'ePixelType': 1,
-                        'uiVirtualComponents': 1
-                    }
-            },  # ImageAttributesLV!",
+            {'SLxImageAttributes': self._get_slx_img_attrib()},  # ImageAttributesLV!",
             7,  # ImageTextInfoLV!",
             7,  # ImageMetadataLV!",
-            {
-                'SLxPictureMetadata':
-                    {
-                        'sPicturePlanes':
-                            {
-                                'sPlaneNew': {
-                                    # channels are numbered a0, a1, ..., aN
-                                    'a0': {
-                                        'sDescription': 'TRITC'
-                                    }
-                                }
-                            }
-                    }
-            },  # ImageMetadataSeqLV|0!",
+            {'SLxPictureMetadata': self._get_slx_picture_metadata()},  # ImageMetadataSeqLV|0!",
             7,  # ImageCalibrationLV|0!",
             7,  # CustomData|X!",
             7,  # CustomData|Y!",
