@@ -88,11 +88,10 @@ def determine_sampling_interval(duration, loop):
         avg_interval_set = avg_interval is not None and avg_interval > 0
 
         if round(avg_interval) != round(interval) and avg_interval_set:
-            warnings.warn("Reported average frame interval (%.1f ms) doesn't" +
-                          "match the set interval (%.1f ms)." +
-                          "Using the average now." % (avg_interval,
-                                                      interval),
-                          RuntimeWarning)
+            message = ("Reported average frame interval (%.1f ms) doesn't"
+                       " match the set interval (%.1f ms). Using the average"
+                       " now.")
+            warnings.warn(message % (avg_interval, interval), RuntimeWarning)
             interval = avg_interval
 
     if interval is None or interval <= 0:
