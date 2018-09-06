@@ -2,20 +2,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>nd2reader.parser &#8212; nd2reader 3.0.9 documentation</title>
+    <title>nd2reader.parser &#8212; nd2reader 3.1.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '3.0.9',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -30,8 +22,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -44,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.9</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.1.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -379,8 +370,11 @@
         <span class="c1"># The images for the various channels are interleaved within the same array. For example, the second image</span>
         <span class="c1"># of a four image group will be composed of bytes 2, 6, 10, etc. If you understand why someone would design</span>
         <span class="c1"># a data structure that way, please send the author of this library a message.</span>
-        <span class="n">number_of_true_channels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">image_group_data</span><span class="p">)</span> <span class="o">-</span> <span class="mi">4</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">height</span> <span class="o">*</span> <span class="n">width</span><span class="p">))</span>
-        <span class="n">image_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">image_group_data</span><span class="p">[</span><span class="n">image_data_start</span><span class="p">::</span><span class="n">number_of_true_channels</span><span class="p">],</span> <span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
+        <span class="n">number_of_true_channels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">image_group_data</span><span class="p">[</span><span class="mi">4</span><span class="p">:])</span> <span class="o">/</span> <span class="p">(</span><span class="n">height</span> <span class="o">*</span> <span class="n">width</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">image_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">image_group_data</span><span class="p">[</span><span class="n">image_data_start</span><span class="p">::</span><span class="n">number_of_true_channels</span><span class="p">],</span> <span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">image_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">image_group_data</span><span class="p">[</span><span class="n">image_data_start</span><span class="p">::</span><span class="n">number_of_true_channels</span><span class="p">],</span> <span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">image_group_data</span><span class="p">[</span><span class="n">image_data_start</span><span class="p">::</span><span class="n">number_of_true_channels</span><span class="p">])</span><span class="o">/</span><span class="n">height</span><span class="p">))))</span>
 
         <span class="c1"># Skip images that are all zeros! This is important, since NIS Elements creates blank &quot;gap&quot; images if you</span>
         <span class="c1"># don&#39;t have the same number of images each cycle. We discovered this because we only took GFP images every</span>
@@ -414,7 +408,7 @@
     </p>
     <p>
         &copy; Copyright 2017 - 2018, Ruben Verweij.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.<br/>
     </p>
   </div>
 </footer>
