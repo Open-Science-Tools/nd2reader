@@ -114,7 +114,15 @@ class ND2Reader(FramesSequenceND):
         Returns:
             float: the (average) frame rate in frames per second
         """
-        return 1000. / np.mean(np.diff(self.timesteps))
+        total_duration = 0.0
+
+        for loop in self.metadata['experiment']['loops']:
+            total_duration += loop['duration']
+
+        if total_duration == 0:
+            raise ValueError('Total measurement duration could not be determined from loops')
+
+        return self.metadata['num_frames'] / (total_duration/1000.0)
 
     def _get_metadata_property(self, key, default=None):
         if self.metadata is None:
