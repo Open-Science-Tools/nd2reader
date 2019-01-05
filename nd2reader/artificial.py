@@ -6,6 +6,27 @@ import struct
 from nd2reader.common import check_or_make_dir
 from os import path
 
+global_labels = ['image_attributes', 'image_text_info', 'image_metadata',
+                 'image_metadata_sequence', 'image_calibration', 'x_data',
+                 'y_data', 'z_data', 'roi_metadata', 'pfs_status', 'pfs_offset',
+                 'guid', 'description', 'camera_exposure_time', 'camera_temp',
+                 'acquisition_times', 'acquisition_times_2',
+                 'acquisition_frames', 'lut_data', 'grabber_settings',
+                 'custom_data', 'app_info', 'image_frame_0']
+
+global_file_labels = ["ImageAttributesLV!", "ImageTextInfoLV!",
+                      "ImageMetadataLV!", "ImageMetadataSeqLV|0!",
+                      "ImageCalibrationLV|0!", "CustomData|X!", "CustomData|Y!",
+                      "CustomData|Z!", "CustomData|RoiMetadata_v1!",
+                      "CustomData|PFS_STATUS!", "CustomData|PFS_OFFSET!",
+                      "CustomData|GUIDStore!", "CustomData|CustomDescriptionV1_0!",
+                      "CustomData|Camera_ExposureTime1!", "CustomData|CameraTemp1!",
+                      "CustomData|AcqTimesCache!", "CustomData|AcqTimes2Cache!",
+                      "CustomData|AcqFramesCache!", "CustomDataVar|LUTDataV1_0!",
+                      "CustomDataVar|GrabberCameraSettingsV1_0!",
+                      "CustomDataVar|CustomDataV2_0!", "CustomDataVar|AppInfo_V1_0!",
+                      "ImageDataSeq|0!"]
+
 
 class ArtificialND2(object):
     """Artificial ND2 class (for testing purposes)
@@ -105,56 +126,8 @@ class ArtificialND2(object):
 
         """
         raw_text = six.b('')
-        labels = [
-            'image_attributes',
-            'image_text_info',
-            'image_metadata',
-            'image_metadata_sequence',
-            'image_calibration',
-            'x_data',
-            'y_data',
-            'z_data',
-            'roi_metadata',
-            'pfs_status',
-            'pfs_offset',
-            'guid',
-            'description',
-            'camera_exposure_time',
-            'camera_temp',
-            'acquisition_times',
-            'acquisition_times_2',
-            'acquisition_frames',
-            'lut_data',
-            'grabber_settings',
-            'custom_data',
-            'app_info',
-            'image_frame_0'
-        ]
-        file_labels = [
-            "ImageAttributesLV!",
-            "ImageTextInfoLV!",
-            "ImageMetadataLV!",
-            "ImageMetadataSeqLV|0!",
-            "ImageCalibrationLV|0!",
-            "CustomData|X!",
-            "CustomData|Y!",
-            "CustomData|Z!",
-            "CustomData|RoiMetadata_v1!",
-            "CustomData|PFS_STATUS!",
-            "CustomData|PFS_OFFSET!",
-            "CustomData|GUIDStore!",
-            "CustomData|CustomDescriptionV1_0!",
-            "CustomData|Camera_ExposureTime1!",
-            "CustomData|CameraTemp1!",
-            "CustomData|AcqTimesCache!",
-            "CustomData|AcqTimes2Cache!",
-            "CustomData|AcqFramesCache!",
-            "CustomDataVar|LUTDataV1_0!",
-            "CustomDataVar|GrabberCameraSettingsV1_0!",
-            "CustomDataVar|CustomDataV2_0!",
-            "CustomDataVar|AppInfo_V1_0!",
-            "ImageDataSeq|0!"
-        ]
+        labels = global_labels
+        file_labels = global_file_labels
 
         file_data, file_data_dict = self._get_file_data(labels)
 
@@ -242,42 +215,42 @@ class ArtificialND2(object):
 
         return raw_data
 
+    @staticmethod
+    def _get_slx_img_attrib():
+        return {'uiWidth': 128,
+                'uiWidthBytes': 256,
+                'uiHeight': 128,
+                'uiComp': 1,
+                'uiBpcInMemory': 16,
+                'uiBpcSignificant': 12,
+                'uiSequenceCount': 70,
+                'uiTileWidth': 128,
+                'uiTileHeight': 128,
+                'eCompression': 2,
+                'dCompressionParam': -1.0,
+                'ePixelType': 1,
+                'uiVirtualComponents': 1
+                }
+
+    @staticmethod
+    def _get_slx_picture_metadata():
+        return {'sPicturePlanes':
+                {
+                    'sPlaneNew': {
+                        # channels are numbered a0, a1, ..., aN
+                        'a0': {
+                            'sDescription': 'TRITC'
+                            }
+                        }
+                    }
+                }
+
     def _get_file_data(self, labels):
         file_data = [
-            {
-                'SLxImageAttributes':
-                    {
-                        'uiWidth': 128,
-                        'uiWidthBytes': 256,
-                        'uiHeight': 128,
-                        'uiComp': 1,
-                        'uiBpcInMemory': 16,
-                        'uiBpcSignificant': 12,
-                        'uiSequenceCount': 70,
-                        'uiTileWidth': 128,
-                        'uiTileHeight': 128,
-                        'eCompression': 2,
-                        'dCompressionParam': -1.0,
-                        'ePixelType': 1,
-                        'uiVirtualComponents': 1
-                    }
-            },  # ImageAttributesLV!",
+            {'SLxImageAttributes': self._get_slx_img_attrib()},  # ImageAttributesLV!",
             7,  # ImageTextInfoLV!",
             7,  # ImageMetadataLV!",
-            {
-                'SLxPictureMetadata':
-                    {
-                        'sPicturePlanes':
-                            {
-                                'sPlaneNew': {
-                                    # channels are numbered a0, a1, ..., aN
-                                    'a0': {
-                                        'sDescription': 'TRITC'
-                                    }
-                                }
-                            }
-                    }
-            },  # ImageMetadataSeqLV|0!",
+            {'SLxPictureMetadata': self._get_slx_picture_metadata()},  # ImageMetadataSeqLV|0!",
             7,  # ImageCalibrationLV|0!",
             7,  # CustomData|X!",
             7,  # CustomData|Y!",
@@ -289,9 +262,9 @@ class ArtificialND2(object):
             7,  # CustomData|CustomDescriptionV1_0!",
             7,  # CustomData|Camera_ExposureTime1!",
             7,  # CustomData|CameraTemp1!",
-            7,  # CustomData|AcqTimesCache!",
-            7,  # CustomData|AcqTimes2Cache!",
-            7,  # CustomData|AcqFramesCache!",
+            [0],  # CustomData|AcqTimesCache!",
+            [0],  # CustomData|AcqTimes2Cache!",
+            [0],  # CustomData|AcqFramesCache!",
             7,  # CustomDataVar|LUTDataV1_0!",
             7,  # CustomDataVar|GrabberCameraSettingsV1_0!",
             7,  # CustomDataVar|CustomDataV2_0!",

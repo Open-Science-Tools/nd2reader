@@ -1,8 +1,10 @@
 import re
-from nd2reader.common import read_chunk, read_array, read_metadata, parse_date, get_from_dict_if_exists
 import xmltodict
 import six
 import numpy as np
+
+from nd2reader.common import read_chunk, read_array, read_metadata, parse_date, get_from_dict_if_exists
+from nd2reader.common_raw_metadata import parse_dimension_text_line, parse_if_not_none, parse_roi_shape, parse_roi_type, get_loops_from_data, determine_sampling_interval
 
 
 class RawMetadata(object):
@@ -35,15 +37,15 @@ class RawMetadata(object):
 
         frames_per_channel = self._parse_total_images_per_channel()
         self._metadata_parsed = {
-            "height": self._parse_if_not_none(self.image_attributes, self._parse_height),
-            "width": self._parse_if_not_none(self.image_attributes, self._parse_width),
-            "date": self._parse_if_not_none(self.image_text_info, self._parse_date),
+            "height": parse_if_not_none(self.image_attributes, self._parse_height),
+            "width": parse_if_not_none(self.image_attributes, self._parse_width),
+            "date": parse_if_not_none(self.image_text_info, self._parse_date),
             "fields_of_view": self._parse_fields_of_view(),
             "frames": self._parse_frames(),
             "z_levels": self._parse_z_levels(),
             "total_images_per_channel": frames_per_channel,
             "channels": self._parse_channels(),
-            "pixel_microns": self._parse_if_not_none(self.image_calibration, self._parse_calibration),
+            "pixel_microns": parse_if_not_none(self.image_calibration, self._parse_calibration),
         }
 
         self._set_default_if_not_empty('fields_of_view')
@@ -62,12 +64,6 @@ class RawMetadata(object):
         if len(self._metadata_parsed[entry]) == 0 and total_images > 0:
             # if the file is not empty, we always have one of this entry
             self._metadata_parsed[entry] = [0]
-
-    @staticmethod
-    def _parse_if_not_none(to_check, callback):
-        if to_check is not None:
-            return callback()
-        return None
 
     def _parse_width_or_height(self, key):
         try:
@@ -180,20 +176,11 @@ class RawMetadata(object):
             return dimension_text
 
         for line in textinfo:
-            entry = self._parse_dimension_text_line(line)
+            entry = parse_dimension_text_line(line)
             if entry is not None:
                 return entry
 
         return dimension_text
-
-    @staticmethod
-    def _parse_dimension_text_line(line):
-        if six.b("Dimensions:") in line:
-            entries = line.split(six.b("\r\n"))
-            for entry in entries:
-                if entry.startswith(six.b("Dimensions:")):
-                    return entry
-        return None
 
     def _parse_dimension(self, pattern):
         dimension_text = self._parse_dimension_text()
@@ -261,8 +248,8 @@ class RawMetadata(object):
             "timepoints": [],
             "positions": [],
             "sizes": [],
-            "shape": self._parse_roi_shape(raw_roi_dict[six.b('m_sInfo')][six.b('m_uiShapeType')]),
-            "type": self._parse_roi_type(raw_roi_dict[six.b('m_sInfo')][six.b('m_uiInterpType')])
+            "shape": parse_roi_shape(raw_roi_dict[six.b('m_sInfo')][six.b('m_uiShapeType')]),
+            "type": parse_roi_type(raw_roi_dict[six.b('m_sInfo')][six.b('m_uiInterpType')])
         }
         for i in range(number_of_timepoints):
             roi_dict = self._parse_vect_anim(roi_dict, raw_roi_dict[six.b('m_vectAnimParams_%d' % i)])
@@ -273,26 +260,6 @@ class RawMetadata(object):
         roi_dict["sizes"] = np.array(roi_dict["sizes"], dtype=np.float)
 
         return roi_dict
-
-    @staticmethod
-    def _parse_roi_shape(shape):
-        if shape == 3:
-            return 'rectangle'
-        elif shape == 9:
-            return 'circle'
-
-        return None
-
-    @staticmethod
-    def _parse_roi_type(type_no):
-        if type_no == 4:
-            return 'stimulation'
-        elif type_no == 3:
-            return 'reference'
-        elif type_no == 2:
-            return 'background'
-
-        return None
 
     def _parse_vect_anim(self, roi_dict, animation_dict):
         """
@@ -345,18 +312,6 @@ class RawMetadata(object):
         if six.b('uLoopPars') in raw_data:
             self._metadata_parsed['experiment']['loops'] = self._parse_loop_data(raw_data[six.b('uLoopPars')])
 
-    @staticmethod
-    def _get_loops_from_data(loop_data):
-        loops = [loop_data]
-        if six.b('uiPeriodCount') in loop_data and loop_data[six.b('uiPeriodCount')] > 0:
-            # special ND experiment
-            if six.b('pPeriod') not in loop_data:
-                return []
-
-            # take the first dictionary element, it contains all loop data
-            loops = loop_data[six.b('pPeriod')][list(loop_data[six.b('pPeriod')].keys())[0]]
-        return loops
-
     def _parse_loop_data(self, loop_data):
         """Parse the experimental loop data
 
@@ -367,7 +322,7 @@ class RawMetadata(object):
             list: list of the parsed loops
 
         """
-        loops = self._get_loops_from_data(loop_data)
+        loops = get_loops_from_data(loop_data)
 
         # take into account the absolute time in ms
         time_offset = 0
@@ -377,7 +332,7 @@ class RawMetadata(object):
         for loop in loops:
             # duration of this loop
             duration = get_from_dict_if_exists('dDuration', loop) or 0
-            interval = self._determine_sampling_interval(duration, loop)
+            interval = determine_sampling_interval(duration, loop)
 
             # if duration is not saved, infer it
             duration = self.get_duration_from_interval_and_loops(duration, interval, loop)
@@ -418,43 +373,6 @@ class RawMetadata(object):
 
         return duration
 
-    @staticmethod
-    def _determine_sampling_interval(duration, loop):
-        """Determines the loop sampling interval in milliseconds
-
-        Args:
-            duration: loop duration in milliseconds
-            loop: loop dictionary
-
-        Returns:
-            float: the sampling interval in milliseconds
-
-        """
-        interval = get_from_dict_if_exists('dPeriod', loop)
-        if interval is None or interval <= 0:
-            # Use a fallback if it is still not found
-            interval = get_from_dict_if_exists('dAvgPeriodDiff', loop)
-        if interval is None or interval <= 0:
-            # In some cases, both keys are not saved. Then try to calculate it.
-            interval = RawMetadata._guess_sampling_from_loops(duration, loop)
-        return interval
-
-    @staticmethod
-    def _guess_sampling_from_loops(duration, loop):
-        """ In some cases, both keys are not saved. Then try to calculate it.
-        
-        Args:
-            duration: the total duration of the loop
-            loop: the raw loop data
-
-        Returns:
-            float: the guessed sampling interval in milliseconds
-
-        """
-        number_of_loops = get_from_dict_if_exists('uiCount', loop)
-        number_of_loops = number_of_loops if number_of_loops is not None and number_of_loops > 0 else 1
-        interval = duration / number_of_loops
-        return interval
 
     @property
     def image_text_info(self):
