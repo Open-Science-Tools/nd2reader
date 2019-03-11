@@ -2,12 +2,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>nd2reader package &#8212; nd2reader 3.1.0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -18,12 +26,23 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Tutorial" href="tutorial.html" />
+
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-  </head><body>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-2297596333056287",
+    enable_page_level_ads: true
+  });
+</script>
+
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -127,7 +146,7 @@
       
   <div class="section" id="nd2reader-package">
 <h1>nd2reader package<a class="headerlink" href="#nd2reader-package" title="Permalink to this headline">¶</a></h1>
-<p>In general, you should only have to use the <code class="docutils literal notranslate"><span class="pre">nd2reader.reader</span></code> module. The rest of the submodules are for internal
+<p>In general, you should only have to use the <code class="docutils literal"><span class="pre">nd2reader.reader</span></code> module. The rest of the submodules are for internal
 use only.</p>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
@@ -137,7 +156,7 @@ use only.</p>
 <dl class="class">
 <dt id="nd2reader.reader.ND2Reader">
 <em class="property">class </em><code class="descclassname">nd2reader.reader.</code><code class="descname">ND2Reader</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pims.base_frames.FramesSequenceND</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pims.base_frames.FramesSequenceND</span></code></p>
 <p>PIMS wrapper for the ND2 parser.
 This is the main class: use this to process your .nd2 files.</p>
 <dl class="classmethod">
@@ -265,7 +284,7 @@ This is the main class: use this to process your .nd2 files.</p>
 <dl class="class">
 <dt id="nd2reader.parser.Parser">
 <em class="property">class </em><code class="descclassname">nd2reader.parser.</code><code class="descname">Parser</code><span class="sig-paren">(</span><em>fh</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/parser.html#Parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.parser.Parser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Parses ND2 files and creates a Metadata and driver object.</p>
 <dl class="attribute">
 <dt id="nd2reader.parser.Parser.CHUNK_HEADER">
@@ -372,7 +391,7 @@ doing anything out of the ordinary.</p>
 <dl class="class">
 <dt id="nd2reader.raw_metadata.RawMetadata">
 <em class="property">class </em><code class="descclassname">nd2reader.raw_metadata.</code><code class="descname">RawMetadata</code><span class="sig-paren">(</span><em>fh</em>, <em>label_map</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/raw_metadata.html#RawMetadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>RawMetadata class parses and stores the raw metadata that is read from the binary file in dict format.</p>
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.acquisition_times">
@@ -707,7 +726,7 @@ doing anything out of the ordinary.</p>
 <dl class="class">
 <dt id="nd2reader.label_map.LabelMap">
 <em class="property">class </em><code class="descclassname">nd2reader.label_map.</code><code class="descname">LabelMap</code><span class="sig-paren">(</span><em>raw_binary_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/label_map.html#LabelMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.label_map.LabelMap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Contains pointers to metadata. This might only be valid for V3 files.</p>
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.acquisition_frames">
@@ -1241,7 +1260,7 @@ doing anything out of the ordinary.</p>
 <dl class="exception">
 <dt id="nd2reader.exceptions.EmptyFileError">
 <em class="property">exception </em><code class="descclassname">nd2reader.exceptions.</code><code class="descname">EmptyFileError</code><a class="reference internal" href="_modules/nd2reader/exceptions.html#EmptyFileError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.exceptions.EmptyFileError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
 <p>This .nd2 file seems to be empty.</p>
 <p>Raised if no axes are found in the file.</p>
 </dd></dl>
@@ -1249,7 +1268,7 @@ doing anything out of the ordinary.</p>
 <dl class="exception">
 <dt id="nd2reader.exceptions.InvalidVersionError">
 <em class="property">exception </em><code class="descclassname">nd2reader.exceptions.</code><code class="descname">InvalidVersionError</code><a class="reference internal" href="_modules/nd2reader/exceptions.html#InvalidVersionError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.exceptions.InvalidVersionError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
 <p>Unknown version.</p>
 <p>We don’t know how to parse the version of ND2 that we were given.</p>
 </dd></dl>
@@ -1257,7 +1276,7 @@ doing anything out of the ordinary.</p>
 <dl class="exception">
 <dt id="nd2reader.exceptions.NoImageError">
 <em class="property">exception </em><code class="descclassname">nd2reader.exceptions.</code><code class="descname">NoImageError</code><a class="reference internal" href="_modules/nd2reader/exceptions.html#NoImageError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.exceptions.NoImageError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
 <p>No image found.</p>
 <p>Some apparent images in ND2s are just completely blank placeholders. These are used when the number of images per
 cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and bright field images every minute).</p>
@@ -1270,7 +1289,7 @@ cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and brig
 <dl class="class">
 <dt id="nd2reader.artificial.ArtificialND2">
 <em class="property">class </em><code class="descclassname">nd2reader.artificial.</code><code class="descname">ArtificialND2</code><span class="sig-paren">(</span><em>file</em>, <em>version=(3</em>, <em>0)</em>, <em>skip_blocks=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Artificial ND2 class (for testing purposes)</p>
 <dl class="method">
 <dt id="nd2reader.artificial.ArtificialND2.close">
@@ -1356,7 +1375,7 @@ cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and brig
 <dl class="class">
 <dt id="nd2reader.legacy.Nd2">
 <em class="property">class </em><code class="descclassname">nd2reader.legacy.</code><code class="descname">Nd2</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/legacy.html#Nd2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.legacy.Nd2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Warning: this module is deprecated and only maintained for backwards compatibility with the non-PIMS version of
 nd2reader.</p>
 <dl class="attribute">
@@ -1565,7 +1584,7 @@ nd2reader.</p>
     </p>
     <p>
         &copy; Copyright 2017 - 2018, Ruben Verweij.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
     </p>
   </div>
 </footer>
