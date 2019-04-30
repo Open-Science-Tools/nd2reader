@@ -2,47 +2,28 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>nd2reader package &#8212; nd2reader 3.1.0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '3.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Tutorial" href="tutorial.html" />
-
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
 
-
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<script>
-  (adsbygoogle = window.adsbygoogle || []).push({
-    google_ad_client: "ca-pub-2297596333056287",
-    enable_page_level_ads: true
-  });
-</script>
-
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -142,11 +123,11 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+    <div class="body col-md-12 content" role="main">
       
   <div class="section" id="nd2reader-package">
 <h1>nd2reader package<a class="headerlink" href="#nd2reader-package" title="Permalink to this headline">¶</a></h1>
-<p>In general, you should only have to use the <code class="docutils literal"><span class="pre">nd2reader.reader</span></code> module. The rest of the submodules are for internal
+<p>In general, you should only have to use the <code class="docutils literal notranslate"><span class="pre">nd2reader.reader</span></code> module. The rest of the submodules are for internal
 use only.</p>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
@@ -156,7 +137,7 @@ use only.</p>
 <dl class="class">
 <dt id="nd2reader.reader.ND2Reader">
 <em class="property">class </em><code class="descclassname">nd2reader.reader.</code><code class="descname">ND2Reader</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pims.base_frames.FramesSequenceND</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pims.base_frames.FramesSequenceND</span></code></p>
 <p>PIMS wrapper for the ND2 parser.
 This is the main class: use this to process your .nd2 files.</p>
 <dl class="classmethod">
@@ -180,60 +161,52 @@ This is the main class: use this to process your .nd2 files.</p>
 <dt id="nd2reader.reader.ND2Reader.frame_rate">
 <code class="descname">frame_rate</code><a class="headerlink" href="#nd2reader.reader.ND2Reader.frame_rate" title="Permalink to this definition">¶</a></dt>
 <dd><p>The (average) frame rate</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the (average) frame rate in frames per second</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the (average) frame rate in frames per second</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="nd2reader.reader.ND2Reader.get_frame_2D">
 <code class="descname">get_frame_2D</code><span class="sig-paren">(</span><em>c=0</em>, <em>t=0</em>, <em>z=0</em>, <em>x=0</em>, <em>y=0</em>, <em>v=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.get_frame_2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.get_frame_2D" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a given frame using the parser</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> – The x-index (pims expects this)</li>
-<li><strong>y</strong> – The y-index (pims expects this)</li>
-<li><strong>c</strong> – The color channel number</li>
-<li><strong>t</strong> – The frame number</li>
-<li><strong>z</strong> – The z stack number</li>
-<li><strong>v</strong> – The field of view index</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – The x-index (pims expects this)</p></li>
+<li><p><strong>y</strong> – The y-index (pims expects this)</p></li>
+<li><p><strong>c</strong> – The color channel number</p></li>
+<li><p><strong>t</strong> – The frame number</p></li>
+<li><p><strong>z</strong> – The z stack number</p></li>
+<li><p><strong>v</strong> – The field of view index</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The requested frame</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The requested frame</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="nd2reader.reader.ND2Reader.get_timesteps">
 <code class="descname">get_timesteps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.get_timesteps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.get_timesteps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the timesteps of the experiment</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">an array of times in milliseconds.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an array of times in milliseconds.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -248,32 +221,28 @@ This is the main class: use this to process your .nd2 files.</p>
 <dt id="nd2reader.reader.ND2Reader.pixel_type">
 <code class="descname">pixel_type</code><a class="headerlink" href="#nd2reader.reader.ND2Reader.pixel_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the pixel data type</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the pixel data type</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dtype</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the pixel data type</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dtype</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.reader.ND2Reader.timesteps">
 <code class="descname">timesteps</code><a class="headerlink" href="#nd2reader.reader.ND2Reader.timesteps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the timesteps of the experiment</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">an array of times in milliseconds.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an array of times in milliseconds.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -284,7 +253,7 @@ This is the main class: use this to process your .nd2 files.</p>
 <dl class="class">
 <dt id="nd2reader.parser.Parser">
 <em class="property">class </em><code class="descclassname">nd2reader.parser.</code><code class="descname">Parser</code><span class="sig-paren">(</span><em>fh</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/parser.html#Parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.parser.Parser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Parses ND2 files and creates a Metadata and driver object.</p>
 <dl class="attribute">
 <dt id="nd2reader.parser.Parser.CHUNK_HEADER">
@@ -305,18 +274,17 @@ This is the main class: use this to process your .nd2 files.</p>
 <dt id="nd2reader.parser.Parser.calculate_image_properties">
 <code class="descname">calculate_image_properties</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/parser.html#Parser.calculate_image_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.parser.Parser.calculate_image_properties" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate FOV, channels and z_levels</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) – the index (which is simply the order in which the image was acquired)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">tuple of the field of view, the channel and the z level</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – the index (which is simply the order in which the image was acquired)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>tuple of the field of view, the channel and the z level</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -336,46 +304,41 @@ example, if you take bright field images every minute, and GFP images every five
 indexes that do not contain an image. The reason for this is complicated, but suffice it to say that we hope to
 eliminate this possibility in future releases. For now, you’ll need to check if your image is None if you’re
 doing anything out of the ordinary.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) – the index (which is simply the order in which the image was acquired)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the image</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Frame</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – the index (which is simply the order in which the image was acquired)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the image</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Frame</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="nd2reader.parser.Parser.get_image_by_attributes">
 <code class="descname">get_image_by_attributes</code><span class="sig-paren">(</span><em>frame_number</em>, <em>field_of_view</em>, <em>channel_name</em>, <em>z_level</em>, <em>height</em>, <em>width</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/parser.html#Parser.get_image_by_attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.parser.Parser.get_image_by_attributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets an image based on its attributes alone</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>frame_number</strong> – the frame number</li>
-<li><strong>field_of_view</strong> – the field of view</li>
-<li><strong>channel_name</strong> – the color channel name</li>
-<li><strong>z_level</strong> – the z level</li>
-<li><strong>height</strong> – the height of the image</li>
-<li><strong>width</strong> – the width of the image</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame_number</strong> – the frame number</p></li>
+<li><p><strong>field_of_view</strong> – the field of view</p></li>
+<li><p><strong>channel_name</strong> – the color channel name</p></li>
+<li><p><strong>z_level</strong> – the z level</p></li>
+<li><p><strong>height</strong> – the height of the image</p></li>
+<li><p><strong>width</strong> – the width of the image</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the requested image</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Frame</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the requested image</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Frame</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -391,331 +354,290 @@ doing anything out of the ordinary.</p>
 <dl class="class">
 <dt id="nd2reader.raw_metadata.RawMetadata">
 <em class="property">class </em><code class="descclassname">nd2reader.raw_metadata.</code><code class="descname">RawMetadata</code><span class="sig-paren">(</span><em>fh</em>, <em>label_map</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/raw_metadata.html#RawMetadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>RawMetadata class parses and stores the raw metadata that is read from the binary file in dict format.</p>
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.acquisition_times">
 <code class="descname">acquisition_times</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.acquisition_times" title="Permalink to this definition">¶</a></dt>
 <dd><p>Acquisition times</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Yields:</th><td class="field-body"><em>float</em> – the acquisition time</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Yields</dt>
+<dd class="field-odd"><p><em>float</em> – the acquisition time</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.app_info">
 <code class="descname">app_info</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.app_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>NIS elements application info</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">(Version) information of the NIS Elements application</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(Version) information of the NIS Elements application</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.camera_exposure_time">
 <code class="descname">camera_exposure_time</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.camera_exposure_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exposure time information</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Camera exposure time</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Camera exposure time</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.camera_temp">
 <code class="descname">camera_temp</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.camera_temp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Camera temperature</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Yields:</th><td class="field-body"><em>float</em> – the temperature</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Yields</dt>
+<dd class="field-odd"><p><em>float</em> – the temperature</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.custom_data">
 <code class="descname">custom_data</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.custom_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Custom user data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">custom user data</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>custom user data</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="nd2reader.raw_metadata.RawMetadata.get_duration_from_interval_and_loops">
 <code class="descname">get_duration_from_interval_and_loops</code><span class="sig-paren">(</span><em>duration</em>, <em>interval</em>, <em>loop</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/raw_metadata.html#RawMetadata.get_duration_from_interval_and_loops"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.get_duration_from_interval_and_loops" title="Permalink to this definition">¶</a></dt>
 <dd><p>Infers the duration of the loop from the number of measurements and the interval</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>duration</strong> – loop duration in milliseconds</li>
-<li><strong>duration</strong> – measurement interval in milliseconds</li>
-<li><strong>loop</strong> – loop dictionary</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>duration</strong> – loop duration in milliseconds</p></li>
+<li><p><strong>duration</strong> – measurement interval in milliseconds</p></li>
+<li><p><strong>loop</strong> – loop dictionary</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the loop duration in milliseconds</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the loop duration in milliseconds</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="nd2reader.raw_metadata.RawMetadata.get_parsed_metadata">
 <code class="descname">get_parsed_metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/raw_metadata.html#RawMetadata.get_parsed_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.get_parsed_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the parsed metadata in dictionary form.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the parsed metadata</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the parsed metadata</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.grabber_settings">
 <code class="descname">grabber_settings</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.grabber_settings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Grabber settings</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Acquisition settings</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Acquisition settings</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.image_attributes">
 <code class="descname">image_attributes</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_attributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Image attributes</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">containing the image attributes</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>containing the image attributes</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.image_calibration">
 <code class="descname">image_calibration</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_calibration" title="Permalink to this definition">¶</a></dt>
 <dd><p>The amount of pixels per micron.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">pixels per micron</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>pixels per micron</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.image_metadata">
 <code class="descname">image_metadata</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Image metadata</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Extra image metadata</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Extra image metadata</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.image_metadata_sequence">
 <code class="descname">image_metadata_sequence</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_metadata_sequence" title="Permalink to this definition">¶</a></dt>
 <dd><p>Image metadata of the sequence</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">containing the metadata</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>containing the metadata</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.image_text_info">
 <code class="descname">image_text_info</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_text_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Textual image information</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">containing the textual image info</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>containing the textual image info</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.lut_data">
 <code class="descname">lut_data</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.lut_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>LUT information</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">LUT information</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>LUT information</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.pfs_offset">
 <code class="descname">pfs_offset</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.pfs_offset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perfect focus system (PFS) offset</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Perfect focus system (PFS) offset</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Perfect focus system (PFS) offset</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.pfs_status">
 <code class="descname">pfs_status</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.pfs_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perfect focus system (PFS) status</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Perfect focus system (PFS) status</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Perfect focus system (PFS) status</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.roi_metadata">
 <code class="descname">roi_metadata</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.roi_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>Contains information about the defined ROIs</em> – shape, position and type (reference/background/stimulation).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">ROI metadata dictionary</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dd><p>shape, position and type (reference/background/stimulation).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>ROI metadata dictionary</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Contains information about the defined ROIs</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.x_data">
 <code class="descname">x_data</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.x_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>X data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">x_data</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>x_data</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.y_data">
 <code class="descname">y_data</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.y_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Y data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">y_data</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>y_data</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.raw_metadata.RawMetadata.z_data">
 <code class="descname">z_data</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.z_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Z data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">z_data</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>z_data</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -726,377 +648,331 @@ doing anything out of the ordinary.</p>
 <dl class="class">
 <dt id="nd2reader.label_map.LabelMap">
 <em class="property">class </em><code class="descclassname">nd2reader.label_map.</code><code class="descname">LabelMap</code><span class="sig-paren">(</span><em>raw_binary_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/label_map.html#LabelMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.label_map.LabelMap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Contains pointers to metadata. This might only be valid for V3 files.</p>
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.acquisition_frames">
 <code class="descname">acquisition_frames</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.acquisition_frames" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the acquisition frames</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the acquisition frames</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the acquisition frames</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.acquisition_times">
 <code class="descname">acquisition_times</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.acquisition_times" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the acquisition times, block 1</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the acquisition times, block 1</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the acquisition times, block 1</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.acquisition_times_2">
 <code class="descname">acquisition_times_2</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.acquisition_times_2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the acquisition times, block 2</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the acquisition times, block 2</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the acquisition times, block 2</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.app_info">
 <code class="descname">app_info</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.app_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the application info metadata</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the application info metadata</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the application info metadata</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.camera_exposure_time">
 <code class="descname">camera_exposure_time</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.camera_exposure_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the camera exposure time</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the camera exposure time</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the camera exposure time</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.camera_temp">
 <code class="descname">camera_temp</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.camera_temp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the camera temperature</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the camera temperature</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the camera temperature</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.custom_data">
 <code class="descname">custom_data</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.custom_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the custom user data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the custom user data</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the custom user data</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.description">
 <code class="descname">description</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the image description</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the image description</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the image description</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="nd2reader.label_map.LabelMap.get_image_data_location">
 <code class="descname">get_image_data_location</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/label_map.html#LabelMap.get_image_data_location"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.label_map.LabelMap.get_image_data_location" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the image data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the image data</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the image data</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.grabber_settings">
 <code class="descname">grabber_settings</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.grabber_settings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the grabber settings</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the grabber settings</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the grabber settings</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.guid">
 <code class="descname">guid</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.guid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the image guid</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the image guid</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the image guid</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.image_attributes">
 <code class="descname">image_attributes</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_attributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the image attributes</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the image attributes</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the image attributes</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.image_calibration">
 <code class="descname">image_calibration</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_calibration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the image calibration</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the image calibration</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the image calibration</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.image_metadata">
 <code class="descname">image_metadata</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the image metadata</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the image metadata</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the image metadata</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.image_metadata_sequence">
 <code class="descname">image_metadata_sequence</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_metadata_sequence" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Get the location of the image metadata sequence. There is always only one of these, even though it has a pipe</dt>
-<dd>followed by a zero, which is how they do indexes.</dd>
+<dd><dl class="simple">
+<dt>Get the location of the image metadata sequence. There is always only one of these, even though it has a pipe</dt><dd><p>followed by a zero, which is how they do indexes.</p>
+</dd>
 </dl>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the image metadata sequence</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the image metadata sequence</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.image_text_info">
 <code class="descname">image_text_info</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_text_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the textual image information</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the textual image information</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the textual image information</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.lut_data">
 <code class="descname">lut_data</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.lut_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the LUT data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the LUT data</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the LUT data</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.pfs_offset">
 <code class="descname">pfs_offset</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.pfs_offset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the perfect focus system (PFS) offset</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the perfect focus system (PFS) offset</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the perfect focus system (PFS) offset</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.pfs_status">
 <code class="descname">pfs_status</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.pfs_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the perfect focus system (PFS) status</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the perfect focus system (PFS) status</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the perfect focus system (PFS) status</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.roi_metadata">
 <code class="descname">roi_metadata</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.roi_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Information about any regions of interest (ROIs) defined in the nd2 file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the regions of interest (ROIs)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the regions of interest (ROIs)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.x_data">
 <code class="descname">x_data</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.x_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the custom x data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the custom x data</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the custom x data</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.y_data">
 <code class="descname">y_data</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.y_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the custom y data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the custom y data</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the custom y data</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.label_map.LabelMap.z_data">
 <code class="descname">z_data</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.z_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location of the custom z data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location of the custom z data</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the custom z data</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -1118,140 +994,122 @@ doing anything out of the ordinary.</p>
 :param key: key to lookup
 :param dictionary: dictionary to look in
 :param convert_key_to_binary: convert the key from string to binary if true</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the value of dictionary[key] or None</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the value of dictionary[key] or None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="nd2reader.common.get_version">
 <code class="descclassname">nd2reader.common.</code><code class="descname">get_version</code><span class="sig-paren">(</span><em>fh</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#get_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.common.get_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines what version the ND2 is.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fh</strong> – File handle of the .nd2 file</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Major and minor version</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fh</strong> – File handle of the .nd2 file</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Major and minor version</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="nd2reader.common.parse_date">
 <code class="descclassname">nd2reader.common.</code><code class="descname">parse_date</code><span class="sig-paren">(</span><em>text_info</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#parse_date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.common.parse_date" title="Permalink to this definition">¶</a></dt>
 <dd><p>The date and time when acquisition began.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text_info</strong> – the text that contains the date and time information</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the date and time of the acquisition</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">datetime</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text_info</strong> – the text that contains the date and time information</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the date and time of the acquisition</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>datetime</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="nd2reader.common.parse_version">
 <code class="descclassname">nd2reader.common.</code><code class="descname">parse_version</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#parse_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.common.parse_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parses a string with the version data in it.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>unicode</em>) – the 19th through 54th byte of the ND2, representing the version</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Major and minor version</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>unicode</em>) – the 19th through 54th byte of the ND2, representing the version</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Major and minor version</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="nd2reader.common.read_array">
 <code class="descclassname">nd2reader.common.</code><code class="descname">read_array</code><span class="sig-paren">(</span><em>fh</em>, <em>kind</em>, <em>chunk_location</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#read_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.common.read_array" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fh</strong> – File handle of the nd2 file</li>
-<li><strong>kind</strong> – data type, can be one of ‘double’, ‘int’ or ‘float’</li>
-<li><strong>chunk_location</strong> – the location of the array chunk in the binary nd2 file</li>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fh</strong> – File handle of the nd2 file</p></li>
+<li><p><strong>kind</strong> – data type, can be one of ‘double’, ‘int’ or ‘float’</p></li>
+<li><p><strong>chunk_location</strong> – the location of the array chunk in the binary nd2 file</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">an array of the data</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array.array</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an array of the data</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array.array</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="nd2reader.common.read_chunk">
 <code class="descclassname">nd2reader.common.</code><code class="descname">read_chunk</code><span class="sig-paren">(</span><em>fh</em>, <em>chunk_location</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#read_chunk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.common.read_chunk" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads a piece of data given the location of its pointer.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fh</strong> – an open file handle to the ND2</li>
-<li><strong>chunk_location</strong> (<em>int</em>) – location to read</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fh</strong> – an open file handle to the ND2</p></li>
+<li><p><strong>chunk_location</strong> (<em>int</em>) – location to read</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the data at the chunk location</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bytes</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the data at the chunk location</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bytes</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="nd2reader.common.read_metadata">
 <code class="descclassname">nd2reader.common.</code><code class="descname">read_metadata</code><span class="sig-paren">(</span><em>data</em>, <em>count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#read_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.common.read_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterates over each element of some section of the metadata and parses it.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>data</strong> – the metadata in binary form</li>
-<li><strong>count</strong> – the number of metadata elements</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – the metadata in binary form</p></li>
+<li><p><strong>count</strong> – the number of metadata elements</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a dictionary containing the parsed metadata</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary containing the parsed metadata</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -1260,7 +1118,7 @@ doing anything out of the ordinary.</p>
 <dl class="exception">
 <dt id="nd2reader.exceptions.EmptyFileError">
 <em class="property">exception </em><code class="descclassname">nd2reader.exceptions.</code><code class="descname">EmptyFileError</code><a class="reference internal" href="_modules/nd2reader/exceptions.html#EmptyFileError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.exceptions.EmptyFileError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
 <p>This .nd2 file seems to be empty.</p>
 <p>Raised if no axes are found in the file.</p>
 </dd></dl>
@@ -1268,7 +1126,7 @@ doing anything out of the ordinary.</p>
 <dl class="exception">
 <dt id="nd2reader.exceptions.InvalidVersionError">
 <em class="property">exception </em><code class="descclassname">nd2reader.exceptions.</code><code class="descname">InvalidVersionError</code><a class="reference internal" href="_modules/nd2reader/exceptions.html#InvalidVersionError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.exceptions.InvalidVersionError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
 <p>Unknown version.</p>
 <p>We don’t know how to parse the version of ND2 that we were given.</p>
 </dd></dl>
@@ -1276,7 +1134,7 @@ doing anything out of the ordinary.</p>
 <dl class="exception">
 <dt id="nd2reader.exceptions.NoImageError">
 <em class="property">exception </em><code class="descclassname">nd2reader.exceptions.</code><code class="descname">NoImageError</code><a class="reference internal" href="_modules/nd2reader/exceptions.html#NoImageError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.exceptions.NoImageError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
 <p>No image found.</p>
 <p>Some apparent images in ND2s are just completely blank placeholders. These are used when the number of images per
 cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and bright field images every minute).</p>
@@ -1289,7 +1147,7 @@ cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and brig
 <dl class="class">
 <dt id="nd2reader.artificial.ArtificialND2">
 <em class="property">class </em><code class="descclassname">nd2reader.artificial.</code><code class="descname">ArtificialND2</code><span class="sig-paren">(</span><em>file</em>, <em>version=(3</em>, <em>0)</em>, <em>skip_blocks=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Artificial ND2 class (for testing purposes)</p>
 <dl class="method">
 <dt id="nd2reader.artificial.ArtificialND2.close">
@@ -1301,16 +1159,14 @@ cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and brig
 <dt id="nd2reader.artificial.ArtificialND2.create_label_map_bytes">
 <code class="descname">create_label_map_bytes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.create_label_map_bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.create_label_map_bytes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct a binary label map</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">(binary data, dictionary data)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(binary data, dictionary data)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -1322,16 +1178,14 @@ cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and brig
 <dt id="nd2reader.artificial.ArtificialND2.file_handle">
 <code class="descname">file_handle</code><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.file_handle" title="Permalink to this definition">¶</a></dt>
 <dd><p>The file handle to the binary file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the file handle</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">file</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the file handle</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>file</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -1375,23 +1229,21 @@ cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and brig
 <dl class="class">
 <dt id="nd2reader.legacy.Nd2">
 <em class="property">class </em><code class="descclassname">nd2reader.legacy.</code><code class="descname">Nd2</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/legacy.html#Nd2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.legacy.Nd2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Warning: this module is deprecated and only maintained for backwards compatibility with the non-PIMS version of
 nd2reader.</p>
 <dl class="attribute">
 <dt id="nd2reader.legacy.Nd2.channels">
 <code class="descname">channels</code><a class="headerlink" href="#nd2reader.legacy.Nd2.channels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deprecated. Fetches all color channels.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the color channels.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the color channels.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -1404,165 +1256,143 @@ nd2reader.</p>
 <dt id="nd2reader.legacy.Nd2.date">
 <code class="descname">date</code><a class="headerlink" href="#nd2reader.legacy.Nd2.date" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deprecated. Fetches the acquisition date.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the date</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the date</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.legacy.Nd2.fields_of_view">
 <code class="descname">fields_of_view</code><a class="headerlink" href="#nd2reader.legacy.Nd2.fields_of_view" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deprecated. Fetches the fields of view.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">fields of view.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>fields of view.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.legacy.Nd2.frames">
 <code class="descname">frames</code><a class="headerlink" href="#nd2reader.legacy.Nd2.frames" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deprecated. Fetches all frames.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of frames</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>list of frames</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="nd2reader.legacy.Nd2.get_image">
 <code class="descname">get_image</code><span class="sig-paren">(</span><em>frame_number</em>, <em>field_of_view</em>, <em>channel_name</em>, <em>z_level</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/legacy.html#Nd2.get_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.legacy.Nd2.get_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deprecated. Returns the specified image from the ND2Reader class.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>frame_number</strong> – the frame number</li>
-<li><strong>field_of_view</strong> – the field of view number</li>
-<li><strong>channel_name</strong> – the name of the color channel</li>
-<li><strong>z_level</strong> – the z level number</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame_number</strong> – the frame number</p></li>
+<li><p><strong>field_of_view</strong> – the field of view number</p></li>
+<li><p><strong>channel_name</strong> – the name of the color channel</p></li>
+<li><p><strong>z_level</strong> – the z level number</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the specified image</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Frame</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the specified image</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Frame</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.legacy.Nd2.height">
 <code class="descname">height</code><a class="headerlink" href="#nd2reader.legacy.Nd2.height" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deprecated. Fetches the height of the image.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the pixel height of the image</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the pixel height of the image</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.legacy.Nd2.pixel_microns">
 <code class="descname">pixel_microns</code><a class="headerlink" href="#nd2reader.legacy.Nd2.pixel_microns" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deprecated. Fetches the amount of microns per pixel.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">microns per pixel</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>microns per pixel</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="nd2reader.legacy.Nd2.select">
 <code class="descname">select</code><span class="sig-paren">(</span><em>fields_of_view=None</em>, <em>channels=None</em>, <em>z_levels=None</em>, <em>start=0</em>, <em>stop=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/legacy.html#Nd2.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.legacy.Nd2.select" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select images based on criteria.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fields_of_view</strong> – the fields of view</li>
-<li><strong>channels</strong> – the color channels</li>
-<li><strong>z_levels</strong> – the z levels</li>
-<li><strong>start</strong> – the starting frame</li>
-<li><strong>stop</strong> – the last frame</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fields_of_view</strong> – the fields of view</p></li>
+<li><p><strong>channels</strong> – the color channels</p></li>
+<li><p><strong>z_levels</strong> – the z levels</p></li>
+<li><p><strong>start</strong> – the starting frame</p></li>
+<li><p><strong>stop</strong> – the last frame</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Sliced ND2Reader which contains the frames</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#nd2reader.reader.ND2Reader" title="nd2reader.reader.ND2Reader">ND2Reader</a></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Sliced ND2Reader which contains the frames</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#nd2reader.reader.ND2Reader" title="nd2reader.reader.ND2Reader">ND2Reader</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.legacy.Nd2.width">
 <code class="descname">width</code><a class="headerlink" href="#nd2reader.legacy.Nd2.width" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deprecated. Fetches the width of the image.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the pixel width of the image</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the pixel width of the image</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nd2reader.legacy.Nd2.z_levels">
 <code class="descname">z_levels</code><a class="headerlink" href="#nd2reader.legacy.Nd2.z_levels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deprecated. Fetches the available z levels.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">z levels.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>z levels.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -1584,7 +1414,7 @@ nd2reader.</p>
     </p>
     <p>
         &copy; Copyright 2017 - 2018, Ruben Verweij.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>
