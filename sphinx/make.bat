@@ -5,7 +5,7 @@ REM Command file for Sphinx documentation
 pushd %~dp0
 
 if "%SPHINXBUILD%" == "" (
-	set SPHINXBUILD=sphinx-build
+	set SPHINXBUILD=python3 -msphinx
 )
 set BUILDDIR=../docs
 set ALLSPHINXOPTS= .
@@ -26,7 +26,7 @@ goto sphinx_ok
 
 :sphinx_python
 
-set SPHINXBUILD=python -m sphinx.__init__
+set SPHINXBUILD=python3 -m sphinx.__init__
 %SPHINXBUILD% 2> nul
 if errorlevel 9009 (
 	echo.

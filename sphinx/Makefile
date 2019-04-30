@@ -2,7 +2,7 @@
 #
 
 # You can set these variables from the command line.
-SPHINXBUILD   = sphinx-build
+SPHINXBUILD   = python3 -msphinx
 BUILDDIR      = ../docs
 
 # Internal variables.
