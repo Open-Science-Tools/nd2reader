@@ -67,14 +67,9 @@ class ND2Reader(FramesSequenceND):
             numpy.ndarray: The requested frame
 
         """
-        try:
-            c_name = self.metadata["channels"][c]
-        except KeyError:
-            c_name = self.metadata["channels"][0]
-
         x = self.metadata["width"] if x <= 0 else x
         y = self.metadata["height"] if y <= 0 else y
-        return self._parser.get_image_by_attributes(t, v, c_name, z, y, x)
+        return self._parser.get_image_by_attributes(t, v, c, z, y, x)
 
     @property
     def parser(self):
