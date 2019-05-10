@@ -77,7 +77,7 @@ class Parser(object):
         else:
             return image
 
-    def get_image_by_attributes(self, frame_number, field_of_view, channel_name, z_level, height, width):
+    def get_image_by_attributes(self, frame_number, field_of_view, channel, z_level, height, width):
         """Gets an image based on its attributes alone
 
         Args:
@@ -94,7 +94,7 @@ class Parser(object):
         """
         image_group_number = self._calculate_image_group_number(frame_number, field_of_view, z_level)
         try:
-            timestamp, raw_image_data = self._get_raw_image_data(image_group_number, self._channel_offset[channel_name],
+            timestamp, raw_image_data = self._get_raw_image_data(image_group_number, channel,
                                                                  height, width)
         except (TypeError, NoImageError):
             return Frame([], frame_no=frame_number, metadata=self._get_frame_metadata())
