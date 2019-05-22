@@ -48,6 +48,11 @@ def get_loops_from_data(loop_data):
 
         # take the first dictionary element, it contains all loop data
         loops = loop_data[six.b('pPeriod')][list(loop_data[six.b('pPeriod')].keys())[0]]
+
+        # exclude invalid periods
+        if six.b('pPeriodValid') in loop_data:
+            loops = [loops[i] for i in range(len(loops)) if loop_data[six.b('pPeriodValid')][i] == 1]
+
     return loops
 
 
