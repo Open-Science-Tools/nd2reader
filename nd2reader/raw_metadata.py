@@ -393,9 +393,12 @@ class RawMetadata(object):
         if events is None or six.b('RLxExperimentRecord') not in events:
             return
 
-        events = events[six.b('RLxExperimentRecord')][six.b('pEvents')][six.b('')]
+        events = events[six.b('RLxExperimentRecord')][six.b('pEvents')]
 
-        for event in events:
+        if len(events) == 0:
+            return
+
+        for event in events[six.b('')]:
             event_info = {
                 'index': event[six.b('I')],
                 'time': event[six.b('T')],
@@ -405,7 +408,6 @@ class RawMetadata(object):
                 event_info['name'] = event_names[event_info['type']]
 
             self._metadata_parsed['events'].append(event_info)
-
 
     @property
     def image_text_info(self):
