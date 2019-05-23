@@ -103,6 +103,16 @@ class ND2Reader(FramesSequenceND):
         return self._timesteps
 
     @property
+    def events(self):
+        """Get the events of the experiment
+
+        Returns:
+            iterator of events as dict
+        """
+
+        return self._get_metadata_property("events")
+
+    @property
     def frame_rate(self):
         """The (average) frame rate
         
@@ -186,3 +196,5 @@ class ND2Reader(FramesSequenceND):
         self._timesteps = np.array(list(self._parser._raw_metadata.acquisition_times), dtype=np.float) * 1000.0
 
         return self._timesteps
+
+

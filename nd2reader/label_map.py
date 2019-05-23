@@ -44,6 +44,16 @@ class LabelMap(object):
         return self._get_location(six.b("ImageMetadataLV!"))
 
     @property
+    def image_events(self):
+        """Get the location of the image events
+
+        Returns:
+            int: The location of the image events
+
+        """
+        return self._get_location(six.b("ImageEventsLV!"))
+
+    @property
     def image_metadata_sequence(self):
         """Get the location of the image metadata sequence. There is always only one of these, even though it has a pipe
          followed by a zero, which is how they do indexes.

@@ -54,6 +54,7 @@ class RawMetadata(object):
 
         self._parse_roi_metadata()
         self._parse_experiment_metadata()
+        self._parse_events()
 
         return self._metadata_parsed
 
@@ -373,6 +374,38 @@ class RawMetadata(object):
 
         return duration
 
+    def _parse_events(self):
+        """Extract events
+
+        """
+
+        event_names = {
+            10: 'Experiment Resumed',
+            14: 'Experiment Paused for Refocusing',
+            44: 'No Acquisition Phase Start',
+            45: 'No Acquisition Phase End'
+        }
+
+        self._metadata_parsed['events'] = []
+
+        events = read_metadata(read_chunk(self._fh, self._label_map.image_events), 1)
+
+        if events is None or six.b('RLxExperimentRecord') not in events:
+            return
+
+        events = events[six.b('RLxExperimentRecord')][six.b('pEvents')][six.b('')]
+
+        for event in events:
+            event_info = {
+                'index': event[six.b('I')],
+                'time': event[six.b('T')],
+                'type': event[six.b('M')],
+            }
+            if event_info['type'] in event_names.keys():
+                event_info['name'] = event_names[event_info['type']]
+
+            self._metadata_parsed['events'].append(event_info)
+
 
     @property
     def image_text_info(self):
@@ -554,3 +587,15 @@ class RawMetadata(object):
         """
         if self._label_map.image_metadata:
             return read_metadata(read_chunk(self._fh, self._label_map.image_metadata), 1)
+
+    @property
+    def image_events(self):
+        """Image events
+
+        Returns:
+            dict: Image events
+        """
+        if self._label_map.image_metadata:
+            for event in self._metadata_parsed["events"]:
+                yield event
+
