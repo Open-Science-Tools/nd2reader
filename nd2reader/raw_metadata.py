@@ -379,11 +379,31 @@ class RawMetadata(object):
 
         """
 
+        # list of event names manually extracted from an ND2 file that contains all manually
+        # insertable events from NIS-Elements software (4.60.00 (Build 1171) Patch 02)
         event_names = {
+            1: 'Autofocus',
+            7: 'Command Executed',
+            9: 'Experiment Paused',
             10: 'Experiment Resumed',
+            11: 'Experiment Stopped by User',
+            13: 'Next Phase Moved by User',
             14: 'Experiment Paused for Refocusing',
+            16: 'External Stimulation',
+            33: 'User 1',
+            34: 'User 2',
+            35: 'User 3',
+            36: 'User 4',
+            37: 'User 5',
+            38: 'User 6',
+            39: 'User 7',
+            40: 'User 8',
             44: 'No Acquisition Phase Start',
-            45: 'No Acquisition Phase End'
+            45: 'No Acquisition Phase End',
+            46: 'Hardware Error',
+            47: 'N-STORM',
+            48: 'Incubation Info',
+            49: 'Incubation Error'
         }
 
         self._metadata_parsed['events'] = []
