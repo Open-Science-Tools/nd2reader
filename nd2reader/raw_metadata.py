@@ -54,6 +54,7 @@ class RawMetadata(object):
 
         self._parse_roi_metadata()
         self._parse_experiment_metadata()
+        self._parse_events()
 
         return self._metadata_parsed
 
@@ -373,6 +374,60 @@ class RawMetadata(object):
 
         return duration
 
+    def _parse_events(self):
+        """Extract events
+
+        """
+
+        # list of event names manually extracted from an ND2 file that contains all manually
+        # insertable events from NIS-Elements software (4.60.00 (Build 1171) Patch 02)
+        event_names = {
+            1: 'Autofocus',
+            7: 'Command Executed',
+            9: 'Experiment Paused',
+            10: 'Experiment Resumed',
+            11: 'Experiment Stopped by User',
+            13: 'Next Phase Moved by User',
+            14: 'Experiment Paused for Refocusing',
+            16: 'External Stimulation',
+            33: 'User 1',
+            34: 'User 2',
+            35: 'User 3',
+            36: 'User 4',
+            37: 'User 5',
+            38: 'User 6',
+            39: 'User 7',
+            40: 'User 8',
+            44: 'No Acquisition Phase Start',
+            45: 'No Acquisition Phase End',
+            46: 'Hardware Error',
+            47: 'N-STORM',
+            48: 'Incubation Info',
+            49: 'Incubation Error'
+        }
+
+        self._metadata_parsed['events'] = []
+
+        events = read_metadata(read_chunk(self._fh, self._label_map.image_events), 1)
+
+        if events is None or six.b('RLxExperimentRecord') not in events:
+            return
+
+        events = events[six.b('RLxExperimentRecord')][six.b('pEvents')]
+
+        if len(events) == 0:
+            return
+
+        for event in events[six.b('')]:
+            event_info = {
+                'index': event[six.b('I')],
+                'time': event[six.b('T')],
+                'type': event[six.b('M')],
+            }
+            if event_info['type'] in event_names.keys():
+                event_info['name'] = event_names[event_info['type']]
+
+            self._metadata_parsed['events'].append(event_info)
 
     @property
     def image_text_info(self):
@@ -554,3 +609,15 @@ class RawMetadata(object):
         """
         if self._label_map.image_metadata:
             return read_metadata(read_chunk(self._fh, self._label_map.image_metadata), 1)
+
+    @property
+    def image_events(self):
+        """Image events
+
+        Returns:
+            dict: Image events
+        """
+        if self._label_map.image_metadata:
+            for event in self._metadata_parsed["events"]:
+                yield event
+
