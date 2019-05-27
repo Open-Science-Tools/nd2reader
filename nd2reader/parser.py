@@ -92,6 +92,11 @@ class Parser(object):
             Frame: the requested image
 
         """
+        frame_number = 0 if frame_number is None else frame_number
+        field_of_view = 0 if field_of_view is None else field_of_view
+        channel = 0 if channel is None else channel
+        z_level = 0 if z_level is None else z_level
+
         image_group_number = self._calculate_image_group_number(frame_number, field_of_view, z_level)
         try:
             timestamp, raw_image_data = self._get_raw_image_data(image_group_number, channel,
