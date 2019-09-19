@@ -193,7 +193,7 @@ class RawMetadata(object):
         if not match:
             return []
         count = int(match.group(1))
-        return list(range(count))
+        return range(count)
 
     def _parse_total_images_per_channel(self):
         """The total number of images per channel.
