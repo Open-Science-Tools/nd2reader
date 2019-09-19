@@ -140,6 +140,7 @@ class Parser(object):
         self._label_map = self._build_label_map()
         self._raw_metadata = RawMetadata(self._fh, self._label_map)
         self.metadata = self._raw_metadata.__dict__
+        self.acquisition_times = self._raw_metadata.acquisition_times
 
     def _build_label_map(self):
         """
