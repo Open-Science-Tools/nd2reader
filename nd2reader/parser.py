@@ -7,7 +7,7 @@ from pims.base_frames import Frame
 import numpy as np
 
 from nd2reader.common import get_version, read_chunk
-from nd2reader.exceptions import InvalidVersionError, NoImageError
+from nd2reader.exceptions import InvalidVersionError
 from nd2reader.label_map import LabelMap
 from nd2reader.raw_metadata import RawMetadata
 
@@ -288,8 +288,6 @@ class Parser(object):
         else: 
             empty_frame = np.zeros([height, width])
             return timestamp, Frame(empty_frame, metadata=self._get_frame_metadata())     
-
-        # raise NoImageError # <-- delete?
 
     def _get_frame_metadata(self):
         """Get the metadata for one frame
