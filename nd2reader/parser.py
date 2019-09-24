@@ -3,6 +3,7 @@ import struct
 
 import array
 import six
+import warnings
 from pims.base_frames import Frame
 import numpy as np
 
@@ -72,7 +73,7 @@ class Parser(object):
         try:
             timestamp, image = self._get_raw_image_data(image_group_number, channel_offset, self.metadata["height"],
                                                         self.metadata["width"])
-        except (TypeError, NoImageError):
+        except (TypeError):
             return Frame([], frame_no=frame_number, metadata=self._get_frame_metadata())
         else:
             return image
@@ -101,7 +102,7 @@ class Parser(object):
         try:
             timestamp, raw_image_data = self._get_raw_image_data(image_group_number, channel,
                                                                  height, width)
-        except (TypeError, NoImageError):
+        except (TypeError):
             return Frame([], frame_no=frame_number, metadata=self._get_frame_metadata())
         else:
             return raw_image_data
@@ -283,11 +284,12 @@ class Parser(object):
         if np.any(image_data):
             return timestamp, Frame(image_data, metadata=self._get_frame_metadata())
 
-        # If a blank "gap" image is encountered, generate an empty frame (black image) of corresponding height and width to avoid 
-        # errors with ND2-files with missing frames.
-        else: 
-            empty_frame = np.zeros([height, width])
-            return timestamp, Frame(empty_frame, metadata=self._get_frame_metadata())     
+        # If a blank "gap" image is encountered, generate an array of corresponding height and width to avoid 
+        # errors with ND2-files with missing frames. Array is filled with nan to reflect that data is missing. 
+        else:
+            empty_frame = np.full((height, width), np.nan)
+            warnings.warn('ND2 file contains gap frames which are represented by np.nan-filled arrays')
+            return timestamp, Frame(empty_frame, metadata=self._get_frame_metadata())  
 
     def _get_frame_metadata(self):
         """Get the metadata for one frame
