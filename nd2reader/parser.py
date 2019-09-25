@@ -288,7 +288,7 @@ class Parser(object):
         # errors with ND2-files with missing frames. Array is filled with nan to reflect that data is missing. 
         else:
             empty_frame = np.full((height, width), np.nan)
-            warnings.warn('ND2 file contains gap frames which are represented by np.nan-filled arrays')
+            warnings.warn('ND2 file contains gap frames which are represented by np.nan-filled arrays; to convert to zeros use e.g. np.nan_to_num(array)')
             return timestamp, Frame(empty_frame, metadata=self._get_frame_metadata())  
 
     def _get_frame_metadata(self):
