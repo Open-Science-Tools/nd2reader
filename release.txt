@@ -1,3 +1,13 @@
+Update version in setup.py, nd2reader/__init__.py and sphinx/config.py (todo: fix this)
+
+Rebuild sphinx documentation
+
+Commit & push both master and docs
+
+Check if travis unittests are passing
+
 python setup.py sdist bdist_wheel
 
 twine upload dist/*
+
+Update the version in nd2reader-feedstock to update the conda version: in recipe/meta.yaml, update version and checksum using `sha256sum`
