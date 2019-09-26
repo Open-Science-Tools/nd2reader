@@ -71,7 +71,10 @@ class ND2Reader(FramesSequenceND):
 
     def _get_possible_coords(self, dim, default):
         if dim in self.sizes:
-            return [default] if default is not None else range(self.sizes[dim])
+            if dim in self.bundle_axes:
+                return range(self.sizes[dim])
+            else:
+                return [default] if default is not None else range(self.sizes[dim])
         return [None]
 
     @property
