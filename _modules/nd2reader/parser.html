@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>nd2reader.parser &#8212; nd2reader 3.1.0 documentation</title>
+    <title>nd2reader.parser &#8212; nd2reader 3.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -35,13 +35,13 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.1.0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.2.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
           <ul class="nav navbar-nav">
             
-                <li><a href="http://lighthacking.nl">Lighthacking Blog</a></li>
+                <li><a href="http://lighthacking.nl">Lighthacking</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -182,7 +182,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">image</span></div>
 
-<div class="viewcode-block" id="Parser.get_image_by_attributes"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.parser.Parser.get_image_by_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_image_by_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_number</span><span class="p">,</span> <span class="n">field_of_view</span><span class="p">,</span> <span class="n">channel_name</span><span class="p">,</span> <span class="n">z_level</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
+<div class="viewcode-block" id="Parser.get_image_by_attributes"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.parser.Parser.get_image_by_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_image_by_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_number</span><span class="p">,</span> <span class="n">field_of_view</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">z_level</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Gets an image based on its attributes alone</span>
 
 <span class="sd">        Args:</span>
@@ -197,9 +197,14 @@
 <span class="sd">            Frame: the requested image</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">frame_number</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">frame_number</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">frame_number</span>
+        <span class="n">field_of_view</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">field_of_view</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">field_of_view</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">channel</span>
+        <span class="n">z_level</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">z_level</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">z_level</span>
+
         <span class="n">image_group_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_image_group_number</span><span class="p">(</span><span class="n">frame_number</span><span class="p">,</span> <span class="n">field_of_view</span><span class="p">,</span> <span class="n">z_level</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">timestamp</span><span class="p">,</span> <span class="n">raw_image_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_raw_image_data</span><span class="p">(</span><span class="n">image_group_number</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channel_offset</span><span class="p">[</span><span class="n">channel_name</span><span class="p">],</span>
+            <span class="n">timestamp</span><span class="p">,</span> <span class="n">raw_image_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_raw_image_data</span><span class="p">(</span><span class="n">image_group_number</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span>
                                                                  <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="n">NoImageError</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">Frame</span><span class="p">([],</span> <span class="n">frame_no</span><span class="o">=</span><span class="n">frame_number</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_frame_metadata</span><span class="p">())</span>
@@ -406,7 +411,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2017 - 2018, Ruben Verweij.<br/>
+        &copy; Copyright 2017 - 2019, Ruben Verweij.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>

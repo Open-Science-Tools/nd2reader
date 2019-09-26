@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>nd2reader package &#8212; nd2reader 3.1.0 documentation</title>
+    <title>nd2reader package &#8212; nd2reader 3.2.0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -36,13 +36,13 @@
         </button>
         <a class="navbar-brand" href="index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.1.0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.2.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
           <ul class="nav navbar-nav">
             
-                <li><a href="http://lighthacking.nl">Lighthacking Blog</a></li>
+                <li><a href="http://lighthacking.nl">Lighthacking</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -158,6 +158,17 @@ This is the main class: use this to process your .nd2 files.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="nd2reader.reader.ND2Reader.events">
+<code class="descname">events</code><a class="headerlink" href="#nd2reader.reader.ND2Reader.events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the events of the experiment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>iterator of events as dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="nd2reader.reader.ND2Reader.frame_rate">
 <code class="descname">frame_rate</code><a class="headerlink" href="#nd2reader.reader.ND2Reader.frame_rate" title="Permalink to this definition">¶</a></dt>
 <dd><p>The (average) frame rate</p>
@@ -172,28 +183,9 @@ This is the main class: use this to process your .nd2 files.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="nd2reader.reader.ND2Reader.get_frame_2D">
-<code class="descname">get_frame_2D</code><span class="sig-paren">(</span><em>c=0</em>, <em>t=0</em>, <em>z=0</em>, <em>x=0</em>, <em>y=0</em>, <em>v=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.get_frame_2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.get_frame_2D" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets a given frame using the parser</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – The x-index (pims expects this)</p></li>
-<li><p><strong>y</strong> – The y-index (pims expects this)</p></li>
-<li><p><strong>c</strong> – The color channel number</p></li>
-<li><p><strong>t</strong> – The frame number</p></li>
-<li><p><strong>z</strong> – The z stack number</p></li>
-<li><p><strong>v</strong> – The field of view index</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The requested frame</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>numpy.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
+<dt id="nd2reader.reader.ND2Reader.get_frame_vczyx">
+<code class="descname">get_frame_vczyx</code><span class="sig-paren">(</span><em>v=None</em>, <em>c=None</em>, <em>t=None</em>, <em>z=None</em>, <em>x=None</em>, <em>y=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.get_frame_vczyx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.get_frame_vczyx" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="nd2reader.reader.ND2Reader.get_timesteps">
@@ -319,7 +311,7 @@ doing anything out of the ordinary.</p>
 
 <dl class="method">
 <dt id="nd2reader.parser.Parser.get_image_by_attributes">
-<code class="descname">get_image_by_attributes</code><span class="sig-paren">(</span><em>frame_number</em>, <em>field_of_view</em>, <em>channel_name</em>, <em>z_level</em>, <em>height</em>, <em>width</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/parser.html#Parser.get_image_by_attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.parser.Parser.get_image_by_attributes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_image_by_attributes</code><span class="sig-paren">(</span><em>frame_number</em>, <em>field_of_view</em>, <em>channel</em>, <em>z_level</em>, <em>height</em>, <em>width</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/parser.html#Parser.get_image_by_attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.parser.Parser.get_image_by_attributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets an image based on its attributes alone</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -490,6 +482,20 @@ doing anything out of the ordinary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>pixels per micron</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nd2reader.raw_metadata.RawMetadata.image_events">
+<code class="descname">image_events</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Image events</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Image events</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>dict</p>
@@ -825,6 +831,20 @@ doing anything out of the ordinary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The location of the image calibration</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nd2reader.label_map.LabelMap.image_events">
+<code class="descname">image_events</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the location of the image events</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The location of the image events</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>int</p>
@@ -1412,7 +1432,7 @@ nd2reader.</p>
       
     </p>
     <p>
-        &copy; Copyright 2017 - 2018, Ruben Verweij.<br/>
+        &copy; Copyright 2017 - 2019, Ruben Verweij.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>

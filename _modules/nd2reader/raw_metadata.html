@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>nd2reader.raw_metadata &#8212; nd2reader 3.1.0 documentation</title>
+    <title>nd2reader.raw_metadata &#8212; nd2reader 3.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -35,13 +35,13 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.1.0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.2.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
           <ul class="nav navbar-nav">
             
-                <li><a href="http://lighthacking.nl">Lighthacking Blog</a></li>
+                <li><a href="http://lighthacking.nl">Lighthacking</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -159,6 +159,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_parse_roi_metadata</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_parse_experiment_metadata</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parse_events</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span></div>
 
@@ -478,6 +479,60 @@
 
         <span class="k">return</span> <span class="n">duration</span></div>
 
+    <span class="k">def</span> <span class="nf">_parse_events</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Extract events</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># list of event names manually extracted from an ND2 file that contains all manually</span>
+        <span class="c1"># insertable events from NIS-Elements software (4.60.00 (Build 1171) Patch 02)</span>
+        <span class="n">event_names</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;Autofocus&#39;</span><span class="p">,</span>
+            <span class="mi">7</span><span class="p">:</span> <span class="s1">&#39;Command Executed&#39;</span><span class="p">,</span>
+            <span class="mi">9</span><span class="p">:</span> <span class="s1">&#39;Experiment Paused&#39;</span><span class="p">,</span>
+            <span class="mi">10</span><span class="p">:</span> <span class="s1">&#39;Experiment Resumed&#39;</span><span class="p">,</span>
+            <span class="mi">11</span><span class="p">:</span> <span class="s1">&#39;Experiment Stopped by User&#39;</span><span class="p">,</span>
+            <span class="mi">13</span><span class="p">:</span> <span class="s1">&#39;Next Phase Moved by User&#39;</span><span class="p">,</span>
+            <span class="mi">14</span><span class="p">:</span> <span class="s1">&#39;Experiment Paused for Refocusing&#39;</span><span class="p">,</span>
+            <span class="mi">16</span><span class="p">:</span> <span class="s1">&#39;External Stimulation&#39;</span><span class="p">,</span>
+            <span class="mi">33</span><span class="p">:</span> <span class="s1">&#39;User 1&#39;</span><span class="p">,</span>
+            <span class="mi">34</span><span class="p">:</span> <span class="s1">&#39;User 2&#39;</span><span class="p">,</span>
+            <span class="mi">35</span><span class="p">:</span> <span class="s1">&#39;User 3&#39;</span><span class="p">,</span>
+            <span class="mi">36</span><span class="p">:</span> <span class="s1">&#39;User 4&#39;</span><span class="p">,</span>
+            <span class="mi">37</span><span class="p">:</span> <span class="s1">&#39;User 5&#39;</span><span class="p">,</span>
+            <span class="mi">38</span><span class="p">:</span> <span class="s1">&#39;User 6&#39;</span><span class="p">,</span>
+            <span class="mi">39</span><span class="p">:</span> <span class="s1">&#39;User 7&#39;</span><span class="p">,</span>
+            <span class="mi">40</span><span class="p">:</span> <span class="s1">&#39;User 8&#39;</span><span class="p">,</span>
+            <span class="mi">44</span><span class="p">:</span> <span class="s1">&#39;No Acquisition Phase Start&#39;</span><span class="p">,</span>
+            <span class="mi">45</span><span class="p">:</span> <span class="s1">&#39;No Acquisition Phase End&#39;</span><span class="p">,</span>
+            <span class="mi">46</span><span class="p">:</span> <span class="s1">&#39;Hardware Error&#39;</span><span class="p">,</span>
+            <span class="mi">47</span><span class="p">:</span> <span class="s1">&#39;N-STORM&#39;</span><span class="p">,</span>
+            <span class="mi">48</span><span class="p">:</span> <span class="s1">&#39;Incubation Info&#39;</span><span class="p">,</span>
+            <span class="mi">49</span><span class="p">:</span> <span class="s1">&#39;Incubation Error&#39;</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="s1">&#39;events&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">events</span> <span class="o">=</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">image_events</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">events</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;RLxExperimentRecord&#39;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;RLxExperimentRecord&#39;</span><span class="p">)][</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;pEvents&#39;</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)]:</span>
+            <span class="n">event_info</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="n">event</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">)],</span>
+                <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">event</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)],</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="n">event</span><span class="p">[</span><span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="s1">&#39;M&#39;</span><span class="p">)],</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="n">event_info</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">event_names</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">event_info</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">event_names</span><span class="p">[</span><span class="n">event_info</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="s1">&#39;events&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">event_info</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">image_text_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -658,7 +713,19 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">image_metadata</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">image_metadata</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">image_metadata</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">image_events</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Image events</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Image events</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span><span class="o">.</span><span class="n">image_metadata</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span><span class="p">[</span><span class="s2">&quot;events&quot;</span><span class="p">]:</span>
+                <span class="k">yield</span> <span class="n">event</span></div>
+
 </pre></div>
 
     </div>
@@ -672,7 +739,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2017 - 2018, Ruben Verweij.<br/>
+        &copy; Copyright 2017 - 2019, Ruben Verweij.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
