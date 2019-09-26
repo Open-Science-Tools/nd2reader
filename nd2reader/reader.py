@@ -52,6 +52,11 @@ class ND2Reader(FramesSequenceND):
         except KeyError:
             return 0
 
+    def get_frame_2D(self, c=0, t=0, z=0, x=0, y=0, v=0):
+        """Fallback function for backwards compatibility
+        """
+        return get_frame_vczyx(v=v, c=c, t=t, z=z, x=x, y=y)
+
     def get_frame_vczyx(self, v=None, c=None, t=None, z=None, x=None, y=None):
         x = self.metadata["width"] if x <= 0 else x
         y = self.metadata["height"] if y <= 0 else y

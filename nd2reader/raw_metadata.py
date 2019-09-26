@@ -43,9 +43,10 @@ class RawMetadata(object):
             "fields_of_view": self._parse_fields_of_view(),
             "frames": self._parse_frames(),
             "z_levels": self._parse_z_levels(),
+            "z_coordinates": parse_if_not_none(self.z_data, self._parse_z_coordinates),
             "total_images_per_channel": frames_per_channel,
             "channels": self._parse_channels(),
-            "pixel_microns": parse_if_not_none(self.image_calibration, self._parse_calibration),
+            "pixel_microns": parse_if_not_none(self.image_calibration, self._parse_calibration)
         }
 
         self._set_default_if_not_empty('fields_of_view')
@@ -161,6 +162,14 @@ class RawMetadata(object):
         """
         return self._parse_dimension(r""".*?Z\((\d+)\).*?""")
 
+    def _parse_z_coordinates(self):
+        """The coordinate in micron for all z planes.
+
+        Returns:
+            list: the z coordinates in micron
+        """
+        return self.z_data.tolist()
+
     def _parse_dimension_text(self):
         """While there are metadata values that represent a lot of what we want to capture, they seem to be unreliable.
         Sometimes certain elements don't exist, or change their data type randomly. However, the human-readable text
@@ -193,7 +202,7 @@ class RawMetadata(object):
         if not match:
             return []
         count = int(match.group(1))
-        return list(range(count))
+        return range(count)
 
     def _parse_total_images_per_channel(self):
         """The total number of images per channel.
@@ -492,7 +501,12 @@ class RawMetadata(object):
         Returns:
             dict: z_data
         """
-        return read_array(self._fh, 'double', self._label_map.z_data)
+        try:
+            return read_array(self._fh, 'double', self._label_map.z_data)
+        except ValueError:
+            # Depending on the file format/exact settings, this value is
+            # sometimes saved as float instead of double
+            return read_array(self._fh, 'float', self._label_map.z_data)
 
     @property
     def roi_metadata(self):
