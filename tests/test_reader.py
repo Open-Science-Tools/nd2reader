@@ -53,7 +53,7 @@ class TestReader(unittest.TestCase):
                 with self.assertRaises(struct.error) as exception:
                     frame = reader.get_frame_2D(c=0, t=0, z=0, x=0, y=0, v=0)
 
-                self.assertEqual(str(exception.exception), "unpack requires a buffer of 8 bytes")
+                self.assertIn('unpack', str(exception.exception))
 
     def test_get_frame_vczyx(self):
         # Best test we can do for now:
@@ -64,5 +64,5 @@ class TestReader(unittest.TestCase):
                 with self.assertRaises(struct.error) as exception:
                     frame = reader.get_frame_vczyx(c=0, t=0, z=0, x=0, y=0, v=0)
 
-                self.assertEqual(str(exception.exception), "unpack requires a buffer of 8 bytes")
+                self.assertIn('unpack', str(exception.exception))
 
