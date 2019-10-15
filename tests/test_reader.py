@@ -1,6 +1,8 @@
 import unittest
 import numpy as np
+import struct
 
+from pims import Frame
 from nd2reader.artificial import ArtificialND2
 from nd2reader.exceptions import EmptyFileError
 from nd2reader.reader import ND2Reader
@@ -41,3 +43,26 @@ class TestReader(unittest.TestCase):
             with ND2Reader('test_data/test_nd2_reader.nd2') as reader:
                 timesteps = reader.timesteps
                 self.assertEquals(len(timesteps), 0)
+
+    def test_get_frame_2D(self):
+        # Best test we can do for now:
+        # test everything up to the actual unpacking of the frame data
+        with ArtificialND2('test_data/test_nd2_reader.nd2') as _:
+            with ND2Reader('test_data/test_nd2_reader.nd2') as reader:
+
+                with self.assertRaises(struct.error) as exception:
+                    frame = reader.get_frame_2D(c=0, t=0, z=0, x=0, y=0, v=0)
+
+                self.assertEqual(str(exception.exception), "unpack requires a buffer of 8 bytes")
+
+    def test_get_frame_vczyx(self):
+        # Best test we can do for now:
+        # test everything up to the actual unpacking of the frame data
+        with ArtificialND2('test_data/test_nd2_reader.nd2') as _:
+            with ND2Reader('test_data/test_nd2_reader.nd2') as reader:
+
+                with self.assertRaises(struct.error) as exception:
+                    frame = reader.get_frame_vczyx(c=0, t=0, z=0, x=0, y=0, v=0)
+
+                self.assertEqual(str(exception.exception), "unpack requires a buffer of 8 bytes")
+
