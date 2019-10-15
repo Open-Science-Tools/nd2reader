@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>nd2reader package &#8212; nd2reader 3.2.0 documentation</title>
+    <title>nd2reader package &#8212; nd2reader 3.2.1 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -11,6 +11,10 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Tutorial" href="tutorial.html" />
@@ -18,10 +22,6 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
-<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
 
   </head><body>
 
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.2.0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.2.1</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -123,7 +123,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+    <div class="col-md-12 content">
       
   <div class="section" id="nd2reader-package">
 <h1>nd2reader package<a class="headerlink" href="#nd2reader-package" title="Permalink to this headline">¶</a></h1>
@@ -180,6 +180,12 @@ This is the main class: use this to process your .nd2 files.</p>
 <dd class="field-even"><p>float</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nd2reader.reader.ND2Reader.get_frame_2D">
+<code class="descname">get_frame_2D</code><span class="sig-paren">(</span><em>c=0</em>, <em>t=0</em>, <em>z=0</em>, <em>x=0</em>, <em>y=0</em>, <em>v=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.get_frame_2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.get_frame_2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fallback function for backwards compatibility</p>
 </dd></dl>
 
 <dl class="method">
@@ -1149,15 +1155,6 @@ doing anything out of the ordinary.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
 <p>Unknown version.</p>
 <p>We don’t know how to parse the version of ND2 that we were given.</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="nd2reader.exceptions.NoImageError">
-<em class="property">exception </em><code class="descclassname">nd2reader.exceptions.</code><code class="descname">NoImageError</code><a class="reference internal" href="_modules/nd2reader/exceptions.html#NoImageError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.exceptions.NoImageError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
-<p>No image found.</p>
-<p>Some apparent images in ND2s are just completely blank placeholders. These are used when the number of images per
-cycle are unequal (e.g. if you take fluorescent images every 2 minutes, and bright field images every minute).</p>
 </dd></dl>
 
 </div>
