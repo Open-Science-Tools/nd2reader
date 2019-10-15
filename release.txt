@@ -6,8 +6,12 @@ Commit & push both master and docs
 
 Check if travis unittests are passing
 
-python setup.py sdist bdist_wheel
+Publish new release on GitHub
 
-twine upload dist/*
+Run `python setup.py sdist bdist_wheel`
+
+Run `twine upload dist/*`
 
 Update the version in nd2reader-feedstock to update the conda version: in recipe/meta.yaml, update version and checksum using `sha256sum`
+
+Create & merge PR in nd2reader-feedstock
