@@ -106,6 +106,9 @@ class ND2Reader(FramesSequenceND):
             # Actually get the corresponding Frame
             results[index] = Frame(self._parser.get_image_by_attributes(*current_coords), metadata=self.metadata)
 
+        if len(bundle_axes) == 0:
+            return results[0]
+
         return results
 
     def _get_possible_coords(self, dim, default):
