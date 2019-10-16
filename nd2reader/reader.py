@@ -1,3 +1,4 @@
+from pims import Frame
 from pims.base_frames import FramesSequenceND
 
 from nd2reader.exceptions import EmptyFileError
@@ -58,16 +59,54 @@ class ND2Reader(FramesSequenceND):
         return self.get_frame_vczyx(v=v, c=c, t=t, z=z, x=x, y=y)
 
     def get_frame_vczyx(self, v=None, c=None, t=None, z=None, x=None, y=None):
-        x = self.metadata["width"] if x <= 0 else x
-        y = self.metadata["height"] if y <= 0 else y
+        """Retrieve a frame based on the specified coordinates
+        Axes order is set by self.bundle_axes, x and y coordinates are ignored,
+        because we always return Frame objects.
+        """
+        # remove 'x', 'y' from bundle axes and set to width, height
+        bundle_axes = list(self.bundle_axes)
+        try:
+            bundle_axes.remove('x')
+        except ValueError:
+            pass
+        try:
+            bundle_axes.remove('y')
+        except ValueError:
+            pass
+        x = self.metadata["width"]
+        y = self.metadata["height"]
 
-        result = []
-        for v in self._get_possible_coords('v', v):
-            for c in self._get_possible_coords('c', c):
-                for z in self._get_possible_coords('z', z):
-                    result.append(self._parser.get_image_by_attributes(t, v, c, z, y, x))
+        # make coords dictionary based on function input
+        coords = dict(v=v, c=c, t=t, z=z)
 
-        return np.squeeze(np.array(result, dtype=self._dtype))
+        # Set appropriate values for None and bundle_axes coords
+        for dim in coords:
+            coords[dim] = self._get_possible_coords(dim, coords[dim])
+
+        # Initialize empty array of Frames of right shape
+        if len(bundle_axes) > 0:
+            shape = tuple((len(coords[dim]) for dim in bundle_axes))
+            results = np.empty(shape, dtype=Frame)
+        else:
+            results = np.empty((1,), dtype=Frame)
+
+        # order for the get_image_by_attributes function
+        argument_order = dict(t=0, v=1, c=2, z=3)
+
+        # Now, collect the results in the right order
+        for index, _ in np.ndenumerate(results):
+            current_coords = [0, 0, 0, 0, y, x]
+            for dim in coords:
+                if dim in bundle_axes:
+                    dim_val = coords[dim][index[bundle_axes.index(dim)]]
+                else:
+                    dim_val = coords[dim][0]
+                current_coords[argument_order[dim]] = dim_val
+
+            # Actually get the corresponding Frame
+            results[index] = Frame(self._parser.get_image_by_attributes(*current_coords), metadata=self.metadata)
+
+        return results
 
     def _get_possible_coords(self, dim, default):
         if dim in self.sizes:
