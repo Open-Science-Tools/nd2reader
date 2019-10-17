@@ -44,6 +44,17 @@ class TestReader(unittest.TestCase):
                 timesteps = reader.timesteps
                 self.assertEquals(len(timesteps), 0)
 
+    def test_get_frame_zero(self):
+        # Best test we can do for now:
+        # test everything up to the actual unpacking of the frame data
+        with ArtificialND2('test_data/test_nd2_reader.nd2') as _:
+            with ND2Reader('test_data/test_nd2_reader.nd2') as reader:
+
+                with self.assertRaises(struct.error) as exception:
+                    frame = reader[0]
+
+                self.assertIn('unpack', str(exception.exception))
+
     def test_get_frame_2D(self):
         # Best test we can do for now:
         # test everything up to the actual unpacking of the frame data
@@ -54,15 +65,3 @@ class TestReader(unittest.TestCase):
                     frame = reader.get_frame_2D(c=0, t=0, z=0, x=0, y=0, v=0)
 
                 self.assertIn('unpack', str(exception.exception))
-
-    def test_get_frame_vczyx(self):
-        # Best test we can do for now:
-        # test everything up to the actual unpacking of the frame data
-        with ArtificialND2('test_data/test_nd2_reader.nd2') as _:
-            with ND2Reader('test_data/test_nd2_reader.nd2') as reader:
-
-                with self.assertRaises(struct.error) as exception:
-                    frame = reader.get_frame_vczyx(c=0, t=0, z=0, x=0, y=0, v=0)
-
-                self.assertIn('unpack', str(exception.exception))
-

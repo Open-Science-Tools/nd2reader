@@ -76,7 +76,7 @@ class Parser(object):
         except (TypeError):
             return Frame([], frame_no=frame_number, metadata=self._get_frame_metadata())
         else:
-            return image
+            return Frame(image, frame_no=frame_number, metadata=self._get_frame_metadata())
 
     def get_image_by_attributes(self, frame_number, field_of_view, channel, z_level, height, width):
         """Gets an image based on its attributes alone
@@ -105,7 +105,7 @@ class Parser(object):
         except (TypeError):
             return Frame([], frame_no=frame_number, metadata=self._get_frame_metadata())
         else:
-            return raw_image_data
+            return Frame(raw_image_data, frame_no=frame_number, metadata=self._get_frame_metadata())
 
     @staticmethod
     def get_dtype_from_metadata():
@@ -283,14 +283,14 @@ class Parser(object):
         # other cycle to reduce phototoxicity, but NIS Elements still allocated memory as if we were going to take
         # them every cycle.
         if np.any(image_data):
-            return timestamp, Frame(image_data, metadata=self._get_frame_metadata())
+            return timestamp, image_data
 
         # If a blank "gap" image is encountered, generate an array of corresponding height and width to avoid 
         # errors with ND2-files with missing frames. Array is filled with nan to reflect that data is missing. 
         else:
             empty_frame = np.full((height, width), np.nan)
             warnings.warn('ND2 file contains gap frames which are represented by np.nan-filled arrays; to convert to zeros use e.g. np.nan_to_num(array)')
-            return timestamp, Frame(empty_frame, metadata=self._get_frame_metadata())  
+            return timestamp, image_data
 
     def _get_frame_metadata(self):
         """Get the metadata for one frame

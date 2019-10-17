@@ -54,70 +54,22 @@ class ND2Reader(FramesSequenceND):
             return 0
 
     def get_frame_2D(self, c=0, t=0, z=0, x=0, y=0, v=0):
-        """Fallback function for backwards compatibility
+        """Gets a given frame using the parser
+        Args:
+            x: The x-index (pims expects this)
+            y: The y-index (pims expects this)
+            c: The color channel number
+            t: The frame number
+            z: The z stack number
+            v: The field of view index
+        Returns:
+            pims.Frame: The requested frame
         """
-        return self.get_frame_vczyx(v=v, c=c, t=t, z=z, x=x, y=y)
-
-    def get_frame_vczyx(self, v=None, c=None, t=None, z=None, x=None, y=None):
-        """Retrieve a frame based on the specified coordinates
-        Axes order is set by self.bundle_axes, x and y coordinates are ignored,
-        because we always return Frame objects.
-        """
-        # remove 'x', 'y' from bundle axes and set to width, height
-        bundle_axes = list(self.bundle_axes)
-        try:
-            bundle_axes.remove('x')
-        except ValueError:
-            pass
-        try:
-            bundle_axes.remove('y')
-        except ValueError:
-            pass
+        # This needs to be set to width/height to return an image
         x = self.metadata["width"]
         y = self.metadata["height"]
 
-        # make coords dictionary based on function input
-        coords = dict(v=v, c=c, t=t, z=z)
-
-        # Set appropriate values for None and bundle_axes coords
-        for dim in coords:
-            coords[dim] = self._get_possible_coords(dim, coords[dim])
-
-        # Initialize empty array of Frames of right shape
-        if len(bundle_axes) > 0:
-            shape = tuple((len(coords[dim]) for dim in bundle_axes))
-            results = np.empty(shape, dtype=Frame)
-        else:
-            results = np.empty((1,), dtype=Frame)
-
-        # order for the get_image_by_attributes function
-        argument_order = dict(t=0, v=1, c=2, z=3)
-
-        # Now, collect the results in the right order
-        for index, _ in np.ndenumerate(results):
-            current_coords = [0, 0, 0, 0, y, x]
-            for dim in coords:
-                if dim in bundle_axes:
-                    dim_val = coords[dim][index[bundle_axes.index(dim)]]
-                else:
-                    dim_val = coords[dim][0]
-                current_coords[argument_order[dim]] = dim_val
-
-            # Actually get the corresponding Frame
-            results[index] = Frame(self._parser.get_image_by_attributes(*current_coords), metadata=self.metadata)
-
-        if len(bundle_axes) == 0:
-            return results[0]
-
-        return results
-
-    def _get_possible_coords(self, dim, default):
-        if dim in self.sizes:
-            if dim in self.bundle_axes:
-                return range(self.sizes[dim])
-            else:
-                return [default] if default is not None else range(self.sizes[dim])
-        return [None]
+        return self._parser.get_image_by_attributes(t, v, c, z, y, x)
 
     @property
     def parser(self):
@@ -206,16 +158,7 @@ class ND2Reader(FramesSequenceND):
         # provide the default
         self.iter_axes = self._guess_default_iter_axis()
 
-        self._register_get_frame(self.get_frame_vczyx, 'vczyx')
-        self._register_get_frame(self.get_frame_vczyx, 'vzyx')
-        self._register_get_frame(self.get_frame_vczyx, 'vcyx')
-        self._register_get_frame(self.get_frame_vczyx, 'vyx')
-
-        self._register_get_frame(self.get_frame_vczyx, 'czyx')
-        self._register_get_frame(self.get_frame_vczyx, 'cyx')
-
-        self._register_get_frame(self.get_frame_vczyx, 'zyx')
-        self._register_get_frame(self.get_frame_vczyx, 'yx')
+        self._register_get_frame(self.get_frame_2D, 'yx')
 
     def _init_axis_if_exists(self, axis, size, min_size=1):
         if size >= min_size:
