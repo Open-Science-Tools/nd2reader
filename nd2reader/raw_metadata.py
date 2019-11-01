@@ -168,7 +168,6 @@ class RawMetadata(object):
                 z_levels = []
             else:
                 z_levels = range(len(z_levels))
-            if 0 != len(z_levels):
                 warnings.warn("Z-levels details missing in metadata. Using Z-coordinates instead.")
         return z_levels
 
