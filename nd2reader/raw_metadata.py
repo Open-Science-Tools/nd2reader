@@ -2,6 +2,7 @@ import re
 import xmltodict
 import six
 import numpy as np
+import warnings
 
 from nd2reader.common import read_chunk, read_array, read_metadata, parse_date, get_from_dict_if_exists
 from nd2reader.common_raw_metadata import parse_dimension_text_line, parse_if_not_none, parse_roi_shape, parse_roi_type, get_loops_from_data, determine_sampling_interval
@@ -160,7 +161,15 @@ class RawMetadata(object):
         Returns:
             list: the z levels, just a sequence from 0 to n.
         """
-        return self._parse_dimension(r""".*?Z\((\d+)\).*?""")
+        z_levels = self._parse_dimension(r""".*?Z\((\d+)\).*?""")
+        if 0 == len(z_levels):
+            z_levels = parse_if_not_none(self.z_data, self._parse_z_coordinates)
+            if z_levels is None:
+                z_levels = []
+            else:
+                z_levels = range(len(z_levels))
+                warnings.warn("Z-levels details missing in metadata. Using Z-coordinates instead.")
+        return z_levels
 
     def _parse_z_coordinates(self):
         """The coordinate in micron for all z planes.
