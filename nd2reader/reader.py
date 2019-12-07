@@ -1,7 +1,7 @@
 from pims import Frame
 from pims.base_frames import FramesSequenceND
 
-from nd2reader.exceptions import EmptyFileError
+from nd2reader.exceptions import EmptyFileError, InvalidFileType
 from nd2reader.parser import Parser
 import numpy as np
 
@@ -15,6 +15,10 @@ class ND2Reader(FramesSequenceND):
 
     def __init__(self, filename):
         super(ND2Reader, self).__init__()
+
+        if not filename.endswith(".nd2"):
+            raise InvalidFileType(f"The file {filename} you want to read with nd2reader does not have extension .nd2.")
+
         self.filename = filename
 
         # first use the parser to parse the file

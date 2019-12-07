@@ -1,3 +1,11 @@
+class InvalidFileType(Exception):
+    """Non .nd2 extension file.
+
+    File does not have an extension .nd2.
+
+    """
+    pass
+
 class InvalidVersionError(Exception):
     """Unknown version.
 
