@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Tutorial &#8212; nd2reader 3.2.1 documentation</title>
+    <title>Tutorial &#8212; nd2reader 3.2.2 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -11,10 +11,6 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
-    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="nd2reader package" href="nd2reader.html" />
@@ -23,6 +19,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
 
   </head><body>
 
@@ -37,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.2.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.2.2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -126,12 +126,12 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+    <div class="body col-md-12 content" role="main">
       
   <div class="section" id="tutorial">
-<span id="tutorial"></span><h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="installation">
-<span id="installation"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p>The package is available on PyPi. Install it using:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">nd2reader</span>
 </pre></div>
@@ -139,7 +139,7 @@
 <p>If you don’t already have the packages <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, <code class="docutils literal notranslate"><span class="pre">pims</span></code>, <code class="docutils literal notranslate"><span class="pre">six</span></code> and <code class="docutils literal notranslate"><span class="pre">xmltodict</span></code>, they will be installed automatically if you use the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> script.
 <code class="docutils literal notranslate"><span class="pre">nd2reader</span></code> is an order of magnitude faster in Python 3. I recommend using it unless you have no other choice. Python 2.7 and Python &gt;= 3.4 are supported.</p>
 <div class="section" id="installation-via-conda-forge">
-<span id="installation-via-conda-forge"></span><h3>Installation via Conda Forge<a class="headerlink" href="#installation-via-conda-forge" title="Permalink to this headline">¶</a></h3>
+<h3>Installation via Conda Forge<a class="headerlink" href="#installation-via-conda-forge" title="Permalink to this headline">¶</a></h3>
 <p>Installing <code class="docutils literal notranslate"><span class="pre">nd2reader</span></code> from the <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code> channel can be achieved by adding <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code> to your channels with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">config</span> <span class="o">--</span><span class="n">add</span> <span class="n">channels</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
 </pre></div>
@@ -155,7 +155,7 @@
 </div>
 </div>
 <div class="section" id="opening-nd2s">
-<span id="opening-nd2s"></span><h2>Opening ND2s<a class="headerlink" href="#opening-nd2s" title="Permalink to this headline">¶</a></h2>
+<h2>Opening ND2s<a class="headerlink" href="#opening-nd2s" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">nd2reader</span></code> follows the <a class="reference external" href="https://github.com/soft-matter/pims">pims</a> framework. To open a file and show the first frame:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nd2reader</span> <span class="kn">import</span> <span class="n">ND2Reader</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
@@ -167,7 +167,7 @@
 <p>After opening the file, all <code class="docutils literal notranslate"><span class="pre">pims</span></code> features are supported. Please refer to the <a class="reference external" href="http://soft-matter.github.io/pims/">pims documentation</a>.</p>
 </div>
 <div class="section" id="nd2-metadata">
-<span id="nd2-metadata"></span><h2>ND2 metadata<a class="headerlink" href="#nd2-metadata" title="Permalink to this headline">¶</a></h2>
+<h2>ND2 metadata<a class="headerlink" href="#nd2-metadata" title="Permalink to this headline">¶</a></h2>
 <p>The ND2 file contains various metadata, such as acquisition information,
 regions of interest and custom user comments. Most of this metadata is parsed
 and available in dictionary form. For example:</p>
@@ -194,7 +194,7 @@ and available in dictionary form. For example:</p>
 </ul>
 </div>
 <div class="section" id="iterating-over-fields-of-view">
-<span id="iterating-over-fields-of-view"></span><h2>Iterating over fields of view<a class="headerlink" href="#iterating-over-fields-of-view" title="Permalink to this headline">¶</a></h2>
+<h2>Iterating over fields of view<a class="headerlink" href="#iterating-over-fields-of-view" title="Permalink to this headline">¶</a></h2>
 <p>Using <code class="docutils literal notranslate"><span class="pre">NDExperiments</span></code> in the Nikon software, it is possible to acquire images on different <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> positions.
 This is referred to as different fields of view. Using this reader, the fields of view are on the <code class="docutils literal notranslate"><span class="pre">v</span></code> axis.
 For example:</p>
