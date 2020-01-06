@@ -1,4 +1,5 @@
 include MANIFEST.in
+include VERSION
 include setup.py
 include README.md
 include LICENSE
