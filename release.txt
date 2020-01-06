@@ -1,4 +1,4 @@
-Update version in setup.py, nd2reader/__init__.py and sphinx/config.py (todo: fix this)
+Update version in 'VERSION' file
 
 Rebuild sphinx documentation
 
