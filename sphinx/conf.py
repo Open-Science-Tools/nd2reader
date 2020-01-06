@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from os import path
 import sphinx_bootstrap_theme
 from recommonmark.parser import CommonMarkParser
-
-VERSION = ''
-CURRENT_DIRECTORY = path.abspath(path.dirname(__file__))
-with open(path.join(CURRENT_DIRECTORY, '..', 'VERSION')) as version_file:
-    VERSION = version_file.read().strip()
+from nd2reader import __version__ as VERSION
 
 # -- General configuration ------------------------------------------------
 

@@ -1,10 +1,6 @@
 from os import path
 from setuptools import setup
-
-VERSION = ''
-CURRENT_DIRECTORY = path.abspath(path.dirname(__file__))
-with open(path.join(CURRENT_DIRECTORY, 'VERSION')) as version_file:
-    VERSION = version_file.read().strip()
+from nd2reader import __version__ as VERSION
 
 if __name__ == '__main__':
     setup(
