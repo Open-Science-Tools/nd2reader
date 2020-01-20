@@ -8,10 +8,10 @@ addons:
       repo_token: 8582900c285e4da0f253555b1bac1ba501bd6ff07850b0f227166b3cdac59ecc
 
 python:
-  - "2.7"
-  - "3.4"
-  - "3.5"
-  - "3.6"
+  - 3.5
+  - 3.6
+  - 3.7
+  - 3.8
 
 install:
   - pip install --upgrade pip setuptools wheel
