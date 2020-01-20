@@ -14,7 +14,7 @@ class ND2Reader(FramesSequenceND):
     class_priority = 12
 
     def __init__(self, filename):
-        super(self.__class__, self).__init__()
+        super(ND2Reader, self).__init__()
         self.filename = filename
 
         # first use the parser to parse the file
