@@ -24,7 +24,7 @@ pip install nd2reader
 ```
 
 If you don't already have the packages `numpy`, `pims`, `six` and `xmltodict`, they will be installed automatically if you use the `setup.py` script.
-`nd2reader` is an order of magnitude faster in Python 3. I recommend using it unless you have no other choice. Python 2.7 and Python >= 3.4 are supported.
+Python >= 3.5 are supported.
 
 #### Installation via Conda Forge
 
