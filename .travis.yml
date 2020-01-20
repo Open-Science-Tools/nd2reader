@@ -1,11 +1,14 @@
+env:
+  global:
+    - CC_TEST_REPORTER_ID=8582900c285e4da0f253555b1bac1ba501bd6ff07850b0f227166b3cdac59ecc
+    
 language: python
+
 git:
   depth: 3
+  
 notifications:
   email: false
-addons:
-  code_climate:
-      repo_token: 8582900c285e4da0f253555b1bac1ba501bd6ff07850b0f227166b3cdac59ecc
 
 python:
   - 3.5
@@ -18,6 +21,13 @@ install:
   - pip install --only-binary=numpy numpy
   - pip install -r requirements.txt
   - pip install 'coverage>=4.0,<4.4' --force-reinstall # Upstream bug: https://bitbucket.org/ned/coveragepy/issues/578/incomplete-file-path-in-xml-report
-  - pip install codeclimate-test-reporter
+  
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+  
+script: python ./test.py
 
-script: python ./test.py && CODECLIMATE_REPO_TOKEN=8582900c285e4da0f253555b1bac1ba501bd6ff07850b0f227166b3cdac59ecc codeclimate-test-reporter
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
