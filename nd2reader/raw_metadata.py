@@ -162,7 +162,7 @@ class RawMetadata(object):
             list: the z levels, just a sequence from 0 to n.
         """
         z_levels = self._parse_dimension(r""".*?Z\((\d+)\).*?""")
-        if 0 == len(z_levels):
+        if 0 != len(z_levels):
             z_levels = parse_if_not_none(self.z_data, self._parse_z_coordinates)
             if z_levels is None:
                 z_levels = []
