@@ -17,7 +17,7 @@ class ND2Reader(FramesSequenceND):
         super(ND2Reader, self).__init__()
 
         if not filename.endswith(".nd2"):
-            raise InvalidFileType(f"The file {filename} you want to read with nd2reader does not have extension .nd2.")
+            raise InvalidFileType("The file %s you want to read with nd2reader does not have extension .nd2." % filename)
 
         self.filename = filename
 
