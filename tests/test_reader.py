@@ -4,12 +4,15 @@ import struct
 
 from pims import Frame
 from nd2reader.artificial import ArtificialND2
-from nd2reader.exceptions import EmptyFileError
+from nd2reader.exceptions import EmptyFileError, InvalidFileType
 from nd2reader.reader import ND2Reader
 from nd2reader.parser import Parser
 
 
 class TestReader(unittest.TestCase):
+    def test_invalid_file_extension(self):
+        self.assertRaises(InvalidFileType, lambda: ND2Reader('test_data/invalid_extension_file.inv'))
+
     def test_extension(self):
         self.assertTrue('nd2' in ND2Reader.class_exts())
 
