@@ -129,7 +129,10 @@ class ND2Reader(FramesSequenceND):
             total_duration += loop['duration']
 
         if total_duration == 0:
-            raise ValueError('Total measurement duration could not be determined from loops')
+            total_duration = self.timesteps[-1]
+
+            if total_duration == 0:
+                raise ValueError('Total measurement duration could not be determined from loops')
 
         return self.metadata['num_frames'] / (total_duration/1000.0)
 
