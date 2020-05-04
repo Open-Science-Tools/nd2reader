@@ -2,7 +2,7 @@ from pims import Frame
 from pims.base_frames import FramesSequenceND
 
 from nd2reader.exceptions import EmptyFileError, InvalidFileType
-from nd2reader.parser import Parser
+from nd2reader.sync_parser import SyncParser
 import numpy as np
 
 
@@ -23,19 +23,25 @@ class ND2Reader(FramesSequenceND):
 
         # first use the parser to parse the file
         self._fh = open(filename, "rb")
-        self._parser = Parser(self._fh)
+        self.parser = SyncParser(self._fh)
 
         # Setup metadata
-        self.metadata = self._parser.metadata
+        self.metadata = self.parser.metadata
 
         # Set data type
-        self._dtype = self._parser.get_dtype_from_metadata()
+        self._dtype = self.parser.get_dtype_from_metadata()
 
         # Setup the axes
         self._setup_axes()
 
         # Other properties
         self._timesteps = None
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
 
     @classmethod
     def class_exts(cls):
@@ -73,16 +79,7 @@ class ND2Reader(FramesSequenceND):
         x = self.metadata["width"]
         y = self.metadata["height"]
 
-        return self._parser.get_image_by_attributes(t, v, c, z, y, x)
-
-    @property
-    def parser(self):
-        """
-        Returns the parser object.
-        Returns:
-            Parser: the parser object
-        """
-        return self._parser
+        return self.parser.get_image_by_attributes(t, v, c, z, y, x)
 
     @property
     def pixel_type(self):
@@ -202,6 +199,6 @@ class ND2Reader(FramesSequenceND):
         if self._timesteps is not None and len(self._timesteps) > 0:
             return self._timesteps
 
-        self._timesteps = np.array(list(self._parser._raw_metadata.acquisition_times), dtype=np.float) * 1000.0
+        self._timesteps = np.array(list(self.parser._raw_metadata.acquisition_times), dtype=np.float) * 1000.0
 
         return self._timesteps

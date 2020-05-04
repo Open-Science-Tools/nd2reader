@@ -351,3 +351,14 @@ def check_or_make_dir(directory):
     """
     if not os.path.exists(directory):
         os.makedirs(directory)
+
+def decode_str(value):
+    try:
+        decoded = value.decode('utf8')
+    except UnicodeDecodeError:
+        try:
+            decoded = value.decode('utf16')
+        except UnicodeDecodeError:
+            decoded = ''
+
+    return decoded
