@@ -1,4 +1,3 @@
-from os import path
 from setuptools import setup
 from nd2reader import __version__ as VERSION
 

@@ -30,6 +30,17 @@ class TestRawMetadata(unittest.TestCase):
         self.assertEqual(parse_dimension_text_line(line), six.b('Dimensions: T(443) x \xce\xbb(1)'))
         self.assertIsNone(parse_dimension_text_line(six.b('Dim: nothing')))
 
+    def test_parse_z_levels(self):
+        # smokescreen test to check if the fallback to z_coordinates is working
+        # for details, see RawMetadata._parse_z_levels()
+        dimension_text = self.metadata._parse_dimension_text()
+        z_levels = self.metadata._parse_dimension(r""".*?Z\((\d+)\).*?""", dimension_text)
+        z_coords = self.metadata._parse_z_coordinates()
+
+        self.assertEqual(len(dimension_text), 0)
+        self.assertEqual(len(z_levels), 0)
+        self.assertEqual(len(self.metadata._parse_z_levels()), len(z_coords))
+
     def test_dict(self):
         self.assertTrue(type(self.metadata.__dict__) is dict)
 

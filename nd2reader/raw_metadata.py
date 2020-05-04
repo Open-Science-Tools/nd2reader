@@ -158,18 +158,34 @@ class RawMetadata(object):
     def _parse_z_levels(self):
         """The different levels in the Z-plane.
 
+        If they are not available from the _parse_dimension function AND there
+        is NO 'Dimensions: ' textinfo item in the file, we return a range with
+        the length of z_coordinates if available, otherwise an empty list.
+
         Returns:
             list: the z levels, just a sequence from 0 to n.
         """
-        z_levels = self._parse_dimension(r""".*?Z\((\d+)\).*?""")
-        if 0 != len(z_levels):
-            z_levels = parse_if_not_none(self.z_data, self._parse_z_coordinates)
-            if z_levels is None:
-                z_levels = []
-            else:
-                z_levels = range(len(z_levels))
-                warnings.warn("Z-levels details missing in metadata. Using Z-coordinates instead.")
-        return z_levels
+        # get the dimension text to check if we should apply the fallback or not
+        dimension_text = self._parse_dimension_text()
+
+        # this returns range(len(z_levels))
+        z_levels = self._parse_dimension(r""".*?Z\((\d+)\).*?""", dimension_text)
+
+        if len(z_levels) > 0 or len(dimension_text) > 0:
+            # Either we have found the z_levels (first condition) so return, or
+            # don't fallback, because Z is apparently not in Dimensions, so
+            # there should be no z_levels
+            return z_levels
+
+        # Not available from dimension, get from z_coordinates
+        z_levels = parse_if_not_none(self.z_data, self._parse_z_coordinates)
+
+        if z_levels is None:
+            # No z coordinates, return empty list
+            return []
+
+        warnings.warn("Z-levels details missing in metadata. Using Z-coordinates instead.")
+        return range(len(z_levels))
 
     def _parse_z_coordinates(self):
         """The coordinate in micron for all z planes.
@@ -201,15 +217,18 @@ class RawMetadata(object):
 
         return dimension_text
 
-    def _parse_dimension(self, pattern):
-        dimension_text = self._parse_dimension_text()
+    def _parse_dimension(self, pattern, dimension_text=None):
+        dimension_text = self._parse_dimension_text() if dimension_text is None else dimension_text
         if dimension_text is None:
             return []
+
         if six.PY3:
             dimension_text = dimension_text.decode("utf8")
+
         match = re.match(pattern, dimension_text)
         if not match:
             return []
+
         count = int(match.group(1))
         return range(count)
 
