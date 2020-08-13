@@ -13,16 +13,12 @@ class ND2Reader(FramesSequenceND):
 
     class_priority = 12
 
-    def __init__(self, filename):
+    def __init__(self, fh):
         super(ND2Reader, self).__init__()
 
-        if not filename.endswith(".nd2"):
-            raise InvalidFileType("The file %s you want to read with nd2reader does not have extension .nd2." % filename)
+        self._fh = fh
+        self.filename = ""
 
-        self.filename = filename
-
-        # first use the parser to parse the file
-        self._fh = open(filename, "rb")
         self._parser = Parser(self._fh)
 
         # Setup metadata
@@ -37,6 +33,16 @@ class ND2Reader(FramesSequenceND):
         # Other properties
         self._timesteps = None
 
+    @staticmethod
+    def from_file(filename):
+        if not filename.endswith(".nd2"):
+            raise InvalidFileType("The file %s you want to read with nd2reader does not have extension .nd2." % filename)
+
+        nd2r = ND2Reader(open(filename, "rb"))
+        nd2r.filename = filename
+
+        return nd2r
+        
     @classmethod
     def class_exts(cls):
         """Let PIMS open function use this reader for opening .nd2 files
