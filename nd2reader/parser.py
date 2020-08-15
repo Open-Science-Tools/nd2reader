@@ -246,20 +246,22 @@ class Parser(object):
 
         """
         return {channel: n for n, channel in enumerate(self.metadata["channels"])}
-
     def _remove_unwanted_bytes(self, image_group_data, image_data_start, height, width):
         # Remove unwanted 0-bytes that can appear in stitched images
         number_of_true_channels = int(len(image_group_data[4:]) / (height * width))
-        unwanted_bytes_len = (len(image_group_data[image_data_start:]))%(height*width)
-        if not unwanted_bytes_len:
+        n_unwanted_bytes = (len(image_group_data[image_data_start:]))%(height*width)
+        if not n_unwanted_bytes:
             return
 
-        warnings.warn('Identified unwanted bytes in the ND2 file, possibly stitched.')
-        byte_ids = range(image_data_start+height*number_of_true_channels, len(image_group_data)-unwanted_bytes_len+1, height*number_of_true_channels)
+        assert 0 == n_unwanted_bytes % height, "Unexpected unwanted bytes distribution."
+        unwanted_byte_per_step = n_unwanted_bytes // height
+        byte_ids = range(image_data_start+height*number_of_true_channels, len(image_group_data)-n_unwanted_bytes+1, height*number_of_true_channels)
         if all([0 == image_group_data[byte_ids[i]+i] for i in range(len(byte_ids))]):
-            warnings.warn('All unwanted bytes are zero-bytes, correctly removed.')
+            warnings.warn(f'Identified {n_unwanted_bytes} ({unwanted_byte_per_step}*{height}) unwanted zero-bytes in the ND2 file, removed.')
             for i in range(len(byte_ids)):
                 del image_group_data[byte_ids[i]]
+        else:
+            warnings.warn(f'Identified {n_unwanted_bytes} unwanted non-zero bytes in the ND2 file.')
     
     def _get_raw_image_data(self, image_group_number, channel_offset, height, width):
         """Reads the raw bytes and the timestamp of an image.
