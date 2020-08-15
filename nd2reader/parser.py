@@ -264,7 +264,7 @@ class Parser(object):
         if all([0 == image_group_data[byte_ids[i]+i] for i in range(len(byte_ids))]):
             warnings.warn(f'Identified {n_unwanted_bytes} ({unwanted_byte_per_step}*{height}) unwanted zero-bytes in the ND2 file, removed.')
             for i in range(len(byte_ids)):
-                del image_group_data[byte_ids[i]]
+                del image_group_data[byte_ids[i]:(byte_ids[i]+unwanted_byte_per_step)]
         else:
             warnings.warn(f'Identified {n_unwanted_bytes} unwanted non-zero bytes in the ND2 file.')
     
