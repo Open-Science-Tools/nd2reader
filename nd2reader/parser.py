@@ -251,13 +251,15 @@ class Parser(object):
         # Remove unwanted 0-bytes that can appear in stitched images
         number_of_true_channels = int(len(image_group_data[4:]) / (height * width))
         unwanted_bytes_len = (len(image_group_data[image_data_start:]))%(height*width)
-        if unwanted_bytes_len:
-            warnings.warn('Identified unwanted bytes in the ND2 file, possibly stitched.')
-            byte_ids = range(image_data_start+height*number_of_true_channels, len(image_group_data)-unwanted_bytes_len+1, height*number_of_true_channels)
-            if all([0 == image_group_data[byte_ids[i]+i] for i in range(len(byte_ids))]):
-                warnings.warn('All unwanted bytes are zero-bytes, correctly removed.')
-                for i in range(len(byte_ids)):
-                    del image_group_data[byte_ids[i]]
+        if not unwanted_bytes_len:
+            return
+
+        warnings.warn('Identified unwanted bytes in the ND2 file, possibly stitched.')
+        byte_ids = range(image_data_start+height*number_of_true_channels, len(image_group_data)-unwanted_bytes_len+1, height*number_of_true_channels)
+        if all([0 == image_group_data[byte_ids[i]+i] for i in range(len(byte_ids))]):
+            warnings.warn('All unwanted bytes are zero-bytes, correctly removed.')
+            for i in range(len(byte_ids)):
+                del image_group_data[byte_ids[i]]
     
     def _get_raw_image_data(self, image_group_number, channel_offset, height, width):
         """Reads the raw bytes and the timestamp of an image.
