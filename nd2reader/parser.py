@@ -247,27 +247,28 @@ class Parser(object):
         """
         return {channel: n for n, channel in enumerate(self.metadata["channels"])}
 
-    def _find_unwanted_bytes(self, image_group_data, image_data_start, height, width):
+    def _check_unwanted_bytes(self, image_group_data, image_data_start, height, width):
         number_of_true_channels = int(len(image_group_data[4:]) / (height * width))
         n_unwanted_bytes = (len(image_group_data[image_data_start:]))%(height*width)
         if not n_unwanted_bytes:
-            return n_unwanted_bytes
+            return False
         assert 0 == n_unwanted_bytes % height, "Unexpected unwanted bytes distribution."
-        return n_unwanted_bytes
+        byte_ids = range(image_data_start+height*number_of_true_channels, len(image_group_data)-n_unwanted_bytes+1, height*number_of_true_channels)
+        all_zero_bytes = all([0 == image_group_data[byte_ids[i]+i] for i in range(len(byte_ids))])
+        if not all_zero_bytes:
+            warnings.warn(f'Identified {n_unwanted_bytes} unwanted non-zero bytes in the ND2 file.')
+        return all_zero_bytes
 
     def _remove_unwanted_bytes(self, image_group_data, image_data_start, height, width):
         # Remove unwanted 0-bytes that can appear in stitched images
-        n_unwanted_bytes = self._find_unwanted_bytes(image_group_data, image_data_start, height, width)
         number_of_true_channels = int(len(image_group_data[4:]) / (height * width))
+        n_unwanted_bytes = (len(image_group_data[image_data_start:]))%(height*width)
         unwanted_byte_per_step = n_unwanted_bytes // height
         byte_ids = range(image_data_start+height*number_of_true_channels, len(image_group_data)-n_unwanted_bytes+1, height*number_of_true_channels)
-        if all([0 == image_group_data[byte_ids[i]+i] for i in range(len(byte_ids))]):
-            warnings.warn(f'Identified {n_unwanted_bytes} ({unwanted_byte_per_step}*{height}) unwanted zero-bytes in the ND2 file, removed.')
-            for i in range(len(byte_ids)):
-                del image_group_data[byte_ids[i]:(byte_ids[i]+unwanted_byte_per_step)]
-        else:
-            warnings.warn(f'Identified {n_unwanted_bytes} unwanted non-zero bytes in the ND2 file.')
-    
+        warnings.warn(f'Identified {n_unwanted_bytes} ({unwanted_byte_per_step}*{height}) unwanted zero-bytes in the ND2 file, removed.')
+        for i in range(len(byte_ids)):
+            del image_group_data[byte_ids[i]:(byte_ids[i]+unwanted_byte_per_step)]
+
     def _get_raw_image_data(self, image_group_number, channel_offset, height, width):
         """Reads the raw bytes and the timestamp of an image.
 
@@ -294,7 +295,8 @@ class Parser(object):
         # of a four image group will be composed of bytes 2, 6, 10, etc. If you understand why someone would design
         # a data structure that way, please send the author of this library a message.
         number_of_true_channels = int(len(image_group_data[4:]) / (height * width))
-        self._remove_unwanted_bytes(image_group_data, image_data_start, height, width)
+        if self._check_unwanted_bytes(image_group_data, image_data_start, height, width):
+            self._remove_unwanted_bytes(image_group_data, image_data_start, height, width)
         try:
             image_data = np.reshape(image_group_data[image_data_start::number_of_true_channels], (height, width))
         except ValueError:
