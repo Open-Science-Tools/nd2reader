@@ -246,14 +246,19 @@ class Parser(object):
 
         """
         return {channel: n for n, channel in enumerate(self.metadata["channels"])}
-    def _remove_unwanted_bytes(self, image_group_data, image_data_start, height, width):
-        # Remove unwanted 0-bytes that can appear in stitched images
+
+    def _find_unwanted_bytes(self, image_group_data, image_data_start, height, width):
         number_of_true_channels = int(len(image_group_data[4:]) / (height * width))
         n_unwanted_bytes = (len(image_group_data[image_data_start:]))%(height*width)
         if not n_unwanted_bytes:
-            return
-
+            return n_unwanted_bytes
         assert 0 == n_unwanted_bytes % height, "Unexpected unwanted bytes distribution."
+        return n_unwanted_bytes
+
+    def _remove_unwanted_bytes(self, image_group_data, image_data_start, height, width):
+        # Remove unwanted 0-bytes that can appear in stitched images
+        n_unwanted_bytes = self._find_unwanted_bytes(image_group_data, image_data_start, height, width)
+        number_of_true_channels = int(len(image_group_data[4:]) / (height * width))
         unwanted_byte_per_step = n_unwanted_bytes // height
         byte_ids = range(image_data_start+height*number_of_true_channels, len(image_group_data)-n_unwanted_bytes+1, height*number_of_true_channels)
         if all([0 == image_group_data[byte_ids[i]+i] for i in range(len(byte_ids))]):
