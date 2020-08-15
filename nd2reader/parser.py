@@ -273,6 +273,17 @@ class Parser(object):
         # of a four image group will be composed of bytes 2, 6, 10, etc. If you understand why someone would design
         # a data structure that way, please send the author of this library a message.
         number_of_true_channels = int(len(image_group_data[4:]) / (height * width))
+
+        # Remove unwanted 0-bytes that can appear in stitched images
+        unwanted_bytes_len = (len(image_group_data[image_data_start:]))%(height*width)
+        if unwanted_bytes_len:
+            warnings.warn('Identified unwanted bytes in the ND2 file, possibly stitched.')
+            byte_ids = range(image_data_start+height*number_of_true_channels, len(image_group_data)-unwanted_bytes_len+1, height*number_of_true_channels)
+            if all([0 == image_group_data[byte_ids[i]+i] for i in range(len(byte_ids))]):
+                warnings.warn('All unwanted bytes are zero-bytes, correctly removed.')
+                for i in range(len(byte_ids)):
+                    del image_group_data[byte_ids[i]]
+
         try:
             image_data = np.reshape(image_group_data[image_data_start::number_of_true_channels], (height, width))
         except ValueError:
