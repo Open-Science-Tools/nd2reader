@@ -247,27 +247,37 @@ class Parser(object):
         """
         return {channel: n for n, channel in enumerate(self.metadata["channels"])}
 
-    def _check_unwanted_bytes(self, image_group_data, image_data_start, height, width):
+    def _get_unwanted_bytes_ids(
+        self, image_group_data, image_data_start, height, width
+    ):
+        # Check if the byte array size conforms to the image axes size. If not, check
+        # that the number of unexpected (unwanted) bytes is a multiple of the number of
+        # rows (height), as the same unmber of unwanted bytes is expected to be
+        # appended at the end of each row. Then, returns the indexes of the unwanted
+        # bytes.
         number_of_true_channels = int(len(image_group_data[4:]) / (height * width))
-        n_unwanted_bytes = (len(image_group_data[image_data_start:]))%(height*width)
+        n_unwanted_bytes = (len(image_group_data[image_data_start:])) % (height * width)
         if not n_unwanted_bytes:
-            return False
-        assert 0 == n_unwanted_bytes % height, "An unexpected number of extra bytes was encountered based on the expected frame size, therefore the file could not be parsed."
-        byte_ids = range(image_data_start+height*number_of_true_channels, len(image_group_data)-n_unwanted_bytes+1, height*number_of_true_channels)
-        all_zero_bytes = all([0 == image_group_data[byte_ids[i]+i] for i in range(len(byte_ids))])
-        if not all_zero_bytes:
-            raise Exception(f"{n_unwanted_bytes} unexpected non-zero bytes were found in the ND2 file, the file could not be parsed.")
-        return all_zero_bytes
+            return np.arange(0)
+        assert 0 == n_unwanted_bytes % height, (
+            "An unexpected number of extra bytes was encountered based on the expected"
+            + " frame size, therefore the file could not be parsed."
+        )
+        return np.arange(
+            image_data_start + height * number_of_true_channels,
+            len(image_group_data) - n_unwanted_bytes + 1,
+            height * number_of_true_channels,
+        )
 
-    def _remove_unwanted_bytes(self, image_group_data, image_data_start, height, width):
-        # Remove unwanted 0-bytes that can appear in stitched images
-        number_of_true_channels = int(len(image_group_data[4:]) / (height * width))
-        n_unwanted_bytes = (len(image_group_data[image_data_start:]))%(height*width)
-        unwanted_byte_per_step = n_unwanted_bytes // height
-        byte_ids = range(image_data_start+height*number_of_true_channels, len(image_group_data)-n_unwanted_bytes+1, height*number_of_true_channels)
-        warnings.warn(f"{n_unwanted_bytes} ({unwanted_byte_per_step}*{height}) unexpected zero bytes were found in the ND2 file and removed to allow further parsing.")
+    def _remove_bytes_by_id(self, byte_ids, image_group_data, height):
+        # Remove bytes by ID.
+        bytes_per_row = len(byte_ids) // height
+        warnings.warn(
+            f"{len(byte_ids)} ({bytes_per_row}*{height}) unexpected zero "
+            + "bytes were found in the ND2 file and removed to allow further parsing."
+        )
         for i in range(len(byte_ids)):
-            del image_group_data[byte_ids[i]:(byte_ids[i]+unwanted_byte_per_step)]
+            del image_group_data[byte_ids[i] : (byte_ids[i] + bytes_per_row)]
 
     def _get_raw_image_data(self, image_group_number, channel_offset, height, width):
         """Reads the raw bytes and the timestamp of an image.
@@ -291,16 +301,41 @@ class Parser(object):
         image_group_data = array.array("H", data)
         image_data_start = 4 + channel_offset
 
+        # Stitched ND2 files have been reported to contain unexpected (according to
+        # image shape) zero bytes at the end of each image data row. This hinders
+        # proper reshaping of the data. Hence, here the unwanted zero bytes are
+        # identified and removed.
+        unwanted_byte_ids = self._get_unwanted_bytes_ids(
+            image_group_data, image_data_start, height, width
+        )
+        if 0 != len(unwanted_byte_ids):
+            assert np.all(
+                image_group_data[unwanted_byte_ids + np.arange(len(unwanted_byte_ids))]
+                == 0
+            ), (
+                f"{len(unwanted_byte_ids)} unexpected non-zero bytes were found"
+                + " in the ND2 file, the file could not be parsed."
+            )
+            self._remove_bytes_by_id(unwanted_byte_ids, image_group_data, height)
+
         # The images for the various channels are interleaved within the same array. For example, the second image
         # of a four image group will be composed of bytes 2, 6, 10, etc. If you understand why someone would design
         # a data structure that way, please send the author of this library a message.
         number_of_true_channels = int(len(image_group_data[4:]) / (height * width))
-        if self._check_unwanted_bytes(image_group_data, image_data_start, height, width):
-            self._remove_unwanted_bytes(image_group_data, image_data_start, height, width)
         try:
-            image_data = np.reshape(image_group_data[image_data_start::number_of_true_channels], (height, width))
+            image_data = np.reshape(
+                image_group_data[image_data_start::number_of_true_channels],
+                (height, width),
+            )
         except ValueError:
-            image_data = np.reshape(image_group_data[image_data_start::number_of_true_channels], (height, int(round(len(image_group_data[image_data_start::number_of_true_channels])/height))))
+            image_data = np.reshape(
+                image_group_data[image_data_start::number_of_true_channels],
+                (
+                    height,
+                    len(image_group_data[image_data_start::number_of_true_channels])
+                    // height,
+                ),
+            )
 
         # Skip images that are all zeros! This is important, since NIS Elements creates blank "gap" images if you
         # don't have the same number of images each cycle. We discovered this because we only took GFP images every
@@ -309,11 +344,14 @@ class Parser(object):
         if np.any(image_data):
             return timestamp, image_data
 
-        # If a blank "gap" image is encountered, generate an array of corresponding height and width to avoid 
-        # errors with ND2-files with missing frames. Array is filled with nan to reflect that data is missing. 
+        # If a blank "gap" image is encountered, generate an array of corresponding height and width to avoid
+        # errors with ND2-files with missing frames. Array is filled with nan to reflect that data is missing.
         else:
             empty_frame = np.full((height, width), np.nan)
-            warnings.warn('ND2 file contains gap frames which are represented by np.nan-filled arrays; to convert to zeros use e.g. np.nan_to_num(array)')
+            warnings.warn(
+                "ND2 file contains gap frames which are represented by np.nan-filled"
+                + " arrays; to convert to zeros use e.g. np.nan_to_num(array)"
+            )
             return timestamp, image_data
 
     def _get_frame_metadata(self):
