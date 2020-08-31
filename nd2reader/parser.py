@@ -252,7 +252,7 @@ class Parser(object):
         n_unwanted_bytes = (len(image_group_data[image_data_start:]))%(height*width)
         if not n_unwanted_bytes:
             return False
-        assert 0 == n_unwanted_bytes % height, "Unexpected unwanted bytes distribution."
+        assert 0 == n_unwanted_bytes % height, "An unexpected number of extra bytes was encountered based on the expected frame size, therefore the file could not be parsed."
         byte_ids = range(image_data_start+height*number_of_true_channels, len(image_group_data)-n_unwanted_bytes+1, height*number_of_true_channels)
         all_zero_bytes = all([0 == image_group_data[byte_ids[i]+i] for i in range(len(byte_ids))])
         if not all_zero_bytes:
@@ -265,7 +265,7 @@ class Parser(object):
         n_unwanted_bytes = (len(image_group_data[image_data_start:]))%(height*width)
         unwanted_byte_per_step = n_unwanted_bytes // height
         byte_ids = range(image_data_start+height*number_of_true_channels, len(image_group_data)-n_unwanted_bytes+1, height*number_of_true_channels)
-        warnings.warn(f'Identified {n_unwanted_bytes} ({unwanted_byte_per_step}*{height}) unwanted zero-bytes in the ND2 file, removed.')
+        warnings.warn(f"{n_unwanted_bytes} ({unwanted_byte_per_step}*{height}) unexpected zero bytes were found in the ND2 file and removed to allow further parsing.")
         for i in range(len(byte_ids)):
             del image_group_data[byte_ids[i]:(byte_ids[i]+unwanted_byte_per_step)]
 
