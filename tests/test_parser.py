@@ -2,7 +2,6 @@ import unittest
 from os import path
 from nd2reader.artificial import ArtificialND2
 from nd2reader.common import check_or_make_dir
-from nd2reader.exceptions import InvalidVersionError
 from nd2reader.parser import Parser
 import urllib.request
 
