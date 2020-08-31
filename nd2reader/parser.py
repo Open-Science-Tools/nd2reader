@@ -256,7 +256,7 @@ class Parser(object):
         byte_ids = range(image_data_start+height*number_of_true_channels, len(image_group_data)-n_unwanted_bytes+1, height*number_of_true_channels)
         all_zero_bytes = all([0 == image_group_data[byte_ids[i]+i] for i in range(len(byte_ids))])
         if not all_zero_bytes:
-            warnings.warn(f'Identified {n_unwanted_bytes} unwanted non-zero bytes in the ND2 file.')
+            raise Exception(f"{n_unwanted_bytes} unexpected non-zero bytes were found in the ND2 file, the file could not be parsed.")
         return all_zero_bytes
 
     def _remove_unwanted_bytes(self, image_group_data, image_data_start, height, width):
