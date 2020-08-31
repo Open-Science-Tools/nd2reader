@@ -14,41 +14,46 @@ class ND2Reader(FramesSequenceND):
     class_priority = 12
 
     def __init__(self, fh):
+        """
+        Arguments:
+            fh {str} -- absolute path to .nd2 file
+            fh {IO} -- input buffer handler (opened with "rb" mode)
+        """
         super(ND2Reader, self).__init__()
 
-        self._fh = fh
-        self.filename = ""
+        if isinstance(fh, str):
+            if not fh.endswith(".nd2"):
+                raise InvalidFileType(
+                    ("The file %s you want to read with nd2reader" % fh)
+                    + " does not have extension .nd2."
+                )
 
-        self._parser = Parser(self._fh)
+            self = ND2Reader(open(fh, "rb"))
+            self.filename = fh
+        else:
+            self._fh = fh
+            self.filename = ""
 
-        # Setup metadata
-        self.metadata = self._parser.metadata
+            self._parser = Parser(self._fh)
 
-        # Set data type
-        self._dtype = self._parser.get_dtype_from_metadata()
+            # Setup metadata
+            self.metadata = self._parser.metadata
 
-        # Setup the axes
-        self._setup_axes()
+            # Set data type
+            self._dtype = self._parser.get_dtype_from_metadata()
 
-        # Other properties
-        self._timesteps = None
+            # Setup the axes
+            self._setup_axes()
 
-    @staticmethod
-    def from_file(filename):
-        if not filename.endswith(".nd2"):
-            raise InvalidFileType("The file %s you want to read with nd2reader does not have extension .nd2." % filename)
+            # Other properties
+            self._timesteps = None
 
-        nd2r = ND2Reader(open(filename, "rb"))
-        nd2r.filename = filename
-
-        return nd2r
-        
     @classmethod
     def class_exts(cls):
         """Let PIMS open function use this reader for opening .nd2 files
 
         """
-        return {'nd2'} | super(ND2Reader, cls).class_exts()
+        return {"nd2"} | super(ND2Reader, cls).class_exts()
 
     def close(self):
         """Correctly close the file handle
@@ -125,22 +130,24 @@ class ND2Reader(FramesSequenceND):
     @property
     def frame_rate(self):
         """The (average) frame rate
-        
+
         Returns:
             float: the (average) frame rate in frames per second
         """
         total_duration = 0.0
 
-        for loop in self.metadata['experiment']['loops']:
-            total_duration += loop['duration']
+        for loop in self.metadata["experiment"]["loops"]:
+            total_duration += loop["duration"]
 
         if total_duration == 0:
             total_duration = self.timesteps[-1]
 
             if total_duration == 0:
-                raise ValueError('Total measurement duration could not be determined from loops')
+                raise ValueError(
+                    "Total measurement duration could not be determined from loops"
+                )
 
-        return self.metadata['num_frames'] / (total_duration/1000.0)
+        return self.metadata["num_frames"] / (total_duration / 1000.0)
 
     def _get_metadata_property(self, key, default=None):
         if self.metadata is None:
@@ -158,12 +165,22 @@ class ND2Reader(FramesSequenceND):
         """Setup the xyctz axes, iterate over t axis by default
 
         """
-        self._init_axis_if_exists('x', self._get_metadata_property("width", default=0))
-        self._init_axis_if_exists('y', self._get_metadata_property("height", default=0))
-        self._init_axis_if_exists('c', len(self._get_metadata_property("channels", default=[])), min_size=2)
-        self._init_axis_if_exists('t', len(self._get_metadata_property("frames", default=[])))
-        self._init_axis_if_exists('z', len(self._get_metadata_property("z_levels", default=[])), min_size=2)
-        self._init_axis_if_exists('v', len(self._get_metadata_property("fields_of_view", default=[])), min_size=2)
+        self._init_axis_if_exists("x", self._get_metadata_property("width", default=0))
+        self._init_axis_if_exists("y", self._get_metadata_property("height", default=0))
+        self._init_axis_if_exists(
+            "c", len(self._get_metadata_property("channels", default=[])), min_size=2
+        )
+        self._init_axis_if_exists(
+            "t", len(self._get_metadata_property("frames", default=[]))
+        )
+        self._init_axis_if_exists(
+            "z", len(self._get_metadata_property("z_levels", default=[])), min_size=2
+        )
+        self._init_axis_if_exists(
+            "v",
+            len(self._get_metadata_property("fields_of_view", default=[])),
+            min_size=2,
+        )
 
         if len(self.sizes) == 0:
             raise EmptyFileError("No axes were found for this .nd2 file.")
@@ -171,7 +188,7 @@ class ND2Reader(FramesSequenceND):
         # provide the default
         self.iter_axes = self._guess_default_iter_axis()
 
-        self._register_get_frame(self.get_frame_2D, 'yx')
+        self._register_get_frame(self.get_frame_2D, "yx")
 
     def _init_axis_if_exists(self, axis, size, min_size=1):
         if size >= min_size:
@@ -183,7 +200,7 @@ class ND2Reader(FramesSequenceND):
         Returns:
             the axis to iterate over
         """
-        priority = ['t', 'z', 'c', 'v']
+        priority = ["t", "z", "c", "v"]
         found_axes = []
         for axis in priority:
             try:
@@ -208,6 +225,9 @@ class ND2Reader(FramesSequenceND):
         if self._timesteps is not None and len(self._timesteps) > 0:
             return self._timesteps
 
-        self._timesteps = np.array(list(self._parser._raw_metadata.acquisition_times), dtype=np.float) * 1000.0
+        self._timesteps = (
+            np.array(list(self._parser._raw_metadata.acquisition_times), dtype=np.float)
+            * 1000.0
+        )
 
         return self._timesteps
