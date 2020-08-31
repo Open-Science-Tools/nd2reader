@@ -11,6 +11,7 @@ class ND2Reader(FramesSequenceND):
     This is the main class: use this to process your .nd2 files.
     """
 
+    _fh = None
     class_priority = 12
 
     def __init__(self, fh):
@@ -27,26 +28,24 @@ class ND2Reader(FramesSequenceND):
                     ("The file %s you want to read with nd2reader" % fh)
                     + " does not have extension .nd2."
                 )
+            fh = open(fh, "rb")
 
-            self = ND2Reader(open(fh, "rb"))
-            self.filename = fh
-        else:
-            self._fh = fh
-            self.filename = ""
+        self._fh = fh
+        self.filename = ""
 
-            self._parser = Parser(self._fh)
+        self._parser = Parser(self._fh)
 
-            # Setup metadata
-            self.metadata = self._parser.metadata
+        # Setup metadata
+        self.metadata = self._parser.metadata
 
-            # Set data type
-            self._dtype = self._parser.get_dtype_from_metadata()
+        # Set data type
+        self._dtype = self._parser.get_dtype_from_metadata()
 
-            # Setup the axes
-            self._setup_axes()
+        # Setup the axes
+        self._setup_axes()
 
-            # Other properties
-            self._timesteps = None
+        # Other properties
+        self._timesteps = None
 
     @classmethod
     def class_exts(cls):
