@@ -3,7 +3,7 @@ import numpy as np  # type: ignore
 import warnings
 
 
-def get_unwanted_bytes_ids(self, image_group_data, image_data_start, height, width):
+def get_unwanted_bytes_ids(image_group_data, image_data_start, height, width):
     # Check if the byte array size conforms to the image axes size. If not, check
     # that the number of unexpected (unwanted) bytes is a multiple of the number of
     # rows (height), as the same unmber of unwanted bytes is expected to be
@@ -13,6 +13,7 @@ def get_unwanted_bytes_ids(self, image_group_data, image_data_start, height, wid
     n_unwanted_bytes = (len(image_group_data[image_data_start:])) % (height * width)
     if not n_unwanted_bytes:
         return np.arange(0)
+    print(n_unwanted_bytes)
     assert 0 == n_unwanted_bytes % height, (
         "An unexpected number of extra bytes was encountered based on the expected"
         + " frame size, therefore the file could not be parsed."
@@ -24,7 +25,7 @@ def get_unwanted_bytes_ids(self, image_group_data, image_data_start, height, wid
     )
 
 
-def remove_bytes_by_id(self, byte_ids, image_group_data, height):
+def remove_bytes_by_id(byte_ids, image_group_data, height):
     # Remove bytes by ID.
     bytes_per_row = len(byte_ids) // height
     warnings.warn(
