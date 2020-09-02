@@ -13,7 +13,6 @@ def get_unwanted_bytes_ids(image_group_data, image_data_start, height, width):
     n_unwanted_bytes = (len(image_group_data[image_data_start:])) % (height * width)
     if not n_unwanted_bytes:
         return np.arange(0)
-    print(n_unwanted_bytes)
     assert 0 == n_unwanted_bytes % height, (
         "An unexpected number of extra bytes was encountered based on the expected"
         + " frame size, therefore the file could not be parsed."
