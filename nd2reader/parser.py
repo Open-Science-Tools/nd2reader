@@ -8,9 +8,9 @@ from pims.base_frames import Frame
 import numpy as np
 
 from nd2reader.common import get_version, read_chunk
-from nd2reader.exceptions import InvalidVersionError
 from nd2reader.label_map import LabelMap
 from nd2reader.raw_metadata import RawMetadata
+from nd2reader import stitched
 
 
 class Parser(object):
@@ -232,8 +232,7 @@ class Parser(object):
         Returns:
 
         """
-        return (image_group_number - (field_of_view * len(self.metadata["z_levels"]) + z_level)) / (
-                len(self.metadata["fields_of_view"]) * len(self.metadata["z_levels"]))
+        return (image_group_number - (field_of_view * len(self.metadata["z_levels"]) + z_level)) / (len(self.metadata["fields_of_view"]) * len(self.metadata["z_levels"]))
 
     @property
     def _channel_offset(self):
@@ -268,6 +267,7 @@ class Parser(object):
         timestamp = struct.unpack("d", data[:8])[0]
         image_group_data = array.array("H", data)
         image_data_start = 4 + channel_offset
+        image_group_data = stitched.remove_parsed_unwanted_bytes(image_group_data, image_data_start, height, width)
 
         # The images for the various channels are interleaved within the same array. For example, the second image
         # of a four image group will be composed of bytes 2, 6, 10, etc. If you understand why someone would design
@@ -276,7 +276,8 @@ class Parser(object):
         try:
             image_data = np.reshape(image_group_data[image_data_start::number_of_true_channels], (height, width))
         except ValueError:
-            image_data = np.reshape(image_group_data[image_data_start::number_of_true_channels], (height, int(round(len(image_group_data[image_data_start::number_of_true_channels])/height))))
+            new_width = len(image_group_data[image_data_start::number_of_true_channels]) // height
+            image_data = np.reshape(image_group_data[image_data_start::number_of_true_channels], (height, new_width))
 
         # Skip images that are all zeros! This is important, since NIS Elements creates blank "gap" images if you
         # don't have the same number of images each cycle. We discovered this because we only took GFP images every
@@ -285,11 +286,12 @@ class Parser(object):
         if np.any(image_data):
             return timestamp, image_data
 
-        # If a blank "gap" image is encountered, generate an array of corresponding height and width to avoid 
-        # errors with ND2-files with missing frames. Array is filled with nan to reflect that data is missing. 
+        # If a blank "gap" image is encountered, generate an array of corresponding height and width to avoid
+        # errors with ND2-files with missing frames. Array is filled with nan to reflect that data is missing.
         else:
             empty_frame = np.full((height, width), np.nan)
-            warnings.warn('ND2 file contains gap frames which are represented by np.nan-filled arrays; to convert to zeros use e.g. np.nan_to_num(array)')
+            warnings.warn(
+                "ND2 file contains gap frames which are represented by np.nan-filled arrays; to convert to zeros use e.g. np.nan_to_num(array)")
             return timestamp, image_data
 
     def _get_frame_metadata(self):
