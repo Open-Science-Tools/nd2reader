@@ -22,16 +22,18 @@ class ND2Reader(FramesSequenceND):
         """
         super(ND2Reader, self).__init__()
 
+        self.filename = ""
+
         if isinstance(fh, str):
             if not fh.endswith(".nd2"):
                 raise InvalidFileType(
                     ("The file %s you want to read with nd2reader" % fh)
                     + " does not have extension .nd2."
                 )
+            self.filename = fh
             fh = open(fh, "rb")
 
         self._fh = fh
-        self.filename = ""
 
         self._parser = Parser(self._fh)
 
