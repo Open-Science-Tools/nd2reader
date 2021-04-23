@@ -1,4 +1,4 @@
-Update version in 'nd2reader/__init__.py' file
+Update version in 'setup.py' file
 
 Rebuild sphinx documentation
 
