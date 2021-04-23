@@ -1,5 +1,6 @@
 from setuptools import setup
-from nd2reader import __version__ as VERSION
+
+VERSION = '3.2.3'
 
 if __name__ == '__main__':
     setup(
