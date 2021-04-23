@@ -9,8 +9,9 @@ def get_unwanted_bytes_ids(image_group_data, image_data_start, height, width):
     # rows (height), as the same unmber of unwanted bytes is expected to be
     # appended at the end of each row. Then, returns the indexes of the unwanted
     # bytes.
+    # Skip the first 4 elements that correspond to the time stamp
     number_of_true_channels = int(len(image_group_data[4:]) / (height * width))
-    n_unwanted_bytes = (len(image_group_data[image_data_start:])) % (height * width)
+    n_unwanted_bytes = (len(image_group_data[4:])) % (height * width)
     if not n_unwanted_bytes:
         return np.arange(0)
     assert 0 == n_unwanted_bytes % height, (
