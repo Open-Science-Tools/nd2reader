@@ -4,7 +4,7 @@ from nd2reader.legacy import Nd2
 
 try:
     import importlib.metadata as importlib_metadata
-except ModuleNotFoundError:
+except:
     import importlib_metadata
 
 try:

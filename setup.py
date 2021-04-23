@@ -7,11 +7,12 @@ if __name__ == '__main__':
         name='nd2reader',
         packages=['nd2reader'],
         install_requires=[
-            'numpy>=1.6.2',
+            'numpy>=1.14',
             'six>=1.4',
             'xmltodict>=0.9.2',
             'pims>=0.3.0'
         ],
+        python_requires=">=3.6",
         version=VERSION,
         description='A tool for reading ND2 files produced by NIS Elements',
         author='Ruben Verweij',

@@ -1,6 +1,6 @@
 include MANIFEST.in
-include VERSION
 include setup.py
+include setup.cfg
 include README.md
 include LICENSE
 include COPYING
