@@ -10,4 +10,4 @@ import importlib.metadata as importlib_metadata
 try:
     __version__ = importlib_metadata.version(__name__)
 except:
-    print('Unable to read version number')
+    raise ValueError('Unable to read version number')
