@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>nd2reader.raw_metadata &#8212; nd2reader 3.2.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nd2reader.raw_metadata &#8212; nd2reader 3.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
@@ -35,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.2.3</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.3.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -109,15 +109,15 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">nd2reader.common</span> <span class="k">import</span> <span class="n">read_chunk</span><span class="p">,</span> <span class="n">read_array</span><span class="p">,</span> <span class="n">read_metadata</span><span class="p">,</span> <span class="n">parse_date</span><span class="p">,</span> <span class="n">get_from_dict_if_exists</span>
-<span class="kn">from</span> <span class="nn">nd2reader.common_raw_metadata</span> <span class="k">import</span> <span class="n">parse_dimension_text_line</span><span class="p">,</span> <span class="n">parse_if_not_none</span><span class="p">,</span> <span class="n">parse_roi_shape</span><span class="p">,</span> <span class="n">parse_roi_type</span><span class="p">,</span> <span class="n">get_loops_from_data</span><span class="p">,</span> <span class="n">determine_sampling_interval</span>
+<span class="kn">from</span> <span class="nn">nd2reader.common</span> <span class="kn">import</span> <span class="n">read_chunk</span><span class="p">,</span> <span class="n">read_array</span><span class="p">,</span> <span class="n">read_metadata</span><span class="p">,</span> <span class="n">parse_date</span><span class="p">,</span> <span class="n">get_from_dict_if_exists</span>
+<span class="kn">from</span> <span class="nn">nd2reader.common_raw_metadata</span> <span class="kn">import</span> <span class="n">parse_dimension_text_line</span><span class="p">,</span> <span class="n">parse_if_not_none</span><span class="p">,</span> <span class="n">parse_roi_shape</span><span class="p">,</span> <span class="n">parse_roi_type</span><span class="p">,</span> <span class="n">get_loops_from_data</span><span class="p">,</span> <span class="n">determine_sampling_interval</span>
 
 
 <div class="viewcode-block" id="RawMetadata"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.raw_metadata.RawMetadata">[docs]</a><span class="k">class</span> <span class="nc">RawMetadata</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;RawMetadata class parses and stores the raw metadata that is read from the binary file in dict format.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fh</span><span class="p">,</span> <span class="n">label_map</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fh</span><span class="p">,</span> <span class="n">label_map</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span> <span class="o">=</span> <span class="n">fh</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span> <span class="o">=</span> <span class="n">label_map</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_parsed</span> <span class="o">=</span> <span class="kc">None</span>
@@ -263,18 +263,34 @@
     <span class="k">def</span> <span class="nf">_parse_z_levels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The different levels in the Z-plane.</span>
 
+<span class="sd">        If they are not available from the _parse_dimension function AND there</span>
+<span class="sd">        is NO &#39;Dimensions: &#39; textinfo item in the file, we return a range with</span>
+<span class="sd">        the length of z_coordinates if available, otherwise an empty list.</span>
+
 <span class="sd">        Returns:</span>
 <span class="sd">            list: the z levels, just a sequence from 0 to n.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">z_levels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&quot;&quot;.*?Z\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="mi">0</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">z_levels</span><span class="p">):</span>
-            <span class="n">z_levels</span> <span class="o">=</span> <span class="n">parse_if_not_none</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_z_coordinates</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">z_levels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">z_levels</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">z_levels</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">z_levels</span><span class="p">))</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Z-levels details missing in metadata. Using Z-coordinates instead.&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">z_levels</span>
+        <span class="c1"># get the dimension text to check if we should apply the fallback or not</span>
+        <span class="n">dimension_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension_text</span><span class="p">()</span>
+
+        <span class="c1"># this returns range(len(z_levels))</span>
+        <span class="n">z_levels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&quot;&quot;.*?Z\((\d+)\).*?&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">dimension_text</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">z_levels</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">dimension_text</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Either we have found the z_levels (first condition) so return, or</span>
+            <span class="c1"># don&#39;t fallback, because Z is apparently not in Dimensions, so</span>
+            <span class="c1"># there should be no z_levels</span>
+            <span class="k">return</span> <span class="n">z_levels</span>
+
+        <span class="c1"># Not available from dimension, get from z_coordinates</span>
+        <span class="n">z_levels</span> <span class="o">=</span> <span class="n">parse_if_not_none</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_z_coordinates</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">z_levels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># No z coordinates, return empty list</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Z-levels details missing in metadata. Using Z-coordinates instead.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">z_levels</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">_parse_z_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The coordinate in micron for all z planes.</span>
@@ -306,15 +322,18 @@
 
         <span class="k">return</span> <span class="n">dimension_text</span>
 
-    <span class="k">def</span> <span class="nf">_parse_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
-        <span class="n">dimension_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension_text</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_parse_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">dimension_text</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">dimension_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dimension_text</span><span class="p">()</span> <span class="k">if</span> <span class="n">dimension_text</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">dimension_text</span>
         <span class="k">if</span> <span class="n">dimension_text</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
+
         <span class="k">if</span> <span class="n">six</span><span class="o">.</span><span class="n">PY3</span><span class="p">:</span>
             <span class="n">dimension_text</span> <span class="o">=</span> <span class="n">dimension_text</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+
         <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">dimension_text</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
+
         <span class="n">count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
         <span class="k">return</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
 
@@ -763,7 +782,7 @@
     </p>
     <p>
         &copy; Copyright 2017 - 2019, Ruben Verweij.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.0.<br/>
     </p>
   </div>
 </footer>

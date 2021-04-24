@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>nd2reader.parser &#8212; nd2reader 3.2.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nd2reader.parser &#8212; nd2reader 3.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
@@ -35,7 +35,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.2.3</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.3.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -109,13 +109,13 @@
 <span class="kn">import</span> <span class="nn">array</span>
 <span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">pims.base_frames</span> <span class="k">import</span> <span class="n">Frame</span>
+<span class="kn">from</span> <span class="nn">pims.base_frames</span> <span class="kn">import</span> <span class="n">Frame</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">nd2reader.common</span> <span class="k">import</span> <span class="n">get_version</span><span class="p">,</span> <span class="n">read_chunk</span>
-<span class="kn">from</span> <span class="nn">nd2reader.exceptions</span> <span class="k">import</span> <span class="n">InvalidVersionError</span>
-<span class="kn">from</span> <span class="nn">nd2reader.label_map</span> <span class="k">import</span> <span class="n">LabelMap</span>
-<span class="kn">from</span> <span class="nn">nd2reader.raw_metadata</span> <span class="k">import</span> <span class="n">RawMetadata</span>
+<span class="kn">from</span> <span class="nn">nd2reader.common</span> <span class="kn">import</span> <span class="n">get_version</span><span class="p">,</span> <span class="n">read_chunk</span>
+<span class="kn">from</span> <span class="nn">nd2reader.label_map</span> <span class="kn">import</span> <span class="n">LabelMap</span>
+<span class="kn">from</span> <span class="nn">nd2reader.raw_metadata</span> <span class="kn">import</span> <span class="n">RawMetadata</span>
+<span class="kn">from</span> <span class="nn">nd2reader</span> <span class="kn">import</span> <span class="n">stitched</span>
 
 
 <div class="viewcode-block" id="Parser"><a class="viewcode-back" href="../../nd2reader.html#nd2reader.parser.Parser">[docs]</a><span class="k">class</span> <span class="nc">Parser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -128,7 +128,7 @@
 
     <span class="n">supported_file_versions</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">3</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span> <span class="kc">True</span><span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fh</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fh</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span> <span class="o">=</span> <span class="n">fh</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_label_map</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_raw_metadata</span> <span class="o">=</span> <span class="kc">None</span>
@@ -337,8 +337,7 @@
 <span class="sd">        Returns:</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">image_group_number</span> <span class="o">-</span> <span class="p">(</span><span class="n">field_of_view</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;z_levels&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="n">z_level</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span>
-                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;fields_of_view&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;z_levels&quot;</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">image_group_number</span> <span class="o">-</span> <span class="p">(</span><span class="n">field_of_view</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;z_levels&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="n">z_level</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;fields_of_view&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;z_levels&quot;</span><span class="p">]))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_channel_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -373,6 +372,7 @@
         <span class="n">timestamp</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[:</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">image_group_data</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
         <span class="n">image_data_start</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">+</span> <span class="n">channel_offset</span>
+        <span class="n">image_group_data</span> <span class="o">=</span> <span class="n">stitched</span><span class="o">.</span><span class="n">remove_parsed_unwanted_bytes</span><span class="p">(</span><span class="n">image_group_data</span><span class="p">,</span> <span class="n">image_data_start</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
 
         <span class="c1"># The images for the various channels are interleaved within the same array. For example, the second image</span>
         <span class="c1"># of a four image group will be composed of bytes 2, 6, 10, etc. If you understand why someone would design</span>
@@ -381,7 +381,8 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">image_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">image_group_data</span><span class="p">[</span><span class="n">image_data_start</span><span class="p">::</span><span class="n">number_of_true_channels</span><span class="p">],</span> <span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-            <span class="n">image_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">image_group_data</span><span class="p">[</span><span class="n">image_data_start</span><span class="p">::</span><span class="n">number_of_true_channels</span><span class="p">],</span> <span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">image_group_data</span><span class="p">[</span><span class="n">image_data_start</span><span class="p">::</span><span class="n">number_of_true_channels</span><span class="p">])</span><span class="o">/</span><span class="n">height</span><span class="p">))))</span>
+            <span class="n">new_width</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_group_data</span><span class="p">[</span><span class="n">image_data_start</span><span class="p">::</span><span class="n">number_of_true_channels</span><span class="p">])</span> <span class="o">//</span> <span class="n">height</span>
+            <span class="n">image_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">image_group_data</span><span class="p">[</span><span class="n">image_data_start</span><span class="p">::</span><span class="n">number_of_true_channels</span><span class="p">],</span> <span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">new_width</span><span class="p">))</span>
 
         <span class="c1"># Skip images that are all zeros! This is important, since NIS Elements creates blank &quot;gap&quot; images if you</span>
         <span class="c1"># don&#39;t have the same number of images each cycle. We discovered this because we only took GFP images every</span>
@@ -390,11 +391,12 @@
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">image_data</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">image_data</span>
 
-        <span class="c1"># If a blank &quot;gap&quot; image is encountered, generate an array of corresponding height and width to avoid </span>
-        <span class="c1"># errors with ND2-files with missing frames. Array is filled with nan to reflect that data is missing. </span>
+        <span class="c1"># If a blank &quot;gap&quot; image is encountered, generate an array of corresponding height and width to avoid</span>
+        <span class="c1"># errors with ND2-files with missing frames. Array is filled with nan to reflect that data is missing.</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">empty_frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ND2 file contains gap frames which are represented by np.nan-filled arrays; to convert to zeros use e.g. np.nan_to_num(array)&#39;</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;ND2 file contains gap frames which are represented by np.nan-filled arrays; to convert to zeros use e.g. np.nan_to_num(array)&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">image_data</span>
 
     <span class="k">def</span> <span class="nf">_get_frame_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -419,7 +421,7 @@
     </p>
     <p>
         &copy; Copyright 2017 - 2019, Ruben Verweij.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.0.<br/>
     </p>
   </div>
 </footer>
