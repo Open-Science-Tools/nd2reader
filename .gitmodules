@@ -1,4 +1,4 @@
 [submodule "docs"]
 	path = docs
-	url = https://github.com/rbnvrw/nd2reader.git
+	url = git@github.com:rbnvrw/nd2reader.git
 	branch = gh-pages
