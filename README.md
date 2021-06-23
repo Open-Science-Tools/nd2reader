@@ -3,8 +3,6 @@
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/nd2reader/badges/version.svg)](https://anaconda.org/conda-forge/nd2reader)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/nd2reader/badges/downloads.svg)](https://anaconda.org/conda-forge/nd2reader)
 [![Build status](https://github.com/rbnvrw/nd2reader/actions/workflows/python-package.yml/badge.svg)](https://github.com/rbnvrw/nd2reader/actions/workflows/python-package.yml)
-[![Test Coverage](https://codeclimate.com/github/rbnvrw/nd2reader/badges/coverage.svg)](https://codeclimate.com/github/rbnvrw/nd2reader/coverage)
-[![Code Climate](https://codeclimate.com/github/rbnvrw/nd2reader/badges/gpa.svg)](https://codeclimate.com/github/rbnvrw/nd2reader)
 
 ### About
 
