@@ -139,11 +139,15 @@ class RawMetadata(object):
 
     def _get_channel_validity_list(self, metadata):
         try:
-            validity = self.image_metadata[six.b('SLxExperiment')][six.b('ppNextLevelEx')][six.b('')][0][
-                six.b('ppNextLevelEx')][six.b('')][0][six.b('pItemValid')]
+            validity = self.image_metadata[six.b('SLxExperiment')][six.b('ppNextLevelEx')][six.b('')][
+                six.b('ppNextLevelEx')][six.b('')][six.b('pItemValid')]
         except (KeyError, TypeError):
-            # If none of the channels have been deleted, there is no validity list, so we just make one
-            validity = [True for _ in metadata]
+            try:
+                validity = self.image_metadata[six.b('SLxExperiment')][six.b('ppNextLevelEx')][six.b('')][0][
+                    six.b('ppNextLevelEx')][six.b('')][0][six.b('pItemValid')]
+            except (KeyError, TypeError):
+                    # If none of the channels have been deleted, there is no validity list, so we just make one
+                    validity = [True for _ in metadata[six.b('sPlaneNew')]]
         return validity
 
     def _parse_fields_of_view(self):
