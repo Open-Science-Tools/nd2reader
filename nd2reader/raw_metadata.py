@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 import re
 import xmltodict
 import six
@@ -137,17 +138,21 @@ class RawMetadata(object):
                 channels.append('Unknown')
         return channels
 
+    def _parse_validity(self):
+        parsed = self.image_metadata[six.b('SLxExperiment')]
+        for _ in range(2):
+            parsed = parsed[six.b('ppNextLevelEx')][six.b('')]
+            if isinstance(parsed, Sequence):
+                # Old format had this structure.
+                parsed = parsed[0]
+        return parsed[six.b('pItemValid')]
+
     def _get_channel_validity_list(self, metadata):
         try:
-            validity = self.image_metadata[six.b('SLxExperiment')][six.b('ppNextLevelEx')][six.b('')][
-                six.b('ppNextLevelEx')][six.b('')][six.b('pItemValid')]
+            validity = self._parse_validity()
         except (KeyError, TypeError):
-            try:
-                validity = self.image_metadata[six.b('SLxExperiment')][six.b('ppNextLevelEx')][six.b('')][0][
-                    six.b('ppNextLevelEx')][six.b('')][0][six.b('pItemValid')]
-            except (KeyError, TypeError):
-                    # If none of the channels have been deleted, there is no validity list, so we just make one
-                    validity = [True for _ in metadata[six.b('sPlaneNew')]]
+            # If none of the channels have been deleted, there is no validity list, so we just make one
+            validity = [True for _ in metadata[six.b('sPlaneNew')]]
         return validity
 
     def _parse_fields_of_view(self):
