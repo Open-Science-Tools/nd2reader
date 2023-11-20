@@ -227,7 +227,7 @@ class ND2Reader(FramesSequenceND):
             return self._timesteps
 
         self._timesteps = (
-            np.array(list(self._parser._raw_metadata.acquisition_times), dtype=np.float)
+            np.array(list(self._parser._raw_metadata.acquisition_times), dtype=np.float64)
             * 1000.0
         )
 
