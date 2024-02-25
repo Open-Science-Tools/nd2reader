@@ -45,6 +45,8 @@ class RawMetadata(object):
             "frames": self._parse_frames(),
             "z_levels": self._parse_z_levels(),
             "z_coordinates": parse_if_not_none(self.z_data, self._parse_z_coordinates),
+            "x_coordinates":  parse_if_not_none(self.x_data, self._parse_x_coordinates),
+            "y_coordinates":  parse_if_not_none(self.y_data, self._parse_y_coordinates),
             "total_images_per_channel": frames_per_channel,
             "channels": self._parse_channels(),
             "pixel_microns": parse_if_not_none(self.image_calibration, self._parse_calibration)
@@ -194,6 +196,22 @@ class RawMetadata(object):
             list: the z coordinates in micron
         """
         return self.z_data.tolist()
+
+    def _parse_x_coordinates(self):
+        """The coordinate in micron for all x.
+
+        Returns:
+            list: the x coordinates in micron
+        """
+        return self.x_data.tolist()
+
+    def _parse_y_coordinates(self):
+        """The coordinate in micron for all y.
+
+        Returns:
+            list: the y coordinates in micron
+        """
+        return self.y_data.tolist()
 
     def _parse_dimension_text(self):
         """While there are metadata values that represent a lot of what we want to capture, they seem to be unreliable.
@@ -662,4 +680,3 @@ class RawMetadata(object):
         if self._label_map.image_metadata:
             for event in self._metadata_parsed["events"]:
                 yield event
-
