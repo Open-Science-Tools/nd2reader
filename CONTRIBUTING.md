@@ -1,7 +1,12 @@
+# Looking for maintainers
+
+Because I'm no longer active in this field, I'm unable to maintain this package any longer. If you'd like to help, please reach out to [me](https://github.com/rbnvrw).
+We can discuss your experience and I'll add you to the [OpenScienceTools](https://github.com/Open-Science-Tools) team so that you have access to the repository.
+
 # Contributing to nd2reader
 
 We welcome feature proposals and improvements to the library from anyone. If you just have an idea, you can open an [issue](https://github.com/rbnvrw/nd2reader/issues) for
-discussion, or get in touch with Ruben Verweij. If you already wrote some code or made changes, simply open a pull
+discussion, or get in touch with a member of [OpenScienceTools](https://github.com/Open-Science-Tools). If you already wrote some code or made changes, simply open a pull
 request.
 
 ## Running and Writing Tests
