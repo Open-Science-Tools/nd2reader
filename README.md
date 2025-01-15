@@ -1,5 +1,8 @@
 # nd2reader
 
+**This package is no longer actively developed because I'm no longer working in this field and can't properly maintain it. If you'd like to help, please see the [contributing](https://github.com/rbnvrw/nd2reader/blob/master/CONTRIBUTING.md) page
+for more information.**
+
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/nd2reader/badges/version.svg)](https://anaconda.org/conda-forge/nd2reader)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/nd2reader/badges/downloads.svg)](https://anaconda.org/conda-forge/nd2reader)
 [![Build status](https://github.com/rbnvrw/nd2reader/actions/workflows/python-package.yml/badge.svg)](https://github.com/rbnvrw/nd2reader/actions/workflows/python-package.yml)
