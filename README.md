@@ -12,9 +12,14 @@ for more information.**
 `nd2reader` is a pure-Python package that reads images produced by NIS Elements 4.0+. It has only been definitively tested on NIS Elements 4.30.02 Build 1053. Support for older versions is being actively worked on.
 The reader is written in the [pims](https://github.com/soft-matter/pims) framework, enabling easy access to multidimensional files, lazy slicing, and nice display in IPython.
 
+### Alternatives
+
+- [nd2](https://pypi.org/project/nd2/)
+- Open a PR if you'd like to be listed here.
+
 ### Documentation
 
-The documentation is available [here](http://www.lighthacking.nl/nd2reader/).
+The documentation is available [here](https://open-science-tools.github.io/nd2reader/).
 
 ### Installation
 
@@ -63,7 +68,7 @@ After opening the file, all `pims` features are supported. Please refer to the [
 
 #### Backwards compatibility
 
-Older versions of `nd2reader` do not use the `pims` framework. To provide backwards compatibility, a legacy [Nd2](http://www.lighthacking.nl/nd2reader/nd2reader.html#module-nd2reader.legacy) class is provided.
+Older versions of `nd2reader` do not use the `pims` framework. To provide backwards compatibility, a legacy [Nd2](https://open-science-tools.github.io/nd2reader/nd2reader.html#module-nd2reader.legacy) class is provided.
 
 ### Contributing
 
