@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nd2reader package &#8212; nd2reader 3.3.0 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>nd2reader package &#8212; nd2reader 3.3.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css?v=4468db6d" />
+    <script src="_static/documentation_options.js?v=9ac01507"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Tutorial" href="tutorial.html" />
@@ -18,10 +18,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
-<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
 
   </head><body>
 
@@ -36,13 +36,11 @@
         </button>
         <a class="navbar-brand" href="index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.3.0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.3.1</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
           <ul class="nav navbar-nav">
-            
-                <li><a href="http://lighthacking.nl">Lighthacking</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -53,7 +51,7 @@
      href="index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><p class="caption"><span class="caption-text">Contents:</span></p>
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">    nd2reader quick start tutorial</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">    nd2reader API reference</a></li>
@@ -72,14 +70,143 @@
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">nd2reader package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-nd2reader.reader">nd2reader.reader module</a></li>
-<li><a class="reference internal" href="#module-nd2reader.parser">nd2reader.parser module</a></li>
-<li><a class="reference internal" href="#module-nd2reader.raw_metadata">nd2reader.raw_metadata module</a></li>
-<li><a class="reference internal" href="#module-nd2reader.label_map">nd2reader.label_map module</a></li>
-<li><a class="reference internal" href="#module-nd2reader.common">nd2reader.common module</a></li>
-<li><a class="reference internal" href="#module-nd2reader.exceptions">nd2reader.exceptions module</a></li>
-<li><a class="reference internal" href="#module-nd2reader.artificial">nd2reader.artificial module</a></li>
-<li><a class="reference internal" href="#module-nd2reader.legacy">nd2reader.legacy module</a></li>
+<li><a class="reference internal" href="#module-nd2reader.reader">nd2reader.reader module</a><ul>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader"><code class="docutils literal notranslate"><span class="pre">ND2Reader</span></code></a><ul>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.class_exts"><code class="docutils literal notranslate"><span class="pre">ND2Reader.class_exts()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.class_priority"><code class="docutils literal notranslate"><span class="pre">ND2Reader.class_priority</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.close"><code class="docutils literal notranslate"><span class="pre">ND2Reader.close()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.events"><code class="docutils literal notranslate"><span class="pre">ND2Reader.events</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.frame_rate"><code class="docutils literal notranslate"><span class="pre">ND2Reader.frame_rate</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.get_frame_2D"><code class="docutils literal notranslate"><span class="pre">ND2Reader.get_frame_2D()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.get_timesteps"><code class="docutils literal notranslate"><span class="pre">ND2Reader.get_timesteps()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.parser"><code class="docutils literal notranslate"><span class="pre">ND2Reader.parser</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.pixel_type"><code class="docutils literal notranslate"><span class="pre">ND2Reader.pixel_type</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.timesteps"><code class="docutils literal notranslate"><span class="pre">ND2Reader.timesteps</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-nd2reader.parser">nd2reader.parser module</a><ul>
+<li><a class="reference internal" href="#nd2reader.parser.Parser"><code class="docutils literal notranslate"><span class="pre">Parser</span></code></a><ul>
+<li><a class="reference internal" href="#nd2reader.parser.Parser.CHUNK_HEADER"><code class="docutils literal notranslate"><span class="pre">Parser.CHUNK_HEADER</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.parser.Parser.CHUNK_MAP_END"><code class="docutils literal notranslate"><span class="pre">Parser.CHUNK_MAP_END</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.parser.Parser.CHUNK_MAP_START"><code class="docutils literal notranslate"><span class="pre">Parser.CHUNK_MAP_START</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.parser.Parser.calculate_image_properties"><code class="docutils literal notranslate"><span class="pre">Parser.calculate_image_properties()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.parser.Parser.get_dtype_from_metadata"><code class="docutils literal notranslate"><span class="pre">Parser.get_dtype_from_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.parser.Parser.get_image"><code class="docutils literal notranslate"><span class="pre">Parser.get_image()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.parser.Parser.get_image_by_attributes"><code class="docutils literal notranslate"><span class="pre">Parser.get_image_by_attributes()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.parser.Parser.supported_file_versions"><code class="docutils literal notranslate"><span class="pre">Parser.supported_file_versions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-nd2reader.raw_metadata">nd2reader.raw_metadata module</a><ul>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata"><code class="docutils literal notranslate"><span class="pre">RawMetadata</span></code></a><ul>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.acquisition_times"><code class="docutils literal notranslate"><span class="pre">RawMetadata.acquisition_times</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.app_info"><code class="docutils literal notranslate"><span class="pre">RawMetadata.app_info</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.camera_exposure_time"><code class="docutils literal notranslate"><span class="pre">RawMetadata.camera_exposure_time</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.camera_temp"><code class="docutils literal notranslate"><span class="pre">RawMetadata.camera_temp</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.custom_data"><code class="docutils literal notranslate"><span class="pre">RawMetadata.custom_data</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.get_duration_from_interval_and_loops"><code class="docutils literal notranslate"><span class="pre">RawMetadata.get_duration_from_interval_and_loops()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.get_parsed_metadata"><code class="docutils literal notranslate"><span class="pre">RawMetadata.get_parsed_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.grabber_settings"><code class="docutils literal notranslate"><span class="pre">RawMetadata.grabber_settings</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.image_attributes"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_attributes</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.image_calibration"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_calibration</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.image_events"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_events</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.image_metadata"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_metadata</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.image_metadata_sequence"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_metadata_sequence</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.image_text_info"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_text_info</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.lut_data"><code class="docutils literal notranslate"><span class="pre">RawMetadata.lut_data</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.pfs_offset"><code class="docutils literal notranslate"><span class="pre">RawMetadata.pfs_offset</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.pfs_status"><code class="docutils literal notranslate"><span class="pre">RawMetadata.pfs_status</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.roi_metadata"><code class="docutils literal notranslate"><span class="pre">RawMetadata.roi_metadata</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.x_data"><code class="docutils literal notranslate"><span class="pre">RawMetadata.x_data</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.y_data"><code class="docutils literal notranslate"><span class="pre">RawMetadata.y_data</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.z_data"><code class="docutils literal notranslate"><span class="pre">RawMetadata.z_data</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-nd2reader.label_map">nd2reader.label_map module</a><ul>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap"><code class="docutils literal notranslate"><span class="pre">LabelMap</span></code></a><ul>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.acquisition_frames"><code class="docutils literal notranslate"><span class="pre">LabelMap.acquisition_frames</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.acquisition_times"><code class="docutils literal notranslate"><span class="pre">LabelMap.acquisition_times</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.acquisition_times_2"><code class="docutils literal notranslate"><span class="pre">LabelMap.acquisition_times_2</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.app_info"><code class="docutils literal notranslate"><span class="pre">LabelMap.app_info</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.camera_exposure_time"><code class="docutils literal notranslate"><span class="pre">LabelMap.camera_exposure_time</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.camera_temp"><code class="docutils literal notranslate"><span class="pre">LabelMap.camera_temp</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.custom_data"><code class="docutils literal notranslate"><span class="pre">LabelMap.custom_data</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.description"><code class="docutils literal notranslate"><span class="pre">LabelMap.description</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.get_image_data_location"><code class="docutils literal notranslate"><span class="pre">LabelMap.get_image_data_location()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.grabber_settings"><code class="docutils literal notranslate"><span class="pre">LabelMap.grabber_settings</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.guid"><code class="docutils literal notranslate"><span class="pre">LabelMap.guid</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.image_attributes"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_attributes</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.image_calibration"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_calibration</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.image_events"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_events</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.image_metadata"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_metadata</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.image_metadata_sequence"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_metadata_sequence</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.image_text_info"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_text_info</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.lut_data"><code class="docutils literal notranslate"><span class="pre">LabelMap.lut_data</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.pfs_offset"><code class="docutils literal notranslate"><span class="pre">LabelMap.pfs_offset</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.pfs_status"><code class="docutils literal notranslate"><span class="pre">LabelMap.pfs_status</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.roi_metadata"><code class="docutils literal notranslate"><span class="pre">LabelMap.roi_metadata</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.x_data"><code class="docutils literal notranslate"><span class="pre">LabelMap.x_data</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.y_data"><code class="docutils literal notranslate"><span class="pre">LabelMap.y_data</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.z_data"><code class="docutils literal notranslate"><span class="pre">LabelMap.z_data</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-nd2reader.common">nd2reader.common module</a><ul>
+<li><a class="reference internal" href="#nd2reader.common.check_or_make_dir"><code class="docutils literal notranslate"><span class="pre">check_or_make_dir()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.common.get_from_dict_if_exists"><code class="docutils literal notranslate"><span class="pre">get_from_dict_if_exists()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.common.get_version"><code class="docutils literal notranslate"><span class="pre">get_version()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.common.parse_date"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.common.parse_version"><code class="docutils literal notranslate"><span class="pre">parse_version()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.common.read_array"><code class="docutils literal notranslate"><span class="pre">read_array()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.common.read_chunk"><code class="docutils literal notranslate"><span class="pre">read_chunk()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.common.read_metadata"><code class="docutils literal notranslate"><span class="pre">read_metadata()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-nd2reader.exceptions">nd2reader.exceptions module</a><ul>
+<li><a class="reference internal" href="#nd2reader.exceptions.EmptyFileError"><code class="docutils literal notranslate"><span class="pre">EmptyFileError</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.exceptions.InvalidFileType"><code class="docutils literal notranslate"><span class="pre">InvalidFileType</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.exceptions.InvalidVersionError"><code class="docutils literal notranslate"><span class="pre">InvalidVersionError</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-nd2reader.artificial">nd2reader.artificial module</a><ul>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2"><code class="docutils literal notranslate"><span class="pre">ArtificialND2</span></code></a><ul>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.close"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.close()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.create_label_map_bytes"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.create_label_map_bytes()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.data_types"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.data_types</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.file_handle"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.file_handle</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.header"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.header</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.relative_offset"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.relative_offset</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.write_file"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.write_file()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.write_label_map"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.write_label_map()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.write_label_map_info"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.write_label_map_info()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.write_version"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.write_version()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-nd2reader.legacy">nd2reader.legacy module</a><ul>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2"><code class="docutils literal notranslate"><span class="pre">Nd2</span></code></a><ul>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.channels"><code class="docutils literal notranslate"><span class="pre">Nd2.channels</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.close"><code class="docutils literal notranslate"><span class="pre">Nd2.close()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.date"><code class="docutils literal notranslate"><span class="pre">Nd2.date</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.fields_of_view"><code class="docutils literal notranslate"><span class="pre">Nd2.fields_of_view</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.frames"><code class="docutils literal notranslate"><span class="pre">Nd2.frames</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.get_image"><code class="docutils literal notranslate"><span class="pre">Nd2.get_image()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.height"><code class="docutils literal notranslate"><span class="pre">Nd2.height</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.pixel_microns"><code class="docutils literal notranslate"><span class="pre">Nd2.pixel_microns</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.select"><code class="docutils literal notranslate"><span class="pre">Nd2.select()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.width"><code class="docutils literal notranslate"><span class="pre">Nd2.width</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.z_levels"><code class="docutils literal notranslate"><span class="pre">Nd2.z_levels</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -123,68 +250,230 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#">nd2reader package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-nd2reader.reader">nd2reader.reader module</a><ul>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader"><code class="docutils literal notranslate"><span class="pre">ND2Reader</span></code></a><ul>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.class_exts"><code class="docutils literal notranslate"><span class="pre">ND2Reader.class_exts()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.class_priority"><code class="docutils literal notranslate"><span class="pre">ND2Reader.class_priority</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.close"><code class="docutils literal notranslate"><span class="pre">ND2Reader.close()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.events"><code class="docutils literal notranslate"><span class="pre">ND2Reader.events</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.frame_rate"><code class="docutils literal notranslate"><span class="pre">ND2Reader.frame_rate</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.get_frame_2D"><code class="docutils literal notranslate"><span class="pre">ND2Reader.get_frame_2D()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.get_timesteps"><code class="docutils literal notranslate"><span class="pre">ND2Reader.get_timesteps()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.parser"><code class="docutils literal notranslate"><span class="pre">ND2Reader.parser</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.pixel_type"><code class="docutils literal notranslate"><span class="pre">ND2Reader.pixel_type</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.reader.ND2Reader.timesteps"><code class="docutils literal notranslate"><span class="pre">ND2Reader.timesteps</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-nd2reader.parser">nd2reader.parser module</a><ul>
+<li><a class="reference internal" href="#nd2reader.parser.Parser"><code class="docutils literal notranslate"><span class="pre">Parser</span></code></a><ul>
+<li><a class="reference internal" href="#nd2reader.parser.Parser.CHUNK_HEADER"><code class="docutils literal notranslate"><span class="pre">Parser.CHUNK_HEADER</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.parser.Parser.CHUNK_MAP_END"><code class="docutils literal notranslate"><span class="pre">Parser.CHUNK_MAP_END</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.parser.Parser.CHUNK_MAP_START"><code class="docutils literal notranslate"><span class="pre">Parser.CHUNK_MAP_START</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.parser.Parser.calculate_image_properties"><code class="docutils literal notranslate"><span class="pre">Parser.calculate_image_properties()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.parser.Parser.get_dtype_from_metadata"><code class="docutils literal notranslate"><span class="pre">Parser.get_dtype_from_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.parser.Parser.get_image"><code class="docutils literal notranslate"><span class="pre">Parser.get_image()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.parser.Parser.get_image_by_attributes"><code class="docutils literal notranslate"><span class="pre">Parser.get_image_by_attributes()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.parser.Parser.supported_file_versions"><code class="docutils literal notranslate"><span class="pre">Parser.supported_file_versions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-nd2reader.raw_metadata">nd2reader.raw_metadata module</a><ul>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata"><code class="docutils literal notranslate"><span class="pre">RawMetadata</span></code></a><ul>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.acquisition_times"><code class="docutils literal notranslate"><span class="pre">RawMetadata.acquisition_times</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.app_info"><code class="docutils literal notranslate"><span class="pre">RawMetadata.app_info</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.camera_exposure_time"><code class="docutils literal notranslate"><span class="pre">RawMetadata.camera_exposure_time</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.camera_temp"><code class="docutils literal notranslate"><span class="pre">RawMetadata.camera_temp</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.custom_data"><code class="docutils literal notranslate"><span class="pre">RawMetadata.custom_data</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.get_duration_from_interval_and_loops"><code class="docutils literal notranslate"><span class="pre">RawMetadata.get_duration_from_interval_and_loops()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.get_parsed_metadata"><code class="docutils literal notranslate"><span class="pre">RawMetadata.get_parsed_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.grabber_settings"><code class="docutils literal notranslate"><span class="pre">RawMetadata.grabber_settings</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.image_attributes"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_attributes</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.image_calibration"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_calibration</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.image_events"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_events</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.image_metadata"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_metadata</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.image_metadata_sequence"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_metadata_sequence</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.image_text_info"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_text_info</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.lut_data"><code class="docutils literal notranslate"><span class="pre">RawMetadata.lut_data</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.pfs_offset"><code class="docutils literal notranslate"><span class="pre">RawMetadata.pfs_offset</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.pfs_status"><code class="docutils literal notranslate"><span class="pre">RawMetadata.pfs_status</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.roi_metadata"><code class="docutils literal notranslate"><span class="pre">RawMetadata.roi_metadata</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.x_data"><code class="docutils literal notranslate"><span class="pre">RawMetadata.x_data</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.y_data"><code class="docutils literal notranslate"><span class="pre">RawMetadata.y_data</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.raw_metadata.RawMetadata.z_data"><code class="docutils literal notranslate"><span class="pre">RawMetadata.z_data</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-nd2reader.label_map">nd2reader.label_map module</a><ul>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap"><code class="docutils literal notranslate"><span class="pre">LabelMap</span></code></a><ul>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.acquisition_frames"><code class="docutils literal notranslate"><span class="pre">LabelMap.acquisition_frames</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.acquisition_times"><code class="docutils literal notranslate"><span class="pre">LabelMap.acquisition_times</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.acquisition_times_2"><code class="docutils literal notranslate"><span class="pre">LabelMap.acquisition_times_2</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.app_info"><code class="docutils literal notranslate"><span class="pre">LabelMap.app_info</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.camera_exposure_time"><code class="docutils literal notranslate"><span class="pre">LabelMap.camera_exposure_time</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.camera_temp"><code class="docutils literal notranslate"><span class="pre">LabelMap.camera_temp</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.custom_data"><code class="docutils literal notranslate"><span class="pre">LabelMap.custom_data</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.description"><code class="docutils literal notranslate"><span class="pre">LabelMap.description</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.get_image_data_location"><code class="docutils literal notranslate"><span class="pre">LabelMap.get_image_data_location()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.grabber_settings"><code class="docutils literal notranslate"><span class="pre">LabelMap.grabber_settings</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.guid"><code class="docutils literal notranslate"><span class="pre">LabelMap.guid</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.image_attributes"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_attributes</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.image_calibration"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_calibration</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.image_events"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_events</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.image_metadata"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_metadata</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.image_metadata_sequence"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_metadata_sequence</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.image_text_info"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_text_info</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.lut_data"><code class="docutils literal notranslate"><span class="pre">LabelMap.lut_data</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.pfs_offset"><code class="docutils literal notranslate"><span class="pre">LabelMap.pfs_offset</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.pfs_status"><code class="docutils literal notranslate"><span class="pre">LabelMap.pfs_status</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.roi_metadata"><code class="docutils literal notranslate"><span class="pre">LabelMap.roi_metadata</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.x_data"><code class="docutils literal notranslate"><span class="pre">LabelMap.x_data</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.y_data"><code class="docutils literal notranslate"><span class="pre">LabelMap.y_data</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.label_map.LabelMap.z_data"><code class="docutils literal notranslate"><span class="pre">LabelMap.z_data</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-nd2reader.common">nd2reader.common module</a><ul>
+<li><a class="reference internal" href="#nd2reader.common.check_or_make_dir"><code class="docutils literal notranslate"><span class="pre">check_or_make_dir()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.common.get_from_dict_if_exists"><code class="docutils literal notranslate"><span class="pre">get_from_dict_if_exists()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.common.get_version"><code class="docutils literal notranslate"><span class="pre">get_version()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.common.parse_date"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.common.parse_version"><code class="docutils literal notranslate"><span class="pre">parse_version()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.common.read_array"><code class="docutils literal notranslate"><span class="pre">read_array()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.common.read_chunk"><code class="docutils literal notranslate"><span class="pre">read_chunk()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.common.read_metadata"><code class="docutils literal notranslate"><span class="pre">read_metadata()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-nd2reader.exceptions">nd2reader.exceptions module</a><ul>
+<li><a class="reference internal" href="#nd2reader.exceptions.EmptyFileError"><code class="docutils literal notranslate"><span class="pre">EmptyFileError</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.exceptions.InvalidFileType"><code class="docutils literal notranslate"><span class="pre">InvalidFileType</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.exceptions.InvalidVersionError"><code class="docutils literal notranslate"><span class="pre">InvalidVersionError</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-nd2reader.artificial">nd2reader.artificial module</a><ul>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2"><code class="docutils literal notranslate"><span class="pre">ArtificialND2</span></code></a><ul>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.close"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.close()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.create_label_map_bytes"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.create_label_map_bytes()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.data_types"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.data_types</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.file_handle"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.file_handle</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.header"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.header</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.relative_offset"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.relative_offset</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.write_file"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.write_file()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.write_label_map"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.write_label_map()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.write_label_map_info"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.write_label_map_info()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.artificial.ArtificialND2.write_version"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.write_version()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-nd2reader.legacy">nd2reader.legacy module</a><ul>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2"><code class="docutils literal notranslate"><span class="pre">Nd2</span></code></a><ul>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.channels"><code class="docutils literal notranslate"><span class="pre">Nd2.channels</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.close"><code class="docutils literal notranslate"><span class="pre">Nd2.close()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.date"><code class="docutils literal notranslate"><span class="pre">Nd2.date</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.fields_of_view"><code class="docutils literal notranslate"><span class="pre">Nd2.fields_of_view</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.frames"><code class="docutils literal notranslate"><span class="pre">Nd2.frames</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.get_image"><code class="docutils literal notranslate"><span class="pre">Nd2.get_image()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.height"><code class="docutils literal notranslate"><span class="pre">Nd2.height</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.pixel_microns"><code class="docutils literal notranslate"><span class="pre">Nd2.pixel_microns</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.select"><code class="docutils literal notranslate"><span class="pre">Nd2.select()</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.width"><code class="docutils literal notranslate"><span class="pre">Nd2.width</span></code></a></li>
+<li><a class="reference internal" href="#nd2reader.legacy.Nd2.z_levels"><code class="docutils literal notranslate"><span class="pre">Nd2.z_levels</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <li>
+    <a href="tutorial.html" title="Previous Chapter: Tutorial"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Tutorial</span>
+    </a>
+  </li>
+<div id="sourcelink">
+  <a href="_sources/nd2reader.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+<form action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
-  <div class="section" id="nd2reader-package">
-<h1>nd2reader package<a class="headerlink" href="#nd2reader-package" title="Permalink to this headline">¶</a></h1>
+  <section id="nd2reader-package">
+<h1>nd2reader package<a class="headerlink" href="#nd2reader-package" title="Link to this heading">¶</a></h1>
 <p>In general, you should only have to use the <code class="docutils literal notranslate"><span class="pre">nd2reader.reader</span></code> module. The rest of the submodules are for internal
 use only.</p>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-nd2reader.reader">
-<span id="nd2reader-reader-module"></span><h2>nd2reader.reader module<a class="headerlink" href="#module-nd2reader.reader" title="Permalink to this headline">¶</a></h2>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-nd2reader.reader">
+<span id="nd2reader-reader-module"></span><h2>nd2reader.reader module<a class="headerlink" href="#module-nd2reader.reader" title="Link to this heading">¶</a></h2>
 <dl class="py class">
-<dt id="nd2reader.reader.ND2Reader">
-<em class="property">class </em><code class="sig-prename descclassname">nd2reader.reader.</code><code class="sig-name descname">ND2Reader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fh</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pims.base_frames.FramesSequenceND</span></code></p>
+<dt class="sig sig-object py" id="nd2reader.reader.ND2Reader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nd2reader.reader.</span></span><span class="sig-name descname"><span class="pre">ND2Reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fh</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">FramesSequenceND</span></code></p>
 <p>PIMS wrapper for the ND2 parser.
 This is the main class: use this to process your .nd2 files.</p>
 <dl class="py method">
-<dt id="nd2reader.reader.ND2Reader.class_exts">
-<em class="property">classmethod </em><code class="sig-name descname">class_exts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.class_exts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.class_exts" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.reader.ND2Reader.class_exts">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">class_exts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.class_exts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.class_exts" title="Link to this definition">¶</a></dt>
 <dd><p>Let PIMS open function use this reader for opening .nd2 files</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="nd2reader.reader.ND2Reader.class_priority">
-<code class="sig-name descname">class_priority</code><em class="property"> = 12</em><a class="headerlink" href="#nd2reader.reader.ND2Reader.class_priority" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.reader.ND2Reader.class_priority">
+<span class="sig-name descname"><span class="pre">class_priority</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12</span></em><a class="headerlink" href="#nd2reader.reader.ND2Reader.class_priority" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.reader.ND2Reader.close">
-<code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.close" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.reader.ND2Reader.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.close" title="Link to this definition">¶</a></dt>
 <dd><p>Correctly close the file handle</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.reader.ND2Reader.events">
-<em class="property">property </em><code class="sig-name descname">events</code><a class="headerlink" href="#nd2reader.reader.ND2Reader.events" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.reader.ND2Reader.events">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">events</span></span><a class="headerlink" href="#nd2reader.reader.ND2Reader.events" title="Link to this definition">¶</a></dt>
 <dd><p>Get the events of the experiment</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>iterator of events as dict</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.reader.ND2Reader.frame_rate">
-<em class="property">property </em><code class="sig-name descname">frame_rate</code><a class="headerlink" href="#nd2reader.reader.ND2Reader.frame_rate" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.reader.ND2Reader.frame_rate">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">frame_rate</span></span><a class="headerlink" href="#nd2reader.reader.ND2Reader.frame_rate" title="Link to this definition">¶</a></dt>
 <dd><p>The (average) frame rate</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the (average) frame rate in frames per second</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.reader.ND2Reader.get_frame_2D">
-<code class="sig-name descname">get_frame_2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">c</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">t</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">z</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.get_frame_2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.get_frame_2D" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.reader.ND2Reader.get_frame_2D">
+<span class="sig-name descname"><span class="pre">get_frame_2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.get_frame_2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.get_frame_2D" title="Link to this definition">¶</a></dt>
 <dd><p>Gets a given frame using the parser
 :param x: The x-index (pims expects this)
 :param y: The y-index (pims expects this)
@@ -193,60 +482,60 @@ This is the main class: use this to process your .nd2 files.</p>
 :param z: The z stack number
 :param v: The field of view index</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The requested frame</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>pims.Frame</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.reader.ND2Reader.get_timesteps">
-<code class="sig-name descname">get_timesteps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.get_timesteps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.get_timesteps" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.reader.ND2Reader.get_timesteps">
+<span class="sig-name descname"><span class="pre">get_timesteps</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/reader.html#ND2Reader.get_timesteps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.reader.ND2Reader.get_timesteps" title="Link to this definition">¶</a></dt>
 <dd><p>Get the timesteps of the experiment</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>an array of times in milliseconds.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.reader.ND2Reader.parser">
-<em class="property">property </em><code class="sig-name descname">parser</code><a class="headerlink" href="#nd2reader.reader.ND2Reader.parser" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.reader.ND2Reader.parser">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parser</span></span><a class="headerlink" href="#nd2reader.reader.ND2Reader.parser" title="Link to this definition">¶</a></dt>
 <dd><p>Returns the parser object.
 :returns: the parser object
 :rtype: Parser</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.reader.ND2Reader.pixel_type">
-<em class="property">property </em><code class="sig-name descname">pixel_type</code><a class="headerlink" href="#nd2reader.reader.ND2Reader.pixel_type" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.reader.ND2Reader.pixel_type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pixel_type</span></span><a class="headerlink" href="#nd2reader.reader.ND2Reader.pixel_type" title="Link to this definition">¶</a></dt>
 <dd><p>Return the pixel data type</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the pixel data type</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dtype</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.reader.ND2Reader.timesteps">
-<em class="property">property </em><code class="sig-name descname">timesteps</code><a class="headerlink" href="#nd2reader.reader.ND2Reader.timesteps" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.reader.ND2Reader.timesteps">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">timesteps</span></span><a class="headerlink" href="#nd2reader.reader.ND2Reader.timesteps" title="Link to this definition">¶</a></dt>
 <dd><p>Get the timesteps of the experiment</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>an array of times in milliseconds.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>np.ndarray</p>
 </dd>
 </dl>
@@ -254,57 +543,57 @@ This is the main class: use this to process your .nd2 files.</p>
 
 </dd></dl>
 
-</div>
-<div class="section" id="module-nd2reader.parser">
-<span id="nd2reader-parser-module"></span><h2>nd2reader.parser module<a class="headerlink" href="#module-nd2reader.parser" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-nd2reader.parser">
+<span id="nd2reader-parser-module"></span><h2>nd2reader.parser module<a class="headerlink" href="#module-nd2reader.parser" title="Link to this heading">¶</a></h2>
 <dl class="py class">
-<dt id="nd2reader.parser.Parser">
-<em class="property">class </em><code class="sig-prename descclassname">nd2reader.parser.</code><code class="sig-name descname">Parser</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fh</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/parser.html#Parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.parser.Parser" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.parser.Parser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nd2reader.parser.</span></span><span class="sig-name descname"><span class="pre">Parser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fh</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/parser.html#Parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.parser.Parser" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Parses ND2 files and creates a Metadata and driver object.</p>
 <dl class="py attribute">
-<dt id="nd2reader.parser.Parser.CHUNK_HEADER">
-<code class="sig-name descname">CHUNK_HEADER</code><em class="property"> = 180276954</em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_HEADER" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.parser.Parser.CHUNK_HEADER">
+<span class="sig-name descname"><span class="pre">CHUNK_HEADER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">180276954</span></em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_HEADER" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="nd2reader.parser.Parser.CHUNK_MAP_END">
-<code class="sig-name descname">CHUNK_MAP_END</code><em class="property"> = b'ND2 CHUNK MAP SIGNATURE 0000001!'</em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_MAP_END" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.parser.Parser.CHUNK_MAP_END">
+<span class="sig-name descname"><span class="pre">CHUNK_MAP_END</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">b'ND2</span> <span class="pre">CHUNK</span> <span class="pre">MAP</span> <span class="pre">SIGNATURE</span> <span class="pre">0000001!'</span></em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_MAP_END" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="nd2reader.parser.Parser.CHUNK_MAP_START">
-<code class="sig-name descname">CHUNK_MAP_START</code><em class="property"> = b'ND2 FILEMAP SIGNATURE NAME 0001!'</em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_MAP_START" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.parser.Parser.CHUNK_MAP_START">
+<span class="sig-name descname"><span class="pre">CHUNK_MAP_START</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">b'ND2</span> <span class="pre">FILEMAP</span> <span class="pre">SIGNATURE</span> <span class="pre">NAME</span> <span class="pre">0001!'</span></em><a class="headerlink" href="#nd2reader.parser.Parser.CHUNK_MAP_START" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.parser.Parser.calculate_image_properties">
-<code class="sig-name descname">calculate_image_properties</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/parser.html#Parser.calculate_image_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.parser.Parser.calculate_image_properties" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.parser.Parser.calculate_image_properties">
+<span class="sig-name descname"><span class="pre">calculate_image_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/parser.html#Parser.calculate_image_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.parser.Parser.calculate_image_properties" title="Link to this definition">¶</a></dt>
 <dd><p>Calculate FOV, channels and z_levels</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – the index (which is simply the order in which the image was acquired)</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>tuple of the field of view, the channel and the z level</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.parser.Parser.get_dtype_from_metadata">
-<em class="property">static </em><code class="sig-name descname">get_dtype_from_metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/parser.html#Parser.get_dtype_from_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.parser.Parser.get_dtype_from_metadata" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.parser.Parser.get_dtype_from_metadata">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_dtype_from_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/parser.html#Parser.get_dtype_from_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.parser.Parser.get_dtype_from_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>Determine the data type from the metadata.</p>
 <p>For now, always use float64 to prevent unexpected overflow errors when manipulating the data (calculating sums/
 means/etc.)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.parser.Parser.get_image">
-<code class="sig-name descname">get_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/parser.html#Parser.get_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.parser.Parser.get_image" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.parser.Parser.get_image">
+<span class="sig-name descname"><span class="pre">get_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/parser.html#Parser.get_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.parser.Parser.get_image" title="Link to this definition">¶</a></dt>
 <dd><p>Creates an Image object and adds its metadata, based on the index (which is simply the order in which the image
 was acquired). May return None if the ND2 contains multiple channels and not all were taken in each cycle (for
 example, if you take bright field images every minute, and GFP images every five minutes, there will be some
@@ -312,24 +601,24 @@ indexes that do not contain an image. The reason for this is complicated, but su
 eliminate this possibility in future releases. For now, you’ll need to check if your image is None if you’re
 doing anything out of the ordinary.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – the index (which is simply the order in which the image was acquired)</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the image</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Frame</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.parser.Parser.get_image_by_attributes">
-<code class="sig-name descname">get_image_by_attributes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">frame_number</span></em>, <em class="sig-param"><span class="n">field_of_view</span></em>, <em class="sig-param"><span class="n">channel</span></em>, <em class="sig-param"><span class="n">z_level</span></em>, <em class="sig-param"><span class="n">height</span></em>, <em class="sig-param"><span class="n">width</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/parser.html#Parser.get_image_by_attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.parser.Parser.get_image_by_attributes" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.parser.Parser.get_image_by_attributes">
+<span class="sig-name descname"><span class="pre">get_image_by_attributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_of_view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/parser.html#Parser.get_image_by_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.parser.Parser.get_image_by_attributes" title="Link to this definition">¶</a></dt>
 <dd><p>Gets an image based on its attributes alone</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>frame_number</strong> – the frame number</p></li>
 <li><p><strong>field_of_view</strong> – the field of view</p></li>
@@ -339,323 +628,323 @@ doing anything out of the ordinary.</p>
 <li><p><strong>width</strong> – the width of the image</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the requested image</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Frame</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="nd2reader.parser.Parser.supported_file_versions">
-<code class="sig-name descname">supported_file_versions</code><em class="property"> = {(3, None): True}</em><a class="headerlink" href="#nd2reader.parser.Parser.supported_file_versions" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.parser.Parser.supported_file_versions">
+<span class="sig-name descname"><span class="pre">supported_file_versions</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{(3,</span> <span class="pre">None):</span> <span class="pre">True}</span></em><a class="headerlink" href="#nd2reader.parser.Parser.supported_file_versions" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="module-nd2reader.raw_metadata">
-<span id="nd2reader-raw-metadata-module"></span><h2>nd2reader.raw_metadata module<a class="headerlink" href="#module-nd2reader.raw_metadata" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-nd2reader.raw_metadata">
+<span id="nd2reader-raw-metadata-module"></span><h2>nd2reader.raw_metadata module<a class="headerlink" href="#module-nd2reader.raw_metadata" title="Link to this heading">¶</a></h2>
 <dl class="py class">
-<dt id="nd2reader.raw_metadata.RawMetadata">
-<em class="property">class </em><code class="sig-prename descclassname">nd2reader.raw_metadata.</code><code class="sig-name descname">RawMetadata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fh</span></em>, <em class="sig-param"><span class="n">label_map</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/raw_metadata.html#RawMetadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nd2reader.raw_metadata.</span></span><span class="sig-name descname"><span class="pre">RawMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_map</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/raw_metadata.html#RawMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>RawMetadata class parses and stores the raw metadata that is read from the binary file in dict format.</p>
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.acquisition_times">
-<em class="property">property </em><code class="sig-name descname">acquisition_times</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.acquisition_times" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.acquisition_times">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">acquisition_times</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.acquisition_times" title="Link to this definition">¶</a></dt>
 <dd><p>Acquisition times</p>
 <dl class="field-list simple">
-<dt class="field-odd">Yields</dt>
+<dt class="field-odd">Yields<span class="colon">:</span></dt>
 <dd class="field-odd"><p><em>float</em> – the acquisition time</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.app_info">
-<em class="property">property </em><code class="sig-name descname">app_info</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.app_info" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.app_info">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">app_info</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.app_info" title="Link to this definition">¶</a></dt>
 <dd><p>NIS elements application info</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>(Version) information of the NIS Elements application</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.camera_exposure_time">
-<em class="property">property </em><code class="sig-name descname">camera_exposure_time</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.camera_exposure_time" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.camera_exposure_time">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">camera_exposure_time</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.camera_exposure_time" title="Link to this definition">¶</a></dt>
 <dd><p>Exposure time information</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Camera exposure time</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.camera_temp">
-<em class="property">property </em><code class="sig-name descname">camera_temp</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.camera_temp" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.camera_temp">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">camera_temp</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.camera_temp" title="Link to this definition">¶</a></dt>
 <dd><p>Camera temperature</p>
 <dl class="field-list simple">
-<dt class="field-odd">Yields</dt>
+<dt class="field-odd">Yields<span class="colon">:</span></dt>
 <dd class="field-odd"><p><em>float</em> – the temperature</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.custom_data">
-<em class="property">property </em><code class="sig-name descname">custom_data</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.custom_data" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.custom_data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">custom_data</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.custom_data" title="Link to this definition">¶</a></dt>
 <dd><p>Custom user data</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>custom user data</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.get_duration_from_interval_and_loops">
-<code class="sig-name descname">get_duration_from_interval_and_loops</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">duration</span></em>, <em class="sig-param"><span class="n">interval</span></em>, <em class="sig-param"><span class="n">loop</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/raw_metadata.html#RawMetadata.get_duration_from_interval_and_loops"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.get_duration_from_interval_and_loops" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.get_duration_from_interval_and_loops">
+<span class="sig-name descname"><span class="pre">get_duration_from_interval_and_loops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loop</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/raw_metadata.html#RawMetadata.get_duration_from_interval_and_loops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.get_duration_from_interval_and_loops" title="Link to this definition">¶</a></dt>
 <dd><p>Infers the duration of the loop from the number of measurements and the interval</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>duration</strong> – loop duration in milliseconds</p></li>
 <li><p><strong>duration</strong> – measurement interval in milliseconds</p></li>
 <li><p><strong>loop</strong> – loop dictionary</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the loop duration in milliseconds</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.get_parsed_metadata">
-<code class="sig-name descname">get_parsed_metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/raw_metadata.html#RawMetadata.get_parsed_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.get_parsed_metadata" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.get_parsed_metadata">
+<span class="sig-name descname"><span class="pre">get_parsed_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/raw_metadata.html#RawMetadata.get_parsed_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.get_parsed_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>Returns the parsed metadata in dictionary form.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the parsed metadata</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.grabber_settings">
-<em class="property">property </em><code class="sig-name descname">grabber_settings</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.grabber_settings" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.grabber_settings">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">grabber_settings</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.grabber_settings" title="Link to this definition">¶</a></dt>
 <dd><p>Grabber settings</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Acquisition settings</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.image_attributes">
-<em class="property">property </em><code class="sig-name descname">image_attributes</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_attributes" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.image_attributes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image_attributes</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_attributes" title="Link to this definition">¶</a></dt>
 <dd><p>Image attributes</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>containing the image attributes</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.image_calibration">
-<em class="property">property </em><code class="sig-name descname">image_calibration</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_calibration" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.image_calibration">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image_calibration</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_calibration" title="Link to this definition">¶</a></dt>
 <dd><p>The amount of pixels per micron.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pixels per micron</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.image_events">
-<em class="property">property </em><code class="sig-name descname">image_events</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_events" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.image_events">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image_events</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_events" title="Link to this definition">¶</a></dt>
 <dd><p>Image events</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Image events</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.image_metadata">
-<em class="property">property </em><code class="sig-name descname">image_metadata</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_metadata" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.image_metadata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image_metadata</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>Image metadata</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Extra image metadata</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.image_metadata_sequence">
-<em class="property">property </em><code class="sig-name descname">image_metadata_sequence</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_metadata_sequence" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.image_metadata_sequence">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image_metadata_sequence</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_metadata_sequence" title="Link to this definition">¶</a></dt>
 <dd><p>Image metadata of the sequence</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>containing the metadata</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.image_text_info">
-<em class="property">property </em><code class="sig-name descname">image_text_info</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_text_info" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.image_text_info">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image_text_info</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.image_text_info" title="Link to this definition">¶</a></dt>
 <dd><p>Textual image information</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>containing the textual image info</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.lut_data">
-<em class="property">property </em><code class="sig-name descname">lut_data</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.lut_data" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.lut_data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lut_data</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.lut_data" title="Link to this definition">¶</a></dt>
 <dd><p>LUT information</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>LUT information</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.pfs_offset">
-<em class="property">property </em><code class="sig-name descname">pfs_offset</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.pfs_offset" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.pfs_offset">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pfs_offset</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.pfs_offset" title="Link to this definition">¶</a></dt>
 <dd><p>Perfect focus system (PFS) offset</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Perfect focus system (PFS) offset</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.pfs_status">
-<em class="property">property </em><code class="sig-name descname">pfs_status</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.pfs_status" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.pfs_status">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pfs_status</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.pfs_status" title="Link to this definition">¶</a></dt>
 <dd><p>Perfect focus system (PFS) status</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Perfect focus system (PFS) status</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.roi_metadata">
-<em class="property">property </em><code class="sig-name descname">roi_metadata</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.roi_metadata" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.roi_metadata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi_metadata</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.roi_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>shape, position and type (reference/background/stimulation).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ROI metadata dictionary</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Contains information about the defined ROIs</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.x_data">
-<em class="property">property </em><code class="sig-name descname">x_data</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.x_data" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.x_data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">x_data</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.x_data" title="Link to this definition">¶</a></dt>
 <dd><p>X data</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>x_data</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.y_data">
-<em class="property">property </em><code class="sig-name descname">y_data</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.y_data" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.y_data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">y_data</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.y_data" title="Link to this definition">¶</a></dt>
 <dd><p>Y data</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>y_data</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.raw_metadata.RawMetadata.z_data">
-<em class="property">property </em><code class="sig-name descname">z_data</code><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.z_data" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.raw_metadata.RawMetadata.z_data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">z_data</span></span><a class="headerlink" href="#nd2reader.raw_metadata.RawMetadata.z_data" title="Link to this definition">¶</a></dt>
 <dd><p>Z data</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>z_data</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
@@ -663,348 +952,348 @@ doing anything out of the ordinary.</p>
 
 </dd></dl>
 
-</div>
-<div class="section" id="module-nd2reader.label_map">
-<span id="nd2reader-label-map-module"></span><h2>nd2reader.label_map module<a class="headerlink" href="#module-nd2reader.label_map" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-nd2reader.label_map">
+<span id="nd2reader-label-map-module"></span><h2>nd2reader.label_map module<a class="headerlink" href="#module-nd2reader.label_map" title="Link to this heading">¶</a></h2>
 <dl class="py class">
-<dt id="nd2reader.label_map.LabelMap">
-<em class="property">class </em><code class="sig-prename descclassname">nd2reader.label_map.</code><code class="sig-name descname">LabelMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">raw_binary_data</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/label_map.html#LabelMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.label_map.LabelMap" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nd2reader.label_map.</span></span><span class="sig-name descname"><span class="pre">LabelMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_binary_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/label_map.html#LabelMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.label_map.LabelMap" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Contains pointers to metadata. This might only be valid for V3 files.</p>
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.acquisition_frames">
-<em class="property">property </em><code class="sig-name descname">acquisition_frames</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.acquisition_frames" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.acquisition_frames">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">acquisition_frames</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.acquisition_frames" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the acquisition frames</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the acquisition frames</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.acquisition_times">
-<em class="property">property </em><code class="sig-name descname">acquisition_times</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.acquisition_times" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.acquisition_times">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">acquisition_times</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.acquisition_times" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the acquisition times, block 1</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the acquisition times, block 1</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.acquisition_times_2">
-<em class="property">property </em><code class="sig-name descname">acquisition_times_2</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.acquisition_times_2" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.acquisition_times_2">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">acquisition_times_2</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.acquisition_times_2" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the acquisition times, block 2</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the acquisition times, block 2</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.app_info">
-<em class="property">property </em><code class="sig-name descname">app_info</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.app_info" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.app_info">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">app_info</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.app_info" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the application info metadata</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the application info metadata</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.camera_exposure_time">
-<em class="property">property </em><code class="sig-name descname">camera_exposure_time</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.camera_exposure_time" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.camera_exposure_time">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">camera_exposure_time</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.camera_exposure_time" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the camera exposure time</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the camera exposure time</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.camera_temp">
-<em class="property">property </em><code class="sig-name descname">camera_temp</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.camera_temp" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.camera_temp">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">camera_temp</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.camera_temp" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the camera temperature</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the camera temperature</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.custom_data">
-<em class="property">property </em><code class="sig-name descname">custom_data</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.custom_data" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.custom_data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">custom_data</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.custom_data" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the custom user data</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the custom user data</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.description">
-<em class="property">property </em><code class="sig-name descname">description</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.description" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.description">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.description" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the image description</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the image description</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.get_image_data_location">
-<code class="sig-name descname">get_image_data_location</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/label_map.html#LabelMap.get_image_data_location"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.label_map.LabelMap.get_image_data_location" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.get_image_data_location">
+<span class="sig-name descname"><span class="pre">get_image_data_location</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/label_map.html#LabelMap.get_image_data_location"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.label_map.LabelMap.get_image_data_location" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the image data</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the image data</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.grabber_settings">
-<em class="property">property </em><code class="sig-name descname">grabber_settings</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.grabber_settings" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.grabber_settings">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">grabber_settings</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.grabber_settings" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the grabber settings</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the grabber settings</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.guid">
-<em class="property">property </em><code class="sig-name descname">guid</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.guid" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.guid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">guid</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.guid" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the image guid</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the image guid</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.image_attributes">
-<em class="property">property </em><code class="sig-name descname">image_attributes</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_attributes" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.image_attributes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image_attributes</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_attributes" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the image attributes</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the image attributes</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.image_calibration">
-<em class="property">property </em><code class="sig-name descname">image_calibration</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_calibration" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.image_calibration">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image_calibration</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_calibration" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the image calibration</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the image calibration</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.image_events">
-<em class="property">property </em><code class="sig-name descname">image_events</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_events" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.image_events">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image_events</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_events" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the image events</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the image events</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.image_metadata">
-<em class="property">property </em><code class="sig-name descname">image_metadata</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_metadata" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.image_metadata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image_metadata</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the image metadata</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the image metadata</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.image_metadata_sequence">
-<em class="property">property </em><code class="sig-name descname">image_metadata_sequence</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_metadata_sequence" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.image_metadata_sequence">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image_metadata_sequence</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_metadata_sequence" title="Link to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>Get the location of the image metadata sequence. There is always only one of these, even though it has a pipe</dt><dd><p>followed by a zero, which is how they do indexes.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the image metadata sequence</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.image_text_info">
-<em class="property">property </em><code class="sig-name descname">image_text_info</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_text_info" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.image_text_info">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image_text_info</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.image_text_info" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the textual image information</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the textual image information</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.lut_data">
-<em class="property">property </em><code class="sig-name descname">lut_data</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.lut_data" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.lut_data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lut_data</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.lut_data" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the LUT data</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the LUT data</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.pfs_offset">
-<em class="property">property </em><code class="sig-name descname">pfs_offset</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.pfs_offset" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.pfs_offset">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pfs_offset</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.pfs_offset" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the perfect focus system (PFS) offset</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the perfect focus system (PFS) offset</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.pfs_status">
-<em class="property">property </em><code class="sig-name descname">pfs_status</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.pfs_status" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.pfs_status">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pfs_status</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.pfs_status" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the perfect focus system (PFS) status</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the perfect focus system (PFS) status</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.roi_metadata">
-<em class="property">property </em><code class="sig-name descname">roi_metadata</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.roi_metadata" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.roi_metadata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi_metadata</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.roi_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>Information about any regions of interest (ROIs) defined in the nd2 file</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the regions of interest (ROIs)</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.x_data">
-<em class="property">property </em><code class="sig-name descname">x_data</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.x_data" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.x_data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">x_data</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.x_data" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the custom x data</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the custom x data</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.y_data">
-<em class="property">property </em><code class="sig-name descname">y_data</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.y_data" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.y_data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">y_data</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.y_data" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the custom y data</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the custom y data</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.label_map.LabelMap.z_data">
-<em class="property">property </em><code class="sig-name descname">z_data</code><a class="headerlink" href="#nd2reader.label_map.LabelMap.z_data" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.label_map.LabelMap.z_data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">z_data</span></span><a class="headerlink" href="#nd2reader.label_map.LabelMap.z_data" title="Link to this definition">¶</a></dt>
 <dd><p>Get the location of the custom z data</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The location of the custom z data</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
@@ -1012,328 +1301,328 @@ doing anything out of the ordinary.</p>
 
 </dd></dl>
 
-</div>
-<div class="section" id="module-nd2reader.common">
-<span id="nd2reader-common-module"></span><h2>nd2reader.common module<a class="headerlink" href="#module-nd2reader.common" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-nd2reader.common">
+<span id="nd2reader-common-module"></span><h2>nd2reader.common module<a class="headerlink" href="#module-nd2reader.common" title="Link to this heading">¶</a></h2>
 <dl class="py function">
-<dt id="nd2reader.common.check_or_make_dir">
-<code class="sig-prename descclassname">nd2reader.common.</code><code class="sig-name descname">check_or_make_dir</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">directory</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#check_or_make_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.common.check_or_make_dir" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.common.check_or_make_dir">
+<span class="sig-prename descclassname"><span class="pre">nd2reader.common.</span></span><span class="sig-name descname"><span class="pre">check_or_make_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#check_or_make_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.common.check_or_make_dir" title="Link to this definition">¶</a></dt>
 <dd><p>Check if a directory exists, if not, create it
 :param directory: the path to the directory</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="nd2reader.common.get_from_dict_if_exists">
-<code class="sig-prename descclassname">nd2reader.common.</code><code class="sig-name descname">get_from_dict_if_exists</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">dictionary</span></em>, <em class="sig-param"><span class="n">convert_key_to_binary</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#get_from_dict_if_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.common.get_from_dict_if_exists" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.common.get_from_dict_if_exists">
+<span class="sig-prename descclassname"><span class="pre">nd2reader.common.</span></span><span class="sig-name descname"><span class="pre">get_from_dict_if_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dictionary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convert_key_to_binary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#get_from_dict_if_exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.common.get_from_dict_if_exists" title="Link to this definition">¶</a></dt>
 <dd><p>Get the entry from the dictionary if it exists
 :param key: key to lookup
 :param dictionary: dictionary to look in
 :param convert_key_to_binary: convert the key from string to binary if true</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the value of dictionary[key] or None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="nd2reader.common.get_version">
-<code class="sig-prename descclassname">nd2reader.common.</code><code class="sig-name descname">get_version</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fh</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#get_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.common.get_version" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.common.get_version">
+<span class="sig-prename descclassname"><span class="pre">nd2reader.common.</span></span><span class="sig-name descname"><span class="pre">get_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fh</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#get_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.common.get_version" title="Link to this definition">¶</a></dt>
 <dd><p>Determines what version the ND2 is.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>fh</strong> – File handle of the .nd2 file</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Major and minor version</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="nd2reader.common.parse_date">
-<code class="sig-prename descclassname">nd2reader.common.</code><code class="sig-name descname">parse_date</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text_info</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#parse_date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.common.parse_date" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.common.parse_date">
+<span class="sig-prename descclassname"><span class="pre">nd2reader.common.</span></span><span class="sig-name descname"><span class="pre">parse_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_info</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#parse_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.common.parse_date" title="Link to this definition">¶</a></dt>
 <dd><p>The date and time when acquisition began.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>text_info</strong> – the text that contains the date and time information</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the date and time of the acquisition</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>datetime</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="nd2reader.common.parse_version">
-<code class="sig-prename descclassname">nd2reader.common.</code><code class="sig-name descname">parse_version</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#parse_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.common.parse_version" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.common.parse_version">
+<span class="sig-prename descclassname"><span class="pre">nd2reader.common.</span></span><span class="sig-name descname"><span class="pre">parse_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#parse_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.common.parse_version" title="Link to this definition">¶</a></dt>
 <dd><p>Parses a string with the version data in it.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> (<em>unicode</em>) – the 19th through 54th byte of the ND2, representing the version</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Major and minor version</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="nd2reader.common.read_array">
-<code class="sig-prename descclassname">nd2reader.common.</code><code class="sig-name descname">read_array</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fh</span></em>, <em class="sig-param"><span class="n">kind</span></em>, <em class="sig-param"><span class="n">chunk_location</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#read_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.common.read_array" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.common.read_array">
+<span class="sig-prename descclassname"><span class="pre">nd2reader.common.</span></span><span class="sig-name descname"><span class="pre">read_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_location</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#read_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.common.read_array" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fh</strong> – File handle of the nd2 file</p></li>
 <li><p><strong>kind</strong> – data type, can be one of ‘double’, ‘int’ or ‘float’</p></li>
 <li><p><strong>chunk_location</strong> – the location of the array chunk in the binary nd2 file</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>an array of the data</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>array.array</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="nd2reader.common.read_chunk">
-<code class="sig-prename descclassname">nd2reader.common.</code><code class="sig-name descname">read_chunk</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fh</span></em>, <em class="sig-param"><span class="n">chunk_location</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#read_chunk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.common.read_chunk" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.common.read_chunk">
+<span class="sig-prename descclassname"><span class="pre">nd2reader.common.</span></span><span class="sig-name descname"><span class="pre">read_chunk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_location</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#read_chunk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.common.read_chunk" title="Link to this definition">¶</a></dt>
 <dd><p>Reads a piece of data given the location of its pointer.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fh</strong> – an open file handle to the ND2</p></li>
 <li><p><strong>chunk_location</strong> (<em>int</em>) – location to read</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the data at the chunk location</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bytes</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="nd2reader.common.read_metadata">
-<code class="sig-prename descclassname">nd2reader.common.</code><code class="sig-name descname">read_metadata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">count</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#read_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.common.read_metadata" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.common.read_metadata">
+<span class="sig-prename descclassname"><span class="pre">nd2reader.common.</span></span><span class="sig-name descname"><span class="pre">read_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/common.html#read_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.common.read_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>Iterates over each element of some section of the metadata and parses it.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> – the metadata in binary form</p></li>
 <li><p><strong>count</strong> – the number of metadata elements</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary containing the parsed metadata</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="module-nd2reader.exceptions">
-<span id="nd2reader-exceptions-module"></span><h2>nd2reader.exceptions module<a class="headerlink" href="#module-nd2reader.exceptions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-nd2reader.exceptions">
+<span id="nd2reader-exceptions-module"></span><h2>nd2reader.exceptions module<a class="headerlink" href="#module-nd2reader.exceptions" title="Link to this heading">¶</a></h2>
 <dl class="py exception">
-<dt id="nd2reader.exceptions.EmptyFileError">
-<em class="property">exception </em><code class="sig-prename descclassname">nd2reader.exceptions.</code><code class="sig-name descname">EmptyFileError</code><a class="reference internal" href="_modules/nd2reader/exceptions.html#EmptyFileError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.exceptions.EmptyFileError" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.exceptions.EmptyFileError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nd2reader.exceptions.</span></span><span class="sig-name descname"><span class="pre">EmptyFileError</span></span><a class="reference internal" href="_modules/nd2reader/exceptions.html#EmptyFileError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.exceptions.EmptyFileError" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
 <p>This .nd2 file seems to be empty.</p>
 <p>Raised if no axes are found in the file.</p>
 </dd></dl>
 
 <dl class="py exception">
-<dt id="nd2reader.exceptions.InvalidFileType">
-<em class="property">exception </em><code class="sig-prename descclassname">nd2reader.exceptions.</code><code class="sig-name descname">InvalidFileType</code><a class="reference internal" href="_modules/nd2reader/exceptions.html#InvalidFileType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.exceptions.InvalidFileType" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.exceptions.InvalidFileType">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nd2reader.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidFileType</span></span><a class="reference internal" href="_modules/nd2reader/exceptions.html#InvalidFileType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.exceptions.InvalidFileType" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
 <p>Non .nd2 extension file.</p>
 <p>File does not have an extension .nd2.</p>
 </dd></dl>
 
 <dl class="py exception">
-<dt id="nd2reader.exceptions.InvalidVersionError">
-<em class="property">exception </em><code class="sig-prename descclassname">nd2reader.exceptions.</code><code class="sig-name descname">InvalidVersionError</code><a class="reference internal" href="_modules/nd2reader/exceptions.html#InvalidVersionError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.exceptions.InvalidVersionError" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.exceptions.InvalidVersionError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nd2reader.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidVersionError</span></span><a class="reference internal" href="_modules/nd2reader/exceptions.html#InvalidVersionError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.exceptions.InvalidVersionError" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
 <p>Unknown version.</p>
 <p>We don’t know how to parse the version of ND2 that we were given.</p>
 </dd></dl>
 
-</div>
-<div class="section" id="module-nd2reader.artificial">
-<span id="nd2reader-artificial-module"></span><h2>nd2reader.artificial module<a class="headerlink" href="#module-nd2reader.artificial" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-nd2reader.artificial">
+<span id="nd2reader-artificial-module"></span><h2>nd2reader.artificial module<a class="headerlink" href="#module-nd2reader.artificial" title="Link to this heading">¶</a></h2>
 <p>Functions to create artificial nd2 data for testing purposes</p>
 <dl class="py class">
-<dt id="nd2reader.artificial.ArtificialND2">
-<em class="property">class </em><code class="sig-prename descclassname">nd2reader.artificial.</code><code class="sig-name descname">ArtificialND2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file</span></em>, <em class="sig-param"><span class="n">version</span><span class="o">=</span><span class="default_value">(3, 0)</span></em>, <em class="sig-param"><span class="n">skip_blocks</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.artificial.ArtificialND2">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nd2reader.artificial.</span></span><span class="sig-name descname"><span class="pre">ArtificialND2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(3,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_blocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Artificial ND2 class (for testing purposes)</p>
 <dl class="py method">
-<dt id="nd2reader.artificial.ArtificialND2.close">
-<code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.close" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.artificial.ArtificialND2.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.close" title="Link to this definition">¶</a></dt>
 <dd><p>Correctly close the file handle</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.artificial.ArtificialND2.create_label_map_bytes">
-<code class="sig-name descname">create_label_map_bytes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.create_label_map_bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.create_label_map_bytes" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.artificial.ArtificialND2.create_label_map_bytes">
+<span class="sig-name descname"><span class="pre">create_label_map_bytes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.create_label_map_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.create_label_map_bytes" title="Link to this definition">¶</a></dt>
 <dd><p>Construct a binary label map</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>(binary data, dictionary data)</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="nd2reader.artificial.ArtificialND2.data_types">
-<code class="sig-name descname">data_types</code><em class="property"> = {'char_array': 9, 'double': 6, 'metadata_item': 11, 'string': 8, 'unsigned_char': 1, 'unsigned_int': 2, 'unsigned_int_2': 3, 'unsigned_long': 5}</em><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.data_types" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.artificial.ArtificialND2.data_types">
+<span class="sig-name descname"><span class="pre">data_types</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'char_array':</span> <span class="pre">9,</span> <span class="pre">'double':</span> <span class="pre">6,</span> <span class="pre">'metadata_item':</span> <span class="pre">11,</span> <span class="pre">'string':</span> <span class="pre">8,</span> <span class="pre">'unsigned_char':</span> <span class="pre">1,</span> <span class="pre">'unsigned_int':</span> <span class="pre">2,</span> <span class="pre">'unsigned_int_2':</span> <span class="pre">3,</span> <span class="pre">'unsigned_long':</span> <span class="pre">5}</span></em><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.data_types" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.artificial.ArtificialND2.file_handle">
-<em class="property">property </em><code class="sig-name descname">file_handle</code><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.file_handle" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.artificial.ArtificialND2.file_handle">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">file_handle</span></span><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.file_handle" title="Link to this definition">¶</a></dt>
 <dd><p>The file handle to the binary file</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the file handle</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>file</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="nd2reader.artificial.ArtificialND2.header">
-<code class="sig-name descname">header</code><em class="property"> = 180276954</em><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.header" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.artificial.ArtificialND2.header">
+<span class="sig-name descname"><span class="pre">header</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">180276954</span></em><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.header" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="nd2reader.artificial.ArtificialND2.relative_offset">
-<code class="sig-name descname">relative_offset</code><em class="property"> = 0</em><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.relative_offset" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.artificial.ArtificialND2.relative_offset">
+<span class="sig-name descname"><span class="pre">relative_offset</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.relative_offset" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.artificial.ArtificialND2.write_file">
-<code class="sig-name descname">write_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skip_blocks</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.write_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.write_file" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.artificial.ArtificialND2.write_file">
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skip_blocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.write_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.write_file" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.artificial.ArtificialND2.write_label_map">
-<code class="sig-name descname">write_label_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.write_label_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.write_label_map" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.artificial.ArtificialND2.write_label_map">
+<span class="sig-name descname"><span class="pre">write_label_map</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.write_label_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.write_label_map" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.artificial.ArtificialND2.write_label_map_info">
-<code class="sig-name descname">write_label_map_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.write_label_map_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.write_label_map_info" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.artificial.ArtificialND2.write_label_map_info">
+<span class="sig-name descname"><span class="pre">write_label_map_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.write_label_map_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.write_label_map_info" title="Link to this definition">¶</a></dt>
 <dd><p>Write the location of the start of the label map at the end of the file</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.artificial.ArtificialND2.write_version">
-<code class="sig-name descname">write_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.write_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.write_version" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.artificial.ArtificialND2.write_version">
+<span class="sig-name descname"><span class="pre">write_version</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/artificial.html#ArtificialND2.write_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.artificial.ArtificialND2.write_version" title="Link to this definition">¶</a></dt>
 <dd><p>Write file header</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="module-nd2reader.legacy">
-<span id="nd2reader-legacy-module"></span><h2>nd2reader.legacy module<a class="headerlink" href="#module-nd2reader.legacy" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-nd2reader.legacy">
+<span id="nd2reader-legacy-module"></span><h2>nd2reader.legacy module<a class="headerlink" href="#module-nd2reader.legacy" title="Link to this heading">¶</a></h2>
 <p>Legacy class for backwards compatibility</p>
 <dl class="py class">
-<dt id="nd2reader.legacy.Nd2">
-<em class="property">class </em><code class="sig-prename descclassname">nd2reader.legacy.</code><code class="sig-name descname">Nd2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/legacy.html#Nd2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.legacy.Nd2" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.legacy.Nd2">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nd2reader.legacy.</span></span><span class="sig-name descname"><span class="pre">Nd2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/legacy.html#Nd2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.legacy.Nd2" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Warning: this module is deprecated and only maintained for backwards compatibility with the non-PIMS version of
 nd2reader.</p>
-<dl class="py method">
-<dt id="nd2reader.legacy.Nd2.channels">
-<em class="property">property </em><code class="sig-name descname">channels</code><a class="headerlink" href="#nd2reader.legacy.Nd2.channels" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.legacy.Nd2.channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#nd2reader.legacy.Nd2.channels" title="Link to this definition">¶</a></dt>
 <dd><p>Deprecated. Fetches all color channels.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the color channels.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>list</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.legacy.Nd2.close">
-<code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/legacy.html#Nd2.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.legacy.Nd2.close" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.legacy.Nd2.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/legacy.html#Nd2.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.legacy.Nd2.close" title="Link to this definition">¶</a></dt>
 <dd><p>Closes the ND2Reader</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.legacy.Nd2.date">
-<em class="property">property </em><code class="sig-name descname">date</code><a class="headerlink" href="#nd2reader.legacy.Nd2.date" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.legacy.Nd2.date">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">date</span></span><a class="headerlink" href="#nd2reader.legacy.Nd2.date" title="Link to this definition">¶</a></dt>
 <dd><p>Deprecated. Fetches the acquisition date.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the date</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>string</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.legacy.Nd2.fields_of_view">
-<em class="property">property </em><code class="sig-name descname">fields_of_view</code><a class="headerlink" href="#nd2reader.legacy.Nd2.fields_of_view" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.legacy.Nd2.fields_of_view">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fields_of_view</span></span><a class="headerlink" href="#nd2reader.legacy.Nd2.fields_of_view" title="Link to this definition">¶</a></dt>
 <dd><p>Deprecated. Fetches the fields of view.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>fields of view.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>list</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.legacy.Nd2.frames">
-<em class="property">property </em><code class="sig-name descname">frames</code><a class="headerlink" href="#nd2reader.legacy.Nd2.frames" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.legacy.Nd2.frames">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">frames</span></span><a class="headerlink" href="#nd2reader.legacy.Nd2.frames" title="Link to this definition">¶</a></dt>
 <dd><p>Deprecated. Fetches all frames.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list of frames</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>list</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.legacy.Nd2.get_image">
-<code class="sig-name descname">get_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">frame_number</span></em>, <em class="sig-param"><span class="n">field_of_view</span></em>, <em class="sig-param"><span class="n">channel_name</span></em>, <em class="sig-param"><span class="n">z_level</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/legacy.html#Nd2.get_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.legacy.Nd2.get_image" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.legacy.Nd2.get_image">
+<span class="sig-name descname"><span class="pre">get_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_of_view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_level</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/legacy.html#Nd2.get_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.legacy.Nd2.get_image" title="Link to this definition">¶</a></dt>
 <dd><p>Deprecated. Returns the specified image from the ND2Reader class.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>frame_number</strong> – the frame number</p></li>
 <li><p><strong>field_of_view</strong> – the field of view number</p></li>
@@ -1341,49 +1630,49 @@ nd2reader.</p>
 <li><p><strong>z_level</strong> – the z level number</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the specified image</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Frame</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.legacy.Nd2.height">
-<em class="property">property </em><code class="sig-name descname">height</code><a class="headerlink" href="#nd2reader.legacy.Nd2.height" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.legacy.Nd2.height">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">height</span></span><a class="headerlink" href="#nd2reader.legacy.Nd2.height" title="Link to this definition">¶</a></dt>
 <dd><p>Deprecated. Fetches the height of the image.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the pixel height of the image</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.legacy.Nd2.pixel_microns">
-<em class="property">property </em><code class="sig-name descname">pixel_microns</code><a class="headerlink" href="#nd2reader.legacy.Nd2.pixel_microns" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.legacy.Nd2.pixel_microns">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pixel_microns</span></span><a class="headerlink" href="#nd2reader.legacy.Nd2.pixel_microns" title="Link to this definition">¶</a></dt>
 <dd><p>Deprecated. Fetches the amount of microns per pixel.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>microns per pixel</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="nd2reader.legacy.Nd2.select">
-<code class="sig-name descname">select</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fields_of_view</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">channels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">z_levels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stop</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/legacy.html#Nd2.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nd2reader.legacy.Nd2.select" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nd2reader.legacy.Nd2.select">
+<span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields_of_view</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nd2reader/legacy.html#Nd2.select"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nd2reader.legacy.Nd2.select" title="Link to this definition">¶</a></dt>
 <dd><p>Select images based on criteria.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fields_of_view</strong> – the fields of view</p></li>
 <li><p><strong>channels</strong> – the color channels</p></li>
@@ -1392,38 +1681,38 @@ nd2reader.</p>
 <li><p><strong>stop</strong> – the last frame</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Sliced ND2Reader which contains the frames</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#nd2reader.reader.ND2Reader" title="nd2reader.reader.ND2Reader">ND2Reader</a></p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.legacy.Nd2.width">
-<em class="property">property </em><code class="sig-name descname">width</code><a class="headerlink" href="#nd2reader.legacy.Nd2.width" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.legacy.Nd2.width">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">width</span></span><a class="headerlink" href="#nd2reader.legacy.Nd2.width" title="Link to this definition">¶</a></dt>
 <dd><p>Deprecated. Fetches the width of the image.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the pixel width of the image</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="nd2reader.legacy.Nd2.z_levels">
-<em class="property">property </em><code class="sig-name descname">z_levels</code><a class="headerlink" href="#nd2reader.legacy.Nd2.z_levels" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="nd2reader.legacy.Nd2.z_levels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">z_levels</span></span><a class="headerlink" href="#nd2reader.legacy.Nd2.z_levels" title="Link to this definition">¶</a></dt>
 <dd><p>Deprecated. Fetches the available z levels.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>z levels.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>list</p>
 </dd>
 </dl>
@@ -1431,8 +1720,8 @@ nd2reader.</p>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
     </div>
@@ -1446,8 +1735,8 @@ nd2reader.</p>
       
     </p>
     <p>
-        &copy; Copyright 2017 - 2019, Ruben Verweij.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.0.<br/>
+        &copy; Copyright 2017 - 2024, Ruben Verweij.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
     </p>
   </div>
 </footer>

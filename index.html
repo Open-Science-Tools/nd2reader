@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nd2reader: a pure-Python package for reading Nikon .nd2 files &#8212; nd2reader 3.3.0 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>nd2reader: a pure-Python package for reading Nikon .nd2 files &#8212; nd2reader 3.3.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css?v=4468db6d" />
+    <script src="_static/documentation_options.js?v=9ac01507"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Tutorial" href="tutorial.html" />
@@ -18,10 +18,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
-<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
 
   </head><body>
 
@@ -36,13 +36,11 @@
         </button>
         <a class="navbar-brand" href="#">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.3.0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.3.1</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
           <ul class="nav navbar-nav">
-            
-                <li><a href="http://lighthacking.nl">Lighthacking</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -53,7 +51,7 @@
      href="#">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><p class="caption"><span class="caption-text">Contents:</span></p>
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">    nd2reader quick start tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nd2reader.html">    nd2reader API reference</a></li>
@@ -113,14 +111,37 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">nd2reader</span></code>: a pure-Python package for reading Nikon .nd2 files</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <li>
+    <a href="tutorial.html" title="Next Chapter: Tutorial"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Tutorial &raquo;</span>
+    </a>
+  </li>
+<div id="sourcelink">
+  <a href="_sources/index.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+<form action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
-  <div class="section" id="nd2reader-a-pure-python-package-for-reading-nikon-nd2-files">
-<h1><code class="docutils literal notranslate"><span class="pre">nd2reader</span></code>: a pure-Python package for reading Nikon .nd2 files<a class="headerlink" href="#nd2reader-a-pure-python-package-for-reading-nikon-nd2-files" title="Permalink to this headline">¶</a></h1>
+  <section id="nd2reader-a-pure-python-package-for-reading-nikon-nd2-files">
+<h1><code class="docutils literal notranslate"><span class="pre">nd2reader</span></code>: a pure-Python package for reading Nikon .nd2 files<a class="headerlink" href="#nd2reader-a-pure-python-package-for-reading-nikon-nd2-files" title="Link to this heading">¶</a></h1>
 <p><cite>nd2reader</cite> is a pure-Python package that reads images produced by NIS Elements 4.0+. It has only been definitively tested on NIS Elements 4.30.02 Build 1053. Support for older versions is being actively worked on.
 The reader is written in the <a class="reference external" href="https://github.com/soft-matter/pims">pims</a> framework, enabling easy access to multidimensional files, lazy slicing, and nice display in IPython. To get started, see the quick start tutorial.</p>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">    nd2reader quick start tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorial.html#installation">Installation</a><ul>
@@ -134,27 +155,156 @@ The reader is written in the <a class="reference external" href="https://github.
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nd2reader.html">    nd2reader API reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="nd2reader.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nd2reader.html#module-nd2reader.reader">nd2reader.reader module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nd2reader.html#module-nd2reader.parser">nd2reader.parser module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nd2reader.html#module-nd2reader.raw_metadata">nd2reader.raw_metadata module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nd2reader.html#module-nd2reader.label_map">nd2reader.label_map module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nd2reader.html#module-nd2reader.common">nd2reader.common module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nd2reader.html#module-nd2reader.exceptions">nd2reader.exceptions module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nd2reader.html#module-nd2reader.artificial">nd2reader.artificial module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nd2reader.html#module-nd2reader.legacy">nd2reader.legacy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nd2reader.html#module-nd2reader.reader">nd2reader.reader module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nd2reader.html#nd2reader.reader.ND2Reader"><code class="docutils literal notranslate"><span class="pre">ND2Reader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.reader.ND2Reader.class_exts"><code class="docutils literal notranslate"><span class="pre">ND2Reader.class_exts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.reader.ND2Reader.class_priority"><code class="docutils literal notranslate"><span class="pre">ND2Reader.class_priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.reader.ND2Reader.close"><code class="docutils literal notranslate"><span class="pre">ND2Reader.close()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.reader.ND2Reader.events"><code class="docutils literal notranslate"><span class="pre">ND2Reader.events</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.reader.ND2Reader.frame_rate"><code class="docutils literal notranslate"><span class="pre">ND2Reader.frame_rate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.reader.ND2Reader.get_frame_2D"><code class="docutils literal notranslate"><span class="pre">ND2Reader.get_frame_2D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.reader.ND2Reader.get_timesteps"><code class="docutils literal notranslate"><span class="pre">ND2Reader.get_timesteps()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.reader.ND2Reader.parser"><code class="docutils literal notranslate"><span class="pre">ND2Reader.parser</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.reader.ND2Reader.pixel_type"><code class="docutils literal notranslate"><span class="pre">ND2Reader.pixel_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.reader.ND2Reader.timesteps"><code class="docutils literal notranslate"><span class="pre">ND2Reader.timesteps</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nd2reader.html#module-nd2reader.parser">nd2reader.parser module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nd2reader.html#nd2reader.parser.Parser"><code class="docutils literal notranslate"><span class="pre">Parser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.parser.Parser.CHUNK_HEADER"><code class="docutils literal notranslate"><span class="pre">Parser.CHUNK_HEADER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.parser.Parser.CHUNK_MAP_END"><code class="docutils literal notranslate"><span class="pre">Parser.CHUNK_MAP_END</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.parser.Parser.CHUNK_MAP_START"><code class="docutils literal notranslate"><span class="pre">Parser.CHUNK_MAP_START</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.parser.Parser.calculate_image_properties"><code class="docutils literal notranslate"><span class="pre">Parser.calculate_image_properties()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.parser.Parser.get_dtype_from_metadata"><code class="docutils literal notranslate"><span class="pre">Parser.get_dtype_from_metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.parser.Parser.get_image"><code class="docutils literal notranslate"><span class="pre">Parser.get_image()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.parser.Parser.get_image_by_attributes"><code class="docutils literal notranslate"><span class="pre">Parser.get_image_by_attributes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.parser.Parser.supported_file_versions"><code class="docutils literal notranslate"><span class="pre">Parser.supported_file_versions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nd2reader.html#module-nd2reader.raw_metadata">nd2reader.raw_metadata module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata"><code class="docutils literal notranslate"><span class="pre">RawMetadata</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.acquisition_times"><code class="docutils literal notranslate"><span class="pre">RawMetadata.acquisition_times</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.app_info"><code class="docutils literal notranslate"><span class="pre">RawMetadata.app_info</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.camera_exposure_time"><code class="docutils literal notranslate"><span class="pre">RawMetadata.camera_exposure_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.camera_temp"><code class="docutils literal notranslate"><span class="pre">RawMetadata.camera_temp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.custom_data"><code class="docutils literal notranslate"><span class="pre">RawMetadata.custom_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.get_duration_from_interval_and_loops"><code class="docutils literal notranslate"><span class="pre">RawMetadata.get_duration_from_interval_and_loops()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.get_parsed_metadata"><code class="docutils literal notranslate"><span class="pre">RawMetadata.get_parsed_metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.grabber_settings"><code class="docutils literal notranslate"><span class="pre">RawMetadata.grabber_settings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.image_attributes"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_attributes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.image_calibration"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_calibration</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.image_events"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_events</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.image_metadata"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.image_metadata_sequence"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_metadata_sequence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.image_text_info"><code class="docutils literal notranslate"><span class="pre">RawMetadata.image_text_info</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.lut_data"><code class="docutils literal notranslate"><span class="pre">RawMetadata.lut_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.pfs_offset"><code class="docutils literal notranslate"><span class="pre">RawMetadata.pfs_offset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.pfs_status"><code class="docutils literal notranslate"><span class="pre">RawMetadata.pfs_status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.roi_metadata"><code class="docutils literal notranslate"><span class="pre">RawMetadata.roi_metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.x_data"><code class="docutils literal notranslate"><span class="pre">RawMetadata.x_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.y_data"><code class="docutils literal notranslate"><span class="pre">RawMetadata.y_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.raw_metadata.RawMetadata.z_data"><code class="docutils literal notranslate"><span class="pre">RawMetadata.z_data</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nd2reader.html#module-nd2reader.label_map">nd2reader.label_map module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap"><code class="docutils literal notranslate"><span class="pre">LabelMap</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.acquisition_frames"><code class="docutils literal notranslate"><span class="pre">LabelMap.acquisition_frames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.acquisition_times"><code class="docutils literal notranslate"><span class="pre">LabelMap.acquisition_times</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.acquisition_times_2"><code class="docutils literal notranslate"><span class="pre">LabelMap.acquisition_times_2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.app_info"><code class="docutils literal notranslate"><span class="pre">LabelMap.app_info</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.camera_exposure_time"><code class="docutils literal notranslate"><span class="pre">LabelMap.camera_exposure_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.camera_temp"><code class="docutils literal notranslate"><span class="pre">LabelMap.camera_temp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.custom_data"><code class="docutils literal notranslate"><span class="pre">LabelMap.custom_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.description"><code class="docutils literal notranslate"><span class="pre">LabelMap.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.get_image_data_location"><code class="docutils literal notranslate"><span class="pre">LabelMap.get_image_data_location()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.grabber_settings"><code class="docutils literal notranslate"><span class="pre">LabelMap.grabber_settings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.guid"><code class="docutils literal notranslate"><span class="pre">LabelMap.guid</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.image_attributes"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_attributes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.image_calibration"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_calibration</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.image_events"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_events</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.image_metadata"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.image_metadata_sequence"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_metadata_sequence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.image_text_info"><code class="docutils literal notranslate"><span class="pre">LabelMap.image_text_info</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.lut_data"><code class="docutils literal notranslate"><span class="pre">LabelMap.lut_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.pfs_offset"><code class="docutils literal notranslate"><span class="pre">LabelMap.pfs_offset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.pfs_status"><code class="docutils literal notranslate"><span class="pre">LabelMap.pfs_status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.roi_metadata"><code class="docutils literal notranslate"><span class="pre">LabelMap.roi_metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.x_data"><code class="docutils literal notranslate"><span class="pre">LabelMap.x_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.y_data"><code class="docutils literal notranslate"><span class="pre">LabelMap.y_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.label_map.LabelMap.z_data"><code class="docutils literal notranslate"><span class="pre">LabelMap.z_data</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nd2reader.html#module-nd2reader.common">nd2reader.common module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nd2reader.html#nd2reader.common.check_or_make_dir"><code class="docutils literal notranslate"><span class="pre">check_or_make_dir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nd2reader.html#nd2reader.common.get_from_dict_if_exists"><code class="docutils literal notranslate"><span class="pre">get_from_dict_if_exists()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nd2reader.html#nd2reader.common.get_version"><code class="docutils literal notranslate"><span class="pre">get_version()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nd2reader.html#nd2reader.common.parse_date"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nd2reader.html#nd2reader.common.parse_version"><code class="docutils literal notranslate"><span class="pre">parse_version()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nd2reader.html#nd2reader.common.read_array"><code class="docutils literal notranslate"><span class="pre">read_array()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nd2reader.html#nd2reader.common.read_chunk"><code class="docutils literal notranslate"><span class="pre">read_chunk()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nd2reader.html#nd2reader.common.read_metadata"><code class="docutils literal notranslate"><span class="pre">read_metadata()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nd2reader.html#module-nd2reader.exceptions">nd2reader.exceptions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nd2reader.html#nd2reader.exceptions.EmptyFileError"><code class="docutils literal notranslate"><span class="pre">EmptyFileError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nd2reader.html#nd2reader.exceptions.InvalidFileType"><code class="docutils literal notranslate"><span class="pre">InvalidFileType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nd2reader.html#nd2reader.exceptions.InvalidVersionError"><code class="docutils literal notranslate"><span class="pre">InvalidVersionError</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nd2reader.html#module-nd2reader.artificial">nd2reader.artificial module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nd2reader.html#nd2reader.artificial.ArtificialND2"><code class="docutils literal notranslate"><span class="pre">ArtificialND2</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.artificial.ArtificialND2.close"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.close()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.artificial.ArtificialND2.create_label_map_bytes"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.create_label_map_bytes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.artificial.ArtificialND2.data_types"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.data_types</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.artificial.ArtificialND2.file_handle"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.file_handle</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.artificial.ArtificialND2.header"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.header</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.artificial.ArtificialND2.relative_offset"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.relative_offset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.artificial.ArtificialND2.write_file"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.write_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.artificial.ArtificialND2.write_label_map"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.write_label_map()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.artificial.ArtificialND2.write_label_map_info"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.write_label_map_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.artificial.ArtificialND2.write_version"><code class="docutils literal notranslate"><span class="pre">ArtificialND2.write_version()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nd2reader.html#module-nd2reader.legacy">nd2reader.legacy module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nd2reader.html#nd2reader.legacy.Nd2"><code class="docutils literal notranslate"><span class="pre">Nd2</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.legacy.Nd2.channels"><code class="docutils literal notranslate"><span class="pre">Nd2.channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.legacy.Nd2.close"><code class="docutils literal notranslate"><span class="pre">Nd2.close()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.legacy.Nd2.date"><code class="docutils literal notranslate"><span class="pre">Nd2.date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.legacy.Nd2.fields_of_view"><code class="docutils literal notranslate"><span class="pre">Nd2.fields_of_view</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.legacy.Nd2.frames"><code class="docutils literal notranslate"><span class="pre">Nd2.frames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.legacy.Nd2.get_image"><code class="docutils literal notranslate"><span class="pre">Nd2.get_image()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.legacy.Nd2.height"><code class="docutils literal notranslate"><span class="pre">Nd2.height</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.legacy.Nd2.pixel_microns"><code class="docutils literal notranslate"><span class="pre">Nd2.pixel_microns</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.legacy.Nd2.select"><code class="docutils literal notranslate"><span class="pre">Nd2.select()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.legacy.Nd2.width"><code class="docutils literal notranslate"><span class="pre">Nd2.width</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nd2reader.html#nd2reader.legacy.Nd2.z_levels"><code class="docutils literal notranslate"><span class="pre">Nd2.z_levels</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading">¶</a></h1>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
-</div>
+</section>
 
 
     </div>
@@ -168,8 +318,8 @@ The reader is written in the <a class="reference external" href="https://github.
       
     </p>
     <p>
-        &copy; Copyright 2017 - 2019, Ruben Verweij.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.0.<br/>
+        &copy; Copyright 2017 - 2024, Ruben Verweij.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
     </p>
   </div>
 </footer>

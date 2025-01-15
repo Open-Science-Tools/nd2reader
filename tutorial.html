@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tutorial &#8212; nd2reader 3.3.0 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Tutorial &#8212; nd2reader 3.3.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css?v=4468db6d" />
+    <script src="_static/documentation_options.js?v=9ac01507"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="nd2reader package" href="nd2reader.html" />
@@ -19,10 +19,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
-<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
 
   </head><body>
 
@@ -37,13 +37,11 @@
         </button>
         <a class="navbar-brand" href="index.html">
           nd2reader</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.3.0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.3.1</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
           <ul class="nav navbar-nav">
-            
-                <li><a href="http://lighthacking.nl">Lighthacking</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -54,7 +52,7 @@
      href="index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><p class="caption"><span class="caption-text">Contents:</span></p>
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">    nd2reader quick start tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nd2reader.html">    nd2reader API reference</a></li>
@@ -126,12 +124,47 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#">Tutorial</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#installation-via-conda-forge">Installation via Conda Forge</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#opening-nd2s">Opening ND2s</a></li>
+<li><a class="reference internal" href="#nd2-metadata">ND2 metadata</a></li>
+<li><a class="reference internal" href="#iterating-over-fields-of-view">Iterating over fields of view</a></li>
+</ul>
+</li>
+</ul>
+
+  <li>
+    <a href="index.html" title="Previous Chapter: nd2reader: a pure-Python package for reading Nikon .nd2 files"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; nd2reader: a ...</span>
+    </a>
+  </li>
+  <li>
+    <a href="nd2reader.html" title="Next Chapter: nd2reader package"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">nd2reader package &raquo;</span>
+    </a>
+  </li>
+<div id="sourcelink">
+  <a href="_sources/tutorial.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+<form action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
-  <div class="section" id="tutorial">
-<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+  <section id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Link to this heading">¶</a></h1>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
 <p>The package is available on PyPi. Install it using:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">nd2reader</span>
 </pre></div>
@@ -141,8 +174,8 @@
 <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> script. <code class="docutils literal notranslate"><span class="pre">nd2reader</span></code> is an order of magnitude faster in
 Python 3. I recommend using it unless you have no other choice. Python
 2.7 and Python &gt;= 3.4 are supported.</p>
-<div class="section" id="installation-via-conda-forge">
-<h3>Installation via Conda Forge<a class="headerlink" href="#installation-via-conda-forge" title="Permalink to this headline">¶</a></h3>
+<section id="installation-via-conda-forge">
+<h3>Installation via Conda Forge<a class="headerlink" href="#installation-via-conda-forge" title="Link to this heading">¶</a></h3>
 <p>Installing <code class="docutils literal notranslate"><span class="pre">nd2reader</span></code> from the <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code> channel can be
 achieved by adding <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code> to your channels with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">config</span> <span class="o">--</span><span class="n">add</span> <span class="n">channels</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
@@ -158,10 +191,10 @@ your platform with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">search</span> <span class="n">nd2reader</span> <span class="o">--</span><span class="n">channel</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="opening-nd2s">
-<h2>Opening ND2s<a class="headerlink" href="#opening-nd2s" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="opening-nd2s">
+<h2>Opening ND2s<a class="headerlink" href="#opening-nd2s" title="Link to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">nd2reader</span></code> follows the <a class="reference external" href="https://github.com/soft-matter/pims">pims</a>
 framework. To open a file and show the first frame:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nd2reader</span> <span class="kn">import</span> <span class="n">ND2Reader</span>
@@ -174,9 +207,9 @@ framework. To open a file and show the first frame:</p>
 <p>After opening the file, all <code class="docutils literal notranslate"><span class="pre">pims</span></code> features are supported. Please
 refer to the <a class="reference external" href="http://soft-matter.github.io/pims/">pims
 documentation</a>.</p>
-</div>
-<div class="section" id="nd2-metadata">
-<h2>ND2 metadata<a class="headerlink" href="#nd2-metadata" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="nd2-metadata">
+<h2>ND2 metadata<a class="headerlink" href="#nd2-metadata" title="Link to this heading">¶</a></h2>
 <p>The ND2 file contains various metadata, such as acquisition information,
 regions of interest and custom user comments. Most of this metadata is
 parsed and available in dictionary form. For example:</p>
@@ -202,9 +235,9 @@ parsed and available in dictionary form. For example:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">experiment</span></code>: information about the nature and timings of the ND
 experiment</p></li>
 </ul>
-</div>
-<div class="section" id="iterating-over-fields-of-view">
-<h2>Iterating over fields of view<a class="headerlink" href="#iterating-over-fields-of-view" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="iterating-over-fields-of-view">
+<h2>Iterating over fields of view<a class="headerlink" href="#iterating-over-fields-of-view" title="Link to this heading">¶</a></h2>
 <p>Using <code class="docutils literal notranslate"><span class="pre">NDExperiments</span></code> in the Nikon software, it is possible to acquire
 images on different <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> positions. This is referred to as
 different fields of view. Using this reader, the fields of view are on
@@ -251,8 +284,8 @@ therefore possible to loop over them like this:</p>
 </div>
 <p>For more information on axis bundling and iteration, refer to the <a class="reference external" href="http://soft-matter.github.io/pims/v0.4/multidimensional.html#axes-bundling">pims
 documentation</a>.</p>
-</div>
-</div>
+</section>
+</section>
 
 
     </div>
@@ -266,8 +299,8 @@ documentation</a>.</p>
       
     </p>
     <p>
-        &copy; Copyright 2017 - 2019, Ruben Verweij.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.0.<br/>
+        &copy; Copyright 2017 - 2024, Ruben Verweij.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
     </p>
   </div>
 </footer>
