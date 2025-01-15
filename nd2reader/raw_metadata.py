@@ -293,9 +293,9 @@ class RawMetadata(object):
             roi_dict = self._parse_vect_anim(roi_dict, raw_roi_dict[six.b('m_vectAnimParams_%d' % i)])
 
         # convert to NumPy arrays
-        roi_dict["timepoints"] = np.array(roi_dict["timepoints"], dtype=np.float)
-        roi_dict["positions"] = np.array(roi_dict["positions"], dtype=np.float)
-        roi_dict["sizes"] = np.array(roi_dict["sizes"], dtype=np.float)
+        roi_dict["timepoints"] = np.array(roi_dict["timepoints"], dtype=np.float64)
+        roi_dict["positions"] = np.array(roi_dict["positions"], dtype=np.float64)
+        roi_dict["sizes"] = np.array(roi_dict["sizes"], dtype=np.float64)
 
         return roi_dict
 
