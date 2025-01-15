@@ -1,6 +1,6 @@
 from setuptools import setup
 
-VERSION = '3.3.0'
+VERSION = '3.3.1'
 
 if __name__ == '__main__':
     setup(
@@ -16,8 +16,8 @@ if __name__ == '__main__':
         version=VERSION,
         description='A tool for reading ND2 files produced by NIS Elements',
         author='Ruben Verweij',
-        author_email='ruben@lighthacking.nl',
-        url='https://github.com/rbnvrw/nd2reader',
+        author_email='ruben@kedara.nl',
+        url='https://open-science-tools.github.io/nd2reader/',
         download_url='https://github.com/rbnvrw/nd2reader/tarball/%s' % VERSION,
         keywords=['nd2', 'nikon', 'microscopy', 'NIS Elements'],
         classifiers=['Development Status :: 5 - Production/Stable',

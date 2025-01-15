@@ -37,7 +37,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'nd2reader'
-copyright = '2017 - 2019, Ruben Verweij'
+copyright = '2017 - 2024, Ruben Verweij'
 author = 'Ruben Verweij'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -81,7 +81,7 @@ html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 #
 html_theme_options = {
 'navbar_links': [
-        ("Lighthacking", "http://lighthacking.nl", True),
+
     ],
 }
 
