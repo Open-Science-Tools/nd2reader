@@ -72,7 +72,7 @@ class LabelMap(object):
 
         """
         if not self._image_data:
-            regex = re.compile(six.b("""ImageDataSeq\|(\d+)!"""))
+            regex = re.compile(six.b(r"ImageDataSeq\|(\d+)!"))
             for match in regex.finditer(self._data):
                 if match:
                     location = self._parse_data_location(match.end())
